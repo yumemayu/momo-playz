@@ -36,8 +36,8 @@
     ['ろてん風呂カピバラ', 'Outdoor bath capybara']
   ];
   const copy = {
-    ja: { retry: 'もういちど', on: 'おと ON', off: 'おと OFF', spot: 'スポット', decoy: 'おとり！' },
-    en: { retry: 'Play again', on: 'Sound on', off: 'Sound off', spot: 'Spot', decoy: 'Decoy!' }
+    ja: { retry: 'もういちど', on: 'おと ON', off: 'おと OFF', spot: 'スポット', decoy: 'おとり！', comboUnit: 'コンボ！', amazing: 'すごい！' },
+    en: { retry: 'Play again', on: 'Sound on', off: 'Sound off', spot: 'Spot', decoy: 'Decoy!', comboUnit: ' combo!', amazing: 'Amazing!' }
   };
   let language = 'en';
   let level = 'easy';
@@ -211,6 +211,27 @@
     setTimeout(() => label.remove(), 720);
   }
 
+  const COMBO_MILESTONES = [10, 20, 30, 40, 50, 75, 100];
+  let comboTimer = 0;
+  function celebrateCombo(count) {
+    stage.querySelector('.milestone-banner')?.remove();
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    banner.setAttribute('role', 'status');
+    const big = document.createElement('span');
+    big.className = 'milestone-count';
+    big.textContent = count + copy[language].comboUnit;
+    const sub = document.createElement('span');
+    sub.className = 'milestone-sub';
+    sub.textContent = copy[language].amazing;
+    banner.append(big, sub);
+    stage.append(banner);
+    burst();
+    [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => tone(freq, i * .09, .22, 'triangle', .11));
+    clearTimeout(comboTimer);
+    comboTimer = setTimeout(() => banner.remove(), 1900);
+  }
+
   function tapSpot(spot) {
     if (!playing || !spot.up || !spot.kind) return;
     const kind = spot.kind;
@@ -221,6 +242,7 @@
     } else {
       score += kind.points;
       combo++;
+      if (COMBO_MILESTONES.includes(combo)) celebrateCombo(combo);
       if (kind.golden) playGolden(); else playSplash();
       floatText(spot, '+' + kind.points, kind.golden ? 'golden' : '');
     }

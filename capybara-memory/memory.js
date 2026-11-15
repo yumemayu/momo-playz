@@ -18,8 +18,8 @@
     ['ろてん風呂カピバラ', 'Outdoor bath capybara']
   ];
   const copy = {
-    ja: { title: 'カピバラ神経衰弱', retry: 'もういちど', on: 'おと ON', off: 'おと OFF', card: 'カード' },
-    en: { title: 'Capybara Memory Match', retry: 'Play again', on: 'Sound on', off: 'Sound off', card: 'Card' }
+    ja: { title: 'カピバラ神経衰弱', retry: 'もういちど', on: 'おと ON', off: 'おと OFF', card: 'カード', halfway: 'はんぶん！', halfwaySub: 'あと半分だよ！', noMiss: 'ノーミス！', noMissSub: '1回も まちがえなかった！' },
+    en: { title: 'Capybara Memory Match', retry: 'Play again', on: 'Sound on', off: 'Sound off', card: 'Card', halfway: 'Halfway!', halfwaySub: 'Half to go!', noMiss: 'No misses!', noMissSub: 'Not a single mistake!' }
   };
   let language = 'en';
   let level = 'easy';
@@ -194,6 +194,7 @@
       playMatch();
       updateStats();
       if (matchedPairs === pairCounts[level]) finish(true);
+      else if (matchedPairs === pairCounts[level] / 2) celebrate(copy[language].halfway, copy[language].halfwaySub, false);
     } else {
       misses++;
       lock = true;
@@ -207,6 +208,27 @@
         lock = false;
       }, 780);
     }
+  }
+
+  let milestoneTimer = 0;
+  function celebrate(bigText, subText, fanfare) {
+    stage.querySelector('.milestone-banner')?.remove();
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    banner.setAttribute('role', 'status');
+    const big = document.createElement('span');
+    big.className = 'milestone-count';
+    big.textContent = bigText;
+    const sub = document.createElement('span');
+    sub.className = 'milestone-sub';
+    sub.textContent = subText;
+    banner.append(big, sub);
+    stage.append(banner);
+    burst();
+    if (fanfare) playWin();
+    else { tone(659.25, 0, .18, 'triangle', .11); tone(987.77, .1, .26, 'triangle', .11); }
+    clearTimeout(milestoneTimer);
+    milestoneTimer = setTimeout(() => banner.remove(), 1900);
   }
 
   function burst() {
@@ -243,7 +265,7 @@
   function finish(completed) {
     playing = false;
     stopTimer();
-    if (completed) { playWin(); burst(); }
+    if (completed) { playWin(); burst(); if (misses === 0) celebrate(copy[language].noMiss, copy[language].noMissSub, true); }
     gameScores.finish(currentScore(), completed);
     start.textContent = copy[language].retry;
     setControls();

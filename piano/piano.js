@@ -7,7 +7,7 @@
       ja: {
         start:'スタート画面', play:'演奏画面', free:'じゆうピアノ', guided:'おてほんピアノ',
         back:'‹ もどる', selectSong:'きょくを えらぶ', chooseLevel:'レベルを えらぶ', chooseMode:'モードを えらぶ', freeHint:'すきな けんばんを おしてね', lower:'低い音', higher:'高い音', reset:'はじめから', progress:'曲の進み具合',
-        piano:'ピアノの鍵盤', done:'さいごまで ひけたよ！', cheer:'クリアおめでとう！', challengeDone:'最後までチャレンジできたね！', result: (hits,total) => `${total}音中 ${hits}音 せいかい`, falling:'光が 鍵盤にくるよ',
+        piano:'ピアノの鍵盤', done:'さいごまで ひけたよ！', cheer:'クリアおめでとう！', challengeDone:'最後までチャレンジできたね！', fullCombo:'フルコンボ！', fullComboSub:'ぜんぶ せいかい！', result: (hits,total) => `${total}音中 ${hits}音 せいかい`, falling:'光が 鍵盤にくるよ',
         notes:['ド','レ','ミ','ファ','ソ','ラ','シ'],
         keyName: (note, octave, _number) => octave === 0 ? note : octave === 1 ? `高い${note}` : `いちばん高い${note}`,
         hint: note => `ひかる「${note}」を おしてね`
@@ -15,7 +15,7 @@
       en: {
         start:'Start screen', play:'Play screen', free:'Free Play', guided:'Follow the Notes',
         back:'‹ Back', selectSong:'Choose a song', chooseLevel:'Choose a level', chooseMode:'Choose a mode', freeHint:'Tap any key to play', lower:'Lower octave', higher:'Upper octave', reset:'Start Over', progress:'Song progress',
-        piano:'Piano keyboard', done:'You played the whole song!', cheer:'Great playing!', challengeDone:'You made it to the end!', result: (hits,total) => `${hits} of ${total} notes hit`, falling:'Watch the light fall',
+        piano:'Piano keyboard', done:'You played the whole song!', cheer:'Great playing!', challengeDone:'You made it to the end!', fullCombo:'Full combo!', fullComboSub:'Every note hit!', result: (hits,total) => `${hits} of ${total} notes hit`, falling:'Watch the light fall',
         notes:['C','D','E','F','G','A','B'],
         keyName: (note, _octave, number) => `${note}${number}`,
         hint: note => `Tap the glowing ${note} key`
@@ -144,6 +144,7 @@
     let frame = null;
     let ready = false;
     let hits = 0;
+    let comboCelebrated = false;
     let challenge = false;
     let laneCount = 7;
     let feedback = [];
@@ -159,6 +160,7 @@
       feedback = [];
       step = 0;
       hits = 0;
+      comboCelebrated = false;
       challenge = selectedSong?.level === 1;
       laneCount = selectedSong?.singleOctave ? 7 : whiteKeyCount;
       playScreen.style.setProperty('--lane-count', laneCount);
@@ -272,6 +274,44 @@
       ], {duration:530}));
     }
 
+    let comboTimer = 0;
+    function celebrateFullCombo(copy) {
+      roll.querySelector('.milestone-banner')?.remove();
+      const banner = document.createElement('div');
+      banner.className = 'milestone-banner';
+      banner.setAttribute('role', 'status');
+      const big = document.createElement('span');
+      big.className = 'milestone-count';
+      big.textContent = copy.fullCombo;
+      const sub = document.createElement('span');
+      sub.className = 'milestone-sub';
+      sub.textContent = copy.fullComboSub;
+      banner.append(big, sub);
+      if (!reduceMotion.matches) {
+        const colors = ['#ffc6df', '#aedcff', '#ffd788', '#c5f1ce', '#ddcaff'];
+        for (let i = 0; i < 16; i++) {
+          const piece = document.createElement('span');
+          piece.className = 'milestone-confetti';
+          piece.style.background = colors[i % colors.length];
+          piece.style.left = 12 + Math.random() * 76 + '%';
+          banner.append(piece);
+          piece.animate([
+            { transform: 'translateY(6px) rotate(0deg)', opacity: 1 },
+            { transform: `translateY(${64 + Math.random() * 90}px) rotate(${Math.random() * 320 - 160}deg)`, opacity: 0 }
+          ], { duration: 1150 + Math.random() * 500, easing: 'cubic-bezier(.2,.7,.3,1)' });
+        }
+        avatar.animate([
+          { transform: 'translateY(0) rotate(0)' },
+          { transform: 'translateY(-19px) rotate(-6deg)', offset: .4 },
+          { transform: 'translateY(0) rotate(0)' }
+        ], { duration: 650 });
+      }
+      roll.append(banner);
+      [0, 2, 4, 7].forEach((keyIndex, i) => setTimeout(() => playNote(keyIndex), i * 95));
+      clearTimeout(comboTimer);
+      comboTimer = setTimeout(() => banner.remove(), 2200);
+    }
+
     const rows = [piano.querySelector('.lower-keys'), piano.querySelector('.upper-keys')];
     const keys = Array.from({length: keyCount}, (_, index) => {
       const key = document.createElement('button');
@@ -324,8 +364,13 @@
       playScreen.classList.toggle('rolling', falling);
       const finished = Boolean(notes && next === undefined);
       if (finished) window.momoStickers?.award('piano');
+      const fullCombo = Boolean(challenge && notes && hits === notes.length);
       celebration.hidden = !finished;
-      celebration.querySelector('strong').textContent = challenge && hits !== notes?.length ? copy.challengeDone : copy.cheer;
+      celebration.querySelector('strong').textContent = fullCombo ? copy.fullCombo : challenge && hits !== notes?.length ? copy.challengeDone : copy.cheer;
+      if (finished && fullCombo && !comboCelebrated) {
+        comboCelebrated = true;
+        celebrateFullCombo(copy);
+      }
       const result = celebration.querySelector('.challenge-result');
       result.hidden = !challenge;
       result.textContent = challenge ? copy.result(hits, notes.length) : '';

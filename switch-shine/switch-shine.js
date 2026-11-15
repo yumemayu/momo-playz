@@ -77,11 +77,75 @@
     } catch {}
   }
 
+  const CLEAR_MILESTONES = [5, 10, 15, 20];
+  let clearTimer = 0;
+  function fanfare() {
+    if (!window.AudioContext) return;
+    try {
+      audio ??= new AudioContext();
+      if (audio.state === 'suspended') audio.resume().catch(() => {});
+      [523.25, 659.25, 783.99, 1046.5].forEach((freq, i) => {
+        const oscillator = audio.createOscillator();
+        const gain = audio.createGain();
+        const at = audio.currentTime + i * .09;
+        oscillator.type = 'triangle';
+        oscillator.frequency.setValueAtTime(freq, at);
+        gain.gain.setValueAtTime(.0001, at);
+        gain.gain.exponentialRampToValueAtTime(.08, at + .02);
+        gain.gain.exponentialRampToValueAtTime(.0001, at + .24);
+        oscillator.connect(gain);
+        gain.connect(audio.destination);
+        oscillator.onended = () => { oscillator.disconnect(); gain.disconnect(); };
+        oscillator.start(at);
+        oscillator.stop(at + .26);
+      });
+    } catch {}
+  }
+
+  function celebrateClears(total) {
+    const board = document.querySelector('.board');
+    if (!board) return;
+    board.querySelector('.milestone-banner')?.remove();
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    banner.setAttribute('role', 'status');
+    const big = document.createElement('span');
+    big.className = 'milestone-count';
+    big.textContent = pick(total + ' / ' + puzzles.length, total + '問クリア！');
+    const sub = document.createElement('span');
+    sub.className = 'milestone-sub';
+    sub.textContent = total === puzzles.length ? pick('All circuits solved!', 'ぜんぶクリア！') : pick('Milestone reached!', 'たっせい！');
+    banner.append(big, sub);
+    if (!matchMedia('(prefers-reduced-motion: reduce)').matches) {
+      const colors = ['#71f6c4', '#ffd274', '#79cfff', '#ff9ecf'];
+      for (let i = 0; i < 16; i++) {
+        const piece = document.createElement('span');
+        piece.className = 'milestone-confetti';
+        piece.style.background = colors[i % colors.length];
+        piece.style.left = 12 + Math.random() * 76 + '%';
+        banner.append(piece);
+        piece.animate([
+          { transform: 'translateY(6px) rotate(0deg)', opacity: 1 },
+          { transform: `translateY(${64 + Math.random() * 90}px) rotate(${Math.random() * 320 - 160}deg)`, opacity: 0 }
+        ], { duration: 1150 + Math.random() * 500, easing: 'cubic-bezier(.2,.7,.3,1)' });
+      }
+    }
+    board.append(banner);
+    fanfare();
+    clearTimeout(clearTimer);
+    clearTimer = setTimeout(() => banner.remove(), 1900);
+  }
+
   function recordClear() {
     mergeSavedRecords();
     if (bestMoves[index] !== null && bestMoves[index] <= moves) return;
+    const firstClear = bestMoves[index] === null;
     bestMoves[index] = moves;
     try { localStorage.setItem(recordKey, JSON.stringify(bestMoves)); } catch {}
+    if (firstClear) {
+      const total = bestMoves.filter(best => best !== null).length;
+      if (CLEAR_MILESTONES.includes(total)) celebrateClears(total);
+    }
   }
 
   function renderRecords() {
