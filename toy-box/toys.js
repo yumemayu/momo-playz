@@ -13,7 +13,7 @@ const stickerCatalog = [
   ['piano', '🎹', 'MOMO Piano', 'MOMOピアノ', 'Finish a song', '１曲最後まで弾く'],
   ['capybara', '♨️', 'Capybara Onsen Merge', 'カピバラ温泉マージ'],
   ['capybara-memory', '🃏', 'Capybara Memory', 'カピバラ神経衰弱'],
-  ['capybara-tap', '🫧', 'Capybara Bath Tap', 'カピバラおふろタップ'],
+  ['capybara-tap', '🫧', 'Capybara Onsen Tap', 'カピバラ温泉タップ'],
   ['cat-trap', '📦', 'Trap the Cat', 'ねこをかこもう！', 'Trap the cat', 'ねこを囲む'],
 ];
 function stickerEntry([id, icon, en, ja, taskEn = 'Finish a round', taskJa = '１ラウンド最後まで遊ぶ']) {
