@@ -29,9 +29,9 @@
   const saveKey = 'momo:capybara:best-stage';
   const copy = {
     ja: {growth:'いちばん育った姿', retry:'もういちど', on:'おと ON', off:'おと OFF',
-      special:'ろてん風呂に とうちゃく！', full:'いっぱいになったよ。もういちど！', timeUp:'1分たったよ！', settling:'さいごの合体を待ってね。', error:'ゲームを読みこめませんでした。ページを開きなおしてください。'},
+      special:'ろてん風呂に とうちゃく！', milestoneSub:'マージ たっせい！', mergesUnit:'回！', full:'いっぱいになったよ。もういちど！', timeUp:'1分たったよ！', settling:'さいごの合体を待ってね。', error:'ゲームを読みこめませんでした。ページを開きなおしてください。'},
     en: {growth:'Biggest piece', retry:'Play again', on:'Sound on', off:'Sound off',
-      special:'You made it to the outdoor bath!', full:'The bath is full. Try again!', timeUp:'Time is up!', settling:'Let the last pieces settle!', error:'The game could not load. Please reload the page.'}
+      special:'You made it to the outdoor bath!', milestoneSub:'Merge milestone!', mergesUnit:' merges!', full:'The bath is full. Try again!', timeUp:'Time is up!', settling:'Let the last pieces settle!', error:'The game could not load. Please reload the page.'}
   };
   let language = 'en';
   const stages = [
@@ -72,6 +72,7 @@
   let deadline = 0;
   let settling = false;
   let score = 0;
+  let merges = 0;
   let biggest = 0;
   let current = 0;
   let next = 1;
@@ -212,6 +213,42 @@
     physics.Composite.remove(engine.world, piece.body);
   }
 
+  const MILESTONES = [10, 20, 30, 50, 75, 100, 150, 200, 300, 500];
+  let milestoneTimer = 0;
+  function celebrateMilestone(count) {
+    const stack = document.querySelector('.play-stack');
+    if (!stack) return;
+    stack.querySelector('.milestone-banner')?.remove();
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    banner.setAttribute('role', 'status');
+    const big = document.createElement('span');
+    big.className = 'milestone-count';
+    big.textContent = language === 'ja' ? count + copy.ja.mergesUnit : count + copy.en.mergesUnit;
+    const sub = document.createElement('span');
+    sub.className = 'milestone-sub';
+    sub.textContent = copy[language].milestoneSub;
+    banner.append(big, sub);
+    if (!reducedMotion.matches) {
+      const colors = ['#f272a7', '#ffb52e', '#58cf9e', '#5db9e8', '#b388ff', '#fff3b8'];
+      for (let i = 0; i < 16; i++) {
+        const piece = document.createElement('span');
+        piece.className = 'milestone-confetti';
+        piece.style.background = colors[i % colors.length];
+        piece.style.left = 12 + Math.random() * 76 + '%';
+        banner.append(piece);
+        piece.animate([
+          {transform: 'translateY(6px) rotate(0deg)', opacity: 1},
+          {transform: `translateY(${64 + Math.random() * 90}px) rotate(${Math.random() * 320 - 160}deg)`, opacity: 0}
+        ], {duration: 1150 + Math.random() * 500, easing: 'cubic-bezier(.2,.7,.3,1)'});
+      }
+    }
+    stack.append(banner);
+    playChime(stages.length - 1, true);
+    clearTimeout(milestoneTimer);
+    milestoneTimer = setTimeout(() => banner.remove(), 1900);
+  }
+
   function mergePairs() {
     for (const [first, second] of pairs) {
       const a = first.body;
@@ -233,6 +270,8 @@
       scoreOutput.value = score;
       const special = stage === stages.length - 1;
       effects.push({x: merged.body.position.x, y, stage, at: age, special, points});
+      merges += 1;
+      if (MILESTONES.includes(merges)) celebrateMilestone(merges);
       playChime(stage, special);
       if (special) setNotice('special');
     }
@@ -273,7 +312,7 @@
     buildWorld();
     pieces.clear();
     effects.length = ripples.length = pairs.length = 0;
-    score = biggest = age = backlog = overTime = cooldown = 0;
+    score = biggest = age = backlog = overTime = cooldown = merges = 0;
     lastTime = pointer = pendingDrop = null;
     settling = false;
     deadline = mode === 'quick' ? performance.now() + roundMs : 0;
@@ -545,7 +584,7 @@
     playedRound = false;
     pieces.clear();
     effects.length = ripples.length = 0;
-    score = biggest = overTime = 0;
+    score = biggest = overTime = merges = 0;
     scoreOutput.value = 0;
     quickTime.value = roundMs / 1000;
     next = mode === 'quick' ? babyStage : 1;

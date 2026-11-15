@@ -41,3 +41,51 @@
 @media (max-width: 679px) {
   .capy-main > .capy-modes { order: 2; }
 }
+
+.capy-main .play-stack { position: relative; }
+.milestone-banner {
+  position: absolute;
+  left: 50%;
+  top: 24%;
+  transform: translate(-50%, -50%);
+  z-index: 5;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 26px 14px;
+  border: 3px solid #ffffff;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff8fb8, #ffb52e);
+  box-shadow: 0 10px 28px rgba(214, 90, 145, .45);
+  pointer-events: none;
+  animation: milestone-pop 1.9s ease forwards;
+}
+.milestone-count {
+  font-family: 'Fredoka', var(--game-handwriting), sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.05;
+  color: #ffffff;
+  text-shadow: 0 2px 0 rgba(167, 25, 91, .45);
+  white-space: nowrap;
+}
+.milestone-sub { font-size: .85rem; font-weight: 700; color: #fff7ec; white-space: nowrap; }
+.milestone-confetti {
+  position: absolute;
+  top: 8px;
+  width: 9px;
+  height: 13px;
+  border-radius: 3px;
+  pointer-events: none;
+}
+@keyframes milestone-pop {
+  0% { transform: translate(-50%, -50%) scale(.4); opacity: 0; }
+  14% { transform: translate(-50%, -50%) scale(1.12); opacity: 1; }
+  24% { transform: translate(-50%, -50%) scale(1); }
+  82% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -58%) scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .milestone-banner { animation: none; }
+}
