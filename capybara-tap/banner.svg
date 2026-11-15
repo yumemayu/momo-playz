@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <rect x="52" y="52" width="296" height="296" rx="36" fill="#f2fcfd"/>
+  <!-- splashes -->
+  <g fill="#7ec8e8">
+    <path d="M96 190 q 11 -22 22 0 q -11 11 -22 0 Z"/>
+    <path d="M282 190 q 11 -22 22 0 q -11 11 -22 0 Z"/>
+    <path d="M190 84 q 10 -19 20 0 q -10 10 -20 0 Z"/>
+  </g>
+  <!-- capybara head -->
+  <g>
+    <circle cx="140" cy="146" r="14" fill="#b07a4f"/><circle cx="260" cy="146" r="14" fill="#b07a4f"/>
+    <circle cx="140" cy="146" r="7" fill="#8a5a34"/><circle cx="260" cy="146" r="7" fill="#8a5a34"/>
+    <ellipse cx="200" cy="196" rx="68" ry="56" fill="#b07a4f"/>
+    <ellipse cx="200" cy="220" rx="26" ry="18" fill="#8a5a34"/>
+    <circle cx="191" cy="215" r="3.2" fill="#5d3d22"/><circle cx="209" cy="215" r="3.2" fill="#5d3d22"/>
+    <path d="M166 186 q 7 7 14 0 M220 186 q 7 7 14 0" stroke="#5d3d22" stroke-width="5" fill="none" stroke-linecap="round"/>
+    <ellipse cx="152" cy="208" rx="10" ry="6" fill="#ffb3c1" opacity="0.85"/>
+    <ellipse cx="248" cy="208" rx="10" ry="6" fill="#ffb3c1" opacity="0.85"/>
+  </g>
+  <!-- bucket front -->
+  <path d="M84 258 h232 l -12 62 a12 12 0 0 1 -12 10 h-184 a12 12 0 0 1 -12 -10 Z" fill="#d9a05f"/>
+  <ellipse cx="200" cy="258" rx="116" ry="15" fill="#e8b878"/>
+  <ellipse cx="200" cy="258" rx="98" ry="11" fill="#a8d8ea"/>
+  <path d="M92 296 h216" stroke="#b57e3e" stroke-width="6"/>
+</svg>

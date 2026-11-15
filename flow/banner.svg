@@ -1,0 +1,20 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- panel -->
+  <rect x="52" y="52" width="296" height="296" rx="36" fill="#eef7fb"/>
+  <!-- pink path -->
+  <path d="M268 128 H128 V268" stroke="#f06ba8" stroke-width="30" fill="none" stroke-linecap="round" stroke-linejoin="round"/>
+  <circle cx="268" cy="128" r="21" fill="#f06ba8"/>
+  <circle cx="128" cy="268" r="21" fill="#f06ba8"/>
+  <!-- green path -->
+  <path d="M182 268 H262" stroke="#57c98a" stroke-width="30" fill="none" stroke-linecap="round"/>
+  <circle cx="268" cy="268" r="21" fill="#57c98a"/>
+  <!-- tiny faces on the end dots -->
+  <g fill="#ffffff">
+    <circle cx="121" cy="264" r="3.2"/><circle cx="135" cy="264" r="3.2"/>
+    <circle cx="261" cy="264" r="3.2"/><circle cx="275" cy="264" r="3.2"/>
+  </g>
+  <g stroke="#ffffff" stroke-width="3" fill="none" stroke-linecap="round">
+    <path d="M122 272 Q 128 277 134 272"/>
+    <path d="M262 272 Q 268 277 274 272"/>
+  </g>
+</svg>

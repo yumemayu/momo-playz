@@ -1,17 +1,75 @@
+@import url('https://fonts.googleapis.com/css2?family=Fredoka:wght@500;600;700&display=swap');
+
 [data-game="cat-trap"] {
-  --banner-art: url("assets/ogp/cat-trap.jpg");
+  --banner-art: url("cat-trap/banner.svg");
   --banner-color: #dac1f2;
   --banner-ink: #b41450;
 }
 [data-game="capybara-tap"] {
-  --banner-art: url("assets/ogp/capybara-tap.jpg");
+  --banner-art: url("capybara-tap/banner.svg");
   --banner-color: #a9e9ec;
   --banner-ink: #005364;
 }
 [data-game="capybara"] {
-  --banner-art: url("assets/ogp/capybara-merge.jpg");
+  --banner-art: url("capybara-merge/banner.svg");
   --banner-color: #fbd4ce;
   --banner-ink: #a5163d;
+}
+
+
+[data-game="fries"] {
+  --banner-art: url("assets/fry-squirrel.png");
+  --banner-color: #ffdf9e;
+  --banner-ink: #9c4a00;
+}
+[data-game="buns"] {
+  --banner-art: url("assets/game-bun.png");
+  --banner-color: #ffe7d3;
+  --banner-ink: #a83c14;
+}
+[data-game="cats"] {
+  --banner-art: url("assets/game-cat.png");
+  --banner-color: #d9ecff;
+  --banner-ink: #144a7a;
+}
+[data-game="capybara-memory"] {
+  --banner-art: url("capybara-merge/pieces/10.webp");
+  --banner-color: #d9f2e2;
+  --banner-ink: #14663c;
+}
+[data-game="quoridor"] {
+  --banner-art: url("assets/banner-quoridor.jpg");
+  --banner-color: #e8f4c8;
+  --banner-ink: #4a6b12;
+}
+[data-game="lights-out"] {
+  --banner-art: url("lights-out/banner.svg");
+  --banner-color: #fff0b3;
+  --banner-ink: #8a6100;
+}
+[data-game="flow"] {
+  --banner-art: url("flow/banner.svg");
+  --banner-color: #ffe0ec;
+  --banner-ink: #a51c5e;
+}
+[data-game="dodgeball"] {
+  --banner-art: url("assets/banner-dodgeball.jpg");
+  --banner-color: #dbeafe;
+  --banner-ink: #1e4a8a;
+}
+
+
+[data-game="switch-shine"] {
+  --banner-art: url("switch-shine/banner.svg");
+  --banner-color: #d7f3e3;
+  --banner-ink: #0b6e4f;
+}
+
+
+[data-game="switch-shine"] .game-title-banner {
+  align-items: center;
+  flex-wrap: nowrap;
+  padding: 10px 16px;
 }
 
 .game-heading.game-title-banner {
@@ -44,11 +102,14 @@
 }
 
 .game-title-banner h1 {
+  font-family: "Fredoka", "Arial Rounded MT Bold", sans-serif;
+  font-weight: 700;
   box-sizing: border-box;
   width: 51%;
   margin: 8% 0 0;
   padding: 0 0 0 5%;
   color: var(--banner-ink);
+  paint-order: stroke fill;
   font-size: clamp(15px, 6.3cqi, 26px);
   line-height: 1.14;
   -webkit-text-stroke: 5px #fff;

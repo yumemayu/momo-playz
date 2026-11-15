@@ -6,14 +6,16 @@
   <title data-en-title="Switch &amp; Shine | MOMO Games">ピカッとスイッチ | MOMOゲーム集</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="switch-shine.css?v=records">
+  <link rel="stylesheet" href="../game-title-banner.css">
   <script defer src="../language.js"></script>
   <script defer src="switch-shine.js?v=records"></script>
 </head>
-<body>
+<body data-game="switch-shine">
 <main>
-  <header>
-    <a href="../" data-ja="← ゲーム一覧">← Games</a>
-    <h1>Switch &amp; Shine</h1>
+  <header class="game-heading game-title-banner">
+    <span class="game-title-rainbow" aria-hidden="true">🌈</span>
+    <span class="game-title-art" aria-hidden="true"></span>
+    <h1 data-ja="ピカッとスイッチ">Switch &amp; Shine</h1>
   </header>
   <nav class="modes" aria-label="Game mode" data-ja-label="ゲームモード">
     <button type="button" data-mode="lab" aria-pressed="true" data-ja="実験モード">Lab</button>
