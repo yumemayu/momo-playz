@@ -1,0 +1,180 @@
+/* HUD cards, like the mock: white cards with a thick brown outline. */
+.tap-stats { justify-content: stretch; flex-wrap: nowrap; gap: 8px; }
+.tap-stats > span {
+  flex: 1;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  flex-wrap: wrap;
+  gap: 2px 6px;
+  min-height: 56px;
+  padding: 4px 8px;
+  border: 3px solid #4a2c1a;
+  border-radius: 16px;
+  background: #fff;
+  color: #4a2c1a;
+  box-shadow: 0 3px 0 rgba(74, 44, 26, .25);
+}
+.tap-stat-label { font-size: .8rem; letter-spacing: .04em; }
+.tap-stats output { color: #4a2c1a; font-size: 1.3rem; font-weight: bold; }
+.time-bar {
+  flex-basis: 100%;
+  display: block;
+  height: 11px;
+  border: 2.5px solid #4a2c1a;
+  border-radius: 999px;
+  background: #fff;
+  overflow: hidden;
+}
+#time-fill {
+  display: block;
+  height: 100%;
+  width: 100%;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #8fdcf7, #4fb6e8);
+  transition: width .2s linear;
+}
+.level-art { width: 34px; height: 34px; object-fit: contain; }
+/* The ready/score cards float over the tub; the spots carry z-index 1,
+   so the cards need a higher one or the water rings paint over them. */
+.tap-main .game-card { z-index: 6; }
+
+/* The field is a wooden onsen tub filled with blue water. */
+.bath-field {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-rows: repeat(2, minmax(0, 1fr));
+  gap: 6px;
+  padding: 20px;
+  border: 5px solid #4a2c1a;
+  border-radius: 36px;
+  background:
+    linear-gradient(180deg, rgba(74, 44, 26, .28) 0 4px, transparent 4px calc(100% - 4px), rgba(74, 44, 26, .28) calc(100% - 4px)),
+    repeating-linear-gradient(90deg, #cf9464 0 44px, #a96f3e 44px 47px);
+  box-shadow: inset 0 0 0 3px rgba(255, 235, 200, .35), 0 5px 0 rgba(74, 44, 26, .3);
+}
+.bath-field::before {
+  content: "";
+  position: absolute;
+  inset: 13px;
+  border-radius: 24px;
+  background:
+    radial-gradient(circle at 20% 18%, rgba(255, 255, 255, .5) 0 22px, transparent 23px),
+    radial-gradient(circle at 84% 10%, rgba(255, 255, 255, .4) 0 16px, transparent 17px),
+    linear-gradient(180deg, #8fdcf7, #5fc3ee 70%, #4cb2e6);
+  box-shadow: inset 0 10px 14px rgba(30, 100, 140, .4), inset 0 -8px 12px rgba(255, 255, 255, .25);
+}
+
+/* Each spot is a ripple ring in the water; the capybara rises out of it. */
+.spot {
+  position: relative;
+  z-index: 1;
+  padding: 0;
+  border: 0;
+  border-radius: 18px;
+  background: transparent;
+  box-shadow: none;
+  overflow: hidden;
+  min-height: 0;
+  cursor: pointer;
+}
+.spot:disabled { opacity: 1; cursor: default; }
+.spot::before {
+  content: "";
+  position: absolute;
+  left: 50%;
+  bottom: 7%;
+  width: 82%;
+  height: 27%;
+  transform: translateX(-50%);
+  border: 3px solid rgba(255, 255, 255, .85);
+  border-radius: 50%;
+  box-shadow: 0 0 0 5px rgba(255, 255, 255, .18);
+  pointer-events: none;
+}
+.spot-inner {
+  position: absolute;
+  inset: 0;
+  display: block;
+}
+.spot-inner img {
+  position: absolute;
+  left: 50%;
+  bottom: 9%;
+  width: 88%;
+  height: 88%;
+  object-fit: contain;
+  pointer-events: none;
+  transform: translate(-50%, 118%);
+  transition: transform .18s ease-out;
+}
+.spot.up .spot-inner img { transform: translate(-50%, 4%); }
+.spot::after {
+  content: "";
+  position: absolute;
+  left: 4%;
+  right: 4%;
+  bottom: 2%;
+  height: 26%;
+  border-radius: 50%;
+  background: radial-gradient(ellipse at center, rgba(207, 242, 252, .95), rgba(140, 210, 240, .55) 68%, transparent);
+  pointer-events: none;
+}
+.spot.hit .spot-inner img { transition: transform .1s ease-in; transform: translate(-50%, 118%) scale(.92); }
+
+/* Golden capybara sparkles. */
+.spot.golden .spot-inner::before,
+.spot.golden .spot-inner::after {
+  position: absolute;
+  z-index: 2;
+  color: #ffd93b;
+  text-shadow: 0 0 5px #fff, 0 0 9px #ffd93b;
+  pointer-events: none;
+  animation: twinkle .55s ease-in-out infinite alternate;
+}
+.spot.golden .spot-inner::before { content: "✦"; top: 2%; left: 6%; font-size: 1.25rem; }
+.spot.golden .spot-inner::after { content: "✦"; top: 20%; right: 8%; font-size: .95rem; animation-delay: .25s; }
+@keyframes twinkle {
+  from { transform: scale(.7) rotate(-8deg); opacity: .55; }
+  to { transform: scale(1.15) rotate(10deg); opacity: 1; }
+}
+.float-point {
+  position: absolute;
+  z-index: 3;
+  left: 50%;
+  top: 6%;
+  transform: translate(-50%, 0);
+  font-weight: bold;
+  font-size: clamp(1rem, 4.5vw, 1.4rem);
+  color: #9b2867;
+  text-shadow: 0 1px 0 #fff, 0 0 6px #fff;
+  pointer-events: none;
+  animation: float-rise .7s ease-out forwards;
+}
+.float-point.golden { color: #c98a00; }
+.float-point.decoy { color: #38606e; font-size: clamp(.8rem, 3.6vw, 1.05rem); }
+@keyframes float-rise {
+  to { transform: translate(-50%, -26px); opacity: 0; }
+}
+.burst-star {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  color: #f6b73e;
+  text-shadow: 0 0 4px #fff, 0 0 6px #fff;
+  font-size: 22px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  animation: burst-fly .95s ease-out forwards;
+}
+@keyframes burst-fly {
+  to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.4) rotate(120deg); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .spot-inner img { transition: none; }
+  .spot.golden .spot-inner::before, .spot.golden .spot-inner::after { animation: none; }
+  .float-point { animation: none; opacity: 0; }
+  .burst-star { display: none; }
+  #time-fill { transition: none; }
+}

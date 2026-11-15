@@ -1,0 +1,38 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-en-title="MOMO Sticker Book">MOMOのシール帳</title>
+  <link rel="stylesheet" href="../language.css">
+  <link rel="stylesheet" href="../toy-box/toys.css?v=bun-mix">
+  <script defer src="../language.js"></script>
+<script defer src="../nickname.js?v=compact"></script>
+<link rel="stylesheet" href="../nickname.css?v=compact">
+  <script defer src="../stickers.js"></script>
+  <script defer src="../toy-box/toys.js?v=standalone"></script>
+</head>
+<body>
+<main>
+  <header><a href="../" data-ja="← ゲーム一覧">← Games</a></header>
+  <section id="stickers" class="toy">
+    <h2 data-ja="MOMOのシール帳">MOMO Sticker Book</h2>
+    <p id="sticker-progress" role="status"></p>
+    <h3 data-ja="おもちゃのシール">Toy stickers</h3>
+    <ul class="sticker-sheet" id="toy-stickers"></ul>
+    <h3 data-ja="ゲームのシール">Game stickers</h3>
+    <ul class="sticker-sheet" id="game-stickers"></ul>
+  </section>
+<details class="momo-nickname-panel" data-nickname-panel>
+  <summary>Set nickname</summary>
+  <form>
+    <label for="shared-nickname" data-ja="ニックネーム">Nickname</label>
+    <input id="shared-nickname" maxlength="20" autocomplete="off">
+    <button type="submit" data-ja="保存">Save</button>
+  </form>
+  <small role="status"></small>
+</details>
+</main>
+<span id="sticker-announcement" class="toy-sr-only" role="status"></span>
+</body>
+</html>

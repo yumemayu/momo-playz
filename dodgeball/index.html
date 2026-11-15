@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title data-en-title="MOMO Dodgeball">MOMO ドッジボール</title>
+<link rel="stylesheet" href="../language.css">
+<link rel="stylesheet" href="dodgeball.css?v=dodge-controls">
+<script defer src="../language.js"></script>
+<script defer src="../nickname.js?v=compact"></script>
+<link rel="stylesheet" href="../nickname.css?v=compact">
+<script defer src="dodgeball.js?v=dodge-controls"></script>
+</head>
+<body>
+<main>
+  <header>
+    <a href="../" data-ja="‹ ゲーム一覧">‹ Games</a>
+    <h1 data-ja="MOMO ドッジボール">MOMO Dodgeball</h1>
+  </header>
+  <fieldset class="match-modes">
+    <legend data-ja="あそびかた">Game mode</legend>
+    <button type="button" data-mode="practice" aria-pressed="false" data-ja="5球練習">5-shot practice</button>
+    <button type="button" data-mode="match" aria-pressed="true" data-ja="ねこと対戦">Play against Cat</button>
+  </fieldset>
+  <section class="court" aria-label="Dodgeball court" data-ja-label="ドッジボールコート">
+    <div class="windows" aria-hidden="true"><i></i><i></i><i></i></div>
+    <div class="floor" aria-hidden="true"></div>
+    <div class="score"><span data-ja="ヒット">Hits</span> <strong id="hits">0</strong> <span aria-hidden="true">·</span> <span data-ja="のこり">Left</span> <strong id="left">5</strong><span id="cat-score" hidden> · <span data-ja="ねこ">Cat</span> <strong id="cat-hits">0</strong></span></div>
+    <div class="opponent" aria-hidden="true">
+      <img src="cat.webp" alt="" draggable="false">
+      <img class="hit-face" data-face="squint" src="cat-squint.webp?v=catchlights" alt="" draggable="false">
+      <img class="hit-face" data-face="surprised" src="cat-surprised.webp?v=catchlights" alt="" draggable="false">
+      <img class="hit-face" data-face="dizzy" src="cat-dizzy.webp?v=catchlights" alt="" draggable="false">
+      <div class="impact">
+        <i class="glasses"></i>
+        <div class="star-burst">
+          <i class="spark">★</i><i class="spark">✦</i><i class="spark">★</i>
+          <i class="spark">✧</i><i class="spark">★</i><i class="spark">✦</i>
+        </div>
+      </div>
+      <span class="reaction" id="reaction" hidden></span>
+    </div>
+    <div class="aim" hidden aria-hidden="true"></div>
+    <button id="ball" class="ball" type="button" aria-label="Throw the ball" data-ja-label="ボールを投げる" aria-describedby="guide"></button>
+    <div id="dodge-zone" class="dodge-zone" hidden>
+      <span id="dodge-cue" class="dodge-cue" aria-hidden="true"></span>
+      <div id="landing" class="landing" aria-hidden="true"></div>
+      <div id="paw-position" class="paw-position" aria-hidden="true">🐾</div>
+      <button type="button" data-dodge="-1" aria-label="Dodge left" data-ja-label="左によける">‹</button>
+      <button type="button" data-dodge="1" aria-label="Dodge right" data-ja-label="右によける">›</button>
+    </div>
+    <div id="finish" class="finish" hidden>
+      <h2 id="result"></h2>
+      <button type="button" id="retry" data-ja="もういちど">Play again</button>
+    </div>
+  </section>
+  <p id="guide">Swipe the ball up. With a keyboard, aim with ← → and press Enter.</p>
+  <p id="status" class="sr-only" role="status"></p>
+<details class="momo-nickname-panel" data-nickname-panel>
+  <summary>Set nickname</summary>
+  <form>
+    <label for="shared-nickname" data-ja="ニックネーム">Nickname</label>
+    <input id="shared-nickname" maxlength="20" autocomplete="off">
+    <button type="submit" data-ja="保存">Save</button>
+  </form>
+  <small role="status"></small>
+</details>
+</main>
+</body>
+</html>

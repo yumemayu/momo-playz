@@ -1,0 +1,166 @@
+#momo-piano-levels { display:grid; grid-template-columns:minmax(0,390px); justify-content:center; gap:10px; max-width:470px; margin:auto; padding:12px; box-sizing:border-box; color:#49336b; }
+  #momo-piano-levels * { box-sizing:border-box; }
+  #momo-piano-levels .phone { min-height:490px; border:3px solid #fff8fc; border-radius:30px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 7px 19px #51326824, 0 0 0 1px #d6b7e4; }
+  #momo-piano-levels [hidden] { display:none !important; }
+  #momo-piano-levels .momo-art { display:flex; flex-direction:column; align-items:center; padding:18px 16px 12px; border-radius:28px; background:repeating-linear-gradient(0deg,#f29bc335 0 25px,transparent 25px 50px),repeating-linear-gradient(90deg,#bb9bef42 0 25px,transparent 25px 50px),#fff3f4; }
+  #momo-piano-levels .patch { color:#fff2dc; -webkit-text-stroke:1px #67468e; paint-order:stroke fill; text-shadow:0 3px #6e459b, 2px 0 #6e459b,-2px 0 #6e459b,0 -2px #6e459b, 0 5px #fff5fc; font-family:Nunito,ui-rounded,"Arial Rounded MT Bold",sans-serif; font-size:clamp(35px,6vw,49px); font-weight:1000; letter-spacing:.015em; line-height:.94; text-align:center; margin:7px 0 0; }
+  #momo-piano-levels .patch span { color:#ffc0df; }
+  #momo-piano-levels .hero { position:relative; width:100%; flex:1; min-height:206px; display:grid; place-items:center; margin:6px 0 2px; }
+  #momo-piano-levels .hero .avatar { width:min(76%,230px); height:auto; display:block; filter:drop-shadow(0 5px 4px #7c3f7626); }
+  #momo-piano-levels .gem { position:absolute; font-size:29px; line-height:1; color:#bd70d1; -webkit-text-stroke:1px #fff4fc; text-shadow:0 2px #a66bb850; }
+  #momo-piano-levels .one { left:4%; top:24%; color:#67b7de; }
+  #momo-piano-levels .two { right:3%; top:25%; color:#f188ba; transform:rotate(13deg); }
+  #momo-piano-levels .three { right:7%; bottom:22%; color:#f5c757; }
+  #momo-piano-levels .four { left:8%; bottom:16%; color:#ec80ac; transform:rotate(-14deg); }
+  #momo-piano-levels .choices { width:min(100%,246px); display:grid; gap:9px; }
+  #momo-piano-levels .choice { font-family:inherit; color:inherit; text-align:center; border:2px solid #fff9fa; border-radius:17px; padding:11px 5px; font-size:15px; font-weight:800; box-shadow:0 3px #ae76be60; }
+  #momo-piano-levels .choice span[aria-hidden] { display:inline-block; width:1.5em; }
+  #momo-piano-levels .free { background:#f6a7d0; }
+  #momo-piano-levels .guided { background:#e3cffd; }
+  #momo-piano-levels .play { background:linear-gradient(#fbe3f5,#faf2ff 46%,#fff5f9); }
+  #momo-piano-levels header { display:flex; justify-content:space-between; align-items:center; gap:5px; padding:14px 12px; font-size:12px; font-weight:700; }
+  #momo-piano-levels .back { background:#fff8fc; color:inherit; border:0; font:inherit; padding:6px 9px; min-height:42px; border-radius:10px; }
+  #momo-piano-levels .select-song h2 { margin:25px 16px 18px; text-align:center; font-size:23px; }
+  #momo-piano-levels .level-buttons { display:grid; grid-template-columns:1fr 1fr; gap:6px; }
+  #momo-piano-levels .level-buttons button { min-width:0; min-height:44px; padding:5px 2px; color:#543667; background:#fff7fe; border:1px solid #d9b5e8; border-radius:12px; font:inherit; font-size:12px; font-weight:800; }
+  #momo-piano-levels .level-buttons button[aria-pressed="true"] { background:#eed4ff; border-color:#8553a8; }
+  #momo-piano-levels .song-list { display:grid; gap:12px; padding:0 18px 22px; }
+  #momo-piano-levels .song-list button { display:flex; align-items:center; gap:10px; min-height:58px; padding:9px 13px; text-align:left; background:#fff7fe; }
+  #momo-piano-levels .song-list button span:first-child { flex:none; color:#9660be; }
+  #momo-piano-levels .song { text-align:center; flex:1; padding:3px 15px 9px; }
+  #momo-piano-levels .sparkles { color:#e9ae37; font-size:65px; text-shadow:0 3px #fff6cb; line-height:1.12; }
+  #momo-piano-levels .sparkles span { color:#b780cf; font-size:26px; display:inline-block; margin:0 8px; vertical-align:14px; }
+  #momo-piano-levels .song h2 { margin:0 0 10px; font-size:22px; font-weight:800; }
+  #momo-piano-levels .track { height:6px; width:min(128px,100%); margin:auto; background:#e8d8f3; border-radius:10px; overflow:hidden; }
+  #momo-piano-levels .track div { width:0; height:100%; background:#a96bd6; transition:width .16s; }
+  #momo-piano-levels .hint { margin:12px 0 0; font-weight:700; font-size:13px; min-height:20px; }
+  #momo-piano-levels .piano { display:grid; gap:5px; padding:6px 5px 9px; background:#c0a3e7; }
+  #momo-piano-levels .piano-row { min-width:0; }
+  #momo-piano-levels .row-label { display:block; margin:0 3px 3px; color:#382451; font-size:11px; font-weight:700; }
+  #momo-piano-levels .key-row { position:relative; display:grid; gap:2px; grid-template-columns:repeat(8,minmax(0,1fr)); }
+  #momo-piano-levels .lower-keys { grid-template-columns:repeat(7,minmax(0,1fr)); }
+  #momo-piano-levels .key { appearance:none; font:inherit; min-width:0; padding:0 0 10px; background:#fffafa; color:#49336b; border:0; border-radius:4px 4px 8px 8px; height:94px; box-shadow:0 4px #a581ce; display:flex; align-items:center; justify-content:flex-end; flex-direction:column; gap:4px; font-size:13px; font-weight:800; position:relative; touch-action:manipulation; }
+  #momo-piano-levels .key.sharp { position:absolute; z-index:1; top:0; left:var(--key-position); translate:-50% 0; width:min(40px,12%); height:54px; padding:0 0 5px; background:#543667; color:#fff3fb; box-shadow:0 3px #32203d; font-size:11px; white-space:nowrap; }
+  #momo-piano-levels .key.sharp .dot { display:none; }
+  #momo-piano-levels .key.sharp small { top:4px; }
+  #momo-piano-levels .key.sharp.next { background:#ff80bf; color:#471838; box-shadow:inset 0 0 0 3px #a22570,0 3px #742751; }
+  #momo-piano-levels .key .dot { width:12px; height:12px; border-radius:50%; background:var(--note-color); }
+  #momo-piano-levels .key small { position:absolute; top:10px; font-size:15px; color:#745297; }
+  #momo-piano-levels .key.next { background:#ff80bf; color:#471838; box-shadow:inset 0 0 0 3px #a22570,0 4px #742751; }
+  #momo-piano-levels .key.next small { color:#61204e; font-size:17px; }
+  #momo-piano-levels .key.next .dot { box-shadow:0 0 0 1px #61204e,0 0 0 3px #fff3fa; }
+  #momo-piano-levels .key:active { transform:translateY(2px); }
+  #momo-piano-levels .play-footer { display:flex; justify-content:space-between; align-items:center; padding:7px 13px 6px; font-size:12px; font-weight:700; }
+  #momo-piano-levels .reset { color:#614083; background:transparent; border:0; font:inherit; min-height:42px; }
+
+
+body { margin:0; background:#fff0f7; font-family:Nunito,"Hiragino Maru Gothic ProN",system-ui,sans-serif; }
+#momo-piano-levels { max-width:860px; grid-template-columns:minmax(0,520px); }
+#momo-piano-levels .piano-sidebar { display:grid; gap:11px; min-width:0; }
+#momo-piano-levels .choices { width:100%; grid-template-columns:1fr 1fr; }
+#momo-piano-levels .choices [aria-pressed="true"] { outline:2px solid #9659a5; outline-offset:-2px; }
+#momo-piano-levels .choices [aria-pressed="false"] { background:#fff6fc; }
+#momo-piano-levels .phone { min-width:0; }
+#momo-piano-levels .game-picker { grid-column: 1 / -1; }
+#momo-piano-levels button { cursor:pointer; }
+@media (min-width:760px) {
+  #momo-piano-levels { grid-template-columns:minmax(215px,275px) minmax(0,540px); gap:14px; align-items:start; }
+  #momo-piano-levels .momo-art { min-height:300px; justify-content:center; }
+  #momo-piano-levels .choices { grid-template-columns:1fr; }
+  #momo-piano-levels .piano { padding-inline:40px; }
+  #momo-piano-levels .key { height:108px; }
+  #momo-piano-levels .key.sharp { width:min(34px,12%); height:64px; }
+}
+
+@media (max-width:759px) {
+  #momo-piano-levels .momo-art { flex-direction:row; justify-content:center; gap:8px; padding:6px 10px; }
+  #momo-piano-levels .momo-art .patch { font-size:29px; margin:0; }
+  #momo-piano-levels .hero { flex:none; width:88px; min-height:0; margin:0; }
+  #momo-piano-levels .hero .avatar { width:78px; }
+  #momo-piano-levels .hero .gem { display:none; }
+}
+
+#momo-piano-levels .rolling header { padding-bottom:4px; }
+#momo-piano-levels .rolling .song { flex:none; }
+#momo-piano-levels .rolling .sparkles,
+#momo-piano-levels .with-roll .row-label { display:none; }
+#momo-piano-levels .falling-roll {
+  position:relative;
+  overflow:hidden;
+  height:clamp(170px,32vh,290px);
+  margin-inline:5px;
+  border-radius:16px 16px 0 0;
+  background:
+    repeating-linear-gradient(90deg,transparent 0 calc(100% / var(--lane-count) - 1px),#ffffff1c calc(100% / var(--lane-count) - 1px) calc(100% / var(--lane-count))),
+    linear-gradient(#2b1d47,#1b1133);
+  border-bottom:3px solid #ffb6e6;
+}
+#momo-piano-levels .falling-note {
+  position:absolute;
+  top:0;
+  left:var(--note-position);
+  translate:-50% 0;
+  display:grid;
+  place-items:center;
+  width:min(calc(100% / var(--lane-count) - 3px),40px);
+  font-size:clamp(9px,1.45vw,14px);
+  white-space:nowrap;
+  border:1px solid #fff8ee;
+  border-radius:10px;
+  color:#4d3458;
+  background:var(--note-fill);
+  box-shadow:0 0 14px var(--note-fill);
+  font-weight:800;
+}
+#momo-piano-levels .falling-note.arrived { box-shadow:0 0 20px 3px #ffd788; }
+#momo-piano-levels .with-roll {
+  position:relative;
+  display:grid;
+  grid-template-columns:repeat(var(--lane-count),minmax(0,1fr));
+  gap:0;
+  padding-top:0;
+  margin-inline:5px;
+  padding-inline:0;
+}
+#momo-piano-levels .with-roll .piano-row,
+#momo-piano-levels .with-roll .key-row { display:contents; }
+#momo-piano-levels .with-roll .key.sharp { left:var(--roll-position); width:min(34px,calc(64% / var(--lane-count))); }
+#momo-piano-levels .deflected-note {
+  position:absolute;
+  bottom:4px;
+  color:#e8cafa;
+  font-size:24px;
+  pointer-events:none;
+}
+#momo-piano-levels .with-roll .key:not(.sharp) { border:1px solid #dfcce6; border-radius:0 0 7px 7px; }
+#momo-piano-levels .celebration {
+  display:grid;
+  justify-items:center;
+  gap:3px;
+  margin:10px 12px 0;
+  padding:9px 8px;
+  color:#633b70;
+  background:#fff1c3;
+  border:2px solid #fff8ee;
+  border-radius:16px;
+}
+#momo-piano-levels .celebration span { color:#ba7124; font-size:20px; }
+@media (min-width:760px) {
+  #momo-piano-levels .falling-roll,
+  #momo-piano-levels .with-roll { margin-inline:40px; }
+}
+#momo-piano-levels .correct-star {
+  position:absolute;
+  z-index:2;
+  top:16px;
+  left:50%;
+  color:#fff1ab;
+  text-shadow:0 0 4px #934161,0 0 9px #ffdf83;
+  font-size:28px;
+  line-height:1;
+  opacity:0;
+  pointer-events:none;
+}
+
+.sticker-footer { padding: 0 16px 18px; text-align: center; }
+.sticker-footer a { color: #754779; font-weight: 700; }

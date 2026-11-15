@@ -1,0 +1,34 @@
+.momo-language {
+  position: fixed;
+  top: 8px;
+  right: 8px;
+  z-index: 60;
+  display: flex;
+  gap: 2px;
+  margin: 0;
+  padding: 3px;
+  border: 1.5px solid #dbb6d7;
+  border-radius: 999px;
+  background: rgba(255, 248, 252, .92);
+  box-shadow: 0 2px 0 #e7bad1;
+  backdrop-filter: blur(3px);
+}
+.momo-language button {
+  min-width: 40px;
+  min-height: 38px;
+  padding: 3px 10px;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  color: #57324f;
+  font: 700 16px "Chalkboard SE", "Segoe Print", "Comic Sans MS", Nunito, system-ui, sans-serif;
+  cursor: pointer;
+}
+.momo-language button[aria-pressed="true"] {
+  background: #ffd0e4;
+  box-shadow: inset 0 0 0 1.5px #e271a8;
+}
+.momo-language button:focus-visible {
+  outline: 2px solid #703b79;
+  outline-offset: 2px;
+}

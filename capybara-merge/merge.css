@@ -1,0 +1,43 @@
+.capy-stats { justify-content: flex-start; flex-wrap: wrap; }
+.capy-stats > span {
+  display: inline-flex;
+  align-items: center;
+  gap: 7px;
+  min-height: 49px;
+  padding: 3px 12px;
+  border: 2px solid white;
+  border-radius: 14px;
+  background: #fff8fc;
+}
+.capy-stats output { color: #8f3675; font-size: 1.22rem; }
+.capy-guide {
+  margin: 12px 0 0;
+  padding: 8px;
+  border: 1px solid #e7bad9;
+  border-radius: 16px;
+  background: #fff8fc;
+}
+.capy-guide h2 { margin: 0 0 5px; font: 700 1rem var(--game-handwriting); text-align: center; }
+.capy-guide ol { display: grid; grid-template-columns: repeat(5, minmax(0, 1fr)); margin: 0; padding: 0; list-style: none; }
+.capy-guide li { min-width: 0; }
+.capy-guide li img { display: block; width: 100%; max-width: 53px; margin: auto; opacity: .5; filter: grayscale(1); }
+.capy-guide li.seen img { opacity: 1; filter: none; }
+.capy-guide p { margin: 4px 0 0; text-align: center; font-size: .8rem; }
+.capy-main .game-field { width: 100%; height: auto; aspect-ratio: 6 / 7; border-width: 3px; background: #fff2e7; }
+.capy-main .play-stack { width: 100%; max-width: 430px; align-self: center; justify-self: center; }
+.capy-main .capy-notice { min-height: 1.3em; font-size: .88rem; color: #703460; }
+.capy-main .capy-notice:empty { display: none; }
+.capy-main .move-pad { display: grid; grid-template-columns: 1fr 1.35fr 1fr; }
+.capy-main .move-pad #drop { min-height: 60px; background: #e9d6ff; color: #553369; }
+.capy-main .game-card { z-index: 1; }
+.capy-main .score-stage { font-size: .77rem; color: #6c3d68; }
+@media (max-width: 679px) {
+  .capy-main > .capy-guide { order: 6; width: 100%; }
+  .capy-main > #instructions { order: 5; }
+}
+
+.capy-stats #quick-clock[hidden] { display: none; }
+#quick-time { font-variant-numeric: tabular-nums; }
+@media (max-width: 679px) {
+  .capy-main > .capy-modes { order: 2; }
+}

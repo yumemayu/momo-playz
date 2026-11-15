@@ -1,0 +1,156 @@
+/* Flow: connect matching colours and fill the whole board, faithful
+   to the original. The cuteness lives in the motion: glossy glowing
+   pipes, bubbly pops, sparkles and a rainbow wave at the win. */
+.flow-stats { flex-wrap: wrap; row-gap: 4px; }
+
+.turn-line {
+  min-height: 1.6em;
+  margin: 0 0 6px;
+  text-align: center;
+  font-family: var(--game-handwriting);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #7a3b63;
+}
+.turn-line:empty { visibility: hidden; }
+
+.flow-board {
+  position: relative;
+  display: grid;
+  gap: 1.6%;
+  width: min(100%, 68dvh, 620px);
+  height: auto;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  padding: 2.6%;
+  border: 4px solid #a8d8f0;
+  border-radius: 22px;
+  background: linear-gradient(160deg, #ffffff, #eef9ff);
+  box-shadow: inset 0 2px 0 #ffffff, 0 4px 0 rgba(70, 130, 180, .18);
+  touch-action: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.flow-cell {
+  position: relative;
+  min-height: 0;
+  aspect-ratio: 1;
+  border-radius: 18%;
+  background: rgba(120, 150, 200, .1);
+  box-shadow: inset 0 1px 3px rgba(90, 110, 160, .14);
+  transition: background .15s ease;
+}
+
+/* Pipe pieces: a round joint in the middle plus an arm toward each
+   connected neighbour. The white gloss line makes them look juicy. */
+.pipe {
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  filter: drop-shadow(0 0 5px var(--glow));
+}
+.pipe .joint {
+  position: absolute;
+  left: 27%;
+  top: 27%;
+  width: 46%;
+  height: 46%;
+  border-radius: 50%;
+  background: var(--pipe);
+}
+.pipe .arm {
+  position: absolute;
+  background: var(--pipe);
+}
+.pipe .arm.n { left: 27%; top: 0; width: 46%; height: 52%; }
+.pipe .arm.s { left: 27%; bottom: 0; width: 46%; height: 52%; }
+.pipe .arm.w { left: 0; top: 27%; width: 52%; height: 46%; }
+.pipe .arm.e { right: 0; top: 27%; width: 52%; height: 46%; }
+.pipe .joint::after, .pipe .arm::after {
+  content: "";
+  position: absolute;
+  inset: 0;
+  border-radius: inherit;
+  background: linear-gradient(180deg, rgba(255, 255, 255, .5), rgba(255, 255, 255, 0) 55%);
+}
+.pipe .arm.n::after, .pipe .arm.s::after {
+  background: linear-gradient(90deg, rgba(255, 255, 255, .45), rgba(255, 255, 255, 0) 55%);
+}
+.flow-cell.just-added .pipe { animation: pipe-pop .22s ease; }
+@keyframes pipe-pop {
+  35% { transform: scale(1.13); }
+}
+
+.flow-dot {
+  position: absolute;
+  left: 17%;
+  top: 17%;
+  z-index: 2;
+  width: 66%;
+  height: 66%;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 30%, rgba(255, 255, 255, .85), rgba(255, 255, 255, 0) 46%), var(--pipe);
+  box-shadow: 0 0 8px 1px var(--glow), inset 0 -3px 5px rgba(0, 0, 0, .16);
+  pointer-events: none;
+}
+.flow-dot.done { animation: dot-happy 1.6s ease-in-out infinite; }
+@keyframes dot-happy {
+  0%, 100% { box-shadow: 0 0 8px 1px var(--glow), 0 0 0 0 var(--glow), inset 0 -3px 5px rgba(0, 0, 0, .16); }
+  50% { box-shadow: 0 0 12px 3px var(--glow), 0 0 0 5px transparent, inset 0 -3px 5px rgba(0, 0, 0, .16); }
+}
+.flow-cell.head .flow-dot { animation: dot-head .7s ease-in-out infinite alternate; }
+@keyframes dot-head {
+  from { transform: scale(1); }
+  to { transform: scale(1.12); }
+}
+
+.flow-cell .spark {
+  position: absolute;
+  left: 50%;
+  top: 6%;
+  z-index: 3;
+  pointer-events: none;
+  color: var(--pipe);
+  text-shadow: 0 0 4px #fff, 0 0 6px #fff;
+  font-size: 15px;
+  line-height: 1;
+  transform: translate(-50%, 0);
+  animation: spark-float .6s ease-out forwards;
+}
+@keyframes spark-float {
+  to { transform: translate(calc(-50% + var(--sx, 0px)), -24px) scale(.5) rotate(80deg); opacity: 0; }
+}
+
+/* Win celebration: a rainbow wave rolls across the board. */
+.flow-cell.wave { background: var(--wave); transition: background .1s ease; }
+
+.flow-verdict {
+  margin-top: 4px;
+  font-size: clamp(1.05rem, 4.5vw, 1.4rem);
+  font-weight: bold;
+  color: #9b2867;
+}
+.flow-verdict:empty { display: none; }
+
+.burst-star {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  color: #f6b73e;
+  text-shadow: 0 0 4px #fff, 0 0 6px #fff;
+  font-size: 22px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  animation: burst-fly .95s ease-out forwards;
+}
+@keyframes burst-fly {
+  to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.4) rotate(120deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .flow-cell.just-added .pipe { animation: none; }
+  .flow-dot.done, .flow-cell.head .flow-dot { animation: none; }
+  .flow-cell .spark { display: none; }
+  .burst-star { display: none; }
+}

@@ -1,0 +1,10 @@
+* { box-sizing: border-box; }
+body { margin: 0; color: #48263d; background: #fff1f7; font: 650 1rem/1.45 ui-rounded, system-ui, sans-serif; }
+main, .feedback { max-width: 1050px; margin: auto; padding: 12px clamp(12px, 4vw, 34px); }
+header { display: flex; align-items: center; gap: 12px; padding-right: 80px; }
+header img { width: clamp(64px, 14vw, 130px); height: auto; }
+h1 { font-size: clamp(1.6rem, 6vw, 3rem); margin: 0; }
+nav.game-picker { grid-template-columns: repeat(auto-fit, minmax(min(100%, 135px), 1fr)); gap: 12px; }
+nav.game-picker > a { min-height: 105px; }
+.feedback { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
+.feedback a { color: #754676; }

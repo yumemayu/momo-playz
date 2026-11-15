@@ -1,0 +1,58 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-en-title="Bun Lights">肉まんライト</title>
+  <link rel="stylesheet" href="../language.css">
+  <link rel="stylesheet" href="../toy-box/toys.css?v=bun-mix">
+  <script defer src="../language.js"></script>
+<script defer src="../nickname.js?v=compact"></script>
+<link rel="stylesheet" href="../nickname.css?v=compact">
+  <script defer src="../stickers.js"></script>
+  <script defer src="../toy-box/toys.js?v=standalone"></script>
+</head>
+<body>
+<main>
+  <header><a href="../" data-ja="← ゲーム一覧">← Games</a></header>
+  <section id="bun" class="toy">
+    <h2 data-ja="むぎゅっと肉まんライト">Squishy Bun Lights</h2>
+    <p data-ja="長押しでむぎゅっ。２つ光らせると色がまざるよ！">Hold to squish. Light up two buns to mix their colors!</p>
+    <div class="bun-tray" id="bun-tray">
+      <span class="bun-mixed-glow" aria-hidden="true"></span>
+      <div class="bun-mix-result" id="bun-mix-result" hidden>
+        <div class="bun-mix-swatches" aria-hidden="true"></div>
+        <p class="bun-mix-label" id="bun-mix-label" role="status"></p>
+      </div>
+      <div class="bun-night-sky" aria-hidden="true"><span class="bun-moon"></span><span class="bun-stars">✦</span></div>
+      <button class="bun strawberry" aria-label="Strawberry" data-ja-label="いちご" aria-pressed="false"><span class="bun-cap" aria-hidden="true"><span class="bun-face"></span></span></button>
+      <button class="bun soda" aria-label="Soda" data-ja-label="ソーダ" aria-pressed="false"><span class="bun-cap" aria-hidden="true"><span class="bun-face"></span></span></button>
+      <button class="bun milk" aria-label="Milk" data-ja-label="ミルク" aria-pressed="false"><span class="bun-cap" aria-hidden="true"><span class="bun-face"></span></span></button>
+    </div>
+    <button id="bun-mission" class="action" data-ja="30秒の色チャレンジ">30-second Color Challenge</button>
+    <button id="bun-night" class="action" type="button" aria-pressed="false" data-ja="☾ おやすみモード">☾ Night light</button>
+    <div id="bun-night-controls" class="night-controls" hidden>
+      <label for="bun-night-duration" data-ja="消えるまで">Turn off after</label>
+      <select id="bun-night-duration">
+        <option value="1" data-ja="1分">1 min</option>
+        <option value="3" selected data-ja="3分">3 min</option>
+        <option value="5" data-ja="5分">5 min</option>
+      </select>
+      <output id="bun-night-clock" for="bun-night-duration" aria-live="off"></output>
+    </div>
+    <p id="bun-status" class="status" role="status"></p>
+  </section>
+<details class="momo-nickname-panel" data-nickname-panel>
+  <summary>Set nickname</summary>
+  <form>
+    <label for="shared-nickname" data-ja="ニックネーム">Nickname</label>
+    <input id="shared-nickname" maxlength="20" autocomplete="off">
+    <button type="submit" data-ja="保存">Save</button>
+  </form>
+  <small role="status"></small>
+</details>
+  <footer><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a></footer>
+</main>
+<span id="sticker-announcement" class="toy-sr-only" role="status"></span>
+</body>
+</html>

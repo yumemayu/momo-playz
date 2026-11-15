@@ -1,0 +1,51 @@
+.momo-nickname-panel {
+  margin: 12px auto;
+  max-width: 28rem;
+  padding: 8px 12px;
+  border: 1px solid #e2c2d7;
+  border-radius: 12px;
+  background: #fff7fb;
+  color: #55364e;
+  font: 600 .9rem system-ui, sans-serif;
+}
+.momo-nickname-panel summary { cursor: pointer; padding-block: 4px; overflow-wrap: anywhere; }
+.momo-nickname-panel form { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-top: 8px; }
+.momo-nickname-panel :is(input, button) {
+  min-height: 36px;
+  border: 1px solid #b48aa8;
+  border-radius: 8px;
+  padding: 4px 8px;
+  background: white;
+  color: inherit;
+  font: inherit;
+}
+.momo-nickname-panel input { width: min(100%, 10rem); }
+.momo-nickname-panel button { background: #f3daee; cursor: pointer; }
+
+/* A saved nickname stays out of the play area until someone edits it. */
+.momo-nickname-panel[data-saved]:not([open]) {
+  width: fit-content;
+  margin-block: 4px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.momo-nickname-panel[data-saved]:not([open]) summary,
+button#change-player.change-player {
+  min-height: 28px;
+  padding: 3px 5px;
+  border: 0;
+  background: transparent;
+  box-shadow: none;
+  color: #684974;
+  font: 600 .78rem/1.3 system-ui, sans-serif;
+  text-decoration: underline;
+  text-underline-offset: 2px;
+}
+.momo-nickname-panel[data-saved]:not([open]) summary {
+  list-style: none;
+  display: flex;
+  align-items: center;
+}
+.momo-nickname-panel[data-saved]:not([open]) summary::-webkit-details-marker { display: none; }
+button#change-player.change-player { margin-top: 2px; }

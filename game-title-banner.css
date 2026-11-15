@@ -1,0 +1,68 @@
+[data-game="cat-trap"] {
+  --banner-art: url("assets/ogp/cat-trap.jpg");
+  --banner-color: #dac1f2;
+  --banner-ink: #b41450;
+}
+[data-game="capybara-tap"] {
+  --banner-art: url("assets/ogp/capybara-tap.jpg");
+  --banner-color: #a9e9ec;
+  --banner-ink: #005364;
+}
+[data-game="capybara"] {
+  --banner-art: url("assets/ogp/capybara-merge.jpg");
+  --banner-color: #fbd4ce;
+  --banner-ink: #a5163d;
+}
+
+.game-heading.game-title-banner {
+  position: relative;
+  isolation: isolate;
+  container-type: inline-size;
+  box-sizing: border-box;
+  width: 100%;
+  min-width: 0;
+  min-height: 112px;
+  aspect-ratio: 40 / 21;
+  overflow: hidden;
+  border-radius: 18px;
+  background: var(--banner-color);
+}
+
+.game-title-art {
+  position: absolute;
+  inset: 0 0 0 49%;
+  z-index: -1;
+  background: var(--banner-art) right center / auto 100% no-repeat;
+}
+
+.game-title-rainbow {
+  position: absolute;
+  top: 8%;
+  left: 5%;
+  font-size: clamp(15px, 7cqi, 26px);
+  line-height: 1;
+}
+
+.game-title-banner h1 {
+  box-sizing: border-box;
+  width: 51%;
+  margin: 8% 0 0;
+  padding: 0 0 0 5%;
+  color: var(--banner-ink);
+  font-size: clamp(15px, 6.3cqi, 26px);
+  line-height: 1.14;
+  -webkit-text-stroke: 5px #fff;
+  filter: none;
+  text-shadow: none;
+}
+
+.game-title-banner h1 span {
+  white-space: nowrap;
+}
+
+/* Stacked layouts reserve a row for the fixed language switch. */
+@media (max-width: 1049px) and (orientation: portrait), (max-width: 699px) {
+  main > .game-title-banner {
+    margin-top: 50px;
+  }
+}

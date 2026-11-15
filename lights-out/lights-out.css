@@ -1,0 +1,134 @@
+/* Lights Out: the classic 5x5 flipping-lights puzzle, kept faithful.
+   The only decoration is in the motion: glowing panels, ripples,
+   sparkles and soft sounds. */
+.lights-stats { flex-wrap: wrap; row-gap: 4px; }
+
+.turn-line {
+  min-height: 1.6em;
+  margin: 0 0 6px;
+  text-align: center;
+  font-family: var(--game-handwriting);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #7a3b63;
+}
+.turn-line:empty { visibility: hidden; }
+
+.lo-board {
+  position: relative;
+  display: grid;
+  grid-template-columns: repeat(5, 1fr);
+  gap: 2.6%;
+  width: min(100%, 68dvh, 620px);
+  height: auto;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  padding: 3.2%;
+  border: 4px solid #e8b4d0;
+  border-radius: 22px;
+  background: linear-gradient(160deg, #fff8ee, #ffeef7);
+  box-shadow: inset 0 2px 0 #ffffff, 0 4px 0 rgba(167, 25, 91, .18);
+  touch-action: manipulation;
+}
+
+.lo-tile {
+  position: relative;
+  min-height: 0;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 2px solid #b9aede;
+  border-radius: 20%;
+  background: linear-gradient(160deg, #cfc8e8, #a89fd0);
+  box-shadow: inset 0 3px 5px rgba(70, 55, 130, .35), inset 0 -2px 0 rgba(255, 255, 255, .35);
+  cursor: pointer;
+  transition: background .18s ease, box-shadow .18s ease, border-color .18s ease;
+}
+.lo-tile:disabled { cursor: default; }
+.lo-tile.on {
+  border-color: #f0a92e;
+  background: radial-gradient(circle at 38% 32%, #fffbe8, #ffe066 55%, #ffd02e);
+  box-shadow: 0 0 14px 3px rgba(255, 208, 46, .75), 0 0 30px 6px rgba(255, 208, 46, .35),
+    inset 0 -3px 0 rgba(214, 144, 0, .45), inset 0 3px 4px rgba(255, 255, 255, .8);
+  animation: lamp-breathe 2.2s ease-in-out infinite;
+}
+@keyframes lamp-breathe {
+  0%, 100% { box-shadow: 0 0 12px 3px rgba(255, 208, 46, .65), 0 0 26px 5px rgba(255, 208, 46, .3), inset 0 -3px 0 rgba(214, 144, 0, .45), inset 0 3px 4px rgba(255, 255, 255, .8); }
+  50% { box-shadow: 0 0 18px 5px rgba(255, 208, 46, .85), 0 0 36px 9px rgba(255, 208, 46, .42), inset 0 -3px 0 rgba(214, 144, 0, .45), inset 0 3px 4px rgba(255, 255, 255, .8); }
+}
+/* Before Play, the nickname card sits over the board: keep the preview
+   glow small and still, so the light does not wash over the card. */
+.lo-board.preview .lo-tile.on {
+  animation: none;
+  box-shadow: 0 0 5px 1px rgba(255, 208, 46, .45), inset 0 -3px 0 rgba(214, 144, 0, .45), inset 0 3px 4px rgba(255, 255, 255, .8);
+}
+.lo-tile.pop { animation: tile-pop .28s ease; }
+@keyframes tile-pop {
+  35% { transform: scale(.9); }
+  70% { transform: scale(1.05); }
+}
+.lo-tile .ripple {
+  position: absolute;
+  inset: -6%;
+  border: 3px solid rgba(255, 190, 40, .85);
+  border-radius: 24%;
+  pointer-events: none;
+  animation: tile-ripple .45s ease-out forwards;
+}
+@keyframes tile-ripple {
+  from { transform: scale(.82); opacity: 1; }
+  to { transform: scale(1.22); opacity: 0; }
+}
+.lo-tile .spark {
+  position: absolute;
+  left: 50%;
+  top: 8%;
+  z-index: 2;
+  pointer-events: none;
+  color: #ffb52e;
+  text-shadow: 0 0 4px #fff, 0 0 6px #fff;
+  font-size: 15px;
+  line-height: 1;
+  transform: translate(-50%, 0);
+  animation: spark-float .6s ease-out forwards;
+}
+@keyframes spark-float {
+  to { transform: translate(calc(-50% + var(--sx, 0px)), -26px) scale(.5) rotate(80deg); opacity: 0; }
+}
+
+/* Win celebration: a rainbow wave rolls across the board. */
+.lo-tile.wave {
+  border-color: #ffffff;
+  background: radial-gradient(circle at 38% 32%, #ffffff, var(--wave) 60%, var(--wave));
+  box-shadow: 0 0 16px 4px var(--wave), inset 0 3px 4px rgba(255, 255, 255, .85);
+  animation: none;
+}
+
+.lights-verdict {
+  margin-top: 4px;
+  font-size: clamp(1.05rem, 4.5vw, 1.4rem);
+  font-weight: bold;
+  color: #9b2867;
+}
+.lights-verdict:empty { display: none; }
+
+.burst-star {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  color: #f6b73e;
+  text-shadow: 0 0 4px #fff, 0 0 6px #fff;
+  font-size: 22px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  animation: burst-fly .95s ease-out forwards;
+}
+@keyframes burst-fly {
+  to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.4) rotate(120deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .lo-tile.on { animation: none; }
+  .lo-tile.pop { animation: none; }
+  .lo-tile .ripple, .lo-tile .spark { display: none; }
+  .burst-star { display: none; }
+}

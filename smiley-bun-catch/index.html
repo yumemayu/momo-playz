@@ -1,0 +1,84 @@
+<!doctype html>
+<html lang="en">
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Smiley Bun Catch by Momo.squirrels</title>
+<link rel="stylesheet" href="../game.css?v=level-cards">
+<link rel="stylesheet" href="../game-picker.css">
+<link rel="stylesheet" href="../language.css">
+<body data-game="buns">
+<main>
+<header class="game-heading"><img class="hello-rainbow" src="../assets/momo-squirrels.png" alt="Momo.squirrels" width="780" height="592"><h1 data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</h1></header>
+<div class="bun-rules">
+  <span><img src="../assets/game-bun.png" alt="" width="40" height="40"> <span data-ja="にこにこ肉まん">Smiley Bun</span> <strong>+1</strong></span>
+  <span><img src="../assets/devil-bun.png" alt="" width="40" height="40"> <span data-ja="デビル肉まん">Devil Bun</span> <strong>−1</strong></span>
+</div>
+<fieldset class="difficulty"><legend data-ja="レベルをえらぶ">Pick a level</legend>
+<div class="level-buttons">
+<button type="button" data-level="super-easy" aria-pressed="false"><span class="level-icon" aria-hidden="true">🌱</span><span data-ja="とてもかんたん">Super Easy</span></button>
+<button type="button" data-level="easy" aria-pressed="true"><span class="level-icon" aria-hidden="true">🌼</span><span data-ja="かんたん">Easy</span></button>
+<button type="button" data-level="medium" aria-pressed="false"><span class="level-icon" aria-hidden="true">🦋</span><span data-ja="ふつう">Medium</span></button>
+<button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-ja="むずかしい">Hard</span></button>
+<button type="button" data-level="impossible" aria-pressed="false"><span class="level-icon" aria-hidden="true">🚀</span><span data-ja="超むずかしい">Impossible</span></button>
+</div></fieldset>
+<div class="stats"><span><img class="stat-icon" src="../assets/game-bun.png" alt=""> <output id="score">0</output> <span data-ja="点">points</span></span><span><output id="time">30</output><span data-ja="秒">s left</span></span></div>
+<div class="play-stack">
+<div class="play-stage">
+<canvas class="game-field" id="field" aria-label="Smiley Bun Catch play area" data-ja-label="にこにこ肉まんキャッチの画面">Smiley Bun Catch play area</canvas>
+<div class="game-card" id="ready-card">
+<img src="../assets/game-bun.png" alt="" width="72" height="72">
+<strong data-ja="はじめよう！">Ready to play?</strong>
+<div class="player-setup"><label for="nickname" data-ja="ニックネーム">Your nickname?</label><input id="nickname" maxlength="20" placeholder="e.g. Mochi" data-ja-placeholder="例：もち" autocomplete="off" aria-describedby="player-hint"><small id="player-hint" data-ja="ニックネームは任意です。保存すると、この端末にスコアが残ります。">A nickname is optional. Add one to save your score on this device.</small></div>
+</div>
+</div>
+<div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
+<span data-ja="スコア">Final score</span><strong id="final-score"></strong><p></p>
+</div>
+<button class="change-player" id="change-player" type="button" hidden data-ja="ニックネームをかえる">Change nickname</button>
+<div class="play-row"><button class="play-primary" id="start" type="button">Play</button><button class="stop-button" id="stop" type="button" hidden data-ja="■ ストップ">■ Stop</button></div>
+<div class="controls move-pad" role="group" aria-label="Move left and right">
+<button id="left" aria-label="Move left">←</button><button id="right" aria-label="Move right">→</button>
+</div>
+</div>
+<p id="result" role="status" data-ja="ドラッグするか、やじるしボタンで うごかしてね">Drag on the game or use the arrow buttons.</p>
+<div class="music"><button id="music" type="button" aria-pressed="true">Music on</button><label><span data-ja="音量">Volume</span> <input id="volume" type="range" min="0" max="100" value="25"></label></div>
+<section class="score-board" aria-labelledby="board-title">
+<div class="score-board-heading">
+<h2 id="board-title"><img src="../assets/game-bun.png" alt="" width="38" height="38"><span data-ja="ランキング">Leaderboard</span></h2>
+<span id="score-level"></span>
+<div class="score-period" aria-label="Ranking period" role="group">
+<button type="button" data-period="weekly" aria-pressed="true" data-ja="今週">This week</button>
+<button type="button" data-period="all" aria-pressed="false" data-ja="すべて">All time</button>
+</div>
+</div>
+<p class="personal-best" id="personal-best"></p>
+<ol id="score-list"></ol>
+</section>
+<nav class="game-picker" aria-label="Choose a game">
+<a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
+<a aria-current="page" href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
+<a href="../glasses-cat/"><img class="game-art" src="../assets/game-cat.png" alt="" width="40" height="40"><span data-ja="メガネ猫さがし">Find the Glasses Cat</span></a>
+<a class="picker-piano" href="../piano/"><span class="picker-illustration" aria-hidden="true">♪</span><span data-ja="MOMOピアノ">MOMO Piano</span></a>
+<a class="picker-merge" href="../capybara-merge/"><span class="picker-illustration" aria-hidden="true"></span><span data-ja="カピバラ温泉マージ">Capybara Onsen Merge</span></a>
+<a class="picker-memory" href="../capybara-memory/"><span class="picker-illustration" aria-hidden="true"></span><span data-ja="カピバラ神経衰弱">Capybara Memory</span></a>
+<a class="picker-bath" href="../capybara-tap/"><span class="picker-illustration" aria-hidden="true"></span><span data-ja="カピバラおふろタップ">Capybara Bath Tap</span></a>
+<a class="picker-trap" href="../cat-trap/"><svg class="game-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="7" y="7" width="50" height="50" rx="11" fill="#cdeeb2"/><rect x="43" y="1" width="17" height="14" rx="2.5" fill="#d9a066" stroke="#b57e42" stroke-width="1.6"/><g transform="translate(9.6 7) scale(0.7)"><path d="M9 30 11 11 26 19 Q32 17 38 19 L53 11 55 30 C65 65 -1 65 9 30Z" fill="#fdf3e3" stroke="#57344a" stroke-width="3"/><path d="M15 17 21 23 14 26Z M49 17 50 26 43 23Z" fill="#f987aa"/><circle cx="23" cy="35" r="2.4" fill="#57344a"/><circle cx="41" cy="35" r="2.4" fill="#57344a"/><path d="M28 43Q30 46 32 42Q34 46 37 43" fill="none" stroke="#57344a" stroke-width="2.5" stroke-linecap="round"/><path d="M29 35h6" stroke="#493153" stroke-width="3.5"/><circle cx="22" cy="35" r="7" fill="none" stroke="#493153" stroke-width="3.5"/><circle cx="42" cy="35" r="7" fill="none" stroke="#493153" stroke-width="3.5"/></g></svg><span data-ja="ねこを かこもう！">Trap the Cat</span></a>
+    <a class="picker-quoridor" href="../quoridor/"><svg class="game-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="10" fill="#f3dfba"/><rect x="12" y="40" width="26" height="7" rx="3.5" fill="#c98a4b"/><rect x="42" y="16" width="7" height="26" rx="3.5" fill="#c98a4b"/><path d="M19 21l1.8-6.2L25 18M31 21l-1.8-6.2L25 18" fill="#fff5fa" stroke="#57344a" stroke-width="2.2" stroke-linejoin="round"/><circle cx="25" cy="25" r="8" fill="#fff5fa" stroke="#57344a" stroke-width="2.4"/><circle cx="22.2" cy="24.4" r="1.5" fill="#57344a"/><circle cx="27.8" cy="24.4" r="1.5" fill="#57344a"/><path d="M22.8 28.4q2.2 1.8 4.4 0" fill="none" stroke="#57344a" stroke-width="1.8" stroke-linecap="round"/></svg><span data-en="Quoridor">コリドール</span></a>
+    <a class="picker-lights" href="../lights-out/"><svg class="game-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="12" fill="#fff6d8"/><rect x="13" y="13" width="17" height="17" rx="5" fill="#ffd94d"/><rect x="34" y="13" width="17" height="17" rx="5" fill="#cfc8e8"/><rect x="13" y="34" width="17" height="17" rx="5" fill="#cfc8e8"/><rect x="34" y="34" width="17" height="17" rx="5" fill="#ffd94d"/><path d="M21 8v-3M10 15l-2-2M32 15l2-2M43 39l3-1M46 46l3 1" stroke="#f6b73e" stroke-width="2.4" stroke-linecap="round"/></svg><span data-en="Lights Out">ライトアウト</span></a>
+    <a class="picker-flow" href="../flow/"><svg class="game-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="12" fill="#eaf7ff"/><path d="M20 44V20h24" fill="none" stroke="#f272a7" stroke-width="7" stroke-linecap="round"/><circle cx="20" cy="44" r="6.5" fill="#f272a7"/><circle cx="44" cy="20" r="6.5" fill="#f272a7"/><path d="M44 44H28" stroke="#58cf9e" stroke-width="7" stroke-linecap="round"/><circle cx="44" cy="44" r="6.5" fill="#58cf9e"/><circle cx="28" cy="44" r="6.5" fill="#58cf9e"/></svg><span data-en="Flow">フローパズル</span></a>
+    <a class="picker-bath" href="../bun-lights/"><img class="game-art" src="../assets/game-bun.png" alt="" width="42" height="42"><span data-ja="肉まんライト">Bun Lights</span></a>
+    <a class="picker-piano" href="../clicky-keys/"><span class="game-art" aria-hidden="true">⌨</span><span data-ja="カチカチキー">Clicky Keys</span></a>
+  <a href="../switch-shine/"><span class="game-art" aria-hidden="true">⚡</span><span data-en="Switch &amp; Shine">ピカッとスイッチ</span></a>
+</nav>
+</main>
+<footer class="feedback"><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a>
+<small>Copyright Momo.squirrels</small>
+</footer>
+<script src="../language.js"></script>
+<script src="../stickers.js"></script>
+<script src="../nickname.js?v=compact"></script>
+<script src="../scores.js?v=shared-nickname"></script>
+<script src="../catch.js"></script>
+</body>
+<script src="../tap.js"></script>
+</html>

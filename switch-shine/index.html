@@ -1,0 +1,50 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width,initial-scale=1">
+  <title data-en-title="Switch &amp; Shine | MOMO Games">ピカッとスイッチ | MOMOゲーム集</title>
+  <link rel="stylesheet" href="../language.css">
+  <link rel="stylesheet" href="switch-shine.css?v=records">
+  <script defer src="../language.js"></script>
+  <script defer src="switch-shine.js?v=records"></script>
+</head>
+<body>
+<main>
+  <header>
+    <a href="../" data-ja="← ゲーム一覧">← Games</a>
+    <h1>Switch &amp; Shine</h1>
+  </header>
+  <nav class="modes" aria-label="Game mode" data-ja-label="ゲームモード">
+    <button type="button" data-mode="lab" aria-pressed="true" data-ja="実験モード">Lab</button>
+    <button type="button" data-mode="puzzle" aria-pressed="false" data-ja="チャレンジ">Challenge</button>
+  </nav>
+  <div class="toolbar">
+    <div id="gates" role="group" aria-label="Logic gates" data-ja-label="論理ゲート">
+      <button type="button" data-gate="WIRE" aria-pressed="true">WIRE</button>
+      <button type="button" data-gate="NOT" aria-pressed="false">NOT</button>
+      <button type="button" data-gate="OR" aria-pressed="false">OR</button>
+      <button type="button" data-gate="AND" aria-pressed="false">AND</button>
+      <button type="button" data-gate="XOR" aria-pressed="false">XOR</button>
+      <button type="button" data-gate="NAND" aria-pressed="false">NAND</button>
+    </div>
+    <p id="goal" hidden></p>
+    <button type="button" id="reset" data-ja="リセット">Reset</button>
+  </div>
+  <div id="records" class="records" hidden>
+    <label><span data-ja="問題">Circuit</span> <select id="circuit-select"></select></label>
+    <span><span data-ja="クリア">Cleared</span> <strong id="cleared"></strong></span>
+    <span><span data-ja="手数">Moves</span> <strong id="moves"></strong></span>
+    <span><span data-ja="最少手数">Best</span> <strong id="best-moves"></strong></span>
+  </div>
+  <section class="board" aria-label="Interactive circuit" data-ja-label="操作できる回路" aria-describedby="readout">
+    <svg id="wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"></svg>
+    <div id="nodes"></div>
+  </section>
+  <footer class="readout">
+    <p id="readout" role="status" aria-live="polite"></p>
+    <button type="button" id="advance" hidden></button>
+  </footer>
+</main>
+</body>
+</html>

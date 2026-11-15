@@ -1,0 +1,127 @@
+/* Quoridor: a clean wooden board, close to the original board game.
+   Geometry (percent of the square board) is computed in quoridor.js:
+   a 3% frame, then 9 cells with grooves of 0.16 x cell between them. */
+.level-art { width: 34px; height: 34px; }
+
+.quoridor-stats { flex-wrap: wrap; row-gap: 4px; }
+
+.turn-line {
+  min-height: 1.6em;
+  margin: 0 0 6px;
+  text-align: center;
+  font-family: var(--game-handwriting);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #7a3b63;
+}
+.turn-line:empty { visibility: hidden; }
+
+.quoridor-board {
+  position: relative;
+  width: min(100%, 68dvh, 620px);
+  height: auto;
+  aspect-ratio: 1;
+  margin-inline: auto;
+  border: 4px solid #8a5a2a;
+  border-radius: 18px;
+  background: #a9743f;
+  box-shadow: inset 0 2px 0 #c99a5f, 0 4px 0 rgba(138, 90, 42, .35);
+  touch-action: manipulation;
+}
+
+.qcell {
+  position: absolute;
+  min-height: 0;
+  padding: 0;
+  border: 2px solid #c89b62;
+  border-radius: 16%;
+  background: #f7e3bd;
+  cursor: default;
+}
+.qcell.goal { background: #f6d789; }
+.qcell:disabled { opacity: 1; cursor: default; }
+.qcell.target {
+  cursor: pointer;
+  box-shadow: inset 0 0 0 3px #f272a7, inset 0 0 12px rgba(242, 114, 167, .45);
+}
+.qcell.target::after {
+  content: "";
+  position: absolute;
+  inset: 34%;
+  border-radius: 50%;
+  background: #f272a7;
+  opacity: .75;
+}
+.qcell.target:hover, .qcell.target:focus-visible { filter: brightness(1.06); }
+
+/* Wall slots: invisible buttons lying in the grooves, with a hit area
+   thicker than the groove itself so small fingers can find them. */
+.qslot {
+  position: absolute;
+  z-index: 4;
+  min-height: 0;
+  padding: 0;
+  border: 0;
+  border-radius: 999px;
+  background: transparent;
+  cursor: pointer;
+}
+.qslot:hover, .qslot:focus-visible { background: rgba(255, 246, 214, .55); }
+
+.qwall {
+  position: absolute;
+  z-index: 5;
+  box-sizing: border-box;
+  border: 2px solid #8a5a2a;
+  border-radius: 7px;
+  background: linear-gradient(160deg, #dca95e, #bd8140);
+  box-shadow: 0 2px 3px rgba(74, 44, 26, .4);
+  pointer-events: none;
+}
+.qwall.preview {
+  z-index: 6;
+  border-style: dashed;
+  border-color: #a7195b;
+  background: rgba(242, 114, 167, .5);
+  box-shadow: none;
+  animation: wall-peek 0.9s ease-in-out infinite alternate;
+}
+@keyframes wall-peek { from { opacity: .65; } to { opacity: 1; } }
+
+.qpawn {
+  position: absolute;
+  z-index: 7;
+  pointer-events: none;
+  transition: left .32s ease, top .32s ease;
+  filter: drop-shadow(0 3px 3px rgba(74, 44, 26, .35));
+}
+.qpawn svg { display: block; width: 100%; height: 100%; }
+
+.quoridor-verdict {
+  margin-top: 4px;
+  font-size: clamp(1.05rem, 4.5vw, 1.4rem);
+  font-weight: bold;
+  color: #9b2867;
+}
+.quoridor-verdict:empty { display: none; }
+
+.burst-star {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  color: #f6b73e;
+  text-shadow: 0 0 4px #fff, 0 0 6px #fff;
+  font-size: 22px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  animation: burst-fly .95s ease-out forwards;
+}
+@keyframes burst-fly {
+  to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.4) rotate(120deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .qpawn { transition: none; }
+  .qwall.preview { animation: none; }
+  .burst-star { display: none; }
+}
