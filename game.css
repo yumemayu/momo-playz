@@ -546,3 +546,6 @@ main > .guide-toggle { order: 2; }
 @media (min-width: 1101px), (orientation: landscape) and (min-width: 700px) {
   main > .guide-toggle { order: 0; }
 }
+
+/* Live stats sit directly above the play field (common spec). */
+.play-stack > .stats { margin: 0 2px 6px; }

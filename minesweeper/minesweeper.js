@@ -29,7 +29,7 @@
       go: '地雷を避けて、全部のマスを開けよう！',
       win: '全部開けた！やったね！🎉',
       lose: 'ドカン！地雷だった…',
-      bannerWin: 'クリア！', bannerSub: '{s}秒で クリア！',
+      bannerWin: 'クリア！', bannerSub: '{s}秒で クリア！', wow: 'わあ！{n}こ いっきに開いた！',
       tile: 'マス'
     },
     en: {
@@ -37,7 +37,7 @@
       go: 'Open every tile — but dodge the mines!',
       win: 'You opened every safe tile! 🎉',
       lose: 'Boom! That was a mine…',
-      bannerWin: 'Cleared!', bannerSub: 'Cleared in {s} seconds!',
+      bannerWin: 'Cleared!', bannerSub: 'Cleared in {s} seconds!', wow: 'Wow! {n} opened at once!',
       tile: 'Tile'
     }
   };
@@ -285,14 +285,17 @@
     renderStats();
   }
 
+  let floodTiles = [];
   function floodOpen(startIndex) {
     const stack = [startIndex];
+    floodTiles = [];
     let opened = 0;
     while (stack.length) {
       const index = stack.pop();
       const cell = cells[index];
       if (cell.open || cell.flag) continue;
       cell.open = true;
+      floodTiles.push(index);
       opened += 1;
       openedCount += 1;
       if (cell.count === 0) {
@@ -332,6 +335,51 @@
     }
     render();
     tiles[index].classList.add('pop');
+    if (opened >= 8) wowBurst(index, opened);
+  }
+
+  // One tap opened a whole patch: celebrate it with a floating cheer,
+  // a sparkle burst and a ripple through the freshly opened tiles.
+  function wowBurst(index, opened) {
+    stage.querySelector('.wow-burst')?.remove();
+    const burst = document.createElement('div');
+    burst.className = 'wow-burst';
+    const stageRect = stage.getBoundingClientRect();
+    const tileRect = tiles[index].getBoundingClientRect();
+    const cx = tileRect.left - stageRect.left + tileRect.width / 2;
+    const cy = tileRect.top - stageRect.top + tileRect.height / 2;
+    const text = document.createElement('span');
+    text.className = 'wow-text';
+    text.textContent = copy[language].wow.replace('{n}', String(opened));
+    text.style.left = cx + 'px';
+    text.style.top = cy + 'px';
+    burst.appendChild(text);
+    const glyphs = ['✦', '⭐', '✦', '✧', '⭐', '✦'];
+    for (let i = 0; i < 10; i += 1) {
+      const spark = document.createElement('span');
+      spark.className = 'wow-spark';
+      spark.textContent = glyphs[i % glyphs.length];
+      const angle = (i / 10) * Math.PI * 2 + (index % 5) * 0.3;
+      const dist = 46 + (i % 3) * 22;
+      spark.style.left = cx + 'px';
+      spark.style.top = cy + 'px';
+      spark.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+      spark.style.setProperty('--dy', Math.sin(angle) * dist - 14 + 'px');
+      spark.style.animationDelay = (i % 4) * 0.03 + 's';
+      burst.appendChild(spark);
+    }
+    stage.appendChild(burst);
+    const row = Math.floor(index / COLS), col = index % COLS;
+    floodTiles.forEach(i => {
+      const d = Math.max(Math.abs(Math.floor(i / COLS) - row), Math.abs(i % COLS - col));
+      tiles[i].style.animationDelay = (d * 0.04) + 's';
+      tiles[i].classList.add('wow-pop');
+    });
+    [659.25, 783.99, 987.77].forEach((f, i) => tone(f, i * 0.06, 0.16, 'triangle', 0.09));
+    setTimeout(() => {
+      burst.remove();
+      floodTiles.forEach(i => { tiles[i].classList.remove('wow-pop'); tiles[i].style.animationDelay = ''; });
+    }, 1250);
   }
 
   let bannerTimer = 0;

@@ -33,10 +33,6 @@
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Flow">フローパズル</span></h1>
   </header>
-  <div class="stats flow-stats">
-    <span><span data-en="Pipes">つながった色</span> <output id="pipes">0/5</output></span>
-    <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
-  </div>
   <button type="button" class="guide-toggle" aria-expanded="true" aria-controls="pic-guide">🖼 <span data-en="How to play">あそびかた</span></button>
   <div class="pic-guide" id="pic-guide" role="img" aria-label="How to play Flow in pictures">
     <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="10" y="4" width="44" height="38" rx="5" fill="#fdf7ff" stroke="#e3d5f2" stroke-width="1.6"/><circle cx="21" cy="14" r="5" fill="#ff6b9d"/><circle cx="43" cy="32" r="5" fill="#ff6b9d"/><circle cx="43" cy="14" r="4" fill="#4da3ff"/><circle cx="21" cy="32" r="4" fill="#ffd93d"/></svg><figcaption data-en="Match the colors">同じ色同士を</figcaption></figure>
@@ -52,6 +48,10 @@
     </div>
   </fieldset>
   <div class="play-stack">
+  <div class="stats flow-stats">
+      <span><span data-en="Pipes">つながった色</span> <output id="pipes">0/5</output></span>
+      <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
+    </div>
     <p class="turn-line" id="turn-line" role="status"></p>
     <div class="play-stage">
       <div class="flow-board game-field" id="board" role="group" aria-label="ボード" data-en-label="Board"></div>

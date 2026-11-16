@@ -31,11 +31,6 @@
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Capybara">カピバラ</span><br><span data-en="Memory Match">しんけいすいじゃく</span></h1>
   </header>
-  <div class="stats memory-stats">
-    <span><span class="memory-stat-label" data-en="Pairs">ペア</span> <output id="pairs">0/6</output></span>
-    <span><span class="memory-stat-label" data-en="Moves">てかず</span> <output id="moves">0</output></span>
-    <span><span class="memory-stat-label" data-en="Time">じかん</span> <output id="time">0:00</output></span>
-  </div>
   <fieldset class="difficulty">
     <legend data-en="Choose a level">レベルを えらぶ</legend>
     <div class="level-buttons" role="group" aria-label="レベル" data-en-label="Level">
@@ -45,6 +40,11 @@
     </div>
   </fieldset>
   <div class="play-stack">
+  <div class="stats memory-stats">
+      <span><span class="memory-stat-label" data-en="Pairs">ペア</span> <output id="pairs">0/6</output></span>
+      <span><span class="memory-stat-label" data-en="Moves">てかず</span> <output id="moves">0</output></span>
+      <span><span class="memory-stat-label" data-en="Time">じかん</span> <output id="time">0:00</output></span>
+    </div>
     <div class="play-stage">
       <div class="memory-board game-field easy" id="board" role="group" aria-label="カード" data-en-label="Cards"></div>
       <div class="game-card" id="ready-card">

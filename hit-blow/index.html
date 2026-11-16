@@ -33,10 +33,6 @@
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Hit &amp; Blow">ヒット＆ブロー</span></h1>
   </header>
-  <div class="stats hb-stats">
-    <span><span data-en="Guesses">回数</span> <output id="guesses">0</output></span>
-    <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
-  </div>
   <button type="button" class="guide-toggle" aria-expanded="true" aria-controls="pic-guide">🖼 <span data-en="How to play">あそびかた</span></button>
   <div class="pic-guide" id="pic-guide" role="img" aria-label="How to play Hit & Blow in pictures">
     <figure><svg viewBox="0 0 64 46" aria-hidden="true"><circle cx="11" cy="21" r="8" fill="#ff6b81"/><circle cx="8.2" cy="18.2" r="2.24" fill="#ffffff" opacity=".75"/><circle cx="25" cy="21" r="8" fill="#4da3ff"/><circle cx="22.2" cy="18.2" r="2.24" fill="#ffffff" opacity=".75"/><circle cx="39" cy="21" r="8" fill="#ffd93d"/><circle cx="36.2" cy="18.2" r="2.24" fill="#ffffff" opacity=".75"/><circle cx="53" cy="21" r="8" fill="#6bcb77"/><circle cx="50.2" cy="18.2" r="2.24" fill="#ffffff" opacity=".75"/></svg><figcaption data-en="Pick 4 colors">4つの色をえらぶ</figcaption></figure>
@@ -52,6 +48,10 @@
     </div>
   </fieldset>
   <div class="play-stack">
+  <div class="stats hb-stats">
+      <span><span data-en="Guesses">回数</span> <output id="guesses">0</output></span>
+      <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
+    </div>
     <p class="turn-line" id="turn-line" role="status"></p>
     <div class="play-stage">
       <div class="hb-board game-field preview" id="board">
