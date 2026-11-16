@@ -204,8 +204,17 @@
     wires.append(highlight);
   }
 
+  function junction(x, y, active) {
+    const dot = document.createElement('div');
+    dot.className = 'junction-dot' + (active ? ' lit' : '');
+    dot.style.left = (x / 10) + '%';
+    dot.style.top = (y / 4.4) + '%';
+    nodes.append(dot);
+  }
+
   function redraw(animate = false) {
     wires.replaceChildren();
+    nodes.querySelectorAll('.junction-dot').forEach(d => d.remove());
     inputs.forEach(({ button, digit, name }, i) => {
       digit.textContent = bits[i];
       button.setAttribute('aria-pressed', String(bits[i] === 1));
@@ -222,6 +231,8 @@
           : isBinary && outputs.length > 1 ? 285 + 48 * n + 18 * i : 310;
         const endY = isBinary ? y + (port === 0 ? -17 : 17) : y;
         path('M120 ' + inputs[n].y + 'H' + elbow + 'V' + endY + 'H' + (gate ? 500 : 860), bits[n], animate, 0);
+        junction(elbow, inputs[n].y, bits[n] === 1);
+        junction(elbow, endY, bits[n] === 1);
       });
       if (gate) {
         gate.classList.toggle('marked', on);
