@@ -258,3 +258,50 @@
   .wow-spark { animation: none; opacity: 0; }
   .ms-tile.wow-pop { animation: none; }
 }
+
+/* Cheer floats share the wow layer. */
+.cheer-burst { position: absolute; inset: 0; pointer-events: none; z-index: 6; }
+
+/* Boom: the whole grid shudders. */
+#grid.shake { animation: ms-shake .45s ease; }
+@keyframes ms-shake {
+  0%, 100% { transform: translateX(0); }
+  20% { transform: translateX(-7px); }
+  40% { transform: translateX(6px); }
+  60% { transform: translateX(-4px); }
+  80% { transform: translateX(3px); }
+}
+
+/* Nearly there: the covered tiles breathe with a heartbeat pulse. */
+#grid.endgame .ms-tile.covered:not(.flagged) { animation: ms-pulse 1.1s ease-in-out infinite; }
+@keyframes ms-pulse {
+  50% { transform: scale(1.07); }
+}
+
+/* A freshly planted flag flutters, and the mines counter hops. */
+.ms-tile.just-flagged { animation: ms-flag .45s ease; }
+@keyframes ms-flag {
+  0% { transform: scale(.6) rotate(-14deg); }
+  55% { transform: scale(1.18) rotate(8deg); }
+  100% { transform: scale(1) rotate(0deg); }
+}
+#mines-left.bump { display: inline-block; animation: ms-bump .35s ease; }
+@keyframes ms-bump {
+  40% { transform: scale(1.45); }
+}
+
+/* On a clear, the auto-flagged mines twinkle one after another. */
+.ms-tile.win-sparkle { animation: ms-sparkle .8s ease both; }
+@keyframes ms-sparkle {
+  0% { filter: brightness(1); }
+  40% { filter: brightness(1.55); transform: scale(1.14); }
+  100% { filter: brightness(1); transform: scale(1); }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  #grid.shake { animation: none; }
+  #grid.endgame .ms-tile.covered:not(.flagged) { animation: none; }
+  .ms-tile.just-flagged { animation: none; }
+  #mines-left.bump { animation: none; }
+  .ms-tile.win-sparkle { animation: none; }
+}

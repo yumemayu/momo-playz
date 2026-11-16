@@ -18,6 +18,7 @@
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   const LEVELS = {
+    tiny: { rows: 6, cols: 6, mines: 5 },
     easy: { rows: 8, cols: 8, mines: 8 },
     normal: { rows: 9, cols: 9, mines: 12 },
     hard: { rows: 10, cols: 10, mines: 20 }
@@ -30,6 +31,7 @@
       win: '全部開けた！やったね！🎉',
       lose: 'ドカン！地雷だった…',
       bannerWin: 'クリア！', bannerSub: '{s}秒で クリア！', wow: 'わあ！{n}こ いっきに開いた！',
+      safe: 'セーフ！', half: 'はんぶん開いた！', almost: 'あと少し！', combo: '{n}コンボ！',
       tile: 'マス'
     },
     en: {
@@ -38,6 +40,7 @@
       win: 'You opened every safe tile! 🎉',
       lose: 'Boom! That was a mine…',
       bannerWin: 'Cleared!', bannerSub: 'Cleared in {s} seconds!', wow: 'Wow! {n} opened at once!',
+      safe: 'Safe!', half: 'Halfway!', almost: 'Almost there!', combo: '{n} combo!',
       tile: 'Tile'
     }
   };
@@ -98,6 +101,11 @@
   let audio;
   let muted = false;
   let faceState = 'smile';
+  let streak = 0;
+  let lastOpenAt = 0;
+  let halfCheered = false;
+  let almostCheered = false;
+  let roundToken = 0;
 
   const { rows, cols } = LEVELS[level];
   let ROWS = rows;
@@ -191,6 +199,12 @@
     timerStarted = false;
     clearInterval(timer);
     faceState = 'smile';
+    streak = 0;
+    lastOpenAt = 0;
+    halfCheered = false;
+    almostCheered = false;
+    roundToken += 1;
+    gridEl.classList.remove('endgame', 'shake');
     buildGrid();
   }
 
@@ -316,10 +330,17 @@
       flagCount += cell.flag ? 1 : -1;
       playFlag();
       render();
+      if (cell.flag) {
+        tiles[index].classList.add('just-flagged');
+        minesLeftOutput.classList.remove('bump');
+        void minesLeftOutput.offsetWidth;
+        minesLeftOutput.classList.add('bump');
+      }
       return;
     }
     if (cell.open || cell.flag) return;
-    if (!minesPlaced) placeMines(index);
+    const isFirstTap = !minesPlaced;
+    if (isFirstTap) placeMines(index);
     startTimerOnce();
     if (cell.mine) {
       cell.open = true;
@@ -336,6 +357,64 @@
     render();
     tiles[index].classList.add('pop');
     if (opened >= 8) wowBurst(index, opened);
+    if (isFirstTap && opened < 8) {
+      cheer(copy[language].safe, index, true);
+      tone(1046.5, 0, .14, 'triangle', .09);
+    }
+    const now = performance.now();
+    streak = now - lastOpenAt < 1500 ? streak + 1 : 1;
+    lastOpenAt = now;
+    if (streak >= 3) {
+      cheer(copy[language].combo.replace('{n}', String(streak)), index, false);
+      tone(523.25 * 2 ** (Math.min(streak - 3, 9) / 12), 0, .12, 'triangle', .08);
+    }
+    const totalSafe = cells.length - LEVELS[level].mines;
+    if (!halfCheered && openedCount * 2 >= totalSafe) {
+      halfCheered = true;
+      cheer(copy[language].half, -1, true);
+    }
+    if (!almostCheered && totalSafe - openedCount <= 10) {
+      almostCheered = true;
+      gridEl.classList.add('endgame');
+      cheer(copy[language].almost, -1, true);
+    }
+  }
+
+  // Small floating cheers: Safe!, combo counts and halfway cheers.
+  function cheer(text, index, sparks) {
+    const layer = document.createElement('div');
+    layer.className = 'cheer-burst';
+    const stageRect = stage.getBoundingClientRect();
+    let cx = stageRect.width / 2;
+    let cy = stageRect.height * 0.34;
+    if (index >= 0 && tiles[index]) {
+      const tileRect = tiles[index].getBoundingClientRect();
+      cx = tileRect.left - stageRect.left + tileRect.width / 2;
+      cy = tileRect.top - stageRect.top + tileRect.height / 2;
+    }
+    const label = document.createElement('span');
+    label.className = 'wow-text';
+    label.textContent = text;
+    label.style.left = cx + 'px';
+    label.style.top = cy + 'px';
+    layer.appendChild(label);
+    if (sparks && !reducedMotion.matches) {
+      const glyphs = ['✦', '⭐', '✧', '✦', '⭐', '✧'];
+      for (let i = 0; i < 8; i += 1) {
+        const spark = document.createElement('span');
+        spark.className = 'wow-spark';
+        spark.textContent = glyphs[i % glyphs.length];
+        const angle = (i / 8) * Math.PI * 2 + 0.4;
+        const dist = 40 + (i % 3) * 16;
+        spark.style.left = cx + 'px';
+        spark.style.top = cy + 'px';
+        spark.style.setProperty('--dx', Math.cos(angle) * dist + 'px');
+        spark.style.setProperty('--dy', Math.sin(angle) * dist - 12 + 'px');
+        layer.appendChild(spark);
+      }
+    }
+    stage.appendChild(layer);
+    setTimeout(() => layer.remove(), 1250);
   }
 
   // One tap opened a whole patch: celebrate it with a floating cheer,
@@ -439,6 +518,7 @@
     endState = won ? 'win' : 'lose';
     playing = false;
     clearInterval(timer);
+    gridEl.classList.remove('endgame');
     if (won) {
       cells.forEach(cell => {
         if (cell.mine && !cell.flag) {
@@ -451,15 +531,41 @@
       burst();
       celebrateBanner();
       gameScores.finish(Math.max(200, 1000 - seconds * 5), true);
-    } else {
-      cells.forEach(cell => {
-        if (cell.mine && !cell.flag) cell.open = true;
+      render();
+      let sparkleOrder = 0;
+      cells.forEach((cell, i) => {
+        if (!cell.mine) return;
+        tiles[i].classList.add('win-sparkle');
+        tiles[i].style.animationDelay = (sparkleOrder * 0.07) + 's';
+        sparkleOrder += 1;
       });
+    } else {
       verdict.textContent = copy[language].lose;
       playBoom();
       gameScores.finish(0, false);
+      render();
+      gridEl.classList.add('shake');
+      setTimeout(() => gridEl.classList.remove('shake'), 550);
+      const token = roundToken;
+      const boomRow = Math.floor(boomIndex / COLS), boomCol = boomIndex % COLS;
+      const rest = cells
+        .map((cell, i) => i)
+        .filter(i => cells[i].mine && !cells[i].flag && i !== boomIndex)
+        .sort((a, b) => {
+          const da = Math.abs(Math.floor(a / COLS) - boomRow) + Math.abs(a % COLS - boomCol);
+          const db = Math.abs(Math.floor(b / COLS) - boomRow) + Math.abs(b % COLS - boomCol);
+          return da - db;
+        });
+      rest.forEach((mineIndex, k) => {
+        setTimeout(() => {
+          if (token !== roundToken) return;
+          cells[mineIndex].open = true;
+          render();
+          tiles[mineIndex].classList.add('pop');
+          tone(170 + k * 14, 0, .08, 'triangle', .05);
+        }, 280 + k * 85);
+      });
     }
-    render();
     start.focus({ preventScroll: true });
   }
 
