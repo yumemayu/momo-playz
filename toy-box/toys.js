@@ -15,6 +15,12 @@ const stickerCatalog = [
   ['capybara-memory', '🃏', 'Capybara Memory', 'カピバラ神経衰弱'],
   ['capybara-tap', '🫧', 'Capybara Onsen Tap', 'カピバラ温泉タップ'],
   ['cat-trap', '📦', 'Trap the Cat', 'ねこをかこもう！', 'Trap the cat', 'ねこを囲む'],
+  ['quoridor', '🥑', 'Quoridor', 'コリドール'],
+  ['lights-out', '💡', 'Lights Out', 'ライトアウト'],
+  ['flow', '🧩', 'Flow', 'フローパズル'],
+  ['hit-blow', '🔴', 'Hit & Blow', 'ヒット＆ブロー'],
+  ['minesweeper', '🚩', 'Minesweeper', 'マインスイーパ'],
+  ['hanoi', '🗼', 'Tower of Hanoi', 'ハノイの塔'],
 ];
 function stickerEntry([id, icon, en, ja, taskEn = 'Finish a round', taskJa = '１ラウンド最後まで遊ぶ']) {
   const earned = momoStickers.has(id);
@@ -23,7 +29,12 @@ function stickerEntry([id, icon, en, ja, taskEn = 'Finish a round', taskJa = '�
   const art = document.createElement('span');
   art.className = 'sticker-art';
   art.setAttribute('aria-hidden', 'true');
-  art.textContent = earned ? icon : '✧';
+  const disc = document.createElement('span');
+  disc.className = 'sticker-disc';
+  const svg = window.momoStickerArt?.[id];
+  if (svg) disc.innerHTML = svg;
+  else disc.textContent = earned ? icon : '✧';
+  art.append(disc);
   const title = document.createElement('strong');
   title.textContent = copy(en, ja);
   const hint = document.createElement('small');
@@ -37,6 +48,8 @@ function renderStickers() {
     count + ' / ' + stickerCatalog.length + ' collected',
     stickerCatalog.length + '枚のうち ' + count + '枚 ゲット',
   );
+  const barFill = one('#sticker-bar-fill');
+  if (barFill) barFill.style.width = (stickerCatalog.length ? count / stickerCatalog.length * 100 : 0) + '%';
   one('#toy-stickers').replaceChildren(...stickerCatalog.slice(0, 2).map(stickerEntry));
   one('#game-stickers').replaceChildren(...stickerCatalog.slice(2).map(stickerEntry));
 }

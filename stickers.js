@@ -1,6 +1,7 @@
 window.momoStickers = (() => {
   const keys = new Set(['bun-light', 'ribbon', 'puppy', 'fries', 'buns', 'cats',
-    'piano', 'capybara', 'capybara-memory', 'capybara-tap', 'cat-trap']);
+    'piano', 'capybara', 'capybara-memory', 'capybara-tap', 'cat-trap',
+    'quoridor', 'lights-out', 'flow', 'hit-blow', 'minesweeper', 'hanoi']);
   const prefix = 'momo:stickers:';
   const earned = new Set();
   const listeners = new Set();

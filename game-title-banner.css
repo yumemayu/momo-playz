@@ -142,3 +142,8 @@
     margin-top: 50px;
   }
 }
+[data-game="stickers"] {
+  --banner-art: url("sticker-book/banner.svg");
+  --banner-color: #ffe9f4;
+  --banner-ink: #9b2867;
+}

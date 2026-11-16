@@ -5,12 +5,15 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title data-en-title="MOMO Sticker Book">MOMOのシール帳</title>
   <link rel="stylesheet" href="../language.css">
-  <link rel="stylesheet" href="../toy-box/toys.css?v=bun-mix">
+  <link rel="stylesheet" href="../game.css">
+  <link rel="stylesheet" href="../game-title-banner.css">
+  <link rel="stylesheet" href="../toy-box/toys.css?v=stickers2">
   <script defer src="../language.js"></script>
-<script defer src="../nickname.js?v=compact"></script>
-<link rel="stylesheet" href="../nickname.css?v=compact">
+  <script defer src="../nickname.js?v=compact"></script>
+  <link rel="stylesheet" href="../nickname.css?v=compact">
   <script defer src="../stickers.js"></script>
-  <script defer src="../toy-box/toys.js?v=standalone"></script>
+  <script defer src="../stickers-art.js"></script>
+  <script defer src="../toy-box/toys.js?v=stickers2"></script>
   <link rel="manifest" href="../manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
   <meta name="mobile-web-app-capable" content="yes">
@@ -20,26 +23,36 @@
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
   <script defer src="../pwa.js"></script>
 </head>
-<body>
-<main>
-  <header><a href="../" data-ja="← ゲーム一覧">← Games</a></header>
-  <section id="stickers" class="toy">
-    <h2 data-ja="MOMOのシール帳">MOMO Sticker Book</h2>
-    <p id="sticker-progress" role="status"></p>
-    <h3 data-ja="おもちゃのシール">Toy stickers</h3>
+<body data-game="stickers">
+<main class="game-main">
+  <a class="back-link" href="../" data-en="← Games">← ゲーム一覧</a>
+  <header class="game-heading game-title-banner">
+    <span class="game-title-rainbow" aria-hidden="true">🌈</span>
+    <span class="game-title-art" aria-hidden="true"></span>
+    <h1><span data-en="MOMO Sticker Book">MOMOのシール帳</span></h1>
+  </header>
+
+  <section id="stickers">
+    <div class="sticker-progress-card">
+      <p id="sticker-progress" role="status"></p>
+      <div class="sticker-bar" aria-hidden="true"><i id="sticker-bar-fill"></i></div>
+    </div>
+    <h3 data-en="Toy stickers">おもちゃのシール</h3>
     <ul class="sticker-sheet" id="toy-stickers"></ul>
-    <h3 data-ja="ゲームのシール">Game stickers</h3>
+    <h3 data-en="Game stickers">ゲームのシール</h3>
     <ul class="sticker-sheet" id="game-stickers"></ul>
   </section>
-<details class="momo-nickname-panel" data-nickname-panel>
-  <summary>Set nickname</summary>
-  <form>
-    <label for="shared-nickname" data-ja="ニックネーム">Nickname</label>
-    <input id="shared-nickname" maxlength="20" autocomplete="off">
-    <button type="submit" data-ja="保存">Save</button>
-  </form>
-  <small role="status"></small>
-</details>
+
+  <details class="momo-nickname-panel" data-nickname-panel>
+    <summary>Set nickname</summary>
+    <form>
+      <label for="shared-nickname" data-ja="ニックネーム">Nickname</label>
+      <input id="shared-nickname" maxlength="20" autocomplete="off">
+      <button type="submit" data-ja="保存">Save</button>
+    </form>
+    <small role="status"></small>
+  </details>
+  <footer class="site-footer">© Momo.squirrels</footer>
 </main>
 <span id="sticker-announcement" class="toy-sr-only" role="status"></span>
 </body>

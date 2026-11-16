@@ -311,18 +311,78 @@ button:disabled { opacity: .55; cursor: default; }
 #stickers { background: #fff8f1; }
 #stickers h3 { margin: 18px 0 7px; font-size: 1rem; }
 #sticker-progress { color: #825788; font-weight: 700; }
+/* Sticker Book: patterned round stickers, matching the game pages. */
+body[data-game="stickers"] .back-link {
+  display: inline-block; margin: 2px 0 10px;
+  color: #77366e; font-weight: 700; text-decoration: none;
+}
+/* game.css orders .game-heading as 1 inside flex/grid mains; keep the
+   sticker sections below it. */
+body[data-game="stickers"] main > #stickers { order: 2; }
+body[data-game="stickers"] main > .momo-nickname-panel { order: 3; }
+body[data-game="stickers"] main > .site-footer { order: 4; }
+/* Wide screens: game.css turns main into a sidebar grid for play pages;
+   the sticker book stays a single centred column instead. */
+@media (min-width: 700px) {
+  body[data-game="stickers"] main {
+    display: flex; flex-direction: column; max-width: 860px;
+  }
+}
+@media (min-width: 900px) {
+  #game-stickers { grid-template-columns: repeat(4, 1fr); }
+}
+#stickers { text-align: center; }
+#stickers h3 { margin: 20px 2px 10px; font-size: 1.05rem; color: #7a3b63; text-align: left; }
+.sticker-progress-card {
+  background: #ffffff; border: 2px solid #ffe0ee; border-radius: 18px;
+  padding: 12px 16px 14px; box-shadow: 0 6px 18px rgba(72, 38, 61, .10);
+}
+#sticker-progress { margin: 0; font-size: 1.15rem; font-weight: 900; color: #9b2867; }
+.sticker-bar {
+  height: 14px; margin-top: 8px; border-radius: 999px;
+  background: #f6e3ee; overflow: hidden;
+}
+.sticker-bar i {
+  display: block; height: 100%; width: 0;
+  border-radius: 999px; transition: width .5s ease;
+  background: linear-gradient(90deg, #ff6482, #ff9f43, #ffcf3f, #34ce8b, #4fa3ff, #9b7ff2);
+}
 .sticker-sheet {
-  display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 132px), 1fr));
-  gap: 8px; margin: 0; padding: 0; list-style: none;
+  display: grid; grid-template-columns: 1fr 1fr;
+  gap: 10px; margin: 0; padding: 0; list-style: none;
 }
 .sticker-sheet li {
   display: grid; place-items: center; align-content: start; gap: 3px;
-  min-height: 108px; padding: 8px 5px; border: 1px dashed #dcbccc; border-radius: 13px; background: #fffdf9;
+  min-height: 128px; padding: 12px 6px 9px;
+  border: 2px solid #f3e3ec; border-radius: 16px; background: #ffffff;
+  box-shadow: 0 3px 8px rgba(72, 38, 61, .07);
 }
-.sticker-sheet li[data-earned="true"] { background: #f9e7f2; border-style: solid; border-color: #e2abc8; }
-.sticker-art { font-size: 1.8rem; line-height: 1.15; color: #af83ad; }
-.sticker-sheet strong { font-size: .85rem; }
-.sticker-sheet small { font-size: .73rem; color: #765c75; }
+.sticker-sheet li[data-earned="true"] {
+  background: linear-gradient(180deg, #fff0f7, #ffe3f0); border-color: #f2a9cb;
+}
+.sticker-art { line-height: 1; }
+.sticker-disc {
+  width: 76px; height: 76px; border-radius: 50%;
+  display: grid; place-items: center;
+  border: 3px solid #ffffff;
+  box-shadow: 0 0 0 2px #efd7e4, 0 4px 8px rgba(72, 38, 61, .14);
+  font-size: 1.6rem; color: #af83ad;
+  background: #fff6fa;
+}
+.sticker-disc svg { display: block; width: 46px; height: 46px; }
+.sticker-sheet li:nth-child(8n+1) .sticker-disc { background: radial-gradient(circle, #ffc2d9 3.2px, #ffe9f2 3.6px); background-size: 15px 15px; }
+.sticker-sheet li:nth-child(8n+2) .sticker-disc { background: repeating-linear-gradient(45deg, #cfeeff 0 8px, #eef9ff 8px 16px); }
+.sticker-sheet li:nth-child(8n+3) .sticker-disc { background: repeating-linear-gradient(0deg, rgba(255, 183, 71, .35) 0 9px, transparent 9px 18px), repeating-linear-gradient(90deg, rgba(255, 183, 71, .35) 0 9px, transparent 9px 18px), #fff7e0; }
+.sticker-sheet li:nth-child(8n+4) .sticker-disc { background: radial-gradient(circle, #a8e6c3 3.2px, #eafff3 3.6px); background-size: 15px 15px; }
+.sticker-sheet li:nth-child(8n+5) .sticker-disc { background: repeating-linear-gradient(-45deg, #e2d9ff 0 8px, #f6f2ff 8px 16px); }
+.sticker-sheet li:nth-child(8n+6) .sticker-disc { background: radial-gradient(circle, #ffcf9e 3.2px, #fff3e2 3.6px); background-size: 15px 15px; }
+.sticker-sheet li:nth-child(8n+7) .sticker-disc { background: repeating-linear-gradient(0deg, rgba(242, 114, 167, .28) 0 9px, transparent 9px 18px), repeating-linear-gradient(90deg, rgba(242, 114, 167, .28) 0 9px, transparent 9px 18px), #fff0f6; }
+.sticker-sheet li:nth-child(8n) .sticker-disc { background: repeating-linear-gradient(45deg, #c9f2e2 0 8px, #f0fff8 8px 16px); }
+.sticker-sheet li[data-earned="false"] .sticker-disc { filter: grayscale(.6); opacity: .55; }
+.sticker-sheet li[data-earned="false"] .sticker-disc svg { filter: grayscale(.95); opacity: .5; }
+.sticker-sheet strong { font-size: .86rem; line-height: 1.25; }
+.sticker-sheet small { font-size: .72rem; color: #a06a8d; }
+.sticker-sheet li[data-earned="true"] small { color: #c2437f; font-weight: 900; }
 
 .bun-night-sky { display: none; }
 .bun-tray[data-night] {
