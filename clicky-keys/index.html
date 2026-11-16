@@ -6,6 +6,7 @@
   <title data-en-title="Clicky Keys">カチカチキー</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../toy-box/toys.css?v=bun-mix">
+  <link rel="stylesheet" href="../game-title-banner.css">
   <script defer src="../language.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
@@ -20,11 +21,16 @@
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
   <script defer src="../pwa.js"></script>
 </head>
-<body>
+<body data-game="clicky-keys">
 <main>
   <header><a href="../" data-ja="← ゲーム一覧">← Games</a></header>
-  <section id="keys" class="toy">
-    <h2 data-ja="MOMOのカチカチキーボード">MOMO Clicky Keys</h2>
+    <header class="game-heading game-title-banner">
+    <span class="game-title-rainbow" aria-hidden="true">🌈</span>
+    <span class="game-title-art" aria-hidden="true"></span>
+    <h1><span data-ja="MOMOのカチカチキーボード">MOMO Clicky Keys</span></h1>
+  </header>
+<section id="keys" class="toy">
+    
     <p data-ja="キーを押して、カチッ。パソコンなら A〜Z とスペースキーでも遊べるよ。">Tap the keys for a click. On a computer, try A–Z and Space.</p>
     <div class="choices">
       <button type="button" data-palette="choco" aria-pressed="true" data-ja="チョコミント">Choco Mint</button>

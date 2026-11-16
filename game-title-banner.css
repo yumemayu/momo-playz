@@ -147,3 +147,14 @@
   --banner-color: #ffe9f4;
   --banner-ink: #9b2867;
 }
+
+[data-game="bun-lights"] {
+  --banner-art: url("bun-lights/banner.svg");
+  --banner-color: #ffedb8;
+  --banner-ink: #9c4a00;
+}
+[data-game="clicky-keys"] {
+  --banner-art: url("clicky-keys/banner.svg");
+  --banner-color: #e7e0ff;
+  --banner-ink: #5a3d99;
+}

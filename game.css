@@ -240,6 +240,7 @@ nav[aria-label="Choose a game"] a {
   main { display: flex; flex-direction: column; padding: 12px; }
   main > .game-heading { order: 1; }
   main > .difficulty { order: 2; }
+  main > .pic-guide { order: 2; }
   main > .stats { order: 3; }
   main > .play-stack { order: 4; }
   main > .play-guide, main > .bun-rules, main > .cat-example { order: 7; }
@@ -498,6 +499,7 @@ body[data-game="buns"] {
   main { display: flex; flex-direction: column; max-width: none; padding: 16px; }
   main > .game-heading { order: 1; }
   main > .difficulty, main > .capy-modes { order: 2; }
+  main > .pic-guide { order: 2; }
   main > .stats { order: 3; }
   main > .play-stack { order: 4; width: 100%; }
   main > nav { order: 11; }
@@ -508,3 +510,10 @@ body[data-game="buns"] {
     height: auto; min-height: 0; aspect-ratio: 10 / 9;
   }
 }
+
+/* Picture guide: three picture panels under the banner, the early
+   games' way of showing the rules (picture + a few words). */
+.pic-guide { display: flex; gap: 8px; margin: 10px 0 2px; }
+.pic-guide figure { margin: 0; flex: 1; min-width: 0; background: #fff; border: 2px solid #ffd7e8; border-radius: 14px; padding: 8px 4px 6px; text-align: center; }
+.pic-guide svg { width: 100%; height: 46px; display: block; }
+.pic-guide figcaption { font-size: .68rem; font-weight: 900; color: #7a3b63; line-height: 1.3; margin-top: 4px; }

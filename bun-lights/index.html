@@ -6,6 +6,7 @@
   <title data-en-title="Bun Lights">肉まんライト</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../toy-box/toys.css?v=bun-mix">
+  <link rel="stylesheet" href="../game-title-banner.css">
   <script defer src="../language.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
@@ -20,11 +21,16 @@
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
   <script defer src="../pwa.js"></script>
 </head>
-<body>
+<body data-game="bun-lights">
 <main>
   <header><a href="../" data-ja="← ゲーム一覧">← Games</a></header>
-  <section id="bun" class="toy">
-    <h2 data-ja="むぎゅっと肉まんライト">Squishy Bun Lights</h2>
+    <header class="game-heading game-title-banner">
+    <span class="game-title-rainbow" aria-hidden="true">🌈</span>
+    <span class="game-title-art" aria-hidden="true"></span>
+    <h1><span data-ja="むぎゅっと肉まんライト">Squishy Bun Lights</span></h1>
+  </header>
+<section id="bun" class="toy">
+    
     <p data-ja="長押しでむぎゅっ。２つ光らせると色がまざるよ！">Hold to squish. Light up two buns to mix their colors!</p>
     <div class="bun-tray" id="bun-tray">
       <span class="bun-mixed-glow" aria-hidden="true"></span>
