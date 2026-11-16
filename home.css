@@ -8,3 +8,16 @@ nav.game-picker { grid-template-columns: repeat(auto-fit, minmax(min(100%, 135px
 nav.game-picker > a { min-height: 105px; }
 .feedback { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
 .feedback a { color: #754676; }
+.install-note {
+  margin: 10px 0 2px;
+  padding: 10px 16px;
+  text-align: center;
+  background: #ffffff;
+  border: 2px dashed #f272a7;
+  border-radius: 999px;
+  color: #754676;
+  font-size: .95rem;
+}
+@media (display-mode: standalone) {
+  .install-note { display: none; }
+}
