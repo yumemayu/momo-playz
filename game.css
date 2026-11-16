@@ -537,3 +537,12 @@ body[data-game="buns"] {
   cursor: pointer;
 }
 .pic-guide[hidden] { display: none; }
+/* Keep the How-to-play toggle up with the picture guide (the generic
+   sidebar ordering rules would otherwise drop it to the bottom). */
+main > .guide-toggle { order: 2; }
+
+/* In the wide/landscape grid, order 2 would sink the toggle below every
+   order-0 sidebar item; DOM order already puts it under the stats. */
+@media (min-width: 1101px), (orientation: landscape) and (min-width: 700px) {
+  main > .guide-toggle { order: 0; }
+}
