@@ -65,3 +65,21 @@ nav.game-picker > a { min-height: 105px; }
 @media (display-mode: standalone) {
   .install-pop { display: none; }
 }
+nav.game-picker > a { position: relative; }
+.new-badge {
+  position: absolute;
+  top: -8px;
+  right: -5px;
+  z-index: 2;
+  padding: 2px 8px;
+  border-radius: 999px;
+  background: linear-gradient(90deg, #f272a7, #ff9f2e);
+  color: #ffffff;
+  font-size: .68rem;
+  font-weight: 800;
+  letter-spacing: .04em;
+  transform: rotate(8deg);
+  box-shadow: 0 2px 5px rgba(72, 38, 61, .3);
+}
+.recent-title { margin: 16px 0 0; font-size: 1.05rem; color: #754676; }
+nav.recent-picker { margin-top: 8px; }
