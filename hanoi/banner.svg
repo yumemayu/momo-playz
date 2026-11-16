@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- sparkles -->
+  <g fill="#f6b73e">
+    <path d="M48 44 l4.5 10.5 L63 59 l-10.5 4.5 L48 74 l-4.5 -10.5 L33 59 l10.5 -4.5 Z"/>
+    <path d="M348 60 l3.5 8.5 L360 72 l-8.5 3.5 L348 84 l-3.5 -8.5 L336 72 l8.5 -3.5 Z"/>
+  </g>
+  <!-- panel -->
+  <rect x="52" y="52" width="296" height="296" rx="36" fill="#fff8ec"/>
+  <!-- pegs -->
+  <g fill="#57344a">
+    <rect x="116" y="120" width="10" height="168" rx="5"/>
+    <rect x="195" y="120" width="10" height="168" rx="5"/>
+    <rect x="274" y="120" width="10" height="168" rx="5"/>
+  </g>
+  <!-- ground -->
+  <rect x="76" y="288" width="248" height="16" rx="8" fill="#b57e42"/>
+  <!-- tower on the left peg -->
+  <g stroke="#ffffff" stroke-width="3">
+    <rect x="66" y="252" width="110" height="30" rx="15" fill="#ff6482"/>
+    <rect x="76" y="219" width="90" height="30" rx="15" fill="#ffcf3f"/>
+    <rect x="86" y="186" width="70" height="30" rx="15" fill="#34ce8b"/>
+  </g>
+  <!-- disk floating over the middle peg -->
+  <rect x="160" y="128" width="80" height="30" rx="15" fill="#4fa3ff" stroke="#ffffff" stroke-width="3"/>
+  <!-- goal star over the right peg -->
+  <path d="M279 78 l5.5 12.5 L298 92 l-10 9 2.8 13.5 L279 107.5 l-11.8 7 L270 101 l-10 -9 13.5 -1.5 Z" fill="#f6b73e"/>
+</svg>

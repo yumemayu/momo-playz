@@ -62,6 +62,11 @@
   --banner-color: #cdf0da;
   --banner-ink: #1d7a4f;
 }
+[data-game="hanoi"] {
+  --banner-art: url("hanoi/banner.svg");
+  --banner-color: #ffe9d6;
+  --banner-ink: #9a4a12;
+}
 [data-game="dodgeball"] {
   --banner-art: url("assets/banner-dodgeball.jpg");
   --banner-color: #dbeafe;
