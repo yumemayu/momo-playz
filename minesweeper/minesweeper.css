@@ -1,0 +1,206 @@
+/* Minesweeper: the classic mine-hunting logic game, kept faithful.
+   Mint covered tiles, cream opened tiles, classic number colours,
+   and the face button whose whole circle is the face. */
+.ms-stats { flex-wrap: wrap; row-gap: 4px; }
+
+.turn-line {
+  min-height: 1.6em;
+  margin: 0 0 6px;
+  text-align: center;
+  font-family: var(--game-handwriting);
+  font-weight: 700;
+  font-size: 1.05rem;
+  color: #7a3b63;
+}
+.turn-line:empty { visibility: hidden; }
+
+.ms-board {
+  position: relative;
+  width: min(100%, 480px);
+  margin-inline: auto;
+  padding: 14px;
+  border: 4px solid #a9dfc0;
+  border-radius: 22px;
+  background: linear-gradient(180deg, #ffffff, #f4fbf6);
+  box-shadow: inset 0 2px 0 #ffffff, 0 4px 0 rgba(23, 120, 70, .15);
+  touch-action: manipulation;
+  -webkit-touch-callout: none;
+  user-select: none;
+  -webkit-user-select: none;
+}
+
+.ms-status {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 12px;
+}
+.ms-counter {
+  min-width: 96px;
+  text-align: center;
+  font-weight: 900;
+  font-size: 1.02rem;
+  color: #57344a;
+  background: #fff3f8;
+  border-radius: 999px;
+  padding: 6px 10px;
+}
+.ms-counter output { font-variant-numeric: tabular-nums; }
+
+.ms-face {
+  width: 56px;
+  height: 56px;
+  flex: none;
+  padding: 0;
+  border-radius: 50%;
+  border: 3px solid #ffffff;
+  background: #ffdd55;
+  box-shadow: 0 3px 8px rgba(72, 38, 61, .25);
+  overflow: hidden;
+  cursor: pointer;
+}
+.ms-face svg { display: block; width: 100%; height: 100%; }
+.ms-face:active { transform: scale(.94); }
+
+.ms-grid {
+  display: grid;
+  gap: 4px;
+}
+.ms-tile {
+  aspect-ratio: 1;
+  min-width: 0;
+  padding: 0;
+  border-radius: 22%;
+  display: grid;
+  place-items: center;
+  font-weight: 900;
+  font-size: clamp(13px, 4.4vw, 20px);
+  line-height: 1;
+  font-variant-numeric: tabular-nums;
+}
+.ms-tile.covered {
+  background: linear-gradient(150deg, #8fe3c0, #34ce8b);
+  border: 2px solid #ffffff;
+  box-shadow: inset -2px -3px 0 rgba(0, 90, 50, .18), inset 2px 2px 0 rgba(255, 255, 255, .45), 0 1px 3px rgba(72, 38, 61, .18);
+  cursor: pointer;
+}
+.ms-tile.open {
+  background: #fdf6ec;
+  border: 2px solid #f3e3d3;
+  box-shadow: inset 0 1px 3px rgba(72, 38, 61, .06);
+  cursor: default;
+}
+.ms-tile.flagged { font-size: clamp(12px, 4vw, 18px); }
+.ms-tile.mine-open { background: #ffe1e8; border-color: #ffb3c2; }
+.ms-tile.boom { background: #ff8fa8; border-color: #ff6482; }
+.ms-tile.wrong { position: relative; }
+.ms-tile.wrong::after {
+  content: "✕";
+  position: absolute;
+  inset: 0;
+  display: grid;
+  place-items: center;
+  color: rgba(214, 40, 80, .85);
+  font-size: 1.15em;
+  font-weight: 900;
+}
+.ms-tile .mine-art { width: 72%; height: 72%; display: block; }
+.ms-tile.pop { animation: ms-pop .18s ease; }
+@keyframes ms-pop {
+  40% { transform: scale(.88); }
+}
+.ms-board.preview .ms-tile { cursor: default; }
+
+.n1 { color: #4fa3ff; } .n2 { color: #34b06b; } .n3 { color: #ff6482; }
+.n4 { color: #9b7ff2; } .n5 { color: #ff9f43; } .n6 { color: #2fb3a3; }
+.n7 { color: #57344a; } .n8 { color: #98a0ad; }
+
+.ms-mode { display: flex; gap: 10px; margin-top: 14px; }
+.ms-mode button {
+  flex: 1;
+  font: inherit;
+  font-weight: 900;
+  font-size: 1.05rem;
+  padding: 11px;
+  border-radius: 999px;
+  border: 2px solid #bfe6cf;
+  background: #ffffff;
+  color: #2c6e4c;
+  cursor: pointer;
+}
+.ms-mode button.selected {
+  background: linear-gradient(90deg, #f272a7, #ff9f2e);
+  border: 2px dashed #ffffff;
+  outline: 2px solid #f272a7;
+  color: #ffffff;
+}
+.ms-mode button:disabled { opacity: .45; cursor: default; }
+.ms-board.preview .ms-mode { opacity: .45; }
+
+.ms-verdict {
+  margin-top: 4px;
+  font-size: clamp(1.05rem, 4.5vw, 1.4rem);
+  font-weight: bold;
+  color: #9b2867;
+}
+.ms-verdict:empty { display: none; }
+
+.burst-star {
+  position: absolute;
+  z-index: 3;
+  pointer-events: none;
+  color: #f6b73e;
+  text-shadow: 0 0 4px #fff, 0 0 6px #fff;
+  font-size: 22px;
+  line-height: 1;
+  transform: translate(-50%, -50%);
+  animation: burst-fly .95s ease-out forwards;
+}
+@keyframes burst-fly {
+  to { transform: translate(calc(-50% + var(--dx)), calc(-50% + var(--dy))) scale(.4) rotate(120deg); opacity: 0; }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .ms-tile.pop { animation: none; }
+  .ms-face:active { transform: none; }
+  .burst-star { display: none; }
+}
+
+.milestone-banner {
+  position: absolute;
+  left: 50%;
+  top: 30%;
+  transform: translate(-50%, -50%);
+  z-index: 6;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 2px;
+  padding: 12px 26px 14px;
+  border: 3px solid #ffffff;
+  border-radius: 999px;
+  background: linear-gradient(135deg, #ff8fb8, #ffb52e);
+  box-shadow: 0 10px 28px rgba(214, 90, 145, .45);
+  pointer-events: none;
+  animation: milestone-pop 1.9s ease forwards;
+}
+.milestone-count {
+  font-family: 'Fredoka', sans-serif;
+  font-weight: 700;
+  font-size: 2rem;
+  line-height: 1.05;
+  color: #ffffff;
+  text-shadow: 0 2px 0 rgba(167, 25, 91, .45);
+  white-space: nowrap;
+}
+.milestone-sub { font-size: .85rem; font-weight: 700; color: #fff7ec; white-space: nowrap; }
+@keyframes milestone-pop {
+  0% { transform: translate(-50%, -50%) scale(.4); opacity: 0; }
+  14% { transform: translate(-50%, -50%) scale(1.12); opacity: 1; }
+  24% { transform: translate(-50%, -50%) scale(1); }
+  82% { transform: translate(-50%, -50%) scale(1); opacity: 1; }
+  100% { transform: translate(-50%, -58%) scale(1); opacity: 0; }
+}
+@media (prefers-reduced-motion: reduce) {
+  .milestone-banner { animation: none; }
+}

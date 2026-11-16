@@ -1,0 +1,44 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- sparkles -->
+  <g fill="#f6b73e">
+    <path d="M48 44 l4.5 10.5 L63 59 l-10.5 4.5 L48 74 l-4.5 -10.5 L33 59 l10.5 -4.5 Z"/>
+    <path d="M348 60 l3.5 8.5 L360 72 l-8.5 3.5 L348 84 l-3.5 -8.5 L336 72 l8.5 -3.5 Z"/>
+  </g>
+  <!-- panel -->
+  <rect x="52" y="52" width="296" height="296" rx="36" fill="#f2fbf5"/>
+  <!-- tile grid -->
+  <g>
+    <rect x="76" y="76" width="68" height="68" rx="12" fill="#34ce8b"/>
+    <rect x="156" y="76" width="68" height="68" rx="12" fill="#fdf6ec" stroke="#f3e3d3" stroke-width="3"/>
+    <rect x="236" y="76" width="68" height="68" rx="12" fill="#34ce8b"/>
+    <rect x="76" y="156" width="68" height="68" rx="12" fill="#fdf6ec" stroke="#f3e3d3" stroke-width="3"/>
+    <rect x="156" y="156" width="68" height="68" rx="12" fill="#34ce8b"/>
+    <rect x="236" y="156" width="68" height="68" rx="12" fill="#fdf6ec" stroke="#f3e3d3" stroke-width="3"/>
+    <rect x="76" y="236" width="68" height="68" rx="12" fill="#34ce8b"/>
+    <rect x="156" y="236" width="68" height="68" rx="12" fill="#fdf6ec" stroke="#f3e3d3" stroke-width="3"/>
+    <rect x="236" y="236" width="68" height="68" rx="12" fill="#34ce8b"/>
+  </g>
+  <!-- numbers -->
+  <g font-family="Arial, sans-serif" font-weight="900" font-size="38" text-anchor="middle">
+    <text x="190" y="122" fill="#4fa3ff">1</text>
+    <text x="110" y="202" fill="#34b06b">2</text>
+    <text x="270" y="202" fill="#4fa3ff">1</text>
+    <text x="190" y="282" fill="#ff6482">3</text>
+  </g>
+  <!-- flag on the middle tile -->
+  <g>
+    <rect x="186" y="168" width="5" height="34" rx="2.5" fill="#57344a"/>
+    <path d="M191 168 L214 175 L191 184 Z" fill="#ff5252"/>
+  </g>
+  <!-- mine peeking at the corner tile -->
+  <g fill="#57344a">
+    <circle cx="270" cy="270" r="15"/>
+    <g stroke="#57344a" stroke-width="5" stroke-linecap="round">
+      <line x1="270" y1="248" x2="270" y2="254"/>
+      <line x1="270" y1="286" x2="270" y2="292"/>
+      <line x1="248" y1="270" x2="254" y2="270"/>
+      <line x1="286" y1="270" x2="292" y2="270"/>
+    </g>
+    <circle cx="264" cy="264" r="4" fill="#ffffff" opacity=".85"/>
+  </g>
+</svg>

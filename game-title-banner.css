@@ -57,6 +57,11 @@
   --banner-color: #ffdce9;
   --banner-ink: #a51c5e;
 }
+[data-game="minesweeper"] {
+  --banner-art: url("minesweeper/banner.svg");
+  --banner-color: #cdf0da;
+  --banner-ink: #1d7a4f;
+}
 [data-game="dodgeball"] {
   --banner-art: url("assets/banner-dodgeball.jpg");
   --banner-color: #dbeafe;
