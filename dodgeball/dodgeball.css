@@ -9,6 +9,7 @@ h1 { margin: 0; font-size: clamp(1.2rem, 4vw, 1.8rem); }
   position: relative;
   isolation: isolate;
   overflow: hidden;
+  touch-action: none;
   width: 100%;
   height: clamp(370px, calc(100dvh - 110px), 760px);
   border: 3px solid #b995a9;
@@ -207,4 +208,11 @@ h1 { margin: 0; font-size: clamp(1.2rem, 4vw, 1.8rem); }
 .dodge-zone button {
   width: clamp(48px, 11%, 75px);
   box-shadow: 0 3px 0 #80517655;
+}
+
+/* Landscape tablets: keep the title banner compact (sidebar-sized),
+   like the other games, so the court fits on screen. */
+@media (orientation: landscape) and (min-width: 700px) {
+  .game-title-banner { aspect-ratio: auto; height: 118px; max-width: 620px; margin-inline: auto; }
+  .court { height: clamp(320px, calc(100dvh - 215px), 760px); }
 }

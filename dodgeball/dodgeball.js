@@ -89,8 +89,8 @@
       guide.textContent = dodgeResult === 'safe' ? say('Nice dodge!', 'よけた！') : say('Cat scores!', 'ねこに1点！');
     } else {
       guide.textContent = mode === 'match'
-        ? say('Your turn! Swipe up to throw, or aim with ← → and press Enter.', 'きみの番！ 上にスワイプ。キーなら ← → で狙って Enter。')
-        : say('Swipe the ball up. With a keyboard, aim with ← → and press Enter.', 'ボールを上にスワイプ。キーなら ← → で狙って Enter。');
+        ? say('Your turn! Drag to aim — let go to throw!', 'きみの番！ ドラッグでねらって、はなして投げよう！')
+        : say('Drag anywhere to aim — let go to throw! A tap on the ball throws it straight.', 'コートをドラッグでねらって、はなすと投げる！ボールをタップでまっすぐ投げるよ。');
     }
   }
 
@@ -250,12 +250,40 @@
     const position = swipeTarget(event);
     drag = null;
     aim.hidden = true;
+    // A plain tap on the ball throws at the current aim point, so the
+    // game is fully playable by touch alone (no keyboard, no swipe).
     if (position !== null) void throwBall(position);
+    else void throwBall(target);
   });
   ball.addEventListener('lostpointercapture', () => {
     drag = null;
     aim.hidden = true;
   });
+
+  // Drag anywhere on the court to aim; release to throw. This is the
+  // main touch control on tablets and phones.
+  let courtDrag = null;
+  function aimAtFinger(event) {
+    const rect = court.getBoundingClientRect();
+    showAim(clamp((event.clientX - rect.left) / rect.width * 100, 3, 97));
+  }
+  court.addEventListener('pointerdown', event => {
+    if (busy || phase !== 'throw' || !event.isPrimary || event.button !== 0 || drag || courtDrag) return;
+    if (event.target.closest('button')) return;
+    courtDrag = { id: event.pointerId };
+    court.setPointerCapture(event.pointerId);
+    aimAtFinger(event);
+  });
+  court.addEventListener('pointermove', event => {
+    if (courtDrag?.id === event.pointerId) aimAtFinger(event);
+  });
+  court.addEventListener('pointerup', event => {
+    if (courtDrag?.id !== event.pointerId) return;
+    courtDrag = null;
+    aim.hidden = true;
+    void throwBall(target);
+  });
+  court.addEventListener('pointercancel', () => { courtDrag = null; });
   ball.addEventListener('keydown', event => {
     if (busy || !['ArrowLeft', 'ArrowRight'].includes(event.key)) return;
     event.preventDefault();

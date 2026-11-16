@@ -17,6 +17,7 @@
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
   const LEVELS = {
+    practice: { disks: 2, par: 3, practice: true },
     easy: { disks: 3, par: 7 },
     normal: { disks: 4, par: 15 },
     hard: { disks: 5, par: 31 }
@@ -435,7 +436,14 @@
     celebrateBanner(perfect);
     confettiBurst();
     towerHop();
-    gameScores.finish(Math.max(200, 1000 - (moves - par) * 30 - seconds * 2), true);
+    if (LEVELS[level].practice) {
+      // Practice rounds celebrate the clear but post no score.
+      window.momoStickers?.award(document.body.dataset.game);
+      document.querySelector('#final-score').textContent = '★';
+      document.querySelector('#score-card').hidden = false;
+    } else {
+      gameScores.finish(Math.max(200, 1000 - (moves - par) * 30 - seconds * 2), true);
+    }
     render();
     start.focus({ preventScroll: true });
   }
