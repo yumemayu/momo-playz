@@ -52,6 +52,11 @@
   --banner-color: #ffe0ec;
   --banner-ink: #a51c5e;
 }
+[data-game="hit-blow"] {
+  --banner-art: url("hit-blow/banner.svg");
+  --banner-color: #ffdce9;
+  --banner-ink: #a51c5e;
+}
 [data-game="dodgeball"] {
   --banner-art: url("assets/banner-dodgeball.jpg");
   --banner-color: #dbeafe;

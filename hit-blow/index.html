@@ -1,0 +1,125 @@
+<!doctype html>
+<html lang="ja">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en-title="Hit &amp; Blow | Momo.squirrels">ヒット＆ブロー | Momo.squirrels</title>
+<meta name="description" content="ひみつの4色のコードを推理して当てる、昔ながらのロジックゲーム。赤ピンは色も場所も合ってる、白ピンは色だけ合ってる。ブラウザで遊べる無料パズルゲームです。">
+<link rel="canonical" href="https://yumemayu.github.io/momo-playz/hit-blow/">
+<link rel="stylesheet" href="../game.css?v=level-cards">
+<link rel="stylesheet" href="../game-picker.css">
+<link rel="stylesheet" href="../game-title-banner.css">
+<link rel="stylesheet" href="../language.css">
+<link rel="stylesheet" href="hit-blow.css">
+<script defer src="../language.js"></script>
+<script defer src="../stickers.js"></script>
+<script defer src="../nickname.js?v=compact"></script>
+<script defer src="../scores.js?v=shared-nickname"></script>
+<script defer src="hit-blow.js"></script>
+<link rel="stylesheet" href="../nickname.css?v=compact">
+  <link rel="manifest" href="../manifest.webmanifest">
+  <meta name="theme-color" content="#f272a7">
+  <meta name="mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="default">
+  <meta name="apple-mobile-web-app-title" content="MOMO Playz">
+  <link rel="apple-touch-icon" href="../icons/icon-512.png">
+  <script defer src="../pwa.js"></script>
+</head>
+<body data-game="hit-blow">
+<main class="hb-main">
+  <header class="game-heading game-title-banner">
+    <span class="game-title-rainbow" aria-hidden="true">🌈</span>
+    <span class="game-title-art" aria-hidden="true"></span>
+    <h1><span data-en="Hit &amp; Blow">ヒット＆ブロー</span></h1>
+  </header>
+  <div class="stats hb-stats">
+    <span><span data-en="Guesses">回数</span> <output id="guesses">0</output></span>
+    <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
+  </div>
+  <fieldset class="difficulty">
+    <legend data-en="Choose a level">レベルを えらぶ</legend>
+    <div class="level-buttons" role="group" aria-label="レベル" data-en-label="Level">
+      <button type="button" data-level="easy" aria-pressed="false"><span class="level-icon" aria-hidden="true">🌼</span><span data-en="Easy">かんたん</span></button>
+      <button type="button" data-level="normal" aria-pressed="true"><span class="level-icon" aria-hidden="true">🦋</span><span data-en="Normal">ふつう</span></button>
+      <button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-en="Hard">むずかしい</span></button>
+    </div>
+  </fieldset>
+  <div class="play-stack">
+    <p class="turn-line" id="turn-line" role="status"></p>
+    <div class="play-stage">
+      <div class="hb-board game-field preview" id="board">
+        <div class="hb-secret-row">
+          <span class="hb-secret-label" data-en="Secret code">ひみつのコード</span>
+          <div class="hb-pegs" id="secret-pegs"></div>
+        </div>
+        <hr class="hb-sep">
+        <div class="hb-rows" id="rows"></div>
+        <p class="hb-tries" id="tries-line"></p>
+        <div class="hb-palette" id="palette" role="group" aria-label="色をえらぶ" data-en-label="Choose a color"></div>
+        <div class="hb-actions">
+          <button type="button" class="hb-back" id="back">⌫ <span data-en="Undo">もどす</span></button>
+          <button type="button" class="hb-check" id="check" data-en="Check!">決定！</button>
+        </div>
+        <p class="hb-legend">
+          <span class="hb-clue hit"></span><span data-en="Red pin = right color, right place">赤ピン ＝ 色も 場所も 合ってる</span><br>
+          <span class="hb-clue blow"></span><span data-en="White pin = right color, wrong place">白ピン ＝ 色は 合ってるけど 場所が ちがう</span><br>
+          <span data-en="Which colors matched stays secret — think it through!">どの色が当たったかは ヒミツ。推理して当てよう！</span>
+        </p>
+      </div>
+      <div class="game-card" id="ready-card">
+        <img src="../assets/game-cat.png" alt="" width="58" height="58">
+        <strong data-en="Ready to play?">はじめよう！</strong>
+        <div class="player-setup">
+          <label for="nickname" data-en="Nickname">ニックネーム</label>
+          <input id="nickname" maxlength="20" placeholder="例：もち" data-en-placeholder="e.g. Mochi" autocomplete="off" aria-describedby="player-hint">
+          <small id="player-hint" data-en="Enter a nickname to save your score on this device.">なまえを入れると、この端末にスコアが残るよ。</small>
+        </div>
+      </div>
+    </div>
+    <div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
+      <span data-en="Score">スコア</span><strong id="final-score"></strong>
+      <div class="hb-verdict" id="hb-verdict"></div>
+      <p></p>
+    </div>
+    <button type="button" id="change-player" class="change-player" data-en="Change nickname" hidden>ニックネームをかえる</button>
+    <div class="play-row">
+      <button class="play-primary" id="start" type="button">Play</button>
+      <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
+    </div>
+  </div>
+  <p id="instructions" data-en="A secret code of 4 colors is hidden. Pick 4 colors and press Check! A red pin means a color is in the right place, a white pin means a color is in the code but in the wrong place — but you won't be told which colors matched. Use the clues to crack the code. Easy and Normal have no repeated colors; Hard allows repeats and gives you 8 guesses.">ひみつの4色のコードを当てるゲーム。色を4つ選んで「決定！」を押そう。赤ピンは色も場所も合ってる、白ピンは色は合ってるけど場所がちがう。でも、どの色が当たったかは教えてもらえないよ。ヒントを推理して、コードを当てよう。かんたん・ふつうは色の重なりなし、むずかしいは重なりありで8回まで。</p>
+  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+  <section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
+      <span id="score-level"></span>
+      <div class="score-period" aria-label="Ranking period" role="group">
+        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
+        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
+      </div>
+    </div>
+    <p class="personal-best" id="personal-best"></p>
+    <ol id="score-list"></ol>
+  </section>
+  <nav class="game-picker" aria-label="Choose a game">
+    <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
+    <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
+    <a href="../glasses-cat/"><img class="game-art" src="../assets/game-cat.png" alt="" width="40" height="40"><span data-ja="メガネ猫さがし">Find the Glasses Cat</span></a>
+    <a class="picker-piano" href="../piano/"><span class="picker-illustration" aria-hidden="true">♪</span><span data-ja="MOMOピアノ">MOMO Piano</span></a>
+    <a class="picker-merge" href="../capybara-merge/"><span class="picker-illustration" aria-hidden="true"></span><span data-ja="カピバラ温泉マージ">Capybara Onsen Merge</span></a>
+    <a class="picker-memory" href="../capybara-memory/"><span class="picker-illustration" aria-hidden="true"></span><span data-ja="カピバラ神経衰弱">Capybara Memory Match</span></a>
+    <a class="picker-bath" href="../capybara-tap/"><span class="picker-illustration" aria-hidden="true"></span><span data-ja="カピバラ温泉タップ">Capybara Onsen Tap</span></a>
+    <a class="picker-trap" href="../cat-trap/"><svg class="game-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="7" y="7" width="50" height="50" rx="11" fill="#cdeeb2"/><rect x="43" y="1" width="17" height="14" rx="2.5" fill="#d9a066" stroke="#b57e42" stroke-width="1.6"/><g transform="translate(9.6 7) scale(0.7)"><path d="M9 30 11 11 26 19 Q32 17 38 19 L53 11 55 30 C65 65 -1 65 9 30Z" fill="#fdf3e3" stroke="#57344a" stroke-width="3"/><path d="M15 17 21 23 14 26Z M49 17 50 26 43 23Z" fill="#f987aa"/><circle cx="23" cy="35" r="2.4" fill="#57344a"/><circle cx="41" cy="35" r="2.4" fill="#57344a"/><path d="M28 43Q30 46 32 42Q34 46 37 43" fill="none" stroke="#57344a" stroke-width="2.5" stroke-linecap="round"/><path d="M29 35h6" stroke="#493153" stroke-width="3.5"/><circle cx="22" cy="35" r="7" fill="none" stroke="#493153" stroke-width="3.5"/><circle cx="42" cy="35" r="7" fill="none" stroke="#493153" stroke-width="3.5"/></g></svg><span data-ja="ねこを かこもう！">Trap the Cat</span></a>
+    <a class="picker-quoridor" href="../quoridor/"><svg class="game-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="10" fill="#f3dfba"/><rect x="12" y="40" width="26" height="7" rx="3.5" fill="#c98a4b"/><rect x="42" y="16" width="7" height="26" rx="3.5" fill="#c98a4b"/><path d="M19 21l1.8-6.2L25 18M31 21l-1.8-6.2L25 18" fill="#fff5fa" stroke="#57344a" stroke-width="2.2" stroke-linejoin="round"/><circle cx="25" cy="25" r="8" fill="#fff5fa" stroke="#57344a" stroke-width="2.4"/><circle cx="22.2" cy="24.4" r="1.5" fill="#57344a"/><circle cx="27.8" cy="24.4" r="1.5" fill="#57344a"/><path d="M22.8 28.4q2.2 1.8 4.4 0" fill="none" stroke="#57344a" stroke-width="1.8" stroke-linecap="round"/></svg><span data-ja="コリドール">Quoridor</span></a>
+    <a class="picker-lights" href="../lights-out/"><svg class="game-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="12" fill="#fff6d8"/><rect x="13" y="13" width="17" height="17" rx="5" fill="#ffd94d"/><rect x="34" y="13" width="17" height="17" rx="5" fill="#cfc8e8"/><rect x="13" y="34" width="17" height="17" rx="5" fill="#cfc8e8"/><rect x="34" y="34" width="17" height="17" rx="5" fill="#ffd94d"/><path d="M21 8v-3M10 15l-2-2M32 15l2-2M43 39l3-1M46 46l3 1" stroke="#f6b73e" stroke-width="2.4" stroke-linecap="round"/></svg><span data-ja="ライトアウト">Lights Out</span></a>
+    <a class="picker-flow" href="../flow/"><svg class="game-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="12" fill="#eaf7ff"/><path d="M20 44V20h24" fill="none" stroke="#f272a7" stroke-width="7" stroke-linecap="round"/><circle cx="20" cy="44" r="6.5" fill="#f272a7"/><circle cx="44" cy="20" r="6.5" fill="#f272a7"/><path d="M44 44H28" stroke="#58cf9e" stroke-width="7" stroke-linecap="round"/><circle cx="44" cy="44" r="6.5" fill="#58cf9e"/><circle cx="28" cy="44" r="6.5" fill="#58cf9e"/></svg><span data-ja="フローパズル">Flow</span></a>
+    <a class="picker-hitblow" aria-current="page" href="./"><svg class="game-art" viewBox="0 0 64 64" aria-hidden="true"><rect x="6" y="6" width="52" height="52" rx="12" fill="#fff0f6"/><circle cx="20" cy="24" r="8.5" fill="#ff6482"/><circle cx="44" cy="24" r="8.5" fill="#4fa3ff"/><circle cx="20" cy="44" r="8.5" fill="#ffcf3f"/><circle cx="44" cy="44" r="8.5" fill="#34ce8b"/><g fill="#ffffff" opacity=".8"><ellipse cx="17" cy="21" rx="3" ry="2.2"/><ellipse cx="41" cy="21" rx="3" ry="2.2"/><ellipse cx="17" cy="41" rx="3" ry="2.2"/><ellipse cx="41" cy="41" rx="3" ry="2.2"/></g></svg><span data-en="Hit &amp; Blow">ヒット＆ブロー</span></a>
+    <a class="picker-bath" href="../bun-lights/"><img class="game-art" src="../assets/game-bun.png" alt="" width="42" height="42"><span data-ja="肉まんライト">Bun Lights</span></a>
+    <a class="picker-piano" href="../clicky-keys/"><span class="game-art" aria-hidden="true">⌨</span><span data-ja="カチカチキー">Clicky Keys</span></a>
+    <a href="../switch-shine/"><span class="game-art" aria-hidden="true">⚡</span><span data-ja="ピカッとスイッチ">Switch &amp; Shine</span></a>
+</nav>
+</main>
+<footer class="feedback"><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-en="Send feedback">感想をおくる</a><small>Copyright Momo.squirrels</small></footer>
+</body>
+</html>

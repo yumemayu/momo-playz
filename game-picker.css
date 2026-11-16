@@ -32,6 +32,7 @@ nav.game-picker > a:nth-child(3) { --picker-color: #dcf2e5; }
 nav.game-picker > .picker-merge { --picker-color: #ffe1d6; }
 nav.game-picker > .picker-lights { --picker-color: #fff3b8; }
 nav.game-picker > .picker-flow { --picker-color: #dff3ff; }
+nav.game-picker > .picker-hitblow { --picker-color: #ffe0ec; }
 nav.game-picker > .picker-memory { --picker-color: #fff2cd; }
 nav.game-picker > .picker-bath { --picker-color: #def4fa; }
 nav.game-picker > .picker-trap { --picker-color: #eee2ff; }

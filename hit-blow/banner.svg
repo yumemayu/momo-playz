@@ -1,0 +1,27 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <!-- sparkles -->
+  <g fill="#f6b73e">
+    <path d="M52 62 l4.5 10.5 L67 77 l-10.5 4.5 L52 92 l-4.5 -10.5 L37 77 l10.5 -4.5 Z"/>
+    <path d="M344 96 l3.5 8.5 L356 108 l-8.5 3.5 L344 120 l-3.5 -8.5 L332 108 l8.5 -3.5 Z"/>
+    <path d="M322 268 l3 7.5 L332.5 278.5 L325 281.5 L322 289 l-3 -7.5 L311.5 278.5 L319 275.5 Z"/>
+  </g>
+  <!-- panel -->
+  <rect x="42" y="108" width="316" height="184" rx="36" fill="#fff5f9"/>
+  <!-- marbles -->
+  <g stroke="rgba(255,255,255,.9)" stroke-width="3">
+    <circle cx="95" cy="172" r="34" fill="#ff6482"/>
+    <circle cx="168" cy="172" r="34" fill="#4fa3ff"/>
+    <circle cx="241" cy="172" r="34" fill="#ffcf3f"/>
+    <circle cx="314" cy="172" r="34" fill="#34ce8b"/>
+  </g>
+  <g fill="#ffffff" opacity=".8">
+    <ellipse cx="83" cy="159" rx="10" ry="7"/>
+    <ellipse cx="156" cy="159" rx="10" ry="7"/>
+    <ellipse cx="229" cy="159" rx="10" ry="7"/>
+    <ellipse cx="302" cy="159" rx="10" ry="7"/>
+  </g>
+  <!-- clue pins -->
+  <circle cx="168" cy="248" r="13" fill="#ef476f"/>
+  <circle cx="205" cy="248" r="13" fill="#ffffff" stroke="#d8c3d2" stroke-width="3"/>
+  <circle cx="242" cy="248" r="13" fill="#eadbe4"/>
+</svg>
