@@ -61,10 +61,14 @@
       + '<g stroke="#57344a" stroke-width="3" stroke-linecap="round">'
       + '<path d="M18 24 L26 32 M26 24 L18 32"/><path d="M38 24 L46 32 M46 24 L38 32"/></g>'
       + '<path d="M24 42 Q27 39 30 42 Q33 45 36 42 Q38 40 40 42" fill="none" stroke="#57344a" stroke-width="2.6" stroke-linecap="round"/>',
-    cool: FACE_HEAD
-      + '<rect x="8" y="20" width="48" height="15" rx="7.5" fill="#57344a"/>'
-      + '<rect x="13" y="23.5" width="12" height="4" rx="2" fill="#ffffff" opacity=".35"/>'
-      + '<path d="M25 40 Q32 47 39 40" fill="none" stroke="#57344a" stroke-width="2.8" stroke-linecap="round"/>'
+    cool: '<defs><radialGradient id="msfaceg" cx="38%" cy="30%" r="85%"><stop offset="0%" stop-color="#ffefa8"/><stop offset="60%" stop-color="#ffdd55"/><stop offset="100%" stop-color="#ffcf3f"/></radialGradient></defs>'
+      + '<circle cx="32" cy="32" r="32" fill="url(#msfaceg)"/>'
+      + '<ellipse cx="12.5" cy="41.5" rx="5" ry="3" fill="#ffb3c8" opacity=".85"/><ellipse cx="51.5" cy="41.5" rx="5" ry="3" fill="#ffb3c8" opacity=".85"/>'
+      + '<g fill="#57344a"><path d="M8.5 20 H29.5 L28.6 32.5 Q28.3 38.5 22.5 38.5 H15.5 Q9.8 38.5 9.3 32.8 Z"/>'
+      + '<path d="M55.5 20 H34.5 L35.4 32.5 Q35.7 38.5 41.5 38.5 H48.5 Q54.2 38.5 54.7 32.8 Z"/>'
+      + '<path d="M28.5 19.5 H35.5 V24.5 Q32 23 28.5 24.5 Z"/>'
+      + '<rect x="1.5" y="21" width="8" height="4.6" rx="1.5"/><rect x="54.5" y="21" width="8" height="4.6" rx="1.5"/></g>'
+      + '<path d="M24.5 42.5 Q32 49 39.5 40.5" fill="none" stroke="#57344a" stroke-width="3" stroke-linecap="round"/>'
   };
   const MINE_ART = '<svg class="mine-art" viewBox="0 0 48 48" aria-hidden="true">'
     + '<g stroke="#57344a" stroke-width="4" stroke-linecap="round">'
