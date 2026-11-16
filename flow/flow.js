@@ -11,14 +11,37 @@
   const levelButtons = Array.from(document.querySelectorAll('[data-level]'));
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
-  // Hand-made layouts, given as the two dots of each colour. Every
-  // layout has a solution that fills the board (checked cell by cell);
-  // a random rotation/flip and a colour shuffle keep each game fresh
-  // while the solution always survives the transform.
+  // Layouts, given as the two dots of each colour: the first is the
+  // original hand-made one, the rest were generated as full-coverage
+  // path partitions and re-checked with a solver, so every layout has
+  // a solution that fills the board. A random layout, rotation/flip
+  // and colour shuffle keep each game fresh while the solution always
+  // survives the transform.
   const PUZZLES = {
-    easy: { size: 5, pairs: [[[0, 0], [3, 2]], [[0, 2], [2, 2]], [[0, 4], [3, 3]], [[1, 0], [4, 1]], [[1, 4], [4, 2]]] },
-    normal: { size: 6, pairs: [[[0, 1], [4, 1]], [[0, 2], [2, 2]], [[0, 5], [3, 3]], [[1, 2], [5, 3]], [[1, 5], [4, 3]], [[5, 0], [5, 1]], [[5, 4], [5, 5]]] },
-    hard: { size: 7, pairs: [[[0, 0], [5, 3]], [[0, 2], [2, 2]], [[0, 4], [5, 4]], [[0, 6], [1, 4]], [[1, 0], [6, 0]], [[1, 6], [6, 6]], [[3, 4], [5, 5]], [[4, 1], [6, 5]], [[2, 4], [2, 5]]] }
+    easy: { size: 5, layouts: [
+        [[[0, 0], [3, 2]], [[0, 2], [2, 2]], [[0, 4], [3, 3]], [[1, 0], [4, 1]], [[1, 4], [4, 2]]],
+        [[[3, 3], [4, 2]], [[4, 1], [2, 2]], [[2, 1], [0, 0]], [[0, 1], [1, 4]], [[1, 3], [2, 4]]],
+        [[[1, 1], [1, 3]], [[1, 2], [2, 1]], [[2, 0], [4, 1]], [[3, 1], [3, 4]], [[2, 4], [3, 3]]],
+        [[[3, 1], [4, 0]], [[3, 0], [3, 4]], [[3, 3], [0, 4]], [[0, 3], [0, 1]], [[0, 0], [1, 1]]],
+        [[[0, 4], [4, 2]], [[4, 1], [3, 0]], [[2, 0], [0, 2]], [[0, 3], [3, 2]], [[3, 1], [2, 2]]],
+        [[[3, 3], [4, 4]], [[4, 3], [2, 0]], [[1, 0], [0, 1]], [[0, 2], [1, 4]], [[2, 4], [3, 1]]]
+      ] },
+    normal: { size: 6, layouts: [
+        [[[0, 1], [4, 1]], [[0, 2], [2, 2]], [[0, 5], [3, 3]], [[1, 2], [5, 3]], [[1, 5], [4, 3]], [[5, 0], [5, 1]], [[5, 4], [5, 5]]],
+        [[[5, 1], [2, 0]], [[2, 1], [0, 2]], [[1, 2], [4, 5]], [[3, 5], [0, 4]], [[0, 3], [1, 4]], [[2, 4], [3, 3]], [[3, 4], [4, 3]]],
+        [[[4, 3], [5, 1]], [[5, 0], [4, 2]], [[3, 2], [2, 1]], [[2, 2], [0, 0]], [[0, 1], [1, 3]], [[2, 3], [0, 5]], [[1, 5], [4, 4]]],
+        [[[0, 0], [2, 0]], [[3, 0], [5, 1]], [[5, 2], [5, 5]], [[4, 5], [0, 1]], [[1, 1], [2, 4]], [[3, 4], [4, 2]], [[4, 1], [3, 2]]],
+        [[[4, 0], [0, 4]], [[0, 5], [1, 3]], [[1, 2], [2, 3]], [[2, 4], [3, 5]], [[3, 4], [3, 2]], [[4, 2], [4, 4]], [[5, 4], [4, 5]]],
+        [[[2, 5], [4, 5]], [[5, 5], [5, 1]], [[5, 0], [3, 0]], [[2, 0], [0, 0]], [[0, 1], [0, 5]], [[0, 4], [0, 2]], [[1, 2], [3, 3]]]
+      ] },
+    hard: { size: 7, layouts: [
+        [[[0, 0], [5, 3]], [[0, 2], [2, 2]], [[0, 4], [5, 4]], [[0, 6], [1, 4]], [[1, 0], [6, 0]], [[1, 6], [6, 6]], [[3, 4], [5, 5]], [[4, 1], [6, 5]], [[2, 4], [2, 5]]],
+        [[[2, 0], [0, 1]], [[0, 2], [5, 6]], [[6, 6], [6, 4]], [[6, 3], [6, 0]], [[5, 0], [3, 1]], [[2, 1], [1, 2]], [[2, 2], [2, 5]], [[2, 4], [5, 5]], [[5, 4], [4, 2]]],
+        [[[4, 0], [2, 0]], [[1, 0], [3, 2]], [[2, 2], [0, 3]], [[1, 3], [5, 1]], [[5, 0], [6, 2]], [[6, 3], [4, 4]], [[3, 4], [0, 6]], [[1, 6], [3, 6]], [[3, 5], [6, 6]]],
+        [[[4, 6], [0, 6]], [[0, 5], [0, 2]], [[0, 1], [1, 0]], [[2, 0], [5, 0]], [[6, 0], [6, 2]], [[6, 3], [5, 6]], [[5, 5], [1, 3]], [[1, 2], [2, 3]], [[2, 2], [4, 2]]],
+        [[[5, 1], [3, 0]], [[2, 0], [3, 1]], [[4, 1], [0, 4]], [[0, 5], [1, 6]], [[2, 6], [6, 6]], [[6, 5], [4, 5]], [[3, 5], [2, 4]], [[3, 4], [4, 3]], [[4, 4], [5, 3]]],
+        [[[6, 2], [5, 0]], [[5, 1], [6, 3]], [[6, 4], [5, 6]], [[5, 5], [4, 1]], [[4, 0], [0, 0]], [[0, 1], [3, 1]], [[3, 2], [3, 5]], [[4, 5], [2, 2]], [[1, 2], [0, 6]]]
+      ] }
   };
   const COLORS = ['#f272a7', '#4fb3e8', '#f6c945', '#58cf9e', '#a78bfa', '#f79c4b', '#ef6f8f', '#3ec6c6', '#a4d94e'];
   const SCALE = [523.25, 587.33, 659.25, 783.99, 880, 1046.5, 1174.66, 1318.51];
@@ -132,13 +155,20 @@
     return [x, y];
   }
 
+  const lastLayout = { easy: -1, normal: -1, hard: -1 };
   function setupPuzzle() {
     const base = PUZZLES[level];
     size = base.size;
+    let layoutIndex = Math.floor(Math.random() * base.layouts.length);
+    if (base.layouts.length > 1 && layoutIndex === lastLayout[level]) {
+      layoutIndex = (layoutIndex + 1) % base.layouts.length;
+    }
+    lastLayout[level] = layoutIndex;
+    const layout = base.layouts[layoutIndex];
     const rot = Math.floor(Math.random() * 4);
     const flip = Math.random() < .5;
     const colorOrder = shuffle(COLORS.map((_, i) => i));
-    pairs = base.pairs.map((pair, i) => ({
+    pairs = layout.map((pair, i) => ({
       a: transform(pair[0], rot, flip),
       b: transform(pair[1], rot, flip),
       color: colorOrder[i]
