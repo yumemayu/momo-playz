@@ -302,3 +302,18 @@ const gameScores = (() => {
     }
   };
 })();
+
+// Picture guide: open for first-time players (no nickname saved yet),
+// closed for returning players; the toggle button re-opens it any time.
+(() => {
+  const toggle = document.querySelector('.guide-toggle');
+  const guide = document.querySelector('.pic-guide');
+  if (!toggle || !guide) return;
+  const returning = !!localStorage.getItem('momo:nickname');
+  guide.hidden = returning;
+  toggle.setAttribute('aria-expanded', String(!returning));
+  toggle.addEventListener('click', () => {
+    guide.hidden = !guide.hidden;
+    toggle.setAttribute('aria-expanded', String(!guide.hidden));
+  });
+})();
