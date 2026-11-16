@@ -12,7 +12,7 @@
 
   // Recently played: remember which picker cards were tapped.
   const KEY = 'momoRecentGames';
-  const MAX = 4;
+  const MAX = 8;
   const mainPicker = document.querySelector('main nav.game-picker:not(.recent-picker)');
   const section = document.getElementById('recent');
   const recentPicker = document.getElementById('recent-picker');
