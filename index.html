@@ -10,6 +10,7 @@
 <link rel="stylesheet" href="home.css">
 <script defer src="language.js"></script>
 <script defer src="stickers.js"></script>
+<script defer src="install-hint.js"></script>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
   <meta name="mobile-web-app-capable" content="yes">
@@ -25,7 +26,6 @@
   <img src="assets/momo-squirrels.png" alt="" width="130" height="99">
   <h1>MOMO Playz</h1>
 </header>
-<p class="install-note"><span aria-hidden="true">📱</span> <span data-ja="共有ボタン→「ホーム画面に追加」してね。アプリみたいに遊べるよ！">Add it to your home screen to play like an app: Share → “Add to Home Screen”</span></p>
 <nav class="game-picker" aria-label="Choose a game">
 <a href="fry-catch/"><img class="game-art" src="assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
 <a href="switch-shine/"><span class="game-art" aria-hidden="true">⚡</span><span data-ja="ピカッとスイッチ">Switch &amp; Shine</span></a>
@@ -47,5 +47,13 @@
 <footer class="feedback"><a href="sticker-book/" data-sticker-link>✦ Sticker Book</a><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a>
 <small>Copyright Momo.squirrels</small>
 </footer>
+<div class="install-pop" id="install-pop" hidden>
+  <div class="install-pop-card" role="dialog" aria-label="Add to home screen">
+    <button type="button" class="install-pop-close" id="install-pop-close" aria-label="Close">✕</button>
+    <div class="install-pop-icon" aria-hidden="true">📱</div>
+    <p class="install-pop-text" data-ja="共有ボタン→「ホーム画面に追加」してね。アプリみたいに遊べるよ！">Add it to your home screen to play like an app: Share → “Add to Home Screen”</p>
+    <button type="button" class="install-pop-ok" id="install-pop-ok" data-ja="わかった！">Got it!</button>
+  </div>
+</div>
 </body>
 </html>

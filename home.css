@@ -8,16 +8,60 @@ nav.game-picker { grid-template-columns: repeat(auto-fit, minmax(min(100%, 135px
 nav.game-picker > a { min-height: 105px; }
 .feedback { display: flex; flex-wrap: wrap; align-items: center; gap: 8px 16px; }
 .feedback a { color: #754676; }
-.install-note {
-  margin: 10px 0 2px;
-  padding: 10px 16px;
-  text-align: center;
+.install-pop {
+  position: fixed;
+  inset: 0;
+  z-index: 60;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 20px;
+  background: rgba(72, 38, 61, .35);
+}
+.install-pop[hidden] { display: none; }
+.install-pop-card {
+  position: relative;
+  width: 100%;
+  max-width: 340px;
   background: #ffffff;
-  border: 2px dashed #f272a7;
+  border: 3px solid #f272a7;
+  border-radius: 24px;
+  padding: 26px 22px 20px;
+  text-align: center;
+  box-shadow: 0 12px 32px rgba(72, 38, 61, .25);
+  animation: install-pop-in .25s ease-out;
+}
+@keyframes install-pop-in {
+  from { transform: scale(.85); opacity: 0; }
+  to { transform: scale(1); opacity: 1; }
+}
+.install-pop-icon { font-size: 2.6rem; line-height: 1.2; }
+.install-pop-text { margin: 10px 0 16px; font-size: 1.05rem; line-height: 1.5; }
+.install-pop-ok {
+  font: inherit;
+  font-weight: 800;
+  color: #ffffff;
+  background: linear-gradient(90deg, #f272a7, #ff9f2e);
+  border: 2px dashed #ffffff;
+  outline: 2px solid #f272a7;
   border-radius: 999px;
+  padding: 10px 34px;
+  cursor: pointer;
+}
+.install-pop-close {
+  position: absolute;
+  top: 10px;
+  right: 10px;
+  width: 34px;
+  height: 34px;
+  border: none;
+  border-radius: 50%;
+  background: #ffe3ef;
   color: #754676;
-  font-size: .95rem;
+  font: inherit;
+  font-weight: 800;
+  cursor: pointer;
 }
 @media (display-mode: standalone) {
-  .install-note { display: none; }
+  .install-pop { display: none; }
 }
