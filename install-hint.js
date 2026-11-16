@@ -1,4 +1,4 @@
-/* Top-page popup: add MOMO Playz to the home screen.
+/* Top-page popup: add Momo Playz to the home screen.
    - Android / Chrome: captures beforeinstallprompt, so the button
      opens the native install dialog directly.
    - iPhone etc.: shows the Share -> "Add to Home Screen" guide.
@@ -38,8 +38,8 @@
   function applyMode() {
     if (!deferredPrompt || !lang) return;
     textEl.textContent = lang.pick(
-      'Add MOMO Playz to your home screen to play like an app!',
-      'MOMO Playzをホーム画面に追加すると、アプリみたいに遊べるよ！'
+      'Add Momo Playz to your home screen to play like an app!',
+      'Momo Playzをホーム画面に追加すると、アプリみたいに遊べるよ！'
     );
     okBtn.textContent = lang.pick('Install', 'インストール');
   }

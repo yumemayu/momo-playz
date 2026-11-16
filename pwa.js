@@ -1,4 +1,4 @@
-/* Registers the MOMO Playz service worker (sw.js at the site root).
+/* Registers the Momo Playz service worker (sw.js at the site root).
    Included by every page; the worker URL is resolved from this
    script's own URL so it works from the top page and game folders. */
 (() => {

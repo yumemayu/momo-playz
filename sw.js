@@ -1,4 +1,4 @@
-/* MOMO Playz service worker: network-first so updates always arrive,
+/* Momo Playz service worker: network-first so updates always arrive,
    with a cache fallback so visited games keep working offline. */
 const CACHE = 'momo-playz-v1';
 const CORE = ['./', './index.html', './manifest.webmanifest', './icons/icon-512.png'];

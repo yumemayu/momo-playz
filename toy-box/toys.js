@@ -6,11 +6,11 @@ function select(buttons, selected) {
 }
 const stickerCatalog = [
   ['bun-light', '🏮', 'Bun Lights', '肉まんライト', 'Mix two colors', '２色をまぜる'],
-  ['ribbon', '🎀', 'MOMO ribbon', 'MOMOのリボン', 'Type the secret word', 'ひみつの言葉を入力'],
+  ['ribbon', '🎀', 'Momo ribbon', 'Momoのリボン', 'Type the secret word', 'ひみつの言葉を入力'],
   ['fries', '🍟', 'Fry Catch', 'フライキャッチ'],
   ['buns', '🥟', 'Smiley Bun Catch', 'にこにこ肉まんキャッチ'],
   ['cats', '🐱', 'Find the Glasses Cat', 'メガネ猫さがし'],
-  ['piano', '🎹', 'MOMO Piano', 'MOMOピアノ', 'Finish a song', '１曲最後まで弾く'],
+  ['piano', '🎹', 'Momo Piano', 'Momoピアノ', 'Finish a song', '１曲最後まで弾く'],
   ['capybara', '♨️', 'Capybara Onsen Merge', 'カピバラ温泉マージ'],
   ['capybara-memory', '🃏', 'Capybara Memory', 'カピバラ神経衰弱'],
   ['capybara-tap', '🫧', 'Capybara Onsen Tap', 'カピバラ温泉タップ'],
@@ -400,7 +400,7 @@ if (one('#keys')) {
     'strawberry', 'bow', 'heart', 'flower', 'paw', 'strawberry', 'star',
   ];
   const furs = ['#d89068', '#b7a0ab', '#cb9c83', '#53475c'];
-  const themeSpace = { choco: 'HAPPINESS', puppy: 'VERY LUCKY', pastel: 'MOMO', cat: 'MOMO' };
+  const themeSpace = { choco: 'HAPPINESS', puppy: 'VERY LUCKY', pastel: 'Momo', cat: 'Momo' };
   // Whole-key cat faces with coat patterns, like the cat keycaps:
   // tabby stripes, calico patches, tuxedo and bi-colour coats.
   const catFaces = [
@@ -432,7 +432,7 @@ if (one('#keys')) {
   const notebook = one('#key-note');
   const noteStorage = 'momo:toy-box:note';
   const ribbon = one('#momo-ribbon');
-  const momoCommand = 'MOMO';
+  const momoCommand = 'Momo';
   ribbon.hidden = !momoStickers.has('ribbon');
   momoStickers.subscribe(id => { if (id === 'ribbon') ribbon.hidden = false; });
   let celebrationTimer;
@@ -455,10 +455,87 @@ if (one('#keys')) {
   let catPresses = 0;
   let nextMeow = 8;
 
+  // Secret-word guests: finish typing a word and a visitor pops into
+  // the key case with a little show. Momo's idea: HOHOHO -> Santa.
+  const KEY_GUESTS = [
+    { word: 'HOHOHO', emoji: '🎅', fx: 'snow', en: 'Ho ho ho! Merry Christmas!', ja: 'ホホホ！メリークリスマス！' },
+    { word: 'SANTA', emoji: '🎅', fx: 'snow', en: 'Santa is here!', ja: 'サンタがきた！' },
+    { word: 'MOMO', emoji: '🐱', fx: 'hearts', en: 'Momo is here!', ja: 'Momoがきた！' },
+    { word: 'CAT', emoji: '🐱', fx: 'pop', en: 'A cat came to play!', ja: 'ねこが遊びにきた！' },
+    { word: 'NEKO', emoji: '🐱', fx: 'pop', en: 'A cat came to play!', ja: 'ねこが遊びにきた！' },
+    { word: 'DOG', emoji: '🐶', fx: 'pop', en: 'A puppy came to play!', ja: 'わんちゃんが遊びにきた！' },
+    { word: 'INU', emoji: '🐶', fx: 'pop', en: 'A puppy came to play!', ja: 'わんちゃんが遊びにきた！' },
+    { word: 'SNOW', emoji: '⛄', fx: 'snow', en: "It's snowing!", ja: 'ゆきだ！' },
+    { word: 'YUKI', emoji: '⛄', fx: 'snow', en: "It's snowing!", ja: 'ゆきだ！' },
+    { word: 'STAR', emoji: '⭐', fx: 'stars', en: 'Star shower!', ja: 'ほしのシャワー！' },
+    { word: 'HOSHI', emoji: '⭐', fx: 'stars', en: 'Star shower!', ja: 'ほしのシャワー！' },
+    { word: 'TRAIN', emoji: '🚃', fx: 'walk', en: 'The train is coming!', ja: 'でんしゃがきた！' },
+    { word: 'DENSHA', emoji: '🚃', fx: 'walk', en: 'The train is coming!', ja: 'でんしゃがきた！' },
+    { word: 'DANCE', emoji: '💃', fx: 'dance', en: "Let's dance!", ja: 'おどろう！' },
+    { word: 'MUSIC', emoji: '🎵', fx: 'dance', en: 'Music time!', ja: 'おんがく！' },
+    { word: 'HAPPY', emoji: '🎉', fx: 'confetti', en: 'So happy!', ja: 'ハッピー！' },
+    { word: 'BIRTHDAY', emoji: '🎂', fx: 'confetti', en: 'Happy birthday!', ja: 'おたんじょうび おめでとう！' },
+    { word: 'LOVE', emoji: '💗', fx: 'hearts', en: 'Love love!', ja: 'だいすき！' },
+    { word: 'PIZZA', emoji: '🍕', fx: 'pop', en: 'Pizza time!', ja: 'ピザがきた！' },
+    { word: 'SUSHI', emoji: '🍣', fx: 'pop', en: 'Sushi time!', ja: 'おすしがきた！' },
+    { word: 'GHOST', emoji: '👻', fx: 'float', en: 'A friendly ghost!', ja: 'おばけだ！' },
+    { word: 'EGG', emoji: '🐣', fx: 'pop', en: 'It hatched!', ja: 'うまれた！' },
+    { word: 'RAINBOW', emoji: '🌈', fx: 'pop', en: 'A rainbow!', ja: 'にじだ！' },
+    { word: 'NIJI', emoji: '🌈', fx: 'pop', en: 'A rainbow!', ja: 'にじだ！' },
+    { word: 'FLOWER', emoji: '🌸', fx: 'petals', en: 'Flower petals!', ja: 'おはな！' },
+    { word: 'BYE', emoji: '👋', fx: 'walk', en: 'Bye bye!', ja: 'バイバイ！' },
+  ];
+  let guestTimer;
+  function guestJingle(fx) {
+    const seqs = {
+      snow: [1318, 1568, 1318, 1760],
+      stars: [1046, 1318, 1568, 2093],
+      hearts: [784, 988, 1175],
+      confetti: [523, 659, 784, 1046],
+      petals: [880, 1046, 880],
+      walk: [392, 392, 523, 392],
+      pop: [523, 659, 784],
+      dance: [659, 659, 784, 659, 784, 988],
+      float: [494, 587, 494, 440],
+    };
+    (seqs[fx] || seqs.pop).forEach((f, i) => setTimeout(() => play(0, f), i * 130));
+  }
+  function spawnGuest(guest) {
+    if (keyCase.querySelector('.key-guest')) return;
+    const wrap = document.createElement('div');
+    wrap.className = 'key-guest fx-' + guest.fx;
+    wrap.setAttribute('aria-hidden', 'true');
+    const emoji = document.createElement('span');
+    emoji.className = 'guest-emoji';
+    emoji.textContent = guest.emoji;
+    const label = document.createElement('span');
+    label.className = 'guest-label';
+    label.textContent = copy(guest.en, guest.ja);
+    emoji.append(label);
+    wrap.append(emoji);
+    const glyph = { snow: '❄', stars: '✦', hearts: '💗', petals: '🌸' }[guest.fx] || '';
+    for (let i = 0; i < 14; i += 1) {
+      const p = document.createElement('i');
+      p.className = 'guest-particle';
+      p.textContent = glyph;
+      p.style.left = (4 + (i * 67) % 92) + '%';
+      p.style.setProperty('--p-delay', ((i * 37) % 10) / 10 + 's');
+      p.style.setProperty('--p-drift', ((i * 53) % 41) - 20 + 'px');
+      if (guest.fx === 'confetti') p.style.background = ['#f272a7', '#ffb340', '#7bc47f', '#5b8dd9', '#9a7bd9'][i % 5];
+      wrap.append(p);
+    }
+    keyCase.append(wrap);
+    guestJingle(guest.fx);
+    clearTimeout(guestTimer);
+    guestTimer = setTimeout(() => wrap.remove(), guest.fx === 'walk' ? 3700 : 2900);
+  }
+
   function pressKeycap(key, index, letter) {
     play(index);
     saveNote(notebook.value + letter);
     if (notebook.value.endsWith(momoCommand)) celebrateMomo();
+    const guest = KEY_GUESTS.find(g => notebook.value.endsWith(g.word));
+    if (guest) spawnGuest(guest);
     const catSound = keyCase.dataset.theme === 'cat' && ++catPresses >= nextMeow;
     if (catSound) {
       catPresses = 0;
@@ -476,7 +553,7 @@ if (one('#keys')) {
   const spaceWord = one('#space-word');
   function renderKeys(theme) {
     keyCase.dataset.theme = theme;
-    spaceWord.textContent = themeSpace[theme] ?? 'MOMO';
+    spaceWord.textContent = themeSpace[theme] ?? 'Momo';
     // Animal faces and arrow/symbol keys hide on random keys, mixed in
     // with the icon keys (like the keychain keyboards).
     let faceMap = new Map();
