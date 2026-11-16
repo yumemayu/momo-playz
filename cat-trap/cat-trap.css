@@ -73,6 +73,15 @@
   88% { transform: translateY(1.5%) scale(1.07, .88); }
   100% { transform: translateY(0) scale(1, 1); }
 }
+/* Escape dash: the cat bolts off the board and fades away. */
+.cat-art.escaping {
+  transition: left .68s cubic-bezier(.5, .05, .8, .5), bottom .68s cubic-bezier(.5, .05, .8, .5), opacity .22s ease-in .46s;
+}
+.cat-art.escaping .cat-frame { animation: cat-run .16s ease-in-out infinite alternate; }
+@keyframes cat-run {
+  from { transform: translateY(0) rotate(-2.5deg); }
+  to { transform: translateY(-10%) rotate(2deg); }
+}
 /* Dust puff on landing. */
 .land-puff {
   position: absolute;
@@ -127,7 +136,7 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .cat-art { transition: none; }
-  .cat-art .cat-frame { animation: none; }
+  .cat-art .cat-frame, .cat-art.escaping .cat-frame { animation: none; }
   .land-puff { display: none; }
   .burst-star { display: none; }
 }

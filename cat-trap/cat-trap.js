@@ -15,6 +15,9 @@
   const newButton = document.querySelector('#trap-new');
   const history = [];
   let escapeTimer;
+  let escapeDashTimer;
+  let catGone = false;
+  let escapeSoundPlayed = false;
   const levelConfig = {
     easy: { blocks: 24 },
     normal: { blocks: 16 },
@@ -217,6 +220,8 @@
 
   // The cat is a field-level layer, so it glides from tile to tile.
   function positionCat() {
+    if (catGone) { catImg.style.display = 'none'; return; }
+    catImg.style.display = '';
     const cx = (cat.c + (cat.r % 2 ? .5 : 0) + .5) / (SIZE + .5) * 100;
     const bottom = 90.5 - cat.r * 8.8;
     catImg.style.left = cx + '%';
@@ -285,6 +290,15 @@
     history.length = 0;
     clearTimeout(escapeTimer);
     escapeTimer = null;
+    clearTimeout(escapeDashTimer);
+    escapeDashTimer = null;
+    catGone = false;
+    escapeSoundPlayed = false;
+    if (catImg) {
+      catImg.classList.remove('escaping');
+      catImg.style.opacity = '';
+      catImg.style.display = '';
+    }
     blocked = new Set();
     const count = levelConfig[level].blocks;
     while (blocked.size < count) {
@@ -336,6 +350,40 @@
     bannerTimer = setTimeout(() => banner.remove(), 2000);
   }
 
+  // The cat reached the edge: after its glide lands, it bolts off the
+  // board in the same direction, walk frames spinning, and fades away.
+  function escapeRun(fromR, fromC) {
+    if (reducedMotion.matches || !catImg) {
+      escapeTimer = setTimeout(() => { if (playing) endRound('escape'); }, 330);
+      return;
+    }
+    const centerX = (cc, rr) => (cc + (rr % 2 ? .5 : 0) + .5) / (SIZE + .5) * 100;
+    const centerB = rr => 90.5 - rr * 8.8;
+    let vx = centerX(cat.c, cat.r) - centerX(fromC, fromR);
+    let vy = centerB(cat.r) - centerB(fromR);
+    if (Math.abs(vx) < .01 && Math.abs(vy) < .01) { vx = centerX(cat.c, cat.r) - 50; vy = centerB(cat.r) - 50; }
+    const len = Math.hypot(vx, vy) || 1;
+    const targetLeft = centerX(cat.c, cat.r) + vx / len * 30;
+    const targetBottom = centerB(cat.r) + vy / len * 30;
+    escapeTimer = setTimeout(() => { if (playing) endRound('escape'); }, 1100);
+    escapeDashTimer = setTimeout(() => {
+      if (!playing || !catImg) return;
+      catImg.classList.add('escaping');
+      catImg.style.left = targetLeft + '%';
+      catImg.style.bottom = targetBottom + '%';
+      catImg.style.opacity = '0';
+      playEscape();
+      escapeSoundPlayed = true;
+      clearInterval(frameTimer);
+      let alt = false;
+      frameTimer = setInterval(() => {
+        alt = !alt;
+        if (catFrame) catFrame.src = alt ? CAT_FRAME_B : CAT_FRAME_A;
+      }, 90);
+      setTimeout(() => { if (playing) spawnDust(); }, 260);
+    }, 350);
+  }
+
   function tapTile(r, c) {
     if (!playing || escapeTimer || blocked.has(key(r, c)) || (cat.r === r && cat.c === c)) return;
     history.push({cat, r, c, lineKey});
@@ -359,8 +407,8 @@
       if (isEdge(nr, nc)) {
         lineKey = 'bye';
         updateBubble();
-        escapeTimer = setTimeout(() => { if (playing) endRound('escape'); }, 330);
         render();
+        escapeRun(prev.r, prev.c);
         return;
       }
       if (catSurrounded()) endRound('win');
@@ -399,6 +447,8 @@
     playing = false;
     clearTimeout(escapeTimer);
     escapeTimer = null;
+    clearTimeout(escapeDashTimer);
+    escapeDashTimer = null;
     if (result === 'win') {
       lineKey = 'caught';
       updateBubble();
@@ -408,7 +458,9 @@
       verdict.textContent = copy[language].verdictWin;
       gameScores.finish(Math.max(200, 1000 - moves * 20), true);
     } else if (result === 'escape') {
-      playEscape();
+      catGone = true;
+      clearInterval(frameTimer);
+      if (!escapeSoundPlayed) playEscape();
       verdict.textContent = copy[language].verdictEscape;
       gameScores.finish(0, false);
     } else {
