@@ -204,7 +204,6 @@ nav[aria-label="Choose a game"] a {
   letter-spacing: .03em;
   font-size: clamp(1.55rem, 4vw, 2rem);
   box-shadow: 0 0 0 5px #ffa8c5, 0 6px 0 5px #e271a8, 0 14px 20px rgba(226, 113, 168, .30);
-  animation: play-bob 1.6s ease-in-out infinite;
 }
 .play-primary::before, .play-primary::after {
   content: "";
@@ -218,7 +217,6 @@ nav[aria-label="Choose a game"] a {
 .play-primary::after { margin-inline-start: .38em; }
 .play-primary:disabled { animation: none; }
 .play-primary:disabled::before, .play-primary:disabled::after { content: none; }
-@keyframes play-bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-3px); } }
 @media (prefers-reduced-motion: reduce) { .play-primary { animation: none; } }
 
 .play-guide,.bun-rules span{display:flex;align-items:center;gap:6px;flex-wrap:wrap}
