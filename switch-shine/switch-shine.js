@@ -10,6 +10,13 @@
   const reset = document.querySelector('#reset');
   const recordBar = document.querySelector('#records');
   const circuitSelect = document.querySelector('#circuit-select');
+  const book = document.querySelector('#book');
+  const bookWires = document.querySelector('#book-wires');
+  const bookNodes = document.querySelector('#book-nodes');
+  const bookName = document.querySelector('#book-name');
+  const bookCount = document.querySelector('#book-count');
+  const bookPrev = document.querySelector('#book-prev');
+  const bookNext = document.querySelector('#book-next');
   const clearedOutput = document.querySelector('#cleared');
   const movesOutput = document.querySelector('#moves');
   const bestOutput = document.querySelector('#best-moves');
@@ -53,6 +60,28 @@
     { outputs: ['NAND', 'OR', 'XOR'], pins: [[0, 2], [0, 1], [1, 2]], count: 3, initial: [1, 1, 1], target: [1, 0, 1] },
     { outputs: ['XOR', 'NAND', 'AND'], pins: [[0, 2], [0, 1], [1, 2]], count: 3, initial: [1, 0, 0], target: [1, 1, 1] }
   ];
+  const bookPages = [
+    { name: 'WIRE', color: '#f0562f', inputs: 1, hint: ['Press it — the lamp lights up just as-is.', 'おすと そのまま ランプが つく'] },
+    { name: 'NOT', color: '#2fb3a3', inputs: 1, hint: ['Press it — it flips!', 'おすと ぎゃくに なる'] },
+    { name: 'OR', color: '#ef4f9a', inputs: 2, hint: ['Press either one — it lights up.', 'どっちか おすと つく'] },
+    { name: 'AND', color: '#ff9f2e', inputs: 2, hint: ['Press both — it lights up.', 'りょうほう おすと つく'] },
+    { name: 'XOR', color: '#8b6fd8', inputs: 2, hint: ['Press just one — it lights up.', 'かたほうだけ おすと つく'] },
+    { name: 'NAND', color: '#4f83e8', inputs: 2, hint: ['Press both — it turns off.', 'りょうほう おすと きえる'] }
+  ];
+  const bookPaths = {
+    NOT: 'M445 165 L560 220 L445 275 Z M578 220 a13 13 0 1 0 -26 0 a13 13 0 1 0 26 0 Z',
+    OR: 'M430 160 Q545 158 592 220 Q545 282 430 280 Q478 220 430 160 Z',
+    AND: 'M438 160 H505 C600 160 600 280 505 280 H438 Z',
+    XOR: 'M452 160 Q548 158 592 220 Q548 282 452 280 Q498 220 452 160 Z M424 160 Q470 220 424 280',
+    NAND: 'M432 160 H498 C588 160 588 280 498 280 H432 Z M606 220 a13 13 0 1 0 -26 0 a13 13 0 1 0 26 0 Z'
+  };
+  const bookOutX = { NOT: 578, OR: 592, AND: 598, XOR: 592, NAND: 606 };
+  const bookDiscs = [
+    { disc: '#ffd02e', dark: '#d9a41c' },
+    { disc: '#ff5252', dark: '#c62828' }
+  ];
+  let bookIndex = 0;
+  let bookBits = [0, 0];
   const binaryGates = new Set(['OR', 'AND', 'XOR', 'NAND']);
   let mode = 'lab';
   let kind = 'WIRE';
@@ -248,11 +277,11 @@
   }
 
   function renderCopy(solved) {
-    gatePicker.hidden = mode !== 'lab';
+    gatePicker.hidden = true;
     goal.hidden = mode !== 'puzzle';
     advance.hidden = !solved;
     if (mode === 'lab') {
-      readout.textContent = pick(...rules[kind]);
+      readout.textContent = '💡 ' + pick(...bookPages[bookIndex].hint);
       return;
     }
     const targets = stage.target.map((value, i) => outputs[i].name + ' = ' + value).join(' / ');
@@ -261,6 +290,103 @@
       ? (index === puzzles.length - 1 ? pick('All ' + puzzles.length + ' circuits solved!', puzzles.length + '問すべてクリア！') : pick('Circuit solved!', 'クリア！'))
       : pick('Set the inputs to match the target outputs.', 'スイッチを切り替えて、お題と同じ出力にしよう。');
     advance.textContent = index === puzzles.length - 1 ? pick('Play again', 'もういちど') : pick('Next circuit →', '次の回路 →');
+  }
+
+  function playPress(on) {
+    if (!window.AudioContext) return;
+    try {
+      audio ??= new AudioContext();
+      if (audio.state === 'suspended') audio.resume().catch(() => {});
+      const now = audio.currentTime;
+      const osc = audio.createOscillator();
+      const gain = audio.createGain();
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(on ? 640 : 520, now);
+      osc.frequency.exponentialRampToValueAtTime(185, now + .09);
+      gain.gain.setValueAtTime(.0001, now);
+      gain.gain.exponentialRampToValueAtTime(.16, now + .008);
+      gain.gain.exponentialRampToValueAtTime(.0001, now + .14);
+      osc.connect(gain).connect(audio.destination);
+      osc.start(now);
+      osc.stop(now + .15);
+      const click = audio.createOscillator();
+      const clickGain = audio.createGain();
+      click.type = 'triangle';
+      click.frequency.setValueAtTime(1250, now);
+      clickGain.gain.setValueAtTime(.05, now);
+      clickGain.gain.exponentialRampToValueAtTime(.0001, now + .03);
+      click.connect(clickGain).connect(audio.destination);
+      click.start(now);
+      click.stop(now + .035);
+    } catch {}
+  }
+
+  function bookPath(d, cls) {
+    const line = document.createElementNS(svgNS, 'path');
+    line.setAttribute('d', d);
+    line.setAttribute('class', cls);
+    bookWires.append(line);
+    return line;
+  }
+
+  function renderBook() {
+    const page = bookPages[bookIndex];
+    book.style.background = page.color;
+    bookName.textContent = page.name;
+    bookCount.textContent = (bookIndex + 1) + ' / ' + bookPages.length;
+    bookPrev.setAttribute('aria-label', pick('Previous page', '前のページ'));
+    bookNext.setAttribute('aria-label', pick('Next page', '次のページ'));
+    bookWires.replaceChildren();
+    bookNodes.replaceChildren();
+    const btnX = 150, lampX = 855, lampY = 220;
+    const ys = page.inputs === 1 ? [220] : [130, 310];
+    const out = evaluate(page.name, [bookBits[0], bookBits[1]]);
+    ys.forEach((y, i) => {
+      const portY = page.name === 'WIRE' ? lampY : page.inputs === 1 ? 220 : i === 0 ? 185 : 255;
+      const endX = page.name === 'WIRE' ? lampX - 40 : 430;
+      const midX = page.name === 'WIRE' ? 500 : 330;
+      bookPath('M' + (btnX + 70) + ' ' + y + 'H' + midX + 'V' + portY + 'H' + endX, 'bwire' + (bookBits[i] ? ' lit' : ''));
+    });
+    if (page.name !== 'WIRE') {
+      bookPath(bookPaths[page.name], 'bsymbol');
+      bookPath('M' + bookOutX[page.name] + ' 220H' + (lampX - 40), 'bwire' + (out ? ' lit' : ''));
+    }
+    bookPath('M855 262V292M829 292H881M838 304H872M847 316H863', 'bground');
+    ys.forEach((y, i) => {
+      const button = document.createElement('button');
+      button.type = 'button';
+      button.className = 'bigbtn';
+      button.style.left = (btnX / 10) + '%';
+      button.style.top = (y / 4.4) + '%';
+      button.style.setProperty('--disc', bookDiscs[i].disc);
+      button.style.setProperty('--disc-dark', bookDiscs[i].dark);
+      button.setAttribute('aria-pressed', String(bookBits[i] === 1));
+      button.setAttribute('aria-label', pick('Button ', 'ボタン ') + 'AB'[i]);
+      const disc = document.createElement('span');
+      disc.className = 'disc';
+      button.append(disc);
+      button.addEventListener('click', () => {
+        bookBits[i] ^= 1;
+        playPress(bookBits[i] === 1);
+        renderBook();
+      });
+      bookNodes.append(button);
+    });
+    const lamp = document.createElement('div');
+    lamp.className = 'bled' + (out ? ' lit' : '');
+    lamp.style.left = (lampX / 10) + '%';
+    lamp.style.top = (lampY / 4.4) + '%';
+    bookNodes.append(lamp);
+    renderCopy(false);
+  }
+
+  function showMode() {
+    const isLab = mode === 'lab';
+    book.hidden = !isLab;
+    wires.hidden = isLab;
+    nodes.hidden = isLab;
+    if (isLab) renderBook();
+    else loadStage();
   }
 
   function rowPosition(index, count) {
@@ -345,13 +471,12 @@
       index = Math.max(0, firstUnsolved);
     }
     modes.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-    loadStage();
+    showMode();
   }));
   gates.forEach(button => button.addEventListener('click', () => {
     if (kind === button.dataset.gate) return;
     kind = button.dataset.gate;
     gates.forEach(item => item.setAttribute('aria-pressed', String(item === button)));
-    loadStage();
   }));
   circuitSelect.addEventListener('change', () => {
     index = Number(circuitSelect.value);
@@ -362,12 +487,32 @@
     mergeSavedRecords();
     renderRecords();
   });
-  reset.addEventListener('click', loadStage);
+  reset.addEventListener('click', () => {
+    if (mode === 'lab') {
+      bookBits = [0, 0];
+      renderBook();
+    } else {
+      loadStage();
+    }
+  });
   advance.addEventListener('click', () => {
     index = (index + 1) % puzzles.length;
     loadStage();
     inputs[0].button.focus({ preventScroll: true });
   });
-  loadStage();
-  momoLanguage.subscribe(() => redraw());
+  bookPrev.addEventListener('click', () => {
+    bookIndex = (bookIndex + bookPages.length - 1) % bookPages.length;
+    bookBits = [0, 0];
+    renderBook();
+  });
+  bookNext.addEventListener('click', () => {
+    bookIndex = (bookIndex + 1) % bookPages.length;
+    bookBits = [0, 0];
+    renderBook();
+  });
+  showMode();
+  momoLanguage.subscribe(() => {
+    if (mode === 'lab') renderBook();
+    else redraw();
+  });
 })();

@@ -5,10 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title data-en-title="Switch &amp; Shine | MOMO Games">ピカッとスイッチ | MOMOゲーム集</title>
   <link rel="stylesheet" href="../language.css">
-  <link rel="stylesheet" href="switch-shine.css?v=records">
+  <link rel="stylesheet" href="switch-shine.css?v=book1">
   <link rel="stylesheet" href="../game-title-banner.css">
   <script defer src="../language.js"></script>
-  <script defer src="switch-shine.js?v=records"></script>
+  <script defer src="switch-shine.js?v=book1"></script>
 </head>
 <body data-game="switch-shine">
 <main>
@@ -42,6 +42,14 @@
   <section class="board" aria-label="Interactive circuit" data-ja-label="操作できる回路" aria-describedby="readout">
     <svg id="wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"></svg>
     <div id="nodes"></div>
+    <div id="book" hidden>
+      <svg id="book-wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div id="book-nodes"></div>
+      <div class="book-name" id="book-name">WIRE</div>
+      <button type="button" class="pager prev" id="book-prev" aria-label="Previous page">‹</button>
+      <button type="button" class="pager next" id="book-next" aria-label="Next page">›</button>
+      <span class="book-count" id="book-count">1 / 6</span>
+    </div>
   </section>
   <footer class="readout">
     <p id="readout" role="status" aria-live="polite"></p>

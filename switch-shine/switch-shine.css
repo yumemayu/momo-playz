@@ -172,3 +172,72 @@ body:has(.records:not([hidden])) .board { height: clamp(285px, calc(100dvh - 260
   background: #ffbe2e;
   box-shadow: 0 0 12px rgba(255, 208, 46, .95), 0 0 4px rgba(255, 242, 176, .9);
 }
+
+/* ---- Lab "book" mode: one gate per page, like the picture book ---- */
+body:has(#book:not([hidden])) .board { height: clamp(300px, calc(100dvh - 300px), 570px); }
+@media (max-width: 640px) {
+  body:has(#book:not([hidden])) .board { height: clamp(280px, calc(100dvh - 440px), 570px); }
+}
+#book { position: absolute; inset: 0; transition: background .35s ease; }
+#book-wires { position: absolute; inset: 0; width: 100%; height: 100%; }
+.bwire { fill: none; stroke: rgba(40, 20, 30, .55); stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; transition: stroke .15s; }
+.bwire.lit { stroke: #ffe45e; filter: drop-shadow(0 0 7px rgba(255, 228, 94, .95)); }
+.bsymbol { fill: none; stroke: rgba(255, 255, 255, .92); stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.bground { fill: none; stroke: rgba(40, 20, 30, .55); stroke-width: 4; stroke-linecap: round; vector-effect: non-scaling-stroke; }
+.book-name {
+  position: absolute; left: 0; right: 0; bottom: 5.5%;
+  text-align: center; line-height: 1; pointer-events: none;
+  font-family: Fredoka, sans-serif; font-weight: 700;
+  font-size: clamp(3.2rem, 13vw, 6.4rem); letter-spacing: .06em;
+  color: rgba(255, 255, 255, .94);
+  text-shadow: 0 3px 0 rgba(60, 20, 40, .18);
+}
+.bigbtn {
+  position: absolute;
+  width: clamp(92px, 17vw, 150px); aspect-ratio: 1;
+  border: none; border-radius: 50%;
+  transform: translate(-50%, -50%);
+  cursor: pointer; touch-action: manipulation;
+  background: radial-gradient(circle, #55595f 0 60%, #848b92 76%, #c9ced4 90%, rgba(255, 255, 255, .55) 100%);
+  box-shadow: inset 0 10px 16px rgba(0, 0, 0, .5), inset 0 -4px 7px rgba(255, 255, 255, .3), 0 2px 5px rgba(50, 15, 35, .25);
+  -webkit-tap-highlight-color: transparent;
+}
+.bigbtn .disc {
+  position: absolute; inset: 16%; border-radius: 50%;
+  background: radial-gradient(circle at 40% 30%, rgba(255, 255, 255, .65), rgba(255, 255, 255, 0) 50%), var(--disc);
+  box-shadow: 0 3px 0 var(--disc-dark), 0 5px 9px rgba(50, 15, 35, .3), inset 0 -4px 7px rgba(0, 0, 0, .16), inset 0 3px 5px rgba(255, 255, 255, .35);
+  transition: transform .06s ease, box-shadow .06s ease;
+}
+.bigbtn[aria-pressed="true"] .disc {
+  transform: translateY(3px);
+  box-shadow: 0 0 0 var(--disc-dark), 0 2px 4px rgba(50, 15, 35, .3), inset 0 -2px 6px rgba(0, 0, 0, .22), inset 0 2px 4px rgba(255, 255, 255, .25), 0 0 26px rgba(255, 228, 94, .8);
+}
+.bigbtn:focus-visible { outline: 3px solid #ffffff; outline-offset: 3px; }
+.bled {
+  position: absolute;
+  width: clamp(44px, 8vw, 68px); aspect-ratio: 1;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+  background: radial-gradient(circle at 40% 32%, #8d9299, #565b62 70%);
+  box-shadow: inset 0 -4px 8px rgba(0, 0, 0, .35), 0 4px 10px rgba(50, 15, 35, .3);
+  transition: background .15s, box-shadow .15s;
+}
+.bled.lit {
+  background: radial-gradient(circle at 42% 34%, #ffffff, #cfe9ff 45%, #7ec3ff 100%);
+  box-shadow: 0 0 34px rgba(160, 215, 255, .95), 0 0 12px rgba(255, 255, 255, .9), inset 0 -3px 7px rgba(70, 130, 200, .35);
+}
+.pager {
+  position: absolute; bottom: 12px;
+  width: 52px; height: 52px; border-radius: 50%;
+  border: 3px solid rgba(255, 255, 255, .85);
+  background: rgba(255, 255, 255, .22);
+  color: #ffffff; font-size: 1.5rem; font-weight: 800; line-height: 1;
+  display: grid; place-items: center; cursor: pointer;
+}
+.pager.prev { left: 10px; }
+.pager.next { right: 10px; }
+.book-count {
+  position: absolute; right: 16px; top: 12px;
+  color: rgba(255, 255, 255, .9); font-weight: 800; font-size: .95rem;
+  font-family: Fredoka, sans-serif; letter-spacing: .08em;
+}
