@@ -483,6 +483,11 @@ if (one('#keys')) {
     { word: 'RAINBOW', emoji: '🌈', fx: 'pop', en: 'A rainbow!', ja: 'にじだ！' },
     { word: 'NIJI', emoji: '🌈', fx: 'pop', en: 'A rainbow!', ja: 'にじだ！' },
     { word: 'FLOWER', emoji: '🌸', fx: 'petals', en: 'Flower petals!', ja: 'おはな！' },
+    { word: 'OHAYO', emoji: '☀️', fx: 'stars', en: 'Good morning!', ja: 'おはよう！' },
+    { word: 'OYASUMI', emoji: '🌙', fx: 'float', en: 'Good night!', ja: 'おやすみ！' },
+    { word: 'ARIGATO', emoji: '💌', fx: 'hearts', en: 'Thank you!', ja: 'ありがとう！' },
+    { word: 'GAMBARE', emoji: '📣', fx: 'confetti', en: 'You can do it!', ja: 'がんばれ！' },
+    { word: 'SUGOI', emoji: '🌟', fx: 'stars', en: 'Amazing!', ja: 'すごい！' },
     { word: 'BYE', emoji: '👋', fx: 'walk', en: 'Bye bye!', ja: 'バイバイ！' },
   ];
   let guestTimer;
