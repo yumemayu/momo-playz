@@ -19,12 +19,14 @@
     ja: {
       retry: 'もういちど', on: 'おと ON', off: 'おと OFF',
       go: '全部の明かりを消そう！', tile: 'パネル',
-      win: '全部消えた！やったね！🎉'
+      win: '全部消えた！やったね！🎉',
+      bannerWin: 'ぜんぶ消えた！', bannerSub: '{n}手で クリア！'
     },
     en: {
       retry: 'Play again', on: 'Sound on', off: 'Sound off',
       go: 'Turn every light off!', tile: 'Panel',
-      win: 'All the lights are off! You did it! 🎉'
+      win: 'All the lights are off! You did it! 🎉',
+      bannerWin: 'All out!', bannerSub: 'Cleared in {n} moves!'
     }
   };
 
@@ -230,12 +232,31 @@
     setControls();
   }
 
+
+  let bannerTimer = 0;
+  function celebrateBanner() {
+    stage.querySelector('.milestone-banner')?.remove();
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    const big = document.createElement('span');
+    big.className = 'milestone-count';
+    big.textContent = copy[language].bannerWin;
+    const sub = document.createElement('span');
+    sub.className = 'milestone-sub';
+    sub.textContent = copy[language].bannerSub.replace('{n}', moves);
+    banner.append(big, sub);
+    stage.append(banner);
+    clearTimeout(bannerTimer);
+    bannerTimer = setTimeout(() => banner.remove(), 2000);
+  }
+
   function finishGame() {
     playing = false;
     render();
     verdict.textContent = copy[language].win;
     playWin();
     burst();
+    celebrateBanner();
     // A rainbow wave rolls over the board, diagonal by diagonal.
     tiles.forEach((row, r) => row.forEach((tile, c) => {
       const delay = reducedMotion.matches ? 0 : (r + c) * 70;

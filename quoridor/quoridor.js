@@ -28,6 +28,7 @@
       yourTurn: 'あなたの ばん！', catTurn: 'あいてが かんがえ中…',
       preview: 'もう一度 タップで かべを おく！',
       win: '勝った！ むこう岸に ついた！🎉', lose: 'あいてが 先に ついちゃった！',
+      bannerWin: 'ゴールイン！', bannerSub: '{n}手で むこう岸に ついた！',
       wall: 'かべ', cell: 'マス'
     },
     en: {
@@ -35,6 +36,7 @@
       yourTurn: 'Your turn!', catTurn: 'Your rival is thinking…',
       preview: 'Tap the wall again to place it!',
       win: 'You win! You reached the far side! 🎉', lose: 'Your rival got there first!',
+      bannerWin: 'Goal!', bannerSub: 'Reached the far side in {n} moves!',
       wall: 'Wall', cell: 'Square'
     }
   };
@@ -456,13 +458,31 @@
     updateStats();
   }
 
+
+  let bannerTimer = 0;
+  function celebrateBanner() {
+    stage.querySelector('.milestone-banner')?.remove();
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    const big = document.createElement('span');
+    big.className = 'milestone-count';
+    big.textContent = copy[language].bannerWin;
+    const sub = document.createElement('span');
+    sub.className = 'milestone-sub';
+    sub.textContent = copy[language].bannerSub.replace('{n}', moves);
+    banner.append(big, sub);
+    stage.append(banner);
+    clearTimeout(bannerTimer);
+    bannerTimer = setTimeout(() => banner.remove(), 2000);
+  }
+
   function finishGame(won) {
     playing = false;
     busy = false;
     preview = null;
     render();
     verdict.textContent = copy[language][won ? 'win' : 'lose'];
-    if (won) { playWin(); burst(); } else playLose();
+    if (won) { playWin(); burst(); celebrateBanner(); } else playLose();
     gameScores.finish(won ? Math.max(200, 1000 - moves * 15) : 0, won);
     start.textContent = copy[language].retry;
     setControls();

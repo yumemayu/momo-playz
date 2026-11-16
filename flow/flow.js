@@ -28,12 +28,14 @@
     ja: {
       retry: 'もういちど', on: 'おと ON', off: 'おと OFF',
       go: '同じ色をつないで、全部うめよう！',
-      win: '全部の色がつながった！🎉'
+      win: '全部の色がつながった！🎉',
+      bannerWin: 'クリア！', bannerSub: '{n}秒で ぜんぶ つながった！'
     },
     en: {
       retry: 'Play again', on: 'Sound on', off: 'Sound off',
       go: 'Connect the colours and fill the board!',
-      win: 'Every colour is connected! 🎉'
+      win: 'Every colour is connected! 🎉',
+      bannerWin: 'Clear!', bannerSub: 'All connected in {n} seconds!'
     }
   };
 
@@ -410,6 +412,24 @@
     render();
   }
 
+
+  let bannerTimer = 0;
+  function celebrateBanner() {
+    stage.querySelector('.milestone-banner')?.remove();
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    const big = document.createElement('span');
+    big.className = 'milestone-count';
+    big.textContent = copy[language].bannerWin;
+    const sub = document.createElement('span');
+    sub.className = 'milestone-sub';
+    sub.textContent = copy[language].bannerSub.replace('{n}', seconds);
+    banner.append(big, sub);
+    stage.append(banner);
+    clearTimeout(bannerTimer);
+    bannerTimer = setTimeout(() => banner.remove(), 2000);
+  }
+
   function finishGame() {
     playing = false;
     drawing = null;
@@ -418,6 +438,7 @@
     verdict.textContent = copy[language].win;
     playWin();
     burst();
+    celebrateBanner();
     cells.forEach((row, r) => row.forEach((cell, c) => {
       const delay = reducedMotion.matches ? 0 : (r + c) * 60;
       setTimeout(() => {
