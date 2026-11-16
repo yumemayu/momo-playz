@@ -241,3 +241,8 @@ body:has(#book:not([hidden])) .board { height: clamp(300px, calc(100dvh - 300px)
   color: rgba(255, 255, 255, .9); font-weight: 800; font-size: .95rem;
   font-family: Fredoka, sans-serif; letter-spacing: .08em;
 }
+
+/* Site footer (same look as game.css .feedback). */
+.feedback { margin: 14px auto 0; padding: 0 16px 22px; text-align: center; }
+.feedback small { display: block; }
+.feedback a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 16px; color: inherit; text-underline-offset: 3px; }

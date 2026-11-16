@@ -17,6 +17,7 @@
 .hn-board {
   position: relative;
   z-index: 0;
+  height: auto;
   width: min(100%, 480px);
   margin-inline: auto;
   padding: 14px;

@@ -3,6 +3,7 @@
    and the face button whose whole circle is the face. */
 .ms-stats { flex-wrap: wrap; row-gap: 4px; }
 
+
 .turn-line {
   min-height: 1.6em;
   margin: 0 0 6px;
@@ -16,6 +17,7 @@
 
 .ms-board {
   position: relative;
+  height: auto;
   width: min(100%, 480px);
   margin-inline: auto;
   padding: 14px;
@@ -69,6 +71,7 @@
 .ms-tile {
   aspect-ratio: 1;
   min-width: 0;
+  min-height: 0;
   padding: 0;
   border-radius: 22%;
   display: grid;
@@ -203,4 +206,10 @@
 }
 @media (prefers-reduced-motion: reduce) {
   .milestone-banner { animation: none; }
+}
+
+/* Short landscape screens (tablets): keep the board compact enough
+   that the Play button stays on screen below it. */
+@media (orientation: landscape) and (min-width: 700px) and (max-height: 900px) {
+  .ms-board { width: min(100%, 430px); }
 }
