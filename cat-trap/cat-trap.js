@@ -25,13 +25,15 @@
       retry: 'もういちど', on: 'おと ON', off: 'おと OFF',
       tile: 'マス', box: 'ふさがれたマス', catHere: '猫',
       lines: { idle: 'にゃーん！', taunt: 'つかまえられないよ！', worried: 'あれ…？', caught: 'つかまった〜', bye: 'バイバイ！' },
-      verdictWin: '猫を つかまえた！🎉', verdictEscape: '猫に にげられた！🐾'
+      verdictWin: '猫を つかまえた！🎉', verdictEscape: '猫に にげられた！🐾',
+      bannerWin: 'トラップ成功！', bannerSub: '{n}手で つかまえた！'
     },
     en: {
       retry: 'Play again', on: 'Sound on', off: 'Sound off',
       tile: 'Tile', box: 'blocked', catHere: 'cat',
       lines: { idle: 'Meow!', taunt: "Can't catch me!", worried: 'Uh oh…', caught: 'You got me!', bye: 'Bye-bye!' },
-      verdictWin: 'You trapped the cat! 🎉', verdictEscape: 'The cat escaped! 🐾'
+      verdictWin: 'You trapped the cat! 🎉', verdictEscape: 'The cat escaped! 🐾',
+      bannerWin: 'Trapped!', bannerSub: 'Caught in {n} moves!'
     }
   };
   // Chunky block-style calico cat: one-piece head (no centre seam), round
@@ -317,6 +319,23 @@
     }
   }
 
+  let bannerTimer = 0;
+  function celebrateTrap() {
+    stage.querySelector('.milestone-banner')?.remove();
+    const banner = document.createElement('div');
+    banner.className = 'milestone-banner';
+    const big = document.createElement('span');
+    big.className = 'milestone-count';
+    big.textContent = copy[language].bannerWin;
+    const sub = document.createElement('span');
+    sub.className = 'milestone-sub';
+    sub.textContent = copy[language].bannerSub.replace('{n}', moves);
+    banner.append(big, sub);
+    stage.append(banner);
+    clearTimeout(bannerTimer);
+    bannerTimer = setTimeout(() => banner.remove(), 2000);
+  }
+
   function tapTile(r, c) {
     if (!playing || escapeTimer || blocked.has(key(r, c)) || (cat.r === r && cat.c === c)) return;
     history.push({cat, r, c, lineKey});
@@ -385,6 +404,7 @@
       updateBubble();
       playWin();
       burst();
+      celebrateTrap();
       verdict.textContent = copy[language].verdictWin;
       gameScores.finish(Math.max(200, 1000 - moves * 20), true);
     } else if (result === 'escape') {
