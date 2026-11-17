@@ -612,3 +612,19 @@ main:has(#bun:not([hidden])) { max-width: 1120px; }
 @media (prefers-reduced-motion: reduce) {
   .key-guest { display: none; }
 }
+
+[data-sticker="fry-cup"] .sticker-disc::before {
+  content: "";
+  display: block;
+  width: 35px;
+  height: 34px;
+  border: 2px solid #942a48;
+  border-top: 6px solid #942a48;
+  border-radius: 6px 6px 11px 11px;
+  background: repeating-conic-gradient(#ffe5a2 0% 25%, #db4260 0% 50%) center bottom / 10px 10px no-repeat,
+    linear-gradient(#f26070, #c93251);
+  background-size: 27px 10px, 100% 100%;
+  transform: perspective(40px) rotateX(-8deg);
+}
+[data-sticker="fry-cup"][data-earned="false"] .sticker-disc::before { filter: grayscale(1) brightness(.55); }
+#mission-milestone { grid-template-columns: minmax(130px, 220px); margin-bottom: 12px; }
