@@ -83,3 +83,17 @@ nav.game-picker > a { position: relative; }
 }
 .recent-title { margin: 16px 0 0; font-size: 1.05rem; color: #754676; }
 nav.recent-picker { margin-top: 8px; }
+
+.home-play { display: grid; grid-template-columns: minmax(0, 2fr) minmax(0, 1fr); gap: 12px; margin: 12px 0 20px; }
+.home-play[hidden], .home-play [hidden] { display: none; }
+.home-mission, .home-surprise { padding: 14px 16px; border: 1px solid #ddb9d8; border-radius: 18px; background: #fff7e4; color: #572d51; }
+.home-surprise { background: #f0e5fa; display: flex; flex-wrap: wrap; align-content: center; gap: 8px; }
+.home-play h2 { margin: 0; font-size: 1.12rem; }
+.home-play p { margin: 5px 0 8px; }
+.home-play a, .home-play button { display: inline-flex; min-height: 44px; align-items: center; padding: 6px 12px; border: 1px solid #b88ab0; border-radius: 12px; background: #fff; color: #67335f; font: inherit; font-weight: 700; cursor: pointer; }
+.home-sr-only { position: absolute; width: 1px; height: 1px; overflow: hidden; clip-path: inset(50%); }
+@media (max-width: 540px) { .home-play { grid-template-columns: 1fr; } }
+@media (prefers-reduced-motion: no-preference) {
+  .surprise-reveal { animation: surprise-pop .28s ease-out; }
+  @keyframes surprise-pop { from { transform: translateY(5px) scale(.94); opacity: .55; } to { transform: none; opacity: 1; } }
+}

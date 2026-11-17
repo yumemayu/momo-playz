@@ -7,11 +7,11 @@
 <meta name="description" content="Play Momo Playz games, from Fry Catch and Momo Piano to circuit puzzles.">
 <link rel="stylesheet" href="game-picker.css">
 <link rel="stylesheet" href="language.css">
-<link rel="stylesheet" href="home.css">
+<link rel="stylesheet" href="home.css?v=daily-mission">
 <script defer src="language.js"></script>
 <script defer src="stickers.js"></script>
 <script defer src="install-hint.js"></script>
-<script defer src="home.js"></script>
+<script defer src="home.js?v=daily-mission"></script>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
   <meta name="mobile-web-app-capable" content="yes">
@@ -27,6 +27,18 @@
   <img src="assets/momo-squirrels.png" alt="" width="130" height="99">
   <h1>Momo Playz</h1>
 </header>
+<section class="home-play" id="home-play" hidden>
+  <div class="home-mission">
+    <h2 data-ja="今日のミッション">Today’s mission</h2>
+    <p id="mission-task"></p>
+    <a id="mission-action"></a>
+  </div>
+  <div class="home-surprise">
+    <button type="button" id="surprise-game" data-ja="✦ おまかせ">✦ Surprise me</button>
+    <a id="surprise-result" hidden></a>
+    <span id="surprise-announcement" class="home-sr-only" role="status"></span>
+  </div>
+</section>
 <section class="recent" id="recent" hidden>
   <h2 class="recent-title"><span aria-hidden="true">🕒</span> <span data-ja="さいきん遊んだ">Recently played</span></h2>
   <nav class="game-picker recent-picker" id="recent-picker" aria-label="Recently played games"></nav>

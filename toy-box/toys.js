@@ -8,7 +8,9 @@ const stickerCatalog = [
   ['bun-light', '🏮', 'Bun Lights', '肉まんライト', 'Mix two colors', '２色をまぜる'],
   ['ribbon', '🎀', 'Momo ribbon', 'Momoのリボン', 'Type the secret word', 'ひみつの言葉を入力'],
   ['fries', '🍟', 'Fry Catch', 'フライキャッチ'],
+  ['fry-cup', '', 'Red fry cup', 'あかいポテトカップ', 'Finish a round on two different days', 'フライキャッチを別の日にもう一度、最後まで遊ぶ'],
   ['buns', '🥟', 'Smiley Bun Catch', 'にこにこ肉まんキャッチ'],
+  ['bun-steamer', '🧺', 'Bamboo steamer', 'せいろのシール', 'Finish Smiley Bun Catch on two different days', '肉まんキャッチを別の日にもう一度、最後まで遊ぶ'],
   ['cats', '🐱', 'Find the Glasses Cat', 'メガネ猫さがし'],
   ['piano', '🎹', 'Momo Piano', 'Momoピアノ', 'Finish a song', '１曲最後まで弾く'],
   ['capybara', '♨️', 'Capybara Onsen Merge', 'カピバラ温泉マージ'],
@@ -26,6 +28,7 @@ function stickerEntry([id, icon, en, ja, taskEn = 'Finish a round', taskJa = '�
   const earned = momoStickers.has(id);
   const item = document.createElement('li');
   item.dataset.earned = String(earned);
+  item.dataset.sticker = id;
   const art = document.createElement('span');
   art.className = 'sticker-art';
   art.setAttribute('aria-hidden', 'true');
@@ -33,7 +36,7 @@ function stickerEntry([id, icon, en, ja, taskEn = 'Finish a round', taskJa = '�
   disc.className = 'sticker-disc';
   const svg = window.momoStickerArt?.[id];
   if (svg) disc.innerHTML = svg;
-  else disc.textContent = earned ? icon : '✧';
+  else disc.textContent = earned || id === 'bun-steamer' ? icon : '✧';
   art.append(disc);
   const title = document.createElement('strong');
   title.textContent = copy(en, ja);
@@ -643,3 +646,54 @@ if (one('#keys')) {
     setTimeout(() => key.classList.remove('pressed'), 110);
   });
 }
+
+(() => {
+  const sheet = document.querySelector('#daily-sticker-sheet');
+  if (!sheet || !momoStickers.missionProgress) return;
+  const milestone = document.querySelector('#mission-milestone');
+
+  function renderDailyStickers() {
+    const today = new Date();
+    const language = document.documentElement.lang === 'ja' ? 'ja' : 'en';
+    const format = new Intl.DateTimeFormat(language, { month: 'numeric', day: 'numeric' });
+    const days = Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6 + index);
+      const mission = momoStickers.dailyMission(date);
+      const item = document.createElement('li');
+      const art = document.createElement('span');
+      art.className = 'sticker-art';
+      art.textContent = mission.done ? '🌟' : '☆';
+      art.setAttribute('role', 'img');
+      art.setAttribute('aria-label', momoLanguage.pick(
+        mission.done ? 'Earned' : 'Empty',
+        mission.done ? 'ゲット' : '空き'
+      ));
+      const label = document.createElement('span');
+      label.textContent = format.format(date);
+      item.append(art, label);
+      return item;
+    });
+    sheet.replaceChildren(...days);
+    const progress = momoStickers.missionProgress();
+    const reward = document.createElement('li');
+    reward.dataset.earned = String(progress === 3);
+    const disc = document.createElement('span');
+    disc.className = 'sticker-disc';
+    disc.textContent = '🌈';
+    disc.setAttribute('aria-hidden', 'true');
+    const title = document.createElement('strong');
+    title.textContent = copy('Rainbow sticker', 'にじのシール');
+    const hint = document.createElement('small');
+    hint.textContent = progress === 3
+      ? copy('Collected!', 'ゲット！')
+      : copy(`Complete missions on 3 days · ${progress}/3`, `ミッションを通算3日クリア · ${progress}/3`);
+    reward.append(disc, title, hint);
+    milestone.replaceChildren(reward);
+    sheet.parentElement.hidden = false;
+  }
+
+  momoLanguage.subscribe(renderDailyStickers);
+  momoStickers.subscribe(renderDailyStickers);
+  window.addEventListener('pageshow', renderDailyStickers);
+  renderDailyStickers();
+})();

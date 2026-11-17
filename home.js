@@ -35,8 +35,8 @@
   const main = document.querySelector('main');
   if (main) {
     main.addEventListener('click', (event) => {
-      const link = event.target.closest('nav.game-picker a');
-      if (!link) return;
+      const link = event.target.closest('nav.game-picker a, #mission-action, #surprise-result');
+      if (!link || link.pathname.endsWith('/sticker-book/')) return;
       const path = pathOf(link);
       const list = load().filter((item) => item !== path);
       list.unshift(path);
@@ -60,4 +60,56 @@
   renderRecent();
   // Rebuild the clones after a language switch so their names follow.
   if (typeof momoLanguage !== 'undefined') momoLanguage.subscribe(renderRecent);
+})();
+
+(() => {
+  if (!window.momoStickers?.dailyMission) return;
+  const panel = document.querySelector('#home-play');
+  const task = document.querySelector('#mission-task');
+  const action = document.querySelector('#mission-action');
+  const surprise = document.querySelector('#surprise-game');
+  const result = document.querySelector('#surprise-result');
+  const announcement = document.querySelector('#surprise-announcement');
+  const links = Array.from(document.querySelectorAll('main nav.game-picker:not(.recent-picker) a[href]'));
+  let selected;
+
+  function renderMission() {
+    const mission = momoStickers.dailyMission();
+    task.textContent = momoLanguage.pick(mission.en, mission.ja);
+    action.href = mission.done ? 'sticker-book/#daily-stickers' : mission.path;
+    action.textContent = mission.done
+      ? momoLanguage.pick('✓ Done! See your sticker', '✓ クリア！ シールを見る')
+      : momoLanguage.pick('Play mission', 'ミッションで遊ぶ');
+  }
+
+  function renderSurprise() {
+    if (!selected) return;
+    const name = selected.querySelector('[data-ja], [data-en]')?.textContent ?? selected.textContent.trim();
+    result.textContent = name + ' →';
+  }
+
+  surprise.addEventListener('click', () => {
+    const candidates = links.length > 1 ? links.filter(link => link !== selected) : links;
+    selected = candidates[Math.floor(Math.random() * candidates.length)];
+    result.href = selected.href;
+    result.hidden = false;
+    result.classList.remove('surprise-reveal');
+    void result.offsetWidth;
+    result.classList.add('surprise-reveal');
+    renderSurprise();
+    announcement.textContent = result.textContent;
+  });
+  surprise.hidden = links.length === 0;
+  momoLanguage.subscribe(() => {
+    renderMission();
+    renderSurprise();
+  });
+  momoStickers.subscribe(renderMission);
+  window.addEventListener('pageshow', renderMission);
+  document.addEventListener('visibilitychange', () => {
+    if (!document.hidden) renderMission();
+  });
+  setInterval(renderMission, 60000);
+  renderMission();
+  panel.hidden = false;
 })();
