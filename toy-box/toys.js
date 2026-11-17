@@ -493,6 +493,79 @@ if (one('#keys')) {
     { word: 'SUGOI', emoji: '🌟', fx: 'stars', en: 'Amazing!', ja: 'すごい！' },
     { word: 'BYE', emoji: '👋', fx: 'walk', en: 'Bye bye!', ja: 'バイバイ！' },
   ];
+
+  // Riddle hints for the secret words, plus a found count. The hint
+  // never names the word; tapping it shuffles to another secret.
+  const KEY_HINTS = {
+    "HOHOHO": ["What does Santa say when he laughs?", "サンタさんが わらうとき、なんて いう？"],
+    "SANTA": ["Who brings presents at Christmas?", "クリスマスに プレゼントを もってきてくれるのは だれ？"],
+    "MOMO": ["A sweet pink fruit — and the name of a friend here!", "あまくて ピンクの くだもの。このゲームの おともだちの 名前でもあるよ"],
+    "CAT": ["Which animal says meow?", "「にゃー」と なく どうぶつは？"],
+    "NEKO": ["Write the Japanese word for cat with ABC letters", "「ねこ」を ローマ字で 打ってみて"],
+    "DOG": ["Which animal says woof woof?", "「わんわん」と なく どうぶつは？"],
+    "INU": ["Write the Japanese word for dog with ABC letters", "「いぬ」を ローマ字で 打ってみて"],
+    "SNOW": ["White and cold, it falls from the winter sky", "ふゆに 空から ふってくる、白くて つめたいものは？"],
+    "YUKI": ["Write the Japanese word for snow with ABC letters", "「ゆき」を ローマ字で 打ってみて"],
+    "STAR": ["It twinkles in the night sky", "よるの 空で キラキラ ひかるものは？"],
+    "HOSHI": ["Write the Japanese word for star with ABC letters", "「ほし」を ローマ字で 打ってみて"],
+    "TRAIN": ["It runs on rails and carries lots of people", "せんろを はしって、たくさんの 人を はこぶ のりものは？"],
+    "DENSHA": ["Write the Japanese word for train with ABC letters", "「でんしゃ」を ローマ字で 打ってみて"],
+    "DANCE": ["Move your body when the music plays!", "おんがくが なったら、からだを うごかして…？"],
+    "MUSIC": ["Songs, piano, drums — what are they all called?", "うたも ピアノも たいこも、ぜんぶ まとめて なんていう？"],
+    "HAPPY": ["How do you feel when something fun happens?", "たのしいことが あったときの きもちを 英語で いうと？"],
+    "BIRTHDAY": ["A cake, candles, and presents — what day is it?", "ケーキと ロウソクと プレゼントの 日は、なんの 日？"],
+    "LOVE": ["A big warm feeling for someone special", "だいすきな 人への あったかい きもちを 英語で いうと？"],
+    "PIZZA": ["Round and cheesy, from Italy", "まんまるで、チーズが とろーり。イタリアの たべものは？"],
+    "SUSHI": ["A Japanese food with fish and rice", "おさかなと ごはんの、日本の たべものは？"],
+    "GHOST": ["It says boo! on Halloween", "ハロウィンに 「ばあ！」と あらわれるのは？"],
+    "EGG": ["A baby chick hatches from this", "ひよこが かえってくる、まるい ものは？"],
+    "RAINBOW": ["Seven colors arc across the sky after rain", "あめのあと、空に かかる 七色の 橋は？"],
+    "NIJI": ["Write the Japanese word for rainbow with ABC letters", "「にじ」を ローマ字で 打ってみて"],
+    "FLOWER": ["It blooms in spring and smells sweet", "はるに さいて、いい かおりが するものは？"],
+    "OHAYO": ["The greeting you say when you wake up — in romaji", "あさ 起きたときの あいさつを、ローマ字で 打ってみて"],
+    "OYASUMI": ["The greeting you say before bed — in romaji", "ねる前の あいさつを、ローマ字で 打ってみて"],
+    "ARIGATO": ["How to say thank you in Japanese — in romaji", "「ありがとう」を、ローマ字で 打ってみて"],
+    "GAMBARE": ["The cheer you shout for a friend — in romaji", "おうえんの かけ声を、ローマ字で 打ってみて"],
+    "SUGOI": ["How to say amazing! in Japanese — in romaji", "「すごい！」を、ローマ字で 打ってみて"],
+    "BYE": ["A short word you say when you leave", "帰るときの、短い あいさつは？"]
+  };
+  const secretStoreKey = 'momo:clicky-keys:secrets';
+  const knownWords = new Set(KEY_GUESTS.map(g => g.word));
+  let foundSecrets = new Set();
+  try {
+    foundSecrets = new Set(JSON.parse(localStorage.getItem(secretStoreKey) || '[]').filter(w => knownWords.has(w)));
+  } catch {}
+  let hintWord = null;
+  const hintBox = document.querySelector('#key-hint');
+  const hintText = document.querySelector('#key-hint-text');
+  const secretCount = document.querySelector('#key-secret-count');
+  function pickHintWord() {
+    const rest = KEY_GUESTS.filter(g => !foundSecrets.has(g.word));
+    hintWord = rest.length ? rest[Math.floor(Math.random() * rest.length)].word : null;
+  }
+  function renderSecretHint() {
+    if (!hintText || !secretCount) return;
+    secretCount.textContent = copy('Secrets ' + foundSecrets.size + '/' + KEY_GUESTS.length,
+      'シークレット ' + foundSecrets.size + '/' + KEY_GUESTS.length);
+    if (!hintWord) {
+      hintText.textContent = copy('🎉 You found them all!', '🎉 ぜんぶ みつけた！');
+      return;
+    }
+    const guest = KEY_GUESTS.find(g => g.word === hintWord);
+    const hint = KEY_HINTS[hintWord];
+    hintText.textContent = '💡 ' + guest.emoji + ' ' + copy('Hint: ', 'ヒント：') + copy(hint[0], hint[1]);
+  }
+  function markSecretFound(word) {
+    if (foundSecrets.has(word)) return;
+    foundSecrets.add(word);
+    try { localStorage.setItem(secretStoreKey, JSON.stringify([...foundSecrets])); } catch {}
+    if (word === hintWord) pickHintWord();
+    renderSecretHint();
+  }
+  pickHintWord();
+  renderSecretHint();
+  if (hintBox) hintBox.addEventListener('click', () => { pickHintWord(); renderSecretHint(); });
+  momoLanguage.subscribe(renderSecretHint);
   let guestTimer;
   function guestJingle(fx) {
     const seqs = {
@@ -543,7 +616,7 @@ if (one('#keys')) {
     saveNote(notebook.value + letter);
     if (notebook.value.endsWith(momoCommand)) celebrateMomo();
     const guest = KEY_GUESTS.find(g => notebook.value.endsWith(g.word));
-    if (guest) spawnGuest(guest);
+    if (guest) { spawnGuest(guest); markSecretFound(guest.word); }
     const catSound = keyCase.dataset.theme === 'cat' && ++catPresses >= nextMeow;
     if (catSound) {
       catPresses = 0;
