@@ -379,7 +379,7 @@
       root.querySelector('.reset').hidden = !notes;
       rows[1].parentElement.hidden = Boolean(selectedSong?.singleOctave);
       keys.forEach((key, index) => {
-        if (index >= whiteKeyCount) key.hidden = !challenge && !(falling && blackKeys[index - whiteKeyCount].row === 0);
+        if (index >= whiteKeyCount) key.hidden = !challenge && falling && blackKeys[index - whiteKeyCount].row !== 0;
         if (index >= whiteKeyCount && falling) {
           const black = blackKeys[index - whiteKeyCount];
           key.style.setProperty('--roll-position', `${100 * (black.row * 7 + black.gap) / laneCount}%`);
