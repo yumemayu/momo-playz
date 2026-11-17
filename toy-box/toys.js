@@ -643,3 +643,38 @@ if (one('#keys')) {
     setTimeout(() => key.classList.remove('pressed'), 110);
   });
 }
+
+(() => {
+  const sheet = document.querySelector('#daily-sticker-sheet');
+  if (!sheet || !momoStickers.dailyMission) return;
+
+  function renderDailyStickers() {
+    const today = new Date();
+    const language = document.documentElement.lang === 'ja' ? 'ja' : 'en';
+    const format = new Intl.DateTimeFormat(language, { month: 'numeric', day: 'numeric' });
+    const days = Array.from({ length: 7 }, (_, index) => {
+      const date = new Date(today.getFullYear(), today.getMonth(), today.getDate() - 6 + index);
+      const mission = momoStickers.dailyMission(date);
+      const item = document.createElement('li');
+      const art = document.createElement('span');
+      art.className = 'sticker-art';
+      art.textContent = mission.done ? '🌟' : '☆';
+      art.setAttribute('role', 'img');
+      art.setAttribute('aria-label', momoLanguage.pick(
+        mission.done ? 'Earned' : 'Empty',
+        mission.done ? 'ゲット' : '空き'
+      ));
+      const label = document.createElement('span');
+      label.textContent = format.format(date);
+      item.append(art, label);
+      return item;
+    });
+    sheet.replaceChildren(...days);
+    sheet.parentElement.hidden = false;
+  }
+
+  momoLanguage.subscribe(renderDailyStickers);
+  momoStickers.subscribe(renderDailyStickers);
+  window.addEventListener('pageshow', renderDailyStickers);
+  renderDailyStickers();
+})();
