@@ -211,3 +211,15 @@ body { margin:0; background:#fff0f7; font-family:Nunito,"Hiragino Maru Gothic Pr
 @media (prefers-reduced-motion: reduce) {
   #momo-piano-levels .milestone-banner { animation: none; }
 }
+
+.wide-bar { display: flex; justify-content: flex-end; margin-bottom: 6px; }
+.wide-btn { min-height: 46px; padding: 8px 16px; border: 3px solid #fff; border-radius: 999px; background: linear-gradient(135deg, #f272a7, #ff9d5c); color: #fff; font: inherit; font-size: 14px; font-weight: 700; box-shadow: 0 4px 0 #c94f83; cursor: pointer; }
+.wide-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #c94f83; }
+body.game-wide { overflow: hidden; }
+
+#momo-piano-levels .phone.play header .wide-btn { min-height: 40px; padding: 6px 12px; font-size: 13px; }
+body.game-wide #momo-piano-levels .phone.play[data-screen="playing"] { position: fixed; inset: 0; z-index: 80; min-height: 0; border-radius: 0; }
+body.game-wide #momo-piano-levels .piano { margin-top: auto; }
+body.game-wide #momo-piano-levels .key { height: clamp(120px, 24dvh, 200px); }
+body.game-wide #momo-piano-levels .key.sharp { height: clamp(70px, 13dvh, 110px); }
+body.game-wide #momo-piano-levels .falling-roll { flex: 1; }

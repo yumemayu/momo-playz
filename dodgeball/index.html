@@ -35,7 +35,8 @@
     <button type="button" data-mode="practice" data-level="practice" aria-pressed="false"><span data-ja="5球練習">5-shot practice</span></button>
     <button type="button" data-mode="match" data-level="match" aria-pressed="true"><span data-ja="ねこと対戦">Play against Cat</span></button>
   </fieldset>
-  <section class="court" aria-label="Dodgeball court" data-ja-label="ドッジボールコート">
+  <div class="wide-bar"><button type="button" class="wide-btn" data-wide-btn aria-pressed="false">⛶ Bigger</button></div>
+    <section class="court" aria-label="Dodgeball court" data-ja-label="ドッジボールコート">
     <div class="windows" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="floor" aria-hidden="true"></div>
     <div class="score"><span data-ja="ヒット">Hits</span> <strong id="hits">0</strong> <span aria-hidden="true">·</span> <span data-ja="のこり">Left</span> <strong id="left">5</strong><span id="cat-score" hidden> · <span data-ja="ねこ">Cat</span> <strong id="cat-hits">0</strong></span></div>

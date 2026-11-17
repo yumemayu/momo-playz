@@ -219,3 +219,12 @@ h1 { margin: 0; font-size: clamp(1.2rem, 4vw, 1.8rem); }
 
 body[data-game="dodgeball"] main { display: block; max-width: 920px; padding: 12px; }
 .home-link { display: inline-block; margin: 0 0 8px; padding: 8px 4px; color: #684974; font-weight: 700; }
+
+.wide-bar { display: flex; justify-content: flex-end; margin-bottom: 6px; }
+.wide-btn { min-height: 46px; padding: 8px 16px; border: 3px solid #fff; border-radius: 999px; background: linear-gradient(135deg, #f272a7, #ff9d5c); color: #fff; font: inherit; font-size: 14px; font-weight: 700; box-shadow: 0 4px 0 #c94f83; cursor: pointer; }
+.wide-btn:active { transform: translateY(3px); box-shadow: 0 1px 0 #c94f83; }
+body.game-wide { overflow: hidden; }
+
+body.game-wide main { position: fixed; inset: 0; z-index: 80; max-width: none; overflow: auto; background: #fff0f5; padding: 8px; }
+body.game-wide .game-heading, body.game-wide .home-link, body.game-wide .match-modes, body.game-wide .score-board, body.game-wide main nav { display: none; }
+body.game-wide .court { height: calc(100dvh - 78px); }
