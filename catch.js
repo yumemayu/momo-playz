@@ -127,6 +127,105 @@ function drawBun(bun) {
   ctx.restore();
 }
 
+function drawFry(fry) {
+  ctx.save();
+  ctx.translate(fry.x, fry.y);
+  ctx.rotate(fry.tilt);
+  ctx.scale(axisY / axisX, fry.stretch);
+  const crust = ctx.createLinearGradient(-8, 0, 8, 0);
+  crust.addColorStop(0, '#ffe38a');
+  crust.addColorStop(.48, '#ffcc51');
+  crust.addColorStop(1, '#cf710f');
+  ctx.fillStyle = crust;
+  ctx.strokeStyle = '#a7521d';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(-6, -17);
+  ctx.quadraticCurveTo(0, -20, 6, -17);
+  for (let y = -17; y < 15; y += 8) {
+    ctx.quadraticCurveTo(10, y + 2, 6, y + 4);
+    ctx.quadraticCurveTo(3, y + 6, 6, y + 8);
+  }
+  ctx.quadraticCurveTo(7, 20, -6, 17);
+  ctx.lineTo(-6, 15);
+  for (let y = 15; y > -17; y -= 8) {
+    ctx.quadraticCurveTo(-3, y - 2, -6, y - 4);
+    ctx.quadraticCurveTo(-10, y - 6, -6, y - 8);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = '#fff0b8';
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(-3, -14);
+  for (let y = -14; y < 10; y += 8) {
+    ctx.bezierCurveTo(-.5, y + 2, -5, y + 6, -3, y + 8);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+const cupHalfWidth = 30;
+const cupMouthY = 293;
+
+function crossesCup(fry, previousY, previousPlayer) {
+  if (previousY >= cupMouthY || fry.y < cupMouthY) return false;
+  const progress = (cupMouthY - previousY) / (fry.y - previousY);
+  const center = previousPlayer + (player - previousPlayer) * progress;
+  return Math.abs(fry.x - center) <= cupHalfWidth * axisY / axisX;
+}
+
+function drawCup(now) {
+  ctx.save();
+  ctx.translate(player, cupMouthY);
+  ctx.scale(axisY / axisX, 1);
+
+  ctx.fillStyle = '#7f2438';
+  ctx.beginPath();
+  ctx.ellipse(0, 0, cupHalfWidth, 8, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  for (const effect of catches) {
+    if (!effect.fry || reducedMotion.matches) continue;
+    const progress = Math.max(0, (now - effect.at) / 135);
+    if (progress >= 1) continue;
+    drawFry({
+      ...effect.fry,
+      x: player + effect.offset * (1 - progress),
+      y: cupMouthY + 27 * progress,
+      stretch: effect.fry.stretch * (1 - progress),
+    });
+  }
+
+  ctx.save();
+  ctx.translate(player, cupMouthY);
+  ctx.scale(axisY / axisX, 1);
+  const paper = ctx.createLinearGradient(-30, 0, 30, 32);
+  paper.addColorStop(0, '#f45e6b');
+  paper.addColorStop(1, '#ce324f');
+  ctx.beginPath();
+  ctx.moveTo(-cupHalfWidth, 0);
+  ctx.quadraticCurveTo(0, 13, cupHalfWidth, 0);
+  ctx.lineTo(23, 32);
+  ctx.quadraticCurveTo(0, 39, -23, 32);
+  ctx.closePath();
+  ctx.fillStyle = paper;
+  ctx.fill();
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = '#a82b48';
+  ctx.stroke();
+
+  ctx.fillStyle = '#ffe6a3';
+  for (let row = 0; row < 2; row++) {
+    for (let column = 0; column < 8; column++) {
+      if ((row + column) % 2 === 0) ctx.fillRect(-20 + column * 5, 23 + row * 5, 5, 5);
+    }
+  }
+  ctx.restore();
+}
+
 function draw() {
   const rect = field.getBoundingClientRect();
   const density = window.devicePixelRatio || 1;
@@ -154,42 +253,7 @@ function draw() {
       drawBun(fry);
       continue;
     }
-    ctx.save();
-    ctx.translate(fry.x, fry.y);
-    ctx.rotate(fry.tilt);
-    ctx.scale(axisY / axisX, fry.stretch);
-    const crust = ctx.createLinearGradient(-8, 0, 8, 0);
-    crust.addColorStop(0, '#ffe38a');
-    crust.addColorStop(.48, '#ffcc51');
-    crust.addColorStop(1, '#cf710f');
-    ctx.fillStyle = crust;
-    ctx.strokeStyle = '#a7521d';
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(-6, -17);
-    ctx.quadraticCurveTo(0, -20, 6, -17);
-    for (let y = -17; y < 15; y += 8) {
-      ctx.quadraticCurveTo(10, y + 2, 6, y + 4);
-      ctx.quadraticCurveTo(3, y + 6, 6, y + 8);
-    }
-    ctx.quadraticCurveTo(7, 20, -6, 17);
-    ctx.lineTo(-6, 15);
-    for (let y = 15; y > -17; y -= 8) {
-      ctx.quadraticCurveTo(-3, y - 2, -6, y - 4);
-      ctx.quadraticCurveTo(-10, y - 6, -6, y - 8);
-    }
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    ctx.strokeStyle = '#fff0b8';
-    ctx.lineWidth = 1.6;
-    ctx.beginPath();
-    ctx.moveTo(-3, -14);
-    for (let y = -14; y < 10; y += 8) {
-      ctx.bezierCurveTo(-.5, y + 2, -5, y + 6, -3, y + 8);
-    }
-    ctx.stroke();
-    ctx.restore();
+    drawFry(fry);
   }
   if (squirrel.complete && squirrel.naturalWidth) {
     const latest = catches.at(-1);
@@ -201,10 +265,11 @@ function draw() {
     const size = squirrelSize * Math.min(axisX, axisY);
     const spriteWidth = size / axisX;
     const spriteHeight = size / axisY;
-    ctx.drawImage(squirrel, player + shake - spriteWidth / 2, 334 - spriteHeight - hop, spriteWidth, spriteHeight);
+    ctx.drawImage(squirrel, player + shake - spriteWidth / 2, 334 - spriteHeight - (bunMode ? hop : 0), spriteWidth, spriteHeight);
   }
   const now = performance.now();
   catches = catches.filter(catchEffect => now - catchEffect.at < 600);
+  if (!bunMode) drawCup(now);
   for (const effect of catches) {
     const progress = Math.max(0, (now - effect.at) / 600);
     const spread = reducedMotion.matches ? 0 : 35 * progress;
@@ -217,13 +282,14 @@ function draw() {
     ctx.lineWidth = 4;
     ctx.strokeStyle = '#fff';
     ctx.fillStyle = '#a7195b';
-    ctx.strokeText(effect.label, effect.x * axisX / axisY, 199 - spread);
-    ctx.fillText(effect.label, effect.x * axisX / axisY, 199 - spread);
+    const labelY = bunMode ? 199 : cupMouthY - 30;
+    ctx.strokeText(effect.label, effect.x * axisX / axisY, labelY - spread);
+    ctx.fillText(effect.label, effect.x * axisX / axisY, labelY - spread);
     if (effect.label === "+1" && !reducedMotion.matches) {
       ctx.fillStyle = '#d98711';
       ctx.font = '19px sans-serif';
-      ctx.fillText('✦', (effect.x - 19 - spread / 2) * axisX / axisY, 208 - spread);
-      ctx.fillText('✧', (effect.x + 20 + spread / 2) * axisX / axisY, 203 - spread / 2);
+      ctx.fillText('✦', (effect.x - 19 - spread / 2) * axisX / axisY, labelY + 9 - spread);
+      ctx.fillText('✧', (effect.x + 20 + spread / 2) * axisX / axisY, labelY + 4 - spread / 2);
     }
     ctx.restore();
   }
@@ -243,6 +309,7 @@ function step(now) {
     return;
   }
   const direction = Number(keys.has('ArrowRight')) - Number(keys.has('ArrowLeft'));
+  const previousPlayer = player;
   move(player + (held || direction) * 270 * dt);
   if (practicing && fries.length === 0) {
     fries.push({ x: width / 2, y: 80, tilt: .15, stretch: 1, smiles: true });
@@ -251,22 +318,32 @@ function step(now) {
     nextSpawn = elapsed + Math.max(level.interval * .55, level.interval - elapsed / 90);
   }
   fries = fries.filter(fry => {
+    const previousY = fry.y;
     fry.y += (practicing ? 95 : level.speed + elapsed * level.acceleration) * dt;
-    if (fry.y >= 278 && fry.y <= 329 && Math.abs(player - fry.x) < squirrelSize * .39) {
+    const caught = bunMode
+      ? fry.y >= 278 && fry.y <= 329 && Math.abs(player - fry.x) < squirrelSize * .39
+      : crossesCup(fry, previousY, previousPlayer);
+    if (caught) {
+      const effect = { x: player, at: now };
+      if (!bunMode) {
+        effect.fry = fry;
+        const halfWidth = cupHalfWidth * axisY / axisX;
+        effect.offset = Math.max(-halfWidth, Math.min(halfWidth, fry.x - player));
+      }
       if (practicing) {
         practicing = false;
         practiced = true;
         startTime = now;
         result.textContent = L('You got it! Go!', 'つかまえた！ そのちょうし！');
-        catches.push({ x: player, at: now, label: '✓' });
+        catches.push({ ...effect, label: '✓' });
         return false;
       }
       score += fry.smiles ? 1 : -1;
       scoreOutput.value = score;
-      catches.push({ x: player, at: now, label: fry.smiles ? '+1' : '−1' });
+      catches.push({ ...effect, label: fry.smiles ? '+1' : '−1' });
       return false;
     }
-    return fry.y < 332;
+    return fry.y < (bunMode ? 332 : height + 23);
   });
   draw();
   requestAnimationFrame(step);
