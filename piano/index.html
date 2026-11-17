@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Momo Piano</title>
-  <link rel="stylesheet" href="piano.css?v=wide-case">
+  <link rel="stylesheet" href="piano.css?v=wide-art">
   <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../language.css">
   <script defer src="../language.js"></script>
@@ -47,7 +47,7 @@
   <section class="phone play" data-screen="playing" aria-labelledby="momo-current-song">
       <header><button type="button" class="back cursor-interaction" data-action="back" data-copy="back" hidden>‹ もどる</button><span class="mode"></span><button type="button" class="wide-btn" data-wide-btn aria-pressed="false">⛶ Bigger</button></header>
       <div class="song">
-        <div class="sparkles" aria-hidden="true"><span>✧</span>★<span>✦</span></div>
+        <div class="sparkles" aria-hidden="true"><svg class="spark-small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1c1.2 6.5 3 8.8 11 11-8 2.2-9.8 4.5-11 11C10 15.8 8.2 13.5 1 12 8.2 10.5 10 8.2 12 1z" fill="#c99ade"/></svg><svg class="spark-big" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l6.6 13.9 15.2 1.9-11.1 10.5 2.8 15.1L24 38.3l-13.5 7.1 2.8-15.1L2.2 19.8l15.2-1.9z" fill="#f7bd45" stroke="#e09a26" stroke-width="2" stroke-linejoin="round"/></svg><svg class="spark-small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1c1.2 6.5 3 8.8 11 11-8 2.2-9.8 4.5-11 11C10 15.8 8.2 13.5 1 12 8.2 10.5 10 8.2 12 1z" fill="#c99ade"/></svg></div>
         <h2 id="momo-current-song"></h2>
         <div class="track" role="progressbar" aria-label="曲の進み具合" aria-valuemin="0" aria-valuemax="42" aria-valuenow="0"><div></div></div>
         <p class="hint" aria-live="polite">ひかる「ド」を おしてね</p>
@@ -64,7 +64,7 @@
         </div>
       </div>
       <div class="celebration" hidden>
-        <span aria-hidden="true">✦ ★ ✦</span>
+        <span aria-hidden="true"><svg class="spark-small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1c1.2 6.5 3 8.8 11 11-8 2.2-9.8 4.5-11 11C10 15.8 8.2 13.5 1 12 8.2 10.5 10 8.2 12 1z" fill="#c99ade"/></svg><svg class="spark-big" viewBox="0 0 48 48" aria-hidden="true"><path d="M24 4l6.6 13.9 15.2 1.9-11.1 10.5 2.8 15.1L24 38.3l-13.5 7.1 2.8-15.1L2.2 19.8l15.2-1.9z" fill="#f7bd45" stroke="#e09a26" stroke-width="2" stroke-linejoin="round"/></svg><svg class="spark-small" viewBox="0 0 24 24" aria-hidden="true"><path d="M12 1c1.2 6.5 3 8.8 11 11-8 2.2-9.8 4.5-11 11C10 15.8 8.2 13.5 1 12 8.2 10.5 10 8.2 12 1z" fill="#c99ade"/></svg></span>
         <strong>クリアおめでとう！</strong>
         <small class="challenge-result" hidden></small>
       </div>
