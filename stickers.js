@@ -1,5 +1,5 @@
 window.momoStickers = (() => {
-  const keys = new Set(['bun-light', 'ribbon', 'puppy', 'fries', 'buns', 'cats',
+  const keys = new Set(['bun-light', 'ribbon', 'puppy', 'fries', 'fry-cup', 'buns', 'cats',
     'piano', 'capybara', 'capybara-memory', 'capybara-tap', 'cat-trap',
     'quoridor', 'lights-out', 'flow', 'hit-blow', 'minesweeper', 'hanoi']);
   const prefix = 'momo:stickers:';
@@ -23,6 +23,8 @@ window.momoStickers = (() => {
   ];
   const dailyPrefix = 'momo:mission:';
   const sessionDays = new Set();
+  const firstFryDayKey = 'momo:stickers:first-fry-day';
+  let firstFryDay;
 
   function dailyMission(date = new Date()) {
     const day = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000;
@@ -33,12 +35,38 @@ window.momoStickers = (() => {
     return { ...missionGames[index], day, key, done };
   }
 
+  function missionProgress() {
+    const days = new Set(sessionDays);
+    try {
+      for (let i = 0; i < localStorage.length; i++) {
+        const key = localStorage.key(i);
+        if (key?.startsWith(dailyPrefix) && /^-?\d+$/.test(key.slice(dailyPrefix.length)) &&
+            localStorage.getItem(key) === '1') {
+          days.add(Number(key.slice(dailyPrefix.length)));
+        }
+      }
+    } catch {}
+    return Math.min(3, days.size);
+  }
+
   function award(id) {
     const mission = dailyMission();
     if (id === mission.id && !mission.done) {
       sessionDays.add(mission.day);
       try { localStorage.setItem(mission.key, '1'); } catch {}
       listeners.forEach(notify => notify('daily-mission'));
+    }
+    if (id === 'fries' && !earned.has('fry-cup')) {
+      try {
+        const savedDay = localStorage.getItem(firstFryDayKey);
+        if (savedDay !== null) firstFryDay = Number(savedDay);
+      } catch {}
+      if (firstFryDay === undefined) {
+        firstFryDay = mission.day;
+        try { localStorage.setItem(firstFryDayKey, String(firstFryDay)); } catch {}
+      } else if (firstFryDay !== mission.day) {
+        award('fry-cup');
+      }
     }
     if (!keys.has(id) || earned.has(id)) return;
     earned.add(id);
@@ -64,5 +92,5 @@ window.momoStickers = (() => {
     link.textContent = language === 'ja' ? '✦ シール帳' : '✦ Sticker Book';
   });
 
-  return { award, dailyMission, has: id => earned.has(id), subscribe: listener => listeners.add(listener) };
+  return { award, dailyMission, missionProgress, has: id => earned.has(id), subscribe: listener => listeners.add(listener) };
 })();
