@@ -220,6 +220,7 @@ body.game-wide { overflow: hidden; }
 #momo-piano-levels .phone.play header .wide-btn { min-height: 40px; padding: 6px 12px; font-size: 13px; }
 body.game-wide #momo-piano-levels .phone.play[data-screen="playing"] { position: fixed; inset: 0; z-index: 80; min-height: 0; border-radius: 0; }
 body.game-wide #momo-piano-levels .piano { margin-top: auto; }
+body.game-wide #momo-piano-levels .piano, body.game-wide #momo-piano-levels .falling-roll { width: min(100%, 640px); margin-inline: auto; }
 body.game-wide #momo-piano-levels .key { height: clamp(120px, 24dvh, 200px); }
 body.game-wide #momo-piano-levels .key.sharp { height: clamp(70px, 13dvh, 110px); }
 body.game-wide #momo-piano-levels .falling-roll { flex: 1; }
