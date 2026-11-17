@@ -641,7 +641,7 @@ body.keys-wide { overflow: hidden; }
 #keys.keys-wide .key-notebook textarea { flex: 1; min-height: 110px; }
 #keys.keys-wide .keycap { font-size: clamp(18px, 4.4vw, 38px); }
 @media (orientation: landscape) and (min-width: 700px) {
-  #keys.keys-wide { display: grid; grid-template-columns: 1.55fr 1fr; grid-template-rows: auto auto 1fr auto; column-gap: 18px; grid-template-areas: "bar bar" "pal note" "case note" "sound note"; }
+  #keys.keys-wide { display: grid; grid-template-columns: 1fr 240px; grid-template-rows: auto auto 1fr auto; column-gap: 18px; grid-template-areas: "bar bar" "pal note" "case note" "sound note"; }
   #keys.keys-wide .keys-bar { grid-area: bar; margin-bottom: 0; }
   #keys.keys-wide > div:nth-of-type(2) { grid-area: pal; }
   #keys.keys-wide .key-case { grid-area: case; margin: 0; align-self: center; }
