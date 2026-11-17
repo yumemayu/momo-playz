@@ -453,6 +453,23 @@ if (one('#keys')) {
       : `<ellipse cx="35" cy="54" rx="4.6" ry="6.2" fill="#3a2e28"/><ellipse cx="65" cy="54" rx="4.6" ry="6.2" fill="#3a2e28"/><circle cx="33.6" cy="51.2" r="1.6" fill="#fff"/><circle cx="63.6" cy="51.2" r="1.6" fill="#fff"/>`;
     return `<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><path d="M14 26 L27 3 L47 19 Z" fill="${f.fur}"/><path d="M86 26 L73 3 L53 19 Z" fill="${f.fur}"/><path d="M20 22 L27 10 L37 17 Z" fill="#f6a8c1"/><path d="M80 22 L73 10 L63 17 Z" fill="#f6a8c1"/><rect x="2" y="12" width="96" height="86" rx="28" fill="${f.fur}"/>${deco}${muzzle}<ellipse cx="20" cy="66" rx="5.5" ry="2.8" fill="#ffb7c9" opacity=".75"/><ellipse cx="80" cy="66" rx="5.5" ry="2.8" fill="#ffb7c9" opacity=".75"/>${eyes}<path d="M46.5 63.5 h7 l-3.5 4 Z" fill="#f28bb4"/><path d="M50 68 q-3.5 4.5 -8 2.5 M50 68 q3.5 4.5 8 2.5" stroke="#3a2e28" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M20 60 L4 55 M20 67 L4 68 M80 60 L96 55 M80 67 L96 68" stroke="${whisker}" stroke-width="1.8" stroke-linecap="round"/></svg>`;
   }
+  // Puppy theme gets dogs, not cats: floppy ears, a big snout, a tongue.
+  const dogFaces = [
+    { id: 'gold', fur: '#f2b25c', dark: '#c97e35', pattern: 'plain' },
+    { id: 'choc', fur: '#8a5a3b', dark: '#66402a', pattern: 'plain' },
+    { id: 'patc', fur: '#fff6ea', dark: '#8a5a3b', pattern: 'patch' },
+    { id: 'dalm', fur: '#fdfdf8', dark: '#4a4443', pattern: 'spots' },
+    { id: 'gray', fur: '#bdb5b0', dark: '#8d837c', pattern: 'plain' },
+    { id: 'crem', fur: '#ffe8c9', dark: '#d9a05f', pattern: 'patch' },
+    { id: 'pink', fur: '#ffd9e2', dark: '#d98aa5', pattern: 'plain' },
+    { id: 'tanp', fur: '#e8c39a', dark: '#a5713d', pattern: 'spots' },
+  ];
+  function dogSVG(f) {
+    let deco = '';
+    if (f.pattern === 'patch') deco = `<ellipse cx="35" cy="47" rx="15" ry="17" fill="${f.dark}"/>`;
+    if (f.pattern === 'spots') deco = `<circle cx="70" cy="30" r="6" fill="${f.dark}"/><circle cx="24" cy="70" r="5" fill="${f.dark}"/><circle cx="76" cy="76" r="4.5" fill="${f.dark}"/><circle cx="58" cy="20" r="4" fill="${f.dark}"/>`;
+    return `<svg viewBox="0 0 100 100" aria-hidden="true" focusable="false"><ellipse cx="15" cy="48" rx="11" ry="27" fill="${f.dark}" transform="rotate(7 15 48)"/><ellipse cx="85" cy="48" rx="11" ry="27" fill="${f.dark}" transform="rotate(-7 85 48)"/><rect x="16" y="12" width="68" height="80" rx="31" fill="${f.fur}"/>${deco}<ellipse cx="50" cy="71" rx="24" ry="16.5" fill="#fff8ee"/><ellipse cx="35" cy="50" rx="4.8" ry="6" fill="#3a2e28"/><ellipse cx="65" cy="50" rx="4.8" ry="6" fill="#3a2e28"/><circle cx="33.6" cy="47.2" r="1.6" fill="#fff"/><circle cx="63.6" cy="47.2" r="1.6" fill="#fff"/><ellipse cx="22" cy="63" rx="5.5" ry="2.8" fill="#ffb7c9" opacity=".75"/><ellipse cx="78" cy="63" rx="5.5" ry="2.8" fill="#ffb7c9" opacity=".75"/><ellipse cx="50" cy="63" rx="8.5" ry="6" fill="#4a3436"/><path d="M50 69 v4 M50 73 q-4 4 -9 1.5 M50 73 q4 4 9 1.5" stroke="#3a2e28" stroke-width="2" fill="none" stroke-linecap="round"/><path d="M44.5 76.5 h11 v3.5 a5.5 5 0 0 1 -11 0 Z" fill="#f28bb4"/></svg>`;
+  }
   const keyByLetter = new Map();
   const notebook = one('#key-note');
   const noteStorage = 'momo:toy-box:note';
@@ -672,7 +689,7 @@ if (one('#keys')) {
         return arr;
       };
       const spots = shuffle([...Array(26).keys()]);
-      const faces = shuffle(catFaces);
+      const faces = shuffle(theme === 'puppy' ? dogFaces : catFaces);
       const faceCount = 7 + Math.floor(Math.random() * 3);
       faceMap = new Map(spots.slice(0, faceCount).map((spot, i) => [spot, faces[i % faces.length]]));
     }
@@ -696,12 +713,11 @@ if (one('#keys')) {
         art.className = theme === 'cat' ? 'cat-face' : 'key-art';
         art.setAttribute('aria-hidden', 'true');
         if (theme === 'cat') {
-          art.textContent = '•ᴗ•';
-          art.style.setProperty('--fur', furs[(index + rowIndex) % furs.length]);
+          art.innerHTML = faceSVG(catFaces[keyIndex % catFaces.length]);
         } else if (faceMap.has(keyIndex)) {
           key.classList.add('face-key');
           art.className = 'face-art';
-          art.innerHTML = faceSVG(faceMap.get(keyIndex));
+          art.innerHTML = (theme === 'puppy' ? dogSVG : faceSVG)(faceMap.get(keyIndex));
         } else {
           art.dataset.art = symbol;
         }
