@@ -1,5 +1,5 @@
 window.momoStickers = (() => {
-  const keys = new Set(['bun-light', 'ribbon', 'puppy', 'fries', 'fry-cup', 'buns', 'cats',
+  const keys = new Set(['bun-light', 'ribbon', 'puppy', 'fries', 'fry-cup', 'buns', 'bun-steamer', 'cats',
     'piano', 'capybara', 'capybara-memory', 'capybara-tap', 'cat-trap',
     'quoridor', 'lights-out', 'flow', 'hit-blow', 'minesweeper', 'hanoi']);
   const prefix = 'momo:stickers:';
@@ -23,8 +23,11 @@ window.momoStickers = (() => {
   ];
   const dailyPrefix = 'momo:mission:';
   const sessionDays = new Set();
-  const firstFryDayKey = 'momo:stickers:first-fry-day';
-  let firstFryDay;
+  const repeatStickers = {
+    fries: { key: 'momo:stickers:first-fry-day', reward: 'fry-cup' },
+    buns: { key: 'momo:stickers:first-bun-day', reward: 'bun-steamer' }
+  };
+  const firstRoundDays = new Map();
 
   function dailyMission(date = new Date()) {
     const day = Date.UTC(date.getFullYear(), date.getMonth(), date.getDate()) / 86400000;
@@ -56,16 +59,18 @@ window.momoStickers = (() => {
       try { localStorage.setItem(mission.key, '1'); } catch {}
       listeners.forEach(notify => notify('daily-mission'));
     }
-    if (id === 'fries' && !earned.has('fry-cup')) {
+    const repeat = repeatStickers[id];
+    if (repeat && !earned.has(repeat.reward)) {
+      let firstDay = firstRoundDays.get(id);
       try {
-        const savedDay = localStorage.getItem(firstFryDayKey);
-        if (savedDay !== null) firstFryDay = Number(savedDay);
+        const savedDay = localStorage.getItem(repeat.key);
+        if (savedDay !== null) firstDay = Number(savedDay);
       } catch {}
-      if (firstFryDay === undefined) {
-        firstFryDay = mission.day;
-        try { localStorage.setItem(firstFryDayKey, String(firstFryDay)); } catch {}
-      } else if (firstFryDay !== mission.day) {
-        award('fry-cup');
+      if (firstDay === undefined) {
+        firstRoundDays.set(id, mission.day);
+        try { localStorage.setItem(repeat.key, String(mission.day)); } catch {}
+      } else if (firstDay !== mission.day) {
+        award(repeat.reward);
       }
     }
     if (!keys.has(id) || earned.has(id)) return;
