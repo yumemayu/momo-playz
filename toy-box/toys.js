@@ -724,7 +724,11 @@ if (one('#keys')) {
   renderKeys('choco');
   const spaceKey = one('.space');
   spaceKey.addEventListener('click', () => pressKeycap(spaceKey, 26, ' '));
-  all('.symbol-key').forEach((key, i) => key.addEventListener('click', () => pressKeycap(key, 30 + i, key.dataset.glyph)));
+  const symbolByGlyph = new Map();
+  all('.symbol-key').forEach((key, i) => {
+    symbolByGlyph.set(key.dataset.glyph, key);
+    key.addEventListener('click', () => pressKeycap(key, 30 + i, key.dataset.glyph));
+  });
   document.addEventListener('keydown', event => {
     if (event.repeat || event.altKey || event.metaKey || event.ctrlKey || event.target.closest('input, textarea, select, [contenteditable], [data-nickname-panel]')) return;
     if (event.key === 'Backspace') {
@@ -733,7 +737,9 @@ if (one('#keys')) {
       return;
     }
     if (event.code === 'Space' && event.target.closest('button:not(.keycap), a')) return;
-    const key = event.code === 'Space' ? spaceKey : keyByLetter.get(event.key.toUpperCase());
+    const key = event.code === 'Space' ? spaceKey
+      : keyByLetter.get(event.key.toUpperCase())
+      || symbolByGlyph.get(event.key === '!' ? '！' : event.key === '?' ? '？' : event.key);
     if (!key) return;
     event.preventDefault();
     key.classList.add('pressed');
