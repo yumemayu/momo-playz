@@ -10,6 +10,7 @@ const stickerCatalog = [
   ['fries', '🍟', 'Fry Catch', 'フライキャッチ'],
   ['fry-cup', '', 'Red fry cup', 'あかいポテトカップ', 'Finish a round on two different days', 'フライキャッチを別の日にもう一度、最後まで遊ぶ'],
   ['buns', '🥟', 'Smiley Bun Catch', 'にこにこ肉まんキャッチ'],
+  ['bun-steamer', '🧺', 'Bamboo steamer', 'せいろのシール', 'Finish Smiley Bun Catch on two different days', '肉まんキャッチを別の日にもう一度、最後まで遊ぶ'],
   ['cats', '🐱', 'Find the Glasses Cat', 'メガネ猫さがし'],
   ['piano', '🎹', 'Momo Piano', 'Momoピアノ', 'Finish a song', '１曲最後まで弾く'],
   ['capybara', '♨️', 'Capybara Onsen Merge', 'カピバラ温泉マージ'],
@@ -35,7 +36,7 @@ function stickerEntry([id, icon, en, ja, taskEn = 'Finish a round', taskJa = '�
   disc.className = 'sticker-disc';
   const svg = window.momoStickerArt?.[id];
   if (svg) disc.innerHTML = svg;
-  else disc.textContent = earned ? icon : '✧';
+  else disc.textContent = earned || id === 'bun-steamer' ? icon : '✧';
   art.append(disc);
   const title = document.createElement('strong');
   title.textContent = copy(en, ja);
