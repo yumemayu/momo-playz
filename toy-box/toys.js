@@ -697,3 +697,24 @@ if (one('#keys')) {
   window.addEventListener('pageshow', renderDailyStickers);
   renderDailyStickers();
 })();
+
+// Clicky Keys wide mode: fill the screen with the keyboard and notebook.
+(() => {
+  const button = document.querySelector('#keys-wide');
+  const section = document.querySelector('#keys');
+  if (!button || !section) return;
+  const render = () => {
+    const wide = section.classList.contains('keys-wide');
+    button.textContent = typeof momoLanguage !== 'undefined'
+      ? momoLanguage.pick(wide ? '\u2715 Close' : '\u26f6 Bigger', wide ? '\u2715 \u3082\u3069\u3059' : '\u26f6 \u304a\u304a\u304d\u304f')
+      : (wide ? '\u2715 Close' : '\u26f6 Bigger');
+    button.setAttribute('aria-pressed', String(wide));
+  };
+  button.addEventListener('click', () => {
+    const wide = section.classList.toggle('keys-wide');
+    document.body.classList.toggle('keys-wide', wide);
+    render();
+  });
+  if (typeof momoLanguage !== 'undefined') momoLanguage.subscribe(render);
+  render();
+})();
