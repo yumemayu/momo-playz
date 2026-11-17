@@ -216,3 +216,6 @@ h1 { margin: 0; font-size: clamp(1.2rem, 4vw, 1.8rem); }
   .game-title-banner { aspect-ratio: auto; height: 118px; max-width: 620px; margin-inline: auto; }
   .court { height: clamp(320px, calc(100dvh - 215px), 760px); }
 }
+
+body[data-game="dodgeball"] main { display: block; max-width: 920px; padding: 12px; }
+.home-link { display: inline-block; margin: 0 0 8px; padding: 8px 4px; color: #684974; font-weight: 700; }
