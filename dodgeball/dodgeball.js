@@ -87,10 +87,16 @@
       guide.textContent = say("Cat’s turn! Swipe or tap either side to dodge. Keyboard: ← →.", 'ねこの番！ 横にスワイプ、または左右をタップ。キーなら ← →。');
     } else if (phase === 'between') {
       guide.textContent = dodgeResult === 'safe' ? say('Nice dodge!', 'よけた！') : say('Cat scores!', 'ねこに1点！');
+    } else if (phase === 'finished') {
+      guide.textContent = say('Play again for another round.', 'もういちど押すと、新しいラウンドが始まるよ。');
     } else {
-      guide.textContent = mode === 'match'
-        ? say('Your turn! Drag to aim — let go to throw!', 'きみの番！ ドラッグでねらって、はなして投げよう！')
-        : say('Drag anywhere to aim — let go to throw! A tap on the ball throws it straight.', 'コートをドラッグでねらって、はなすと投げる！ボールをタップでまっすぐ投げるよ。');
+      guide.textContent = say(
+        'Click the court where you want to throw. Keyboard: focus the ball, use ← → to aim, and press Space to throw.',
+        'ねらう場所をコートでクリック。キーボードはボールを選んで ← → でねらい、スペースで投げる。'
+      );
+      if (matchMedia('(pointer: coarse)').matches) {
+        guide.textContent = say('Tap the court to throw there, or drag to aim and release to throw.', 'コートをタップして投げよう。ドラッグでねらって、はなしても投げられるよ。');
+      }
     }
   }
 
@@ -147,6 +153,7 @@
 
   async function throwBall(position) {
     if (busy || thrown >= total) return;
+    if (thrown === 0) gameScores.start(mode);
     busy = true;
     modeButtons.forEach(button => { button.disabled = true; });
     ball.setAttribute('aria-disabled', 'true');
@@ -215,6 +222,8 @@
     ball.removeAttribute('aria-disabled');
     if (thrown === total || (mode === 'match' && Math.max(hits, catHits) >= winningScore)) {
       phase = 'finished';
+      gameScores.finish(hits, true);
+      renderGuide();
       ball.hidden = true;
       showResults();
       finish.hidden = false;
@@ -336,6 +345,8 @@
     if (mode === button.dataset.mode) return;
     mode = button.dataset.mode;
     modeButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+    if (thrown > 0 && phase !== 'finished') gameScores.finish(hits, false);
+    gameScores.showLevel(mode);
     resetRound();
   }));
   retry.addEventListener('click', resetRound);
