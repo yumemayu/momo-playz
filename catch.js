@@ -64,6 +64,7 @@ let score = 0;
 let startTime = null;
 let previous = 0;
 let nextSpawn = 0;
+let rareBunAt = Infinity;
 let dragId = null;
 let axisX = 1;
 let axisY = 1;
@@ -73,56 +74,219 @@ function move(position) {
 }
 
 function drawBun(bun) {
+  const rare = Boolean(bun.rare);
+  const devil = !bun.smiles;
   ctx.save();
   ctx.translate(bun.x, bun.y);
   ctx.rotate(bun.tilt * .5);
-  ctx.scale(axisY / axisX, 1);
-  const dough = ctx.createLinearGradient(0, -18, 0, 15);
-  dough.addColorStop(0, bun.smiles ? '#fff9e8' : '#f9c7ed');
-  dough.addColorStop(1, bun.smiles ? '#f0ca9e' : '#be79b4');
-  ctx.fillStyle = dough;
-  ctx.strokeStyle = '#a66951';
-  ctx.lineWidth = 1.5;
-  ctx.beginPath();
-  ctx.moveTo(0, -16);
-  ctx.bezierCurveTo(-9, -17, -24, -6, -23, 5);
-  ctx.bezierCurveTo(-22, 19, 22, 19, 23, 5);
-  ctx.bezierCurveTo(24, -6, 9, -17, 0, -16);
-  ctx.fill();
-  ctx.stroke();
-  ctx.beginPath();
-  ctx.moveTo(-6, -14);
-  ctx.quadraticCurveTo(-10, -9, -13, -8);
-  ctx.moveTo(0, -15);
-  ctx.quadraticCurveTo(4, -11, 3, -8);
-  ctx.moveTo(6, -14);
-  ctx.quadraticCurveTo(12, -12, 14, -7);
-  ctx.stroke();
-  if (bun.smiles) {
-    ctx.fillStyle = '#502c42';
-    for (const eye of [-7, 7]) {
-      ctx.beginPath();
-      ctx.arc(eye, 1, 2, 0, 2 * Math.PI);
-      ctx.fill();
-    }
-    ctx.beginPath();
-    ctx.arc(0, 3, 4, 0, Math.PI);
-    ctx.stroke();
-    ctx.fillStyle = '#ed9fa9';
-    ctx.fillRect(-14, 5, 5, 2);
-    ctx.fillRect(9, 5, 5, 2);
-  } else {
-    ctx.fillStyle = '#85457f';
+  ctx.scale(axisY / axisX * (bun.sink ?? 1), bun.sink ?? 1);
+  ctx.lineJoin = 'round';
+  ctx.lineCap = 'round';
+
+  if (devil) {
+    ctx.fillStyle = '#ab83ce';
+    ctx.strokeStyle = '#784e9b';
+    ctx.lineWidth = 1.4;
     for (const side of [-1, 1]) {
       ctx.beginPath();
-      ctx.moveTo(side * 10, -12);
-      ctx.lineTo(side * 17, -25);
-      ctx.quadraticCurveTo(side * 22, -20, side * 20, -7);
+      ctx.moveTo(side * 10, -10);
+      ctx.quadraticCurveTo(side * 15, -24, side * 18, -22);
+      ctx.quadraticCurveTo(side * 22, -18, side * 21, -8);
+      ctx.closePath();
       ctx.fill();
+      ctx.stroke();
     }
-    ctx.fillStyle = '#502c42';
-    ctx.fillRect(-9, 1, 5, 3);
-    ctx.fillRect(4, 1, 5, 3);
+  }
+
+  const dough = ctx.createRadialGradient(-8, -10, 2, 0, 3, 27);
+  dough.addColorStop(0, rare ? '#efffff' : devil ? '#f8e3ff' : '#fffef6');
+  dough.addColorStop(.54, rare ? '#a7e8f2' : devil ? '#cfade8' : '#fff4da');
+  dough.addColorStop(1, rare ? '#9f84dd' : devil ? '#a77aca' : '#e9c29a');
+  ctx.fillStyle = dough;
+  ctx.strokeStyle = rare ? '#6486b9' : devil ? '#784e9b' : '#ae7959';
+  ctx.lineWidth = 1.4;
+  ctx.beginPath();
+  ctx.moveTo(0, -17);
+  ctx.bezierCurveTo(-12, -18, -26, -7, -23, 6);
+  ctx.bezierCurveTo(-20, 20, 20, 20, 23, 6);
+  ctx.bezierCurveTo(26, -7, 12, -18, 0, -17);
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+
+  ctx.strokeStyle = rare ? '#edfaff' : devil ? '#a77ac7' : '#dfc6a5';
+  ctx.lineWidth = 1.25;
+  for (const end of [-13, -5, 5, 13]) {
+    ctx.beginPath();
+    ctx.moveTo(end * .19, -14.5);
+    ctx.quadraticCurveTo(end * .67, -13, end, -9);
+    ctx.stroke();
+  }
+
+  if (rare) {
+    const glitter = [[-16,-3],[-13,-8],[-7,-6],[2,-9],[9,-7],[15,-3],[18,2],[-16,8],[-5,11],[4,12],[12,9]];
+    glitter.forEach(([x, y], index) => {
+      ctx.fillStyle = ['#fffceb', '#ffd9f5', '#cafff2'][index % 3];
+      ctx.beginPath();
+      ctx.arc(x, y, index % 3 === 0 ? 1.25 : .7, 0, Math.PI * 2);
+      ctx.fill();
+    });
+    ctx.fillStyle = '#fff9df';
+    ctx.font = '12px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.fillText('✦', -23, -10);
+    ctx.fillText('✧', 22, -15);
+  }
+
+  ctx.fillStyle = '#482c45';
+  for (const x of [-7, 7]) {
+    ctx.beginPath();
+    ctx.ellipse(x, 1, 2.3, devil ? 1.7 : 2.8, 0, 0, Math.PI * 2);
+    ctx.fill();
+    if (!devil) {
+      ctx.fillStyle = '#fff';
+      ctx.beginPath();
+      ctx.arc(x - .65, .1, .8, 0, Math.PI * 2);
+      ctx.fill();
+      ctx.fillStyle = '#482c45';
+    }
+  }
+  ctx.strokeStyle = '#482c45';
+  ctx.beginPath();
+  ctx.moveTo(-3.8, 5);
+  ctx.quadraticCurveTo(devil ? 3 : 0, devil ? 5 : 11, 3.8, 4.6);
+  ctx.stroke();
+  ctx.fillStyle = '#ee9fab';
+  for (const x of [-13, 13]) {
+    ctx.beginPath();
+    ctx.ellipse(x, 5.7, 3, 1.45, 0, 0, Math.PI * 2);
+    ctx.fill();
+  }
+  ctx.restore();
+}
+
+function drawFry(fry) {
+  ctx.save();
+  ctx.translate(fry.x, fry.y);
+  ctx.rotate(fry.tilt);
+  ctx.scale(axisY / axisX, fry.stretch);
+  const crust = ctx.createLinearGradient(-8, 0, 8, 0);
+  crust.addColorStop(0, '#ffe38a');
+  crust.addColorStop(.48, '#ffcc51');
+  crust.addColorStop(1, '#cf710f');
+  ctx.fillStyle = crust;
+  ctx.strokeStyle = '#a7521d';
+  ctx.lineWidth = 1.2;
+  ctx.beginPath();
+  ctx.moveTo(-6, -17);
+  ctx.quadraticCurveTo(0, -20, 6, -17);
+  for (let y = -17; y < 15; y += 8) {
+    ctx.quadraticCurveTo(10, y + 2, 6, y + 4);
+    ctx.quadraticCurveTo(3, y + 6, 6, y + 8);
+  }
+  ctx.quadraticCurveTo(7, 20, -6, 17);
+  ctx.lineTo(-6, 15);
+  for (let y = 15; y > -17; y -= 8) {
+    ctx.quadraticCurveTo(-3, y - 2, -6, y - 4);
+    ctx.quadraticCurveTo(-10, y - 6, -6, y - 8);
+  }
+  ctx.closePath();
+  ctx.fill();
+  ctx.stroke();
+  ctx.strokeStyle = '#fff0b8';
+  ctx.lineWidth = 1.6;
+  ctx.beginPath();
+  ctx.moveTo(-3, -14);
+  for (let y = -14; y < 10; y += 8) {
+    ctx.bezierCurveTo(-.5, y + 2, -5, y + 6, -3, y + 8);
+  }
+  ctx.stroke();
+  ctx.restore();
+}
+
+const cupHalfWidth = bunMode ? 35 : 30;
+const cupMouthY = 293;
+
+function crossesCup(fry, previousY, previousPlayer) {
+  if (previousY >= cupMouthY || fry.y < cupMouthY) return false;
+  const progress = (cupMouthY - previousY) / (fry.y - previousY);
+  const center = previousPlayer + (player - previousPlayer) * progress;
+  return Math.abs(fry.x - center) <= cupHalfWidth * axisY / axisX;
+}
+
+function drawCup(now) {
+  ctx.save();
+  ctx.translate(player, cupMouthY);
+  ctx.scale(axisY / axisX, 1);
+
+  ctx.fillStyle = bunMode ? '#865235' : '#7f2438';
+  ctx.beginPath();
+  ctx.ellipse(0, 0, cupHalfWidth, 8, 0, 0, Math.PI * 2);
+  ctx.fill();
+  ctx.restore();
+
+  for (const effect of catches) {
+    if (!effect.fry || reducedMotion.matches) continue;
+    const progress = Math.max(0, (now - effect.at) / 135);
+    if (progress >= 1) continue;
+    const item = {
+      ...effect.fry,
+      x: player + effect.offset * (1 - progress),
+      y: cupMouthY + (bunMode ? 19 : 27) * progress,
+      stretch: effect.fry.stretch * (1 - progress),
+      sink: 1 - progress,
+    };
+    if (bunMode) drawBun(item);
+    else drawFry(item);
+  }
+
+  ctx.save();
+  ctx.translate(player, cupMouthY);
+  ctx.scale(axisY / axisX, 1);
+  if (bunMode) {
+    const bamboo = ctx.createLinearGradient(0, 0, 0, 27);
+    bamboo.addColorStop(0, '#ffe2a8');
+    bamboo.addColorStop(.45, '#f2bf79');
+    bamboo.addColorStop(1, '#d8985b');
+    ctx.beginPath();
+    ctx.moveTo(-cupHalfWidth, 0);
+    ctx.quadraticCurveTo(0, 15, cupHalfWidth, 0);
+    ctx.lineTo(32, 19);
+    ctx.quadraticCurveTo(0, 32, -32, 19);
+    ctx.closePath();
+    ctx.fillStyle = bamboo;
+    ctx.fill();
+    ctx.strokeStyle = '#a26945';
+    ctx.lineWidth = 1.6;
+    ctx.stroke();
+    ctx.beginPath();
+    ctx.moveTo(-33, 10);
+    ctx.quadraticCurveTo(0, 24, 33, 10);
+    ctx.stroke();
+    ctx.restore();
+    return;
+  }
+
+  const paper = ctx.createLinearGradient(-30, 0, 30, 32);
+  paper.addColorStop(0, '#f45e6b');
+  paper.addColorStop(1, '#ce324f');
+  ctx.beginPath();
+  ctx.moveTo(-cupHalfWidth, 0);
+  ctx.quadraticCurveTo(0, 13, cupHalfWidth, 0);
+  ctx.lineTo(23, 32);
+  ctx.quadraticCurveTo(0, 39, -23, 32);
+  ctx.closePath();
+  ctx.fillStyle = paper;
+  ctx.fill();
+  ctx.lineWidth = 1.5;
+  ctx.strokeStyle = '#a82b48';
+  ctx.stroke();
+
+  ctx.fillStyle = '#ffe6a3';
+  for (let row = 0; row < 2; row++) {
+    for (let column = 0; column < 8; column++) {
+      if ((row + column) % 2 === 0) ctx.fillRect(-20 + column * 5, 23 + row * 5, 5, 5);
+    }
   }
   ctx.restore();
 }
@@ -154,57 +318,22 @@ function draw() {
       drawBun(fry);
       continue;
     }
-    ctx.save();
-    ctx.translate(fry.x, fry.y);
-    ctx.rotate(fry.tilt);
-    ctx.scale(axisY / axisX, fry.stretch);
-    const crust = ctx.createLinearGradient(-8, 0, 8, 0);
-    crust.addColorStop(0, '#ffe38a');
-    crust.addColorStop(.48, '#ffcc51');
-    crust.addColorStop(1, '#cf710f');
-    ctx.fillStyle = crust;
-    ctx.strokeStyle = '#a7521d';
-    ctx.lineWidth = 1.2;
-    ctx.beginPath();
-    ctx.moveTo(-6, -17);
-    ctx.quadraticCurveTo(0, -20, 6, -17);
-    for (let y = -17; y < 15; y += 8) {
-      ctx.quadraticCurveTo(10, y + 2, 6, y + 4);
-      ctx.quadraticCurveTo(3, y + 6, 6, y + 8);
-    }
-    ctx.quadraticCurveTo(7, 20, -6, 17);
-    ctx.lineTo(-6, 15);
-    for (let y = 15; y > -17; y -= 8) {
-      ctx.quadraticCurveTo(-3, y - 2, -6, y - 4);
-      ctx.quadraticCurveTo(-10, y - 6, -6, y - 8);
-    }
-    ctx.closePath();
-    ctx.fill();
-    ctx.stroke();
-    ctx.strokeStyle = '#fff0b8';
-    ctx.lineWidth = 1.6;
-    ctx.beginPath();
-    ctx.moveTo(-3, -14);
-    for (let y = -14; y < 10; y += 8) {
-      ctx.bezierCurveTo(-.5, y + 2, -5, y + 6, -3, y + 8);
-    }
-    ctx.stroke();
-    ctx.restore();
+    drawFry(fry);
   }
   if (squirrel.complete && squirrel.naturalWidth) {
     const latest = catches.at(-1);
     const age = latest ? performance.now() - latest.at : Infinity;
     const shake = !reducedMotion.matches && latest?.label === '−1' && age < 260
       ? Math.sin(age / 12) * 5 * (1 - age / 260) : 0;
-    const hop = !reducedMotion.matches && latest?.label !== '−1' && age < 260 ? Math.sin(Math.PI * age / 260) * 14 : 0;
     // The canvas fills a responsive rectangle, so its two axes may scale differently.
     const size = squirrelSize * Math.min(axisX, axisY);
     const spriteWidth = size / axisX;
     const spriteHeight = size / axisY;
-    ctx.drawImage(squirrel, player + shake - spriteWidth / 2, 334 - spriteHeight - hop, spriteWidth, spriteHeight);
+    ctx.drawImage(squirrel, player + shake - spriteWidth / 2, 334 - spriteHeight, spriteWidth, spriteHeight);
   }
   const now = performance.now();
   catches = catches.filter(catchEffect => now - catchEffect.at < 600);
+  drawCup(now);
   for (const effect of catches) {
     const progress = Math.max(0, (now - effect.at) / 600);
     const spread = reducedMotion.matches ? 0 : 35 * progress;
@@ -217,13 +346,15 @@ function draw() {
     ctx.lineWidth = 4;
     ctx.strokeStyle = '#fff';
     ctx.fillStyle = '#a7195b';
-    ctx.strokeText(effect.label, effect.x * axisX / axisY, 199 - spread);
-    ctx.fillText(effect.label, effect.x * axisX / axisY, 199 - spread);
-    if (effect.label === "+1" && !reducedMotion.matches) {
+    const labelY = cupMouthY - 30;
+    ctx.strokeText(effect.label, effect.x * axisX / axisY, labelY - spread);
+    ctx.fillText(effect.label, effect.x * axisX / axisY, labelY - spread);
+    if ((effect.label === "+1" || effect.label === "+5") && !reducedMotion.matches) {
       ctx.fillStyle = '#d98711';
       ctx.font = '19px sans-serif';
-      ctx.fillText('✦', (effect.x - 19 - spread / 2) * axisX / axisY, 208 - spread);
-      ctx.fillText('✧', (effect.x + 20 + spread / 2) * axisX / axisY, 203 - spread / 2);
+      ctx.fillText('✦', (effect.x - 19 - spread / 2) * axisX / axisY, labelY + 9 - spread);
+      ctx.fillText('✧', (effect.x + 20 + spread / 2) * axisX / axisY, labelY + 4 - spread / 2);
+      if (effect.label === '+5') ctx.fillText('✦', effect.x * axisX / axisY, labelY - 26 - spread);
     }
     ctx.restore();
   }
@@ -243,30 +374,38 @@ function step(now) {
     return;
   }
   const direction = Number(keys.has('ArrowRight')) - Number(keys.has('ArrowLeft'));
+  const previousPlayer = player;
   move(player + (held || direction) * 270 * dt);
   if (practicing && fries.length === 0) {
     fries.push({ x: width / 2, y: 80, tilt: .15, stretch: 1, smiles: true });
   } else if (!practicing && elapsed >= nextSpawn) {
-    fries.push({ x: 22 + Math.random() * (width - 44), y: -14, tilt: Math.random() - .5, stretch: .8 + Math.random() * .4, smiles: !bunMode || Math.random() < .67 });
+    const rare = bunMode && elapsed >= rareBunAt;
+    if (rare) rareBunAt = Infinity;
+    fries.push({ x: 22 + Math.random() * (width - 44), y: bunMode ? -24 : -14, tilt: Math.random() - .5, stretch: .8 + Math.random() * .4, rare, smiles: rare || !bunMode || Math.random() < .67 });
     nextSpawn = elapsed + Math.max(level.interval * .55, level.interval - elapsed / 90);
   }
   fries = fries.filter(fry => {
+    const previousY = fry.y;
     fry.y += (practicing ? 95 : level.speed + elapsed * level.acceleration) * dt;
-    if (fry.y >= 278 && fry.y <= 329 && Math.abs(player - fry.x) < squirrelSize * .39) {
+    if (crossesCup(fry, previousY, previousPlayer)) {
+      const halfWidth = cupHalfWidth * axisY / axisX;
+      const offset = Math.max(-halfWidth, Math.min(halfWidth, fry.x - player));
+      const effect = { x: player, at: now, fry, offset };
       if (practicing) {
         practicing = false;
         practiced = true;
         startTime = now;
         result.textContent = L('You got it! Go!', 'つかまえた！ そのちょうし！');
-        catches.push({ x: player, at: now, label: '✓' });
+        catches.push({ ...effect, label: '✓' });
         return false;
       }
-      score += fry.smiles ? 1 : -1;
+      const points = fry.rare ? 5 : fry.smiles ? 1 : -1;
+      score += points;
       scoreOutput.value = score;
-      catches.push({ x: player, at: now, label: fry.smiles ? '+1' : '−1' });
+      catches.push({ ...effect, label: points > 0 ? '+' + points : '−1' });
       return false;
     }
-    return fry.y < 332;
+    return fry.y < height + (bunMode ? 25 : 23);
   });
   draw();
   requestAnimationFrame(step);
@@ -298,6 +437,7 @@ startButton.addEventListener('click', () => {
   scoreOutput.value = score = 0;
   timeOutput.value = duration;
   nextSpawn = 0;
+  rareBunAt = bunMode ? 8 + Math.random() * 7 : Infinity;
   startTime = previous = performance.now();
   startButton.textContent = L('Playing…', 'プレイ中…');
   startButton.disabled = true;
@@ -306,7 +446,7 @@ startButton.addEventListener('click', () => {
   difficultyButtons.forEach(button => { button.disabled = true; });
   music.currentTime = 0;
   playMusic();
-  result.textContent = bunMode ? L('Catch the smiling buns! Dodge the Devil Buns!', 'にこにこ肉まんを つかまえて！ デビル肉まんは よけて！') : practicing ? L('Catch this fry to start!', 'このフライを つかまえて スタート！') : L('Here come the fries!', 'フライが きたよ！');
+  result.textContent = bunMode ? L('The steamer catches smiling buns +1 and glitter buns +5. Avoid devil buns −1!', 'せいろでキャッチ！ にこにこ +1、キラキラ +5。デビル −1 はよけてね！') : practicing ? L('Catch this fry to start!', 'このフライを つかまえて スタート！') : L('Here come the fries!', 'フライが きたよ！');
   requestAnimationFrame(step);
 });
 
