@@ -123,3 +123,9 @@ body.fever #clock{color:#d3382c}
 .waiting-sign::before{left:22%;transform:rotate(10deg)}
 .waiting-sign::after{right:22%;transform:rotate(-10deg)}
 @media(max-width:600px){.waiting-sign{font-size:19px;padding:14px 22px}}
+@keyframes purupuru{0%,100%{transform:scale(1,1)}25%{transform:scale(1.07,.9)}50%{transform:scale(.96,1.06)}75%{transform:scale(1.03,.97)}}
+#shop.is-waiting .menu-bun img{animation:purupuru 1.5s ease-in-out infinite;transform-origin:50% 100%}
+#shop.is-waiting .menu-bun:nth-child(2) img{animation-delay:.18s}
+#shop.is-waiting .menu-bun:nth-child(3) img{animation-delay:.36s}
+#shop.is-waiting .menu-bun:nth-child(4) img{animation-delay:.54s}
+@media (prefers-reduced-motion: reduce){#shop.is-waiting .menu-bun img{animation:none}}

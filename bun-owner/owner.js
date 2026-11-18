@@ -47,6 +47,7 @@ function guests(){
  if(playing()&&state?.phase==='open'&&!state.guests.length){const sign=el('div','waiting-sign',pick('Waiting for the next guest…','次のお客さんを待っています…'));sign.setAttribute('aria-hidden','true');list.append(sign);}
 }
 function status(){
+ $('shop').classList.toggle('is-waiting',playing()&&!!state&&state.phase==='open'&&!state.guests.length);
  $('coins').textContent=state?.coins||0;$('served').textContent=state?.served||0;
  $('clock').textContent=mode==='relaxed'?pick('No rush','のんびり'):state?.phase==='closing'?pick('Last orders','さいごの注文'):pick('Time ','あと ')+Math.max(0,Math.ceil(90-(state?.elapsed||0)))+pick('s','秒');
  const streakNow=state?.streak||0,comboPill=$('combo');if(comboPill){const showCombo=!!playing()&&streakNow>=2;comboPill.hidden=!showCombo;if(showCombo){const label='🔥 '+streakNow+pick(' combo!',' れんぞく！');if(comboPill.textContent!==label){comboPill.textContent=label;animate(comboPill,[{transform:'scale(1.3)'},{transform:'scale(1)'}],{duration:220});}}}
