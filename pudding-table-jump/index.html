@@ -1,0 +1,60 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title data-en-title="Pudding Table Jump | Momo Playz">プリンのテーブルジャンプ | Momo Playz</title>
+<meta name="description" content="Hold and release to help a wobbly pudding hop across the plates in this free browser game.">
+<link rel="stylesheet" href="../game.css?v=level-cards">
+<link rel="stylesheet" href="../language.css">
+<link rel="stylesheet" href="../nickname.css">
+<link rel="stylesheet" href="../game-picker.css">
+<link rel="stylesheet" href="../game-title-banner.css">
+<link rel="stylesheet" href="pudding.css">
+<script defer src="../language.js"></script>
+<script defer src="../nickname.js"></script>
+<script defer src="../stickers.js?v=daily-stickers"></script>
+<script defer src="../scores.js?v=shared-nickname"></script>
+<script defer src="pudding.js"></script>
+</head>
+<body data-game="pudding-table-jump">
+<main class="pudding-main">
+  <header class="game-heading game-title-banner">
+    <span class="game-title-rainbow" aria-hidden="true">🌈</span><span class="game-title-art" aria-hidden="true"></span>
+    <h1 data-ja="プリンのテーブルジャンプ">Pudding Table Jump</h1>
+  </header>
+  <div class="game-card" id="ready-card">
+    <strong data-ja="はじめよう！">Ready to play?</strong>
+    <div class="player-setup">
+      <label for="nickname" data-ja="ニックネーム（任意）">Nickname (optional)</label>
+      <input id="nickname" maxlength="20" autocomplete="off" placeholder="e.g. Mochi" data-ja-placeholder="例：もち" aria-describedby="player-hint">
+      <small id="player-hint" data-ja="ニックネームを入れて全3ステージをクリアすると、ランキングに載るよ。">Enter a nickname and clear all 3 stages to join the leaderboard.</small>
+    </div>
+  </div>
+  <div class="pudding-toolbar"><strong id="stage"></strong><button id="sound" type="button" aria-label="Sound" aria-pressed="false">🔇</button></div>
+  <div class="scene" id="scene" aria-hidden="true"><div class="window"></div><div id="plates"></div><span id="target" class="target-marker" hidden></span><canvas id="arc"></canvas><div class="pudding" id="pudding"><div class="body" id="body"><div class="caramel"></div><div class="face"><b>·</b> •ᴗ• <b>·</b></div></div></div></div>
+  <div class="pudding-controls">
+    <div id="scoreline"><span id="score"></span><span id="combo"></span></div>
+    <progress id="power" max="1" value="0" aria-label="Jump power"></progress>
+    <button class="play-primary" id="jump" type="button">Hold to jump</button>
+    <p id="message" role="status"></p>
+  </div>
+  <div class="game-card" id="score-card" hidden><strong id="final-score"></strong><p></p></div>
+  <button type="button" id="change-player" class="change-player" data-ja="ニックネームをかえる" hidden>Change nickname</button>
+  <section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><span aria-hidden="true">🍮</span> <span data-ja="リーダーボード">Leaderboard</span></h2>
+      <div class="score-period" role="group" aria-label="Ranking period" data-ja-label="ランキングの期間">
+        <button type="button" data-period="weekly" aria-pressed="true" data-ja="今週">This week</button>
+        <button type="button" data-period="all" aria-pressed="false" data-ja="すべて">All time</button>
+      </div>
+    </div>
+    <ol id="score-list"></ol><p class="personal-best" id="personal-best"></p>
+  </section>
+  <nav class="game-picker" aria-label="Choose a game" data-ja-label="ゲームをえらぶ">
+    <a href="../" data-ja="ゲーム一覧">All games</a>
+  </nav>
+</main>
+<footer class="feedback"><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a><small>Copyright Momo.squirrels</small></footer>
+</body>
+</html>
