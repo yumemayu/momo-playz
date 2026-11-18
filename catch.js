@@ -452,7 +452,7 @@ function draw() {
     const size = squirrelSize * Math.min(axisX, axisY);
     const spriteWidth = size / axisX;
     const spriteHeight = size / axisY;
-    ctx.drawImage(squirrel, player + shake - spriteWidth * (1 + bounce * .035) / 2, 334 - spriteHeight - bounce * 4, spriteWidth * (1 + bounce * .035), spriteHeight);
+    ctx.drawImage(squirrel, player + shake - spriteWidth * (1 + bounce * .035) / 2 + (bunMode ? -spriteWidth * .11 : 0), 334 - spriteHeight - bounce * 4, spriteWidth * (1 + bounce * .035), spriteHeight);
   }
   const now = performance.now();
   catches = catches.filter(catchEffect => now - catchEffect.at < 600);
