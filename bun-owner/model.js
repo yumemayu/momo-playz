@@ -30,7 +30,7 @@ function arrival(s){
  s.guests.push(g);if(!s.selected)s.selected=g.id;return g;
 }
 function create(mode='rush',day=0,random=Math.random){
- const s={mode,phase:'open',elapsed:0,coins:0,served:0,left:0,perfect:0,streak:0,bestStreak:0,generated:0,selected:null,guests:[],nextArrival:12,sequence:sequence(day),random};
+ const s={mode,phase:'open',elapsed:0,coins:0,served:0,left:0,perfect:0,streak:0,bestStreak:0,generated:0,selected:null,guests:[],nextArrival:5,sequence:sequence(day),random};
  arrival(s);return s;
 }
 const waiting=(s,id=s.selected)=>s.guests.find(g=>g.id===id&&g.status==='waiting');
@@ -70,7 +70,7 @@ function advance(s,seconds){
   if(s.phase==='open'){
    if(s.mode==='relaxed'&&!s.guests.length&&s.generated<6){arrival(s);arrivals++;changed=true;}
    if(s.mode==='rush'&&s.elapsed>=s.nextArrival&&s.elapsed<90&&s.guests.length<capacity(s)){
-    arrival(s);s.nextArrival=s.elapsed+(s.elapsed<45?11:8);arrivals++;changed=true;
+    arrival(s);s.nextArrival=s.elapsed+(s.elapsed<45?7:5);arrivals++;changed=true;
    }
   }
   if((s.phase==='closing'||(s.mode==='relaxed'&&s.generated>=6))&&!s.guests.length){s.phase='closed';changed=true;}
