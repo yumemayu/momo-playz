@@ -54,7 +54,7 @@
       }else{puzzle=puzzles[round];resetPuzzle();prompt();}
     });next.focus({preventScroll:true});
   }
-  function prompt(){status(drawing?say('Choose a start. Use every line once. Tap or slide.','はじめの点をえらぼう。すべての線を1回ずつ。タップでもなぞってもOK。'):say('Choose the solid that fits, without turning it.','むきをかえずに とおれる立体をえらぼう。'));}
+  function prompt(){status(state.node!==null?say('Continue from the yellow point. Lift and continue any time.','黄色い点から つづきをかこう。指をはなしても つづけられるよ。'):say('Choose a start. Use every line once. Tap or slide.','はじめの点をえらぼう。すべての線を1回ずつ。タップでもなぞってもOK。'));}
   function accept(edge,keepCanvas=false){
     if(!playing||busy)return false;
     const next=M.trace(puzzle,state,edge);
@@ -102,7 +102,8 @@
         accept(step.edge,true);
         if(busy)break;
       }
-      svg.querySelectorAll('.stroke-node').forEach((dot,i)=>{dot.classList.toggle('current',i===state.node);dot.setAttribute('r',i===state.node?10:6);});
+      svg.querySelectorAll('.stroke-node').forEach((dot,i)=>{const current=i===state.node&&!result.progress;dot.classList.toggle('current',current);dot.setAttribute('r',current?10:6);});
+      if(state.node!==null){svg.querySelectorAll('.start-hint').forEach(h=>h.remove());if(!busy)prompt();}
       if(!result.progress||busy){progressPath?.remove();pen?.remove();progressPath=pen=null;return;}
       const progress=result.progress,path=paths[progress.edge],length=path.getTotalLength(),traced=length*progress.fraction;
       if(!progressPath){progressPath=make('path',{fill:'none',stroke:'#f272a7','stroke-width':9,'stroke-linecap':'round','pointer-events':'none'});svg.append(progressPath);}
