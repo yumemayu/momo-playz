@@ -93,8 +93,8 @@ nav.popular-picker a { position: relative; }
 nav.newgames-picker { margin-top: 8px; }
 
 main header { position: relative; }
-.coin-chip { position: absolute; top: 10px; right: 92px; background: #fff8d6; border: 2.5px solid #f6b73e; color: #7a4d12; font-weight: 900; font-size: 1rem; border-radius: 999px; padding: 6px 14px; box-shadow: 0 2px 6px #b0896833; cursor: pointer; font-family: inherit; }
-.coin-hint { position: absolute; top: 52px; right: 92px; background: #ffffff; border: 2px solid #f6b73e; color: #7a4d12; font-weight: 700; font-size: .82rem; border-radius: 12px; padding: 6px 10px; box-shadow: 0 4px 12px #b0896833; z-index: 5; }
+.coin-chip { position: static; margin-left: auto; flex: none; background: #fff8d6; border: 2.5px solid #f6b73e; color: #7a4d12; font-weight: 900; font-size: 1rem; border-radius: 999px; padding: 6px 14px; box-shadow: 0 2px 6px #b0896833; cursor: pointer; font-family: inherit; }
+.coin-hint { position: absolute; top: calc(100% + 6px); right: 8px; background: #ffffff; border: 2px solid #f6b73e; color: #7a4d12; font-weight: 700; font-size: .82rem; border-radius: 12px; padding: 6px 10px; box-shadow: 0 4px 12px #b0896833; z-index: 5; }
 
 .home-play{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:0 0 14px;padding:10px 14px;background:#fff9fd;border:1px solid #e8cee0;border-radius:14px}
 .home-play[hidden]{display:none}
@@ -200,3 +200,9 @@ main header { position: relative; }
 .home-game-row .pop-medal { font-size: .8rem; left: 4px; top: 2px; }
 
 .home-game-row .new-badge { right: 0; }
+
+/* Coin chip lives in the header flow so it can never overlap the mission panel */
+@media (max-width: 620px) {
+  header { flex-wrap: wrap; }
+  .coin-chip { margin-left: auto; }
+}
