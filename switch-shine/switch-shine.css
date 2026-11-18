@@ -11,7 +11,7 @@
   --pink: #f272a7;
   background: linear-gradient(135deg, #ffe9f3 0%, #e6f7ff 55%, #e9fbe9 100%) fixed;
   color: var(--text);
-  font: 16px/1.45 "M PLUS Rounded 1c", "Hiragino Maru Gothic ProN", "Hiragino Sans", system-ui, sans-serif;
+  font: 16px/1.45 Nunito, "Hiragino Maru Gothic ProN", sans-serif;
 }
 * { box-sizing: border-box; }
 body { margin: 0; }
@@ -246,9 +246,3 @@ body:has(#book:not([hidden])) .board { height: clamp(300px, calc(100dvh - 300px)
 .feedback { margin: 14px auto 0; padding: 0 16px 22px; text-align: center; }
 .feedback small { display: block; }
 .feedback a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 16px; color: inherit; text-underline-offset: 3px; }
-
-[data-game="switch-shine"] .game-heading.game-title-banner {
-  width: min(100%, 360px);
-  min-height: 100px;
-  aspect-ratio: 3 / 1;
-}

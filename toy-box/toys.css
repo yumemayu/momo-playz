@@ -1,5 +1,5 @@
 * { box-sizing: border-box; }
-:root { color: #50394e; background: #fcf0f5; font: 500 16px/1.5 "Hiragino Maru Gothic ProN", system-ui, sans-serif; }
+:root { color: #50394e; background: #fcf0f5; font: 500 16px/1.5 Nunito, "Hiragino Maru Gothic ProN", sans-serif; }
 body { margin: 0; }
 main { max-width: 740px; margin: auto; padding: 50px 16px 24px; }
 header a { color: #744a74; }

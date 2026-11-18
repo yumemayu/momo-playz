@@ -3,7 +3,7 @@
   #momo-piano-levels .phone { min-height:490px; border:3px solid #fff8fc; border-radius:30px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 7px 19px #51326824, 0 0 0 1px #d6b7e4; }
   #momo-piano-levels [hidden] { display:none !important; }
   #momo-piano-levels .momo-art { display:flex; flex-direction:column; align-items:center; padding:18px 16px 12px; border-radius:28px; background:repeating-linear-gradient(0deg,#f29bc335 0 25px,transparent 25px 50px),repeating-linear-gradient(90deg,#bb9bef42 0 25px,transparent 25px 50px),#fff3f4; }
-  #momo-piano-levels .patch { color:#fff2dc; -webkit-text-stroke:1px #67468e; paint-order:stroke fill; text-shadow:0 3px #6e459b, 2px 0 #6e459b,-2px 0 #6e459b,0 -2px #6e459b, 0 5px #fff5fc; font-family:Nunito,ui-rounded,"Arial Rounded MT Bold",sans-serif; font-size:clamp(35px,6vw,49px); font-weight:1000; letter-spacing:.015em; line-height:.94; text-align:center; margin:7px 0 0; }
+  #momo-piano-levels .patch { color:#fff2dc; -webkit-text-stroke:1px #67468e; paint-order:stroke fill; text-shadow:0 3px #6e459b, 2px 0 #6e459b,-2px 0 #6e459b,0 -2px #6e459b, 0 5px #fff5fc; font-family:"Fredoka","Arial Rounded MT Bold","Chalkboard SE","Segoe Print","Comic Sans MS",Quicksand,Nunito,sans-serif; font-size:clamp(35px,6vw,49px); font-weight:1000; letter-spacing:.015em; line-height:.94; text-align:center; margin:7px 0 0; }
   #momo-piano-levels .patch span { color:#ffc0df; }
   #momo-piano-levels .hero { position:relative; width:100%; flex:1; min-height:206px; display:grid; place-items:center; margin:6px 0 2px; }
   #momo-piano-levels .hero .avatar { width:min(76%,230px); height:auto; display:block; filter:drop-shadow(0 5px 4px #7c3f7626); }
@@ -54,7 +54,7 @@
   #momo-piano-levels .reset { color:#614083; background:transparent; border:0; font:inherit; min-height:42px; }
 
 
-body { margin:0; background:#fff0f7; font-family:Nunito,"Hiragino Maru Gothic ProN",system-ui,sans-serif; }
+body { margin:0; background:#fff0f7; font-family:Nunito,"Hiragino Maru Gothic ProN",sans-serif; }
 #momo-piano-levels { max-width:860px; grid-template-columns:minmax(0,520px); }
 #momo-piano-levels .piano-sidebar { display:grid; gap:11px; min-width:0; }
 #momo-piano-levels .choices { width:100%; grid-template-columns:1fr 1fr; }
