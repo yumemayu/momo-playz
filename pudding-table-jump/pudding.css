@@ -1,3 +1,4 @@
+.pudding-main{--kitchen:url(kitchen.jpg);--mock:url(table-sprites.jpg);--banner-color:#ffdf9e;--banner-ink:#793c1e}
 .scene{background:var(--kitchen) center 58%/cover no-repeat}
 .window,.plate:after{display:none}
 .plate{border:0;border-radius:0;background:none;box-shadow:none;height:auto;transform:translate(-50%,-13%)}
@@ -57,3 +58,7 @@
 #jump{touch-action:none;user-select:none;-webkit-touch-callout:none;width:min(85%,350px);min-height:52px}
 #message{min-height:1.45em;margin:0}
 .pudding-main .game-card{position:static;transform:none;width:100%;text-align:center}
+
+.pudding-main #ready-card{max-width:340px;justify-self:center;padding:9px 14px;gap:3px;margin:0}
+.pudding-main #ready-card > strong{font-size:1.1rem}
+.pudding-main #ready-card .player-setup{margin-top:3px}
