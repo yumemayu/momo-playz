@@ -95,3 +95,13 @@ nav.newgames-picker { margin-top: 8px; }
 main header { position: relative; }
 .coin-chip { position: absolute; top: 10px; right: 92px; background: #fff8d6; border: 2.5px solid #f6b73e; color: #7a4d12; font-weight: 900; font-size: 1rem; border-radius: 999px; padding: 6px 14px; box-shadow: 0 2px 6px #b0896833; cursor: pointer; font-family: inherit; }
 .coin-hint { position: absolute; top: 52px; right: 92px; background: #ffffff; border: 2px solid #f6b73e; color: #7a4d12; font-weight: 700; font-size: .82rem; border-radius: 12px; padding: 6px 10px; box-shadow: 0 4px 12px #b0896833; z-index: 5; }
+
+.home-play{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:0 0 14px;padding:10px 14px;background:#fff9fd;border:1px solid #e8cee0;border-radius:14px}
+.home-play[hidden]{display:none}
+.home-mission,.home-surprise{display:flex;flex-wrap:wrap;align-items:center;gap:6px 10px}
+.home-mission{flex:1 1 320px}
+.home-mission h2{font-size:1rem;margin:0}
+.home-mission p{font-size:.875rem;margin:0}
+#mission-action,#surprise-game,#surprise-result{display:inline-flex;align-items:center;justify-content:center;min-height:36px;padding:4px 11px;border:1px solid #ceb1d6;border-radius:999px;background:#f2e1f7;color:#57345f;font:inherit;font-size:.875rem;font-weight:750;text-decoration:none;cursor:pointer}
+#mission-action[hidden],#surprise-result[hidden]{display:none}
+.home-sr-only{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
