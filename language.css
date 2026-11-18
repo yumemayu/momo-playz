@@ -3,6 +3,9 @@
   top: 8px;
   right: 8px;
   z-index: 60;
+  opacity: .55;
+  transform: scale(.88);
+  transform-origin: top right;
   display: flex;
   gap: 2px;
   margin: 0;
@@ -32,3 +35,5 @@
   outline: 2px solid #703b79;
   outline-offset: 2px;
 }
+
+.momo-language:hover, .momo-language:focus-within { opacity: 1; }

@@ -93,8 +93,8 @@ nav.popular-picker a { position: relative; }
 nav.newgames-picker { margin-top: 8px; }
 
 main header { position: relative; }
-.coin-chip { position: static; margin-left: auto; flex: none; background: #fff8d6; border: 2.5px solid #f6b73e; color: #7a4d12; font-weight: 900; font-size: 1rem; border-radius: 999px; padding: 6px 14px; box-shadow: 0 2px 6px #b0896833; cursor: pointer; font-family: inherit; }
-.coin-hint { position: absolute; top: calc(100% + 6px); right: 8px; background: #ffffff; border: 2px solid #f6b73e; color: #7a4d12; font-weight: 700; font-size: .82rem; border-radius: 12px; padding: 6px 10px; box-shadow: 0 4px 12px #b0896833; z-index: 5; }
+.coin-chip { position: relative; background: linear-gradient(180deg, #ffe98a, #ffd23e); border: 3px solid #f6b73e; color: #7a4d12; font-weight: 900; font-size: 1.2rem; border-radius: 999px; padding: 8px 18px; box-shadow: 0 3px 10px #b0896855; cursor: pointer; font-family: inherit; }
+.coin-hint { background: #ffffff; border: 2px solid #f6b73e; color: #7a4d12; font-weight: 700; font-size: .82rem; border-radius: 12px; padding: 6px 10px; box-shadow: 0 4px 12px #b0896833; }
 
 .home-play{display:flex;flex-wrap:wrap;align-items:center;gap:8px 16px;margin:0 0 14px;padding:10px 14px;background:#fff9fd;border:1px solid #e8cee0;border-radius:14px}
 .home-play[hidden]{display:none}
@@ -201,12 +201,6 @@ main header { position: relative; }
 
 .home-game-row .new-badge { right: 0; }
 
-/* Coin chip lives in the header flow so it can never overlap the mission panel */
-@media (max-width: 620px) {
-  header { flex-wrap: wrap; }
-  .coin-chip { margin-left: auto; }
-}
-
 /* --- Home shelves + category chips (2026-11-19) --- */
 .home-game-row .game-picker {
   display: flex;
@@ -239,4 +233,18 @@ main header { position: relative; }
   header { padding-right: 100px; gap: 8px; }
   header img { width: 52px; }
   header h1 { font-size: 23px; white-space: nowrap; }
+}
+
+/* --- Coin dock (top right) + language pill in the footer (2026-11-19) --- */
+.coin-dock { position: fixed; top: 8px; right: 8px; z-index: 70; display: flex; flex-direction: column; align-items: flex-end; gap: 4px; }
+.coin-goal { background: rgba(255, 255, 255, .85); border: 1.5px solid #f6b73e; color: #7a4d12; font-weight: 700; font-size: .72rem; border-radius: 999px; padding: 2px 9px; }
+.coin-plus { position: absolute; top: -11px; right: -8px; background: #f272a7; color: #fff; font-size: .8rem; font-weight: 900; border-radius: 999px; padding: 1px 8px; box-shadow: 0 2px 6px #b0896855; animation: coin-float 1.4s ease-in-out infinite alternate; }
+.coin-pop { animation: coin-pop .6s ease; }
+@keyframes coin-float { from { transform: translateY(0); } to { transform: translateY(-4px); } }
+@keyframes coin-pop { 0% { transform: scale(1); } 40% { transform: scale(1.12); } 100% { transform: scale(1); } }
+footer.feedback .momo-language { position: static; opacity: 1; box-shadow: none; margin-left: 10px; vertical-align: middle; }
+@media (max-width: 620px) {
+  /* On phones the header is short: the goal line would spill onto the
+     mission panel, so it stays hidden there (tap the chip for the hint). */
+  .coin-goal { display: none; }
 }

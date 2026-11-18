@@ -144,3 +144,11 @@
     });
   });
 })();
+
+/* The language toggle lives in the footer on the home page: it is set
+   once and rarely changed, so the top right belongs to the coins. */
+(() => {
+  const pill = document.querySelector('.momo-language');
+  const footer = document.querySelector('footer.feedback');
+  if (pill && footer) footer.append(pill);
+})();
