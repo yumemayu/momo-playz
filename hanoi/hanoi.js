@@ -18,8 +18,6 @@
   const restart = document.querySelector('#restart');
   const goalEl = document.querySelector('.hn-goal');
   const goalLabel = document.querySelector('#goal-label');
-  const challengeButtons = Array.from(document.querySelectorAll('[data-challenge]'));
-  const skinButtons = Array.from(document.querySelectorAll('[data-skin]'));
   const levelButtons = Array.from(document.querySelectorAll('[data-level]'));
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -30,11 +28,7 @@
     hard: { disks: 5, par: 31 },
     expert: { disks: 6, par: 63 }
   };
-  const CHALLENGES = {
-    right: { from: 0, to: 2 },
-    middle: { from: 0, to: 1 },
-    left: { from: 2, to: 0 }
-  };
+  const SKINS = ['candy', 'rainbow', 'stars', 'dots'];
   let DISK_H = 30;
   let PITCH = 33;
   const BASE = 14;
@@ -50,7 +44,8 @@
       bannerPerfect: '最短 {p} 手で クリア！',
       bannerSub: '{m} 手・{s} 秒で クリア！',
       cantPlace: '大きい円盤は小さい円盤の上に置けないよ',
-      goal: { right: 'ゴールは右の棒', middle: 'ゴールは真ん中の棒', left: 'ゴールは左の棒' }
+      goal: ['ゴールは左の棒', 'ゴールは真ん中の棒', 'ゴールは右の棒'],
+      goalTo: ['タワーを左の棒へ移そう！', 'タワーを真ん中の棒へ移そう！', 'タワーを右の棒へ移そう！']
     },
     en: {
       retry: 'Play again', on: 'Sound on', off: 'Sound off',
@@ -61,17 +56,37 @@
       bannerPerfect: 'Solved in the minimum {p} moves!',
       bannerSub: '{m} moves in {s} seconds!',
       cantPlace: "A bigger disk can't sit on a smaller one",
-      goal: { right: 'Goal: the right peg', middle: 'Goal: the middle peg', left: 'Goal: the left peg' }
+      goal: ['Goal: the left peg', 'Goal: the middle peg', 'Goal: the right peg'],
+      goalTo: ['Move the tower to the left peg!', 'Move the tower to the middle peg!', 'Move the tower to the right peg!']
     }
   };
 
   let language = 'en';
   let level = 'normal';
-  let challenge = 'right';
+  let roundFrom = 0;
+  let roundTo = 2;
   let skin = 'candy';
-  try { skin = localStorage.getItem('momo:hanoi:skin') || 'candy'; } catch {}
-  if (!['candy', 'rainbow', 'stars', 'dots'].includes(skin)) skin = 'candy';
-  function goalPeg() { return CHALLENGES[challenge].to; }
+  let lastPair = '';
+  let lastSkin = '';
+  function goalPeg() { return roundTo; }
+  function rollRound() {
+    // A new start/goal pair and a new disk style every round,
+    // never the same pair (or style) twice in a row.
+    let pair;
+    do {
+      const from = Math.floor(Math.random() * 3);
+      let to = Math.floor(Math.random() * 3);
+      if (to === from) to = (to + 1) % 3;
+      pair = from + '>' + to;
+    } while (pair === lastPair);
+    [roundFrom, roundTo] = pair.split('>').map(Number);
+    lastPair = pair;
+    let next;
+    do { next = SKINS[Math.floor(Math.random() * SKINS.length)]; } while (next === lastSkin);
+    skin = next;
+    lastSkin = next;
+    document.body.dataset.skin = skin;
+  }
   let playing = false;
   let playedRound = false;
   let over = false;
@@ -204,7 +219,7 @@
     PITCH = n === 6 ? 28 : 33;
     DISK_H = PITCH - 3;
     pegs = [[], [], []];
-    pegs[CHALLENGES[challenge].from] = Array.from({ length: n }, (_, i) => n - i);
+    pegs[roundFrom] = Array.from({ length: n }, (_, i) => n - i);
     goalEl.style.left = ((goalPeg() * 2 + 1) / 6 * 100) + '%';
     diskEls.forEach(el => el.remove());
     diskEls = new Map();
@@ -254,7 +269,7 @@
     restart.hidden = !playing;
     undo.disabled = !playing || over || busy || !!held || !history.length;
     restart.disabled = !playing || busy;
-    goalLabel.textContent = copy[language].goal[challenge];
+    goalLabel.textContent = copy[language].goal[roundTo];
     renderStats();
   }
 
@@ -397,7 +412,7 @@
 
   function restartRound() {
     if (!playing || busy) return;
-    startRound();
+    startRound(false);
   }
 
   function illegalWiggle() {
@@ -494,12 +509,13 @@
     });
   }
 
-  function startRound() {
+  function startRound(roll = true) {
     ensureAudio();
+    if (roll) rollRound();
     gameScores.start(level);
     setup();
     verdict.textContent = '';
-    turnLine.textContent = copy[language].go;
+    turnLine.textContent = copy[language].goalTo[roundTo];
     playing = true;
     playedRound = true;
     board.classList.remove('preview');
@@ -554,22 +570,7 @@
   stop.addEventListener('click', stopGame);
   undo.addEventListener('click', undoMove);
   restart.addEventListener('click', restartRound);
-  challengeButtons.forEach(button => button.addEventListener('click', () => {
-    if (playing || button.dataset.challenge === challenge) return;
-    challenge = button.dataset.challenge;
-    challengeButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
-    setup();
-    render();
-  }));
-  function applySkin() {
-    document.body.dataset.skin = skin;
-    skinButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice.dataset.skin === skin)));
-  }
-  skinButtons.forEach(button => button.addEventListener('click', () => {
-    skin = button.dataset.skin;
-    try { localStorage.setItem('momo:hanoi:skin', skin); } catch {}
-    applySkin();
-  }));
+
   sound.addEventListener('click', () => {
     muted = !muted;
     sound.setAttribute('aria-pressed', String(!muted));
@@ -592,7 +593,6 @@
       renderLanguage();
     });
   }
-  applySkin();
   setup();
   render();
 })();
