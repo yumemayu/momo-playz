@@ -44,6 +44,7 @@ function guests(){
   const deliver=el('button','guest-deliver',pick('Here you go!','どうぞ！'));deliver.type='button';deliver.dataset.deliver=String(g.id);deliver.disabled=g.status!=='waiting'||!g.tray.length;
   card.append(bubble,portrait,meter,tray,deliver);list.append(card);cardUI.set(g.id,{card,portrait,tray,meter,bar});
  }
+ if(playing()&&state?.phase==='open'&&!state.guests.length){const sign=el('div','waiting-sign',pick('Waiting for the next guest…','次のお客さんを待っています…'));sign.setAttribute('aria-hidden','true');list.append(sign);}
 }
 function status(){
  $('coins').textContent=state?.coins||0;$('served').textContent=state?.served||0;
