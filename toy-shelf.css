@@ -6,9 +6,9 @@
 .toy-bun{--button:#b4e4b4}.toy-capybara{--button:#d6b9f1}
 .toy-preview{display:block;width:100%;border:0;padding:0;border-radius:14px;background:transparent;cursor:pointer;touch-action:manipulation}
 .toy-art{display:block;width:100%;aspect-ratio:4/3;border-radius:14px 14px 7px 7px;background:url(assets/toy-shelf.jpg) no-repeat;background-size:362% 362%;box-shadow:0 5px 0 #dba66e}
-.toy-pudding .toy-art{background-position:11.45% 28%}
-.toy-bun .toy-art{background-position:48.66% 28%}
-.toy-capybara .toy-art{background-position:89.7% 28%}
+.toy-pudding .toy-art{background-position:11.45% 30.2%}
+.toy-bun .toy-art{background-position:48.66% 30.2%}
+.toy-capybara .toy-art{background-position:89.7% 30.2%}
 .toy-shelf h3{font-size:clamp(.72rem,2vw,1.03rem);line-height:1.2;margin:12px 0 8px;overflow-wrap:anywhere}
 .toy-play{display:grid;place-items:center;min-height:44px;min-width:min(100%,90px);padding:5px 8px;border-radius:999px;color:#50263b;background:var(--button);text-decoration:none;font-weight:800}
 .toy-preview:focus-visible,.toy-play:focus-visible{outline:3px solid #754676;outline-offset:3px}
