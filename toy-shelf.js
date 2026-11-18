@@ -16,10 +16,9 @@
       ? [{ opacity: .75 }, { opacity: 1 }]
       : ['none', ...transforms, 'none'].map(transform => ({ transform }));
     const animation = button.firstElementChild.animate(frames, { duration: reducedMotion.matches ? 180 : 550, easing: 'ease-in-out' });
-    button.setAttribute('data-playing', '');
     active.set(button, animation);
     const reset = () => {
-      if (active.get(button) === animation) button.removeAttribute('data-playing');
+      if (active.get(button) === animation) active.delete(button);
     };
     animation.finished.then(reset, reset);
   });
