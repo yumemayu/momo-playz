@@ -66,6 +66,7 @@
   let seconds = 0;
   let timer = null;
   let current = null;
+  let previewFresh = true;
   let muted = false;
   let audioCtx = null;
 
@@ -332,7 +333,8 @@
     timeEl.textContent = '0';
     verdict.textContent = '';
     board.classList.remove('preview');
-    current = makeQuestion();
+    if (previewFresh) previewFresh = false;
+    else current = makeQuestion();
     renderQuestion();
     renderButtons();
     timer = setInterval(() => {
@@ -365,6 +367,7 @@
     levelButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
     gameScores.showLevel(level);
     current = makeQuestion();
+    previewFresh = true;
     qIndex = 0;
     renderQuestion();
   }));
