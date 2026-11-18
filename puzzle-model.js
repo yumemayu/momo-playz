@@ -86,5 +86,24 @@
     for(let i=options.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[options[i],options[j]]=[options[j],options[i]];}
     return {hole:shape.map(([x,y])=>[x,y,0]),options,answer:options.findIndex(c=>fits(c,target))};
   }
-  return {levels,drawings,degrees,solve,trace,projection,fits,passage};
+  // One camera basis for the wall, its hole, every cube and the travel lane.
+  // +z is toward the viewer (down-left); passing through reduces z (up-right).
+  function project([x,y,z],scale=1,ox=0,oy=0) {
+    return [ox+(x*.82-z*.92)*scale,oy+(x*.36-y+z*.5)*scale];
+  }
+  function travelDepth(progress,cubes) {
+    const front=6,back=-Math.max(...cubes.map(c=>c[2]))-2;
+    return front+(back-front)*Math.max(0,Math.min(1,progress));
+  }
+  // Split visible cube faces at the wall plane so the wall actually occludes them.
+  function clipDepth(points,front) {
+    const result=[],inside=p=>front?p[2]>=0:p[2]<=0;
+    for(let i=0;i<points.length;i++){
+      const a=points[i],b=points[(i+1)%points.length],ia=inside(a),ib=inside(b);
+      if(ia)result.push(a);
+      if(ia!==ib){const t=-a[2]/(b[2]-a[2]);result.push([a[0]+t*(b[0]-a[0]),a[1]+t*(b[1]-a[1]),0]);}
+    }
+    return result;
+  }
+  return {levels,drawings,degrees,solve,trace,projection,fits,passage,project,travelDepth,clipDepth};
 });

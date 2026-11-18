@@ -17,15 +17,16 @@ class Element{
  animate(){return{finished:Promise.resolve()}}
 }
 function matches(x,s){return s.startsWith('.')?x.classes.has(s.slice(1)):s==='[data-edge]'?x.dataset.edge!==undefined:x.tag===s}
-function mount(mode){
+function mount(mode,reduced=true){
+ let now=1000,frames=[];
  const map=new Map(),get=id=>{if(!map.has(id))map.set(id,new Element());return map.get(id)};
  const levels=Model.levels.map(l=>{const e=new Element('button');e.dataset.level=l;return e});let language,finished=[],passages=[];
  const document={body:{dataset:{game:mode}},querySelector:s=>get(s.slice(1)),querySelectorAll:s=>s==='[data-level]'?levels:[],createElement:t=>new Element(t),createElementNS:(_,t)=>new Element(t),createTextNode:t=>new Element('text')};
  const window={};const MathFixed=Object.create(Math);MathFixed.random=()=>.5;
  const model={...Model,passage:l=>{const p=Model.passage(l,()=>.5);passages.push(p);return p}};
- const context=vm.createContext({document,window,MomoPuzzleModel:model,DOMPoint:class{constructor(x,y){this.x=x;this.y=y}matrixTransform(){return this}},momoLanguage:{subscribe:f=>{language=f;f('en')}},gameScores:{showLevel(){},start(){},finish:(...args)=>finished.push(args)},Math:MathFixed,performance:{now:()=>1000},setInterval:()=>1,clearInterval(){},matchMedia:()=>({matches:true}),Promise});
+ const context=vm.createContext({document,window,MomoPuzzleModel:model,DOMPoint:class{constructor(x,y){this.x=x;this.y=y}matrixTransform(){return this}},momoLanguage:{subscribe:f=>{language=f;f('en')}},gameScores:{showLevel(){},start(){},finish:(...args)=>finished.push(args)},Math:MathFixed,performance:{now:()=>now},requestAnimationFrame:f=>frames.push(f),setInterval:()=>1,clearInterval(){},matchMedia:()=>({matches:reduced}),Promise});
  vm.runInContext(fs.readFileSync(__dirname+'/puzzle-play.js','utf8'),context);
- return{get,levels,finished,passages,language,press:id=>get(id).emit('click')};
+ return{get,levels,finished,passages,language,advance:ms=>{now+=ms;const batch=frames;frames=[];batch.forEach(f=>f(now));},press:id=>get(id).emit('click')};
 }
 function drawAll(ui,g){
  const route=Model.solve(g),p=g.points[route[0].node];let svg=ui.get('puzzle-field').children[0];
@@ -62,5 +63,13 @@ function drawAll(ui,g){
  }
  // Stopping during the passage animation cannot award a late completion.
  const ui=mount('shape-passage');ui.press('start');const pz=ui.passages.at(-1);ui.get('puzzle-field').querySelector('.solid-choices').children[pz.answer].emit('click');ui.press('stop');await Promise.resolve();await Promise.resolve();assert.equal(ui.finished.filter(x=>x[1]).length,0);
+ // Test the real motion callback, including the front/behind wall layers.
+ const motion=mount('shape-passage',false);motion.press('start');const mp=motion.passages.at(-1);
+ const mc=motion.get('puzzle-field').querySelector('.solid-choices').children;
+ assert.ok(mc.every(c=>c.children[0].attrs.viewBox===mc[0].children[0].attrs.viewBox),'same camera and scale for all candidates');
+ mc[mp.answer].emit('click');motion.advance(800);assert.ok(!motion.get('puzzle-field').querySelector('.puzzle-next'));
+ motion.advance(800);await Promise.resolve();assert.ok(motion.get('puzzle-field').querySelector('.puzzle-next'));
+ motion.press('stop');motion.press('start');const p2=motion.passages.at(-1);
+ motion.get('puzzle-field').querySelector('.solid-choices').children[p2.answer].emit('click');motion.advance(400);motion.press('stop');motion.advance(1600);await Promise.resolve();assert.equal(motion.finished.filter(x=>x[1]).length,0);
  console.log('PASS: both games, 5 levels, 3-round sets, continuous drag, keyboard, undo/restart/stop, wrong answers, no delayed awards, replay and language. DOM handler tests; not a visual browser test.');
 })().catch(e=>{console.error(e);process.exitCode=1});

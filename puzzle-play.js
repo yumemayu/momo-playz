@@ -132,48 +132,73 @@
     });
     svg.addEventListener('pointercancel',()=>{gesture=null;render();});
   }
-  const iso=([x,y,z],s,ox,oy)=>[ox+(x-z*.65)*s,oy+(-y+z*.38)*s];
-  function cubesArt(cubes,s,ox,oy){
+  const iso=M.project;
+  function cubesArt(cubes,s,ox,oy,{depth=0,front=null,xOffset=0,yOffset=0}={}){
     const g=make('g');const keys=new Set(cubes.map(c=>c.join(',')));
     [...cubes].sort((a,b)=>a[2]-b[2]||b[1]-a[1]||a[0]-b[0]).forEach(([x,y,z])=>{
-      const face=(points,color)=>g.append(make('polygon',{points:points.map(p=>iso(p,s,ox,oy).join(',')).join(' '),fill:color,stroke:'#4679b0','stroke-width':1.3,'stroke-linejoin':'round'}));
+      const face=(points,color)=>{
+        points=points.map(([px,py,pz])=>[px+xOffset,py+yOffset,pz+depth]);
+        if(front!==null)points=M.clipDepth(points,front);
+        if(points.length<3)return;
+        g.append(make('polygon',{points:points.map(p=>iso(p,s,ox,oy).join(',')).join(' '),fill:color,stroke:'#4679b0','stroke-width':1.1,'stroke-linejoin':'round'}));
+      };
       if(!keys.has([x,y+1,z].join(',')))face([[x,y+1,z],[x+1,y+1,z],[x+1,y+1,z+1],[x,y+1,z+1]],'#c3e6ff');
       if(!keys.has([x-1,y,z].join(',')))face([[x,y,z],[x,y+1,z],[x,y+1,z+1],[x,y,z+1]],'#629fdf');
       if(!keys.has([x,y,z+1].join(',')))face([[x,y,z+1],[x+1,y,z+1],[x+1,y+1,z+1],[x,y+1,z+1]],'#8bcaff');
     });return g;
   }
   function renderPassage(){
-    const scene=make('svg',{viewBox:'0 0 440 265',class:'passage-scene','aria-label':say('A wall with a shaped opening, at the end of a deep room','奥行きのある部屋と、形の穴がある壁')});
+    const scene=make('svg',{viewBox:'0 0 440 265',class:'passage-scene','aria-label':say('An angled wall; solids travel from the near left to the far right','斜めの壁へ、手前の左から奥の右に立体がすすむ')});
     scene.append(make('rect',{width:440,height:265,fill:'#eef6ff'}));
-    scene.append(make('path',{d:'M0 0 L105 65 L105 190 L0 265Z',fill:'#e1edff'}));
-    scene.append(make('path',{d:'M440 0 L365 65 L365 190 L440 265Z',fill:'#d8e7fa'}));
-    scene.append(make('path',{d:'M0 265 L105 190 L365 190 L440 265Z',fill:'#fff1db'}));
-    [0,110,220,330,440].forEach(x=>scene.append(make('path',{d:`M${x} 265 L${150+x*.42} 190`,stroke:'#e7d6bf','stroke-width':1})));
-    [214,239].forEach(y=>scene.append(make('path',{d:`M0 ${y} H440`,stroke:'#e7d6bf','stroke-width':1})));
-    const wall=make('g');
-    wall.append(make('rect',{x:103,y:57,width:264,height:136,rx:5,fill:'#cd8c69'}));
-    const holeKeys=new Set(puzzle.hole.map(([x,y])=>`${x},${y}`));
-    const maxX=Math.max(...puzzle.hole.map(c=>c[0]));
-    const size=25,hx=235-(maxX+1)*size/2,hy=173;
-    wall.append(make('rect',{x:108,y:50,width:264,height:136,rx:5,fill:'#ffdab2',stroke:'#d19b78','stroke-width':2}));
-    // Tile the entire wall except the opening. The opening reveals the back room.
-    puzzle.hole.forEach(([x,y])=>wall.append(make('rect',{x:hx+x*size,y:hy-(y+1)*size,width:size+.5,height:size+.5,fill:'#c6e8e0'})));
-    for(let y=0;y<5;y++)for(let x=0;x<10;x++)wall.append(make('path',{d:`M${112+x*26} ${52+y*27} h25 v26 h-25Z`,fill:'none',stroke:'#e9bc92','stroke-width':.7}));
-    // Redraw the aperture over grout; no front-facing grid crosses the opening.
-    puzzle.hole.forEach(([x,y])=>{
-      const px=hx+x*size,py=hy-(y+1)*size;
-      wall.append(make('rect',{x:px,y:py,width:size+.4,height:size+.4,fill:'#c6e8e0'}));
-      if(!holeKeys.has(`${x},${y+1}`))wall.append(make('path',{d:`M${px} ${py}h${size}`,stroke:'#b98460','stroke-width':3}));
-      if(!holeKeys.has(`${x-1},${y}`))wall.append(make('path',{d:`M${px} ${py}v${size}`,stroke:'#b98460','stroke-width':3}));
-    });
-    scene.append(wall);field.append(scene);
+    scene.append(make('path',{d:'M0 0H440V135L180 70 0 145Z',fill:'#e1edff'}));
+    scene.append(make('path',{d:'M0 145L180 70 440 135V265H0Z',fill:'#fff1db'}));
+    const size=22,ox=207,oy=147;
+    const polygon=(points,fill,stroke='none',width=1)=>make('polygon',{points:points.map(p=>iso(p,size,ox,oy).join(',')).join(' '),fill,stroke,'stroke-width':width,'stroke-linejoin':'round'});
+    // The floor has the same two horizontal axes as the solids and the angled wall.
+    const defs=make('defs'),floorClip=make('clipPath',{id:'passage-floor-clip'});
+    floorClip.append(make('path',{d:'M0 145L180 70 440 135V265H0Z'}));defs.append(floorClip);scene.append(defs);
+    const floorGrid=make('g',{'clip-path':'url(#passage-floor-clip)'});scene.append(floorGrid);
+    for(let x=-12;x<=18;x++){
+      const a=iso([x,0,-6],size,ox,oy),b=iso([x,0,17],size,ox,oy);
+      floorGrid.append(make('path',{d:`M${a} L${b}`,fill:'none',stroke:'#ead6bd','stroke-width':.7}));
+    }
+    for(let z=-6;z<=17;z++){
+      const a=iso([-12,0,z],size,ox,oy),b=iso([18,0,z],size,ox,oy);
+      floorGrid.append(make('path',{d:`M${a} L${b}`,fill:'none',stroke:'#ead6bd','stroke-width':.7}));
+    }
+    const holeWidth=Math.max(...puzzle.hole.map(c=>c[0]))+1;
+    const hx=Math.floor((8-holeWidth)/2),hy=1;
+    const holeKeys=new Set(puzzle.hole.map(([x,y])=>`${x+hx},${y+hy}`));
+    const behind=make('g'),wall=make('g'),inFront=make('g');
+    scene.append(behind);
+    // Front wall tiles are genuinely absent at the opening, revealing the far side.
+    const backTiles=make('g');
+    for(let x=0;x<8;x++)for(let y=0;y<5;y++)if(!holeKeys.has(`${x},${y}`))backTiles.append(polygon([[x,y,-.28],[x+1,y,-.28],[x+1,y+1,-.28],[x,y+1,-.28]],'#d5a179'));
+    wall.append(backTiles);
+    for(let x=0;x<8;x++)for(let y=0;y<5;y++){
+      if(holeKeys.has(`${x},${y}`))continue;
+      wall.append(polygon([[x,y,0],[x+1,y,0],[x+1,y+1,0],[x,y+1,0]],'#ffdab2','#d9ad85',.8));
+    }
+    wall.append(polygon([[0,5,0],[8,5,0],[8,5,-.28],[0,5,-.28]],'#ffe9cc','#c18d70',1));
+    wall.append(polygon([[0,0,0],[0,5,0],[0,5,-.28],[0,0,-.28]],'#c99270','#c18d70',1));
+    for(const [x,y]of puzzle.hole.map(([x,y])=>[x+hx,y+hy])){
+      const sides=[[[x,y,0],[x+1,y,0],[x+1,y,-.28],[x,y,-.28]],[[x+1,y,0],[x+1,y+1,0],[x+1,y+1,-.28],[x+1,y,-.28]],[[x+1,y+1,0],[x,y+1,0],[x,y+1,-.28],[x+1,y+1,-.28]],[[x,y+1,0],[x,y,0],[x,y,-.28],[x,y+1,-.28]]];
+      [[x,y-1],[x+1,y],[x,y+1],[x-1,y]].forEach((adj,i)=>{if(!holeKeys.has(adj.join(',')))wall.append(polygon(sides[i],i<2?'#e9bb93':'#b98562','#b98562',.6));});
+    }
+    const laneStart=iso([hx+holeWidth/2,0,7],size,ox,oy),laneEnd=iso([hx+holeWidth/2,0,1.1],size,ox,oy);
+    scene.append(make('path',{d:`M${laneStart} L${laneEnd}`,fill:'none',stroke:'#62bca7','stroke-width':3,'stroke-linecap':'round','stroke-dasharray':'6 7'}));
+    scene.append(make('path',{d:`M${laneEnd[0]-13},${laneEnd[1]+1} L${laneEnd} L${laneEnd[0]-6},${laneEnd[1]+11}`,fill:'none',stroke:'#62bca7','stroke-width':3,'stroke-linecap':'round','stroke-linejoin':'round'}));
+    scene.append(wall,inFront);field.append(scene);
     const choices=document.createElement('div');choices.className='solid-choices';
+    // Use one view box for all options so neither their angle nor scale gives hints.
+    const bounds=puzzle.options.flatMap(cubes=>cubes.flatMap(([x,y,z])=>[0,1].flatMap(dx=>[0,1].flatMap(dy=>[0,1].map(dz=>iso([x+dx,y+dy,z+dz],20,0,0))))));
+    const minX=Math.min(...bounds.map(p=>p[0]))-8,minY=Math.min(...bounds.map(p=>p[1]))-8;
+    const width=Math.max(...bounds.map(p=>p[0]))-minX+8,height=Math.max(...bounds.map(p=>p[1]))-minY+8;
     puzzle.options.forEach((cubes,i)=>{
       const b=document.createElement('button');b.type='button';b.className='solid-choice';b.disabled=!playing||busy;
       b.setAttribute('aria-label',say(`Choose solid ${String.fromCharCode(65+i)}`,`立体 ${String.fromCharCode(65+i)} をえらぶ`));
-      const art=make('svg',{viewBox:'0 0 140 110','aria-hidden':'true'});
-      const max=Math.max(...cubes.flatMap(c=>[c[0],c[1],c[2]]))+1,s=70/(max+1);
-      art.append(cubesArt(cubes,s,45,82));b.append(art,document.createTextNode(String.fromCharCode(65+i)));choices.append(b);
+      const art=make('svg',{viewBox:`${minX} ${minY} ${width} ${height}`,'aria-hidden':'true'});
+      art.append(cubesArt(cubes,20,0,0));b.append(art,document.createTextNode(String.fromCharCode(65+i)));choices.append(b);
       b.addEventListener('click',()=>{
         if(!playing||busy)return;
         if(!M.fits(cubes,puzzle.hole)){
@@ -182,12 +207,25 @@
         }
         busy=true;choices.querySelectorAll('button').forEach(el=>el.disabled=true);b.classList.add('correct');tone();
         status(say('Through the opening…','すーっと とおるよ…'));
-        const moving=cubesArt(cubes,size,hx+size*.65,hy-size*.38);scene.append(moving);
         const token=epoch;
-        const animation=reduced()?Promise.resolve():moving.animate([
-          {transform:'translate(-85px,70px)'},{transform:'translate(0,0)',offset:.65},{transform:'translate(17px,-10px)',opacity:0}
-        ],{duration:1100,easing:'cubic-bezier(.2,.65,.3,1)',fill:'forwards'}).finished;
-        animation.catch(()=>{}).then(()=>{if(token!==epoch||!playing)return;moving.remove();busy=false;complete();});
+        const frame=progress=>{
+          const depth=M.travelDepth(progress,cubes),pose={depth,xOffset:hx,yOffset:hy};
+          behind.replaceChildren(cubesArt(cubes,size,ox,oy,{...pose,front:false}));
+          inFront.replaceChildren(cubesArt(cubes,size,ox,oy,{...pose,front:true}));
+        };
+        let animation;
+        if(reduced()){frame(1);animation=Promise.resolve(true);}
+        else animation=new Promise(resolve=>{
+          const started=performance.now();
+          const tick=now=>{
+            if(token!==epoch||!playing){resolve(false);return;}
+            const t=Math.min(1,(now-started)/1600),ease=t*t*(3-2*t);
+            frame(ease);
+            if(t<1)requestAnimationFrame(tick);else resolve(true);
+          };
+          frame(0);requestAnimationFrame(tick);
+        });
+        animation.then(finished=>{if(!finished||token!==epoch||!playing)return;busy=false;complete();});
       });
     });field.append(choices);
   }

@@ -36,4 +36,24 @@ for(const level of M.levels)for(let i=0;i<500;i++){
 assert.equal(M.trace(M.drawings.practice[0],{node:999,used:[]},0),null);
 assert.equal(M.fits([[0,0,0],[0,0,1]],[[0,0,0]]),true,'depth does not create a new projected cell');
 assert.equal(M.fits([[0,0,0],[1,0,1]],[[0,0,0]]),false,'rear protrusion blocks passage');
+for(const level of M.levels)for(let i=0;i<50;i++){
+  const puzzle=M.passage(level,rng),cubes=puzzle.options[puzzle.answer];
+  let previous=M.project([0,0,M.travelDepth(0,cubes)]);
+  for(let k=1;k<=100;k++){
+    const next=M.project([0,0,M.travelDepth(k/100,cubes)]);
+    assert.ok(next[0]>previous[0]&&next[1]<previous[1],'travel consistently moves up-right');previous=next;
+  }
+  assert.ok(M.travelDepth(0,cubes)>0);
+  assert.ok(cubes.every(c=>c[2]+1+M.travelDepth(1,cubes)<0),'entire solid ends behind wall');
+}
+const face=[[0,0,-1],[1,0,-1],[1,1,1],[0,1,1]];
+for(const front of [true,false]){
+  const clipped=M.clipDepth(face,front);assert.equal(clipped.length,4);
+  assert.ok(clipped.every(p=>front?p[2]>=0:p[2]<=0));
+  assert.equal(clipped.filter(p=>p[2]===0).length,2,'face intersects at the wall plane');
+}
+assert.deepEqual(M.clipDepth(face.map(p=>[p[0],p[1],-2]),true),[]);
+const wallLeft=M.project([0,0,0]),wallRight=M.project([1,0,0]);
+assert.ok(wallRight[1]>wallLeft[1],'wall is angled instead of frontal');
 console.log(`PASS: ${drawings} solvable drawings; every start and edge; no repeated lines; ${passages} passage rounds, unique answers and connected solids.`);
+console.log('PASS: shared oblique camera, 250 animated routes move up-right, complete passage behind wall, face clipping.');

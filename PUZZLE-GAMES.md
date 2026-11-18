@@ -15,7 +15,7 @@ art/color variables. No existing shared controls are reimplemented.
 - Shape Passage: choose among three/four connected cube solids, without turning
   them. Only one has the exact frontal projection of the opening. Rear cubes are
   included in collision checks; harder levels include more depth and protrusions.
-  The corridor/floor supplies depth, and the selected solid moves to the opening.
+  The wall, floor, hole and all candidates share one oblique camera. Solids travel from near-left to far-right; front/behind face clipping lets the wall occlude them during passage. All candidate thumbnails share the same scale.
 - Complete three puzzles, then choose See results to finish the set. The score
   starts at 3000, subtracts 2 per elapsed second and 100 per retry/Undo/Restart,
   with a minimum of 100. Stop does not submit a completed score.
