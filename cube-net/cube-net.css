@@ -60,3 +60,6 @@
   .cn-net svg { max-width: 170px; }
 }
 .cn-verdict { font-size: 1.05rem; font-weight: 800; color: #7a3b63; min-height: 1.4em; }
+/* The shared .game-field height cap is for play fields; the question
+   board must grow with the cube + nets it contains. */
+.cn-board.game-field { height: auto; min-height: 0; }
