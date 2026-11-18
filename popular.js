@@ -8,7 +8,7 @@
    badge — no network needed. */
 (() => {
   const URL = 'https://script.google.com/macros/s/AKfycbwIZWAIOqgmjctFItur6QacLZqf2zL6paAyLxFeCoV1cAnD2O3yV70ZiKiprBi1xTdIVQ/exec';
-  const CACHE_KEY = 'momo:popular:v2';
+  const CACHE_KEY = 'momo:popular:v3';
   const TTL = 24 * 60 * 60 * 1000;
   const GAMES = {
     'fry-catch': ['fries', ['super-easy', 'easy', 'medium', 'hard', 'impossible']],
@@ -132,13 +132,18 @@
     return { metric: 'players', values };
   }
 
+  const hasData = values => values && Object.values(values).some(n => n > 0);
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); } catch { cached = null; }
-  if (cached && Date.now() - cached.at < TTL && cached.values) {
+  if (cached && Date.now() - cached.at < TTL && hasData(cached.values)) {
     render(cached.metric, cached.values);
   } else {
     fetchRanking().then(({ metric, values }) => {
-      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), metric, values })); } catch { /* storage unavailable */ }
+      // Never cache an empty result: a failed or throttled scan must not
+      // hide the ranking for a day. The next visit simply tries again.
+      if (hasData(values)) {
+        try { localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), metric, values })); } catch { /* storage unavailable */ }
+      }
       render(metric, values);
     }).catch(() => {});
   }
