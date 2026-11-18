@@ -317,3 +317,47 @@ const gameScores = (() => {
     toggle.setAttribute('aria-expanded', String(!guide.hidden));
   });
 })();
+
+// Game coins: finishing a game earns coins on this device.
+// Completed game +10, stopped game +2. Shown on the home page (coins.js).
+(() => {
+  const KEY = 'momo:coins';
+  let awarded = false;
+  const get = () => { try { return parseInt(localStorage.getItem(KEY) || '0', 10) || 0; } catch { return 0; } };
+  const set = v => { try { localStorage.setItem(KEY, String(v)); } catch { /* storage unavailable */ } };
+  const style = document.createElement('style');
+  style.textContent = '.coin-toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#fff8d6;border:2.5px solid #f6b73e;color:#7a4d12;font-weight:900;font-size:1.05rem;padding:10px 20px;border-radius:999px;box-shadow:0 6px 18px #b0896844;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;z-index:60}.coin-toast.show{opacity:1;transform:translate(-50%,0)}';
+  document.head.append(style);
+  const toast = document.createElement('div');
+  toast.className = 'coin-toast';
+  toast.setAttribute('role', 'status');
+  document.body.append(toast);
+  let toastTimer = null;
+  const pick = (en, ja) => (typeof momoLanguage !== 'undefined' && momoLanguage.pick) ? momoLanguage.pick(en, ja) : en;
+  function showToast(text) {
+    toast.textContent = text;
+    toast.classList.add('show');
+    clearTimeout(toastTimer);
+    toastTimer = setTimeout(() => toast.classList.remove('show'), 2800);
+  }
+  const origStart = gameScores.start.bind(gameScores);
+  const origFinish = gameScores.finish.bind(gameScores);
+  gameScores.start = (...args) => { awarded = false; return origStart(...args); };
+  gameScores.finish = (score, completed, growth) => {
+    const result = origFinish(score, completed, growth);
+    if (!awarded) {
+      awarded = true;
+      const gain = completed ? 10 : 2;
+      const before = get();
+      const after = before + gain;
+      set(after);
+      let msg = pick(`🪙 +${gain} Coins!`, `🪙 コイン +${gain}！`);
+      if (Math.floor(after / 50) > Math.floor(before / 50)) {
+        const milestone = Math.floor(after / 50) * 50;
+        msg += pick(` You reached ${milestone} coins! 🎉`, ` ${milestone}コイン達成！🎉`);
+      }
+      setTimeout(() => showToast(msg), 350);
+    }
+    return result;
+  };
+})();

@@ -91,3 +91,7 @@ nav.popular-picker a { position: relative; }
 .pop-count { display: block; width: 100%; text-align: center; font-size: .72rem; font-weight: 700; color: #b08968; margin-top: 2px; }
 
 nav.newgames-picker { margin-top: 8px; }
+
+main header { position: relative; }
+.coin-chip { position: absolute; top: 10px; right: 92px; background: #fff8d6; border: 2.5px solid #f6b73e; color: #7a4d12; font-weight: 900; font-size: 1rem; border-radius: 999px; padding: 6px 14px; box-shadow: 0 2px 6px #b0896833; cursor: pointer; font-family: inherit; }
+.coin-hint { position: absolute; top: 52px; right: 92px; background: #ffffff; border: 2px solid #f6b73e; color: #7a4d12; font-weight: 700; font-size: .82rem; border-radius: 12px; padding: 6px 10px; box-shadow: 0 4px 12px #b0896833; z-index: 5; }
