@@ -61,7 +61,8 @@
     if(!next){tone(false,true);flash(true);status(say('That line is used, or not connected. Try Undo.','その線は とおったか、つながっていないよ。もどすも つかえるよ。'));return false;}
     history.push({node:state.node,used:[...state.used]});state=next;tone();
     if(keepCanvas){
-      const bases=field.querySelectorAll('.stroke-base');state.used.forEach(i=>bases[i].classList.add('traced'));
+      const bases=field.querySelectorAll('.stroke-base'),hits=field.querySelectorAll('.stroke-hit');
+      state.used.forEach(i=>{bases[i].classList.add('traced');hits[i].setAttribute('aria-disabled','true');hits[i].setAttribute('tabindex','-1');});
       field.querySelectorAll('.stroke-node').forEach((el,i)=>{el.classList.toggle('current',i===state.node);el.setAttribute('r',i===state.node?10:6);});
       field.querySelector('.stroke-tally').textContent=`${state.used.length} / ${puzzle.edges.length}`;controls();
     }else render();
@@ -84,53 +85,53 @@
     });
     const tally=make('text',{x:220,y:374,'text-anchor':'middle',class:'stroke-tally'},`${state.used.length} / ${puzzle.edges.length}`);svg.append(tally);
     field.append(svg);
-    let gesture=null,progressPath=null;
+    const matrix=svg.getScreenCTM(),scale=Math.hypot(matrix.a||1,matrix.b||0)||1;
+    const geometry=paths.map(path=>{
+      const length=path.getTotalLength(),count=Math.max(32,Math.ceil(length/4));
+      return Array.from({length:count+1},(_,k)=>path.getPointAtLength(length*k/count));
+    });
+    const tracker=new OneStrokeGesture.Tracker(puzzle,geometry,state,{tolerance:24/scale,deadzone:7/scale,snap:15/scale});
+    let activePointer=null,progressPath=null,pen=null;
     function point(e){const p=new DOMPoint(e.clientX,e.clientY);return p.matrixTransform(svg.getScreenCTM().inverse());}
-    function samples(i){const p=paths[i],n=p.getTotalLength();return Array.from({length:81},(_,k)=>p.getPointAtLength(n*k/80));}
-    function near(p,q){return Math.hypot(p.x-q.x,p.y-q.y);}
-    svg.addEventListener('pointerdown',e=>{
-      if(!playing||busy||e.button!==0)return;
-      const p=point(e), target=e.target.closest('[data-edge]');
-      if(state.node===null){
-        const closest=puzzle.points.map(([x,y],i)=>({i,d:near(p,{x,y})})).sort((a,b)=>a.d-b.d)[0];
-        if(closest.d<24)state.node=closest.i;
-        else if(target){const edge=puzzle.edges[Number(target.dataset.edge)];state.node=near(p,{x:puzzle.points[edge.a][0],y:puzzle.points[edge.a][1]})<near(p,{x:puzzle.points[edge.b][0],y:puzzle.points[edge.b][1]})?edge.a:edge.b;}
-        else return;
+    function update(result){
+      if(result.node!==null&&!result.completed.length&&(state.node===null||(!state.used.length&&!result.progress)))state.node=result.node;
+      for(const step of result.completed){
+        const edge=puzzle.edges[step.edge];
+        // A stroke begun in the middle determines its initial endpoint by motion.
+        if(state.node===null)state.node=step.node===edge.a?edge.b:edge.a;
+        accept(step.edge,true);
+        if(busy)break;
       }
-      gesture={id:e.pointerId,start:p,last:p,edge:null,progress:0,points:null,target:target?Number(target.dataset.edge):null};
-      svg.setPointerCapture(e.pointerId);e.preventDefault();
+      svg.querySelectorAll('.stroke-node').forEach((dot,i)=>{dot.classList.toggle('current',i===state.node);dot.setAttribute('r',i===state.node?10:6);});
+      if(!result.progress||busy){progressPath?.remove();pen?.remove();progressPath=pen=null;return;}
+      const progress=result.progress,path=paths[progress.edge],length=path.getTotalLength(),traced=length*progress.fraction;
+      if(!progressPath){progressPath=make('path',{fill:'none',stroke:'#f272a7','stroke-width':9,'stroke-linecap':'round','pointer-events':'none'});svg.append(progressPath);}
+      progressPath.setAttribute('d',puzzle.edges[progress.edge].d);
+      progressPath.setAttribute('stroke-dasharray',`${traced} ${length}`);
+      progressPath.setAttribute('stroke-dashoffset',progress.forward?0:-(length-traced));
+      if(!pen){pen=make('circle',{r:6,class:'stroke-pen','pointer-events':'none'});svg.append(pen);}
+      pen.setAttribute('cx',progress.point.x);pen.setAttribute('cy',progress.point.y);
+    }
+    svg.addEventListener('pointerdown',e=>{
+      if(!playing||busy||e.button!==0||activePointer!==null)return;
+      const target=e.target.closest('[data-edge]');
+      activePointer=e.pointerId;svg.setPointerCapture(e.pointerId);
+      update(tracker.begin(point(e),target?Number(target.dataset.edge):null));e.preventDefault();
     });
     svg.addEventListener('pointermove',e=>{
-      if(!gesture||gesture.id!==e.pointerId||!playing||busy)return;
-      const p=point(e);gesture.last=p;
-      if(gesture.edge===null){
-        let best=null;
-        puzzle.edges.forEach((edge,i)=>{
-          if(state.used.includes(i)||(edge.a!==state.node&&edge.b!==state.node))return;
-          let pts=samples(i);if(edge.a!==state.node)pts=pts.reverse();
-          for(let k=1;k<=16;k++){const d=near(p,pts[k]);if(d<18&&(!best||d<best.d))best={i,pts,k,d};}
-        });
-        if(!best)return;gesture.edge=best.i;gesture.points=best.pts;gesture.progress=best.k;
-      }
-      let closest=gesture.progress,dist=25;
-      for(let k=Math.max(0,gesture.progress-3);k<=Math.min(80,gesture.progress+18);k++){const d=near(p,gesture.points[k]);if(d<dist){dist=d;closest=k;}}
-      gesture.progress=Math.max(gesture.progress,closest);
-      if(!progressPath){progressPath=make('path',{d:puzzle.edges[gesture.edge].d,fill:'none',stroke:'#f272a7','stroke-width':9,'stroke-linecap':'round','pointer-events':'none'});svg.append(progressPath);}
-      const length=paths[gesture.edge].getTotalLength(),forward=puzzle.edges[gesture.edge].a===state.node;
-      const traced=length*gesture.progress/80;
-      progressPath.setAttribute('stroke-dasharray',forward?`${traced} ${length}`:`0 ${length-traced} ${traced} ${length}`);
-      if(gesture.progress>=77&&near(p,gesture.points[80])<22){
-        const edge=gesture.edge,id=gesture.id;progressPath.remove();progressPath=null;
-        accept(edge,true);
-        gesture=busy?null:{id,start:p,last:p,edge:null,progress:0,points:null,target:null};
-      }
+      if(activePointer!==e.pointerId||!playing||busy)return;
+      const events=e.getCoalescedEvents?.();
+      if(events?.length)for(const sample of events){update(tracker.move(point(sample)));if(busy)break;}
+      if(!busy)update(tracker.move(point(e)));e.preventDefault();
     });
     svg.addEventListener('pointerup',e=>{
-      if(!gesture||e.pointerId!==gesture.id)return;
-      const g=gesture;gesture=null;
-      if(g.target!==null&&near(g.start,point(e))<10)accept(g.target);else render();
+      if(activePointer!==e.pointerId)return;
+      activePointer=null;if(playing&&!busy)update(tracker.end(point(e)));
     });
-    svg.addEventListener('pointercancel',()=>{gesture=null;render();});
+    svg.addEventListener('pointercancel',e=>{
+      if(activePointer!==e.pointerId)return;
+      activePointer=null;update(tracker.cancel());
+    });
   }
   function begin(){
     if(playing)return;epoch++;round=0;errors=0;elapsed=0;began=performance.now();

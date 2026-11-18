@@ -24,7 +24,7 @@ function mount(mode,reduced=true){
  const document={body:{dataset:{game:mode}},querySelector:s=>get(s.slice(1)),querySelectorAll:s=>s==='[data-level]'?levels:[],createElement:t=>new Element(t),createElementNS:(_,t)=>new Element(t),createTextNode:t=>new Element('text')};
  const window={};const MathFixed=Object.create(Math);MathFixed.random=()=>.999999;
  const model={...Model,passage:l=>{const p=Model.passage(l,()=>.5);passages.push(p);return p}};
- const context=vm.createContext({document,window,MomoPuzzleModel:model,DOMPoint:class{constructor(x,y){this.x=x;this.y=y}matrixTransform(){return this}},momoLanguage:{subscribe:f=>{language=f;f('en')}},gameScores:{showLevel(){},start(){},finish:(...args)=>finished.push(args)},Math:MathFixed,performance:{now:()=>now},requestAnimationFrame:f=>frames.push(f),setInterval:()=>1,clearInterval(){},matchMedia:()=>({matches:reduced}),Promise});
+ const context=vm.createContext({document,window,MomoPuzzleModel:model,OneStrokeGesture:require('./gesture.js'),DOMPoint:class{constructor(x,y){this.x=x;this.y=y}matrixTransform(){return this}},momoLanguage:{subscribe:f=>{language=f;f('en')}},gameScores:{showLevel(){},start(){},finish:(...args)=>finished.push(args)},Math:MathFixed,performance:{now:()=>now},requestAnimationFrame:f=>frames.push(f),setInterval:()=>1,clearInterval(){},matchMedia:()=>({matches:reduced}),Promise});
  vm.runInContext(fs.readFileSync(__dirname+'/game.js','utf8'),context);
  return{get,levels,finished,passages,language,advance:ms=>{now+=ms;const batch=frames;frames=[];batch.forEach(f=>f(now));},press:id=>get(id).emit('click')};
 }

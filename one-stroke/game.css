@@ -19,3 +19,5 @@
 @media(prefers-reduced-motion:reduce){.puzzle-board.wrong,.puzzle-board.spark{animation:none}.stroke-base{transition:none}}
 .puzzle-board.solved .stroke-tally{visibility:hidden}
 @media (min-width:1101px),(orientation:landscape) and (min-width:700px){.puzzle-board{height:min(var(--game-field-height),calc(100dvh - 250px));min-height:240px}}
+
+.stroke-pen{fill:#ffcf3f;stroke:#b07824;stroke-width:2;filter:drop-shadow(0 0 4px #ffcf3f)}
