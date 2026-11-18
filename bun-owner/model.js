@@ -4,7 +4,9 @@
   const sizes = [1, 2, 2, 3, 3, 3];
   function makeOrder(round, random = Math.random) {
     const available = menu.slice(0, Math.min(4, round + 1));
-    return Array.from({ length: sizes[round] }, () => available[Math.min(available.length - 1, Math.floor(random() * available.length))]);
+    const order = Array.from({ length: sizes[round] }, () => available[Math.min(available.length - 1, Math.floor(random() * available.length))]);
+    if (round > 0 && round < menu.length) order[0] = available[available.length - 1];
+    return order;
   }
   function difference(order, tray) {
     const missing = [], extra = [];
