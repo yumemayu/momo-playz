@@ -81,6 +81,9 @@ let previous = 0;
 let nextSpawn = 0;
 let rareBunAt = Infinity;
 let chickenAt = Infinity;
+let colaAt = Infinity;
+let streak = 0;
+let previousCatchPlayer = width / 2;
 let bunBag = [];
 const bunPoints = { normal: 1, twins: 2, glitter: 5, devil: -1, burnt: -1 };
 function nextBunKind(rare) {
@@ -206,7 +209,7 @@ function drawBun(bun) {
 }
 
 function drawFry(fry) {
-  if (fry.chicken) { drawChicken(fry); return; }
+  if (fry.chicken || fry.cola) { drawSnack(fry); return; }
   ctx.save();
   ctx.translate(fry.x, fry.y);
   ctx.rotate(fry.tilt);
@@ -245,46 +248,53 @@ function drawFry(fry) {
   ctx.restore();
 }
 
-function drawChicken(item) {
+const snackArt = {};
+if (!bunMode) {
+  for (const name of ['chicken', 'cola']) {
+    const art = new Image();
+    art.addEventListener('load', draw);
+    art.src = '../assets/catch-' + name + '.webp';
+    snackArt[name] = art;
+  }
+}
+
+function drawSnack(item) {
+  const art = snackArt[item.cola ? 'cola' : 'chicken'];
   ctx.save();
   ctx.translate(item.x, item.y);
   ctx.rotate(item.tilt);
-  ctx.scale(axisY / axisX, item.stretch);
-  ctx.lineWidth = 1.5;
-  ctx.strokeStyle = '#a85a28';
-  ctx.fillStyle = '#fff4d6';
-  ctx.beginPath();
-  ctx.roundRect(2, 7, 9, 17, 4);
-  ctx.fill(); ctx.stroke();
-  const crust = ctx.createRadialGradient(-6, -8, 1, 0, -2, 23);
-  crust.addColorStop(0, '#ffdc7b');
-  crust.addColorStop(1, '#c77128');
-  ctx.fillStyle = crust;
-  ctx.beginPath();
-  ctx.moveTo(8, 12);
-  ctx.bezierCurveTo(23, 1, 17, -20, -1, -22);
-  ctx.bezierCurveTo(-23, -24, -26, 2, -10, 10);
-  ctx.quadraticCurveTo(0, 15, 8, 12);
-  ctx.fill(); ctx.stroke();
-  for (const [x,y] of [[-9,-10],[3,-13],[9,-3],[-13,0],[-2,4]]) {
-    ctx.fillStyle = '#b56b2b';
-    ctx.beginPath(); ctx.arc(x, y, 1.7, 0, Math.PI * 2); ctx.fill();
+  ctx.scale(axisY / axisX * (item.sink ?? 1), item.stretch);
+  if (art?.complete && art.naturalWidth) {
+    const h = item.cola ? 47 : 45;
+    const w = h * art.naturalWidth / art.naturalHeight;
+    ctx.drawImage(art, -w / 2, -h / 2, w, h);
+  } else {
+    ctx.font = '36px sans-serif';
+    ctx.textAlign = 'center';
+    ctx.textBaseline = 'middle';
+    ctx.fillText(item.cola ? '🥤' : '🍗', 0, 0);
   }
   ctx.restore();
 }
 
 const cupHalfWidth = bunMode ? 35 : 30;
-const cupMouthY = 293;
+const cupMouthY = 278;
 
-function crossesCup(fry, previousY, previousPlayer) {
-  // Use the visible item bottom and overlap with the opening, including a small rim tolerance.
-  const itemRadius = bunMode ? (fry.kind === 'twins' ? 28 : 22) : fry.chicken ? 18 : 7;
-  const bottom = (bunMode ? 18 : fry.chicken ? 24 : 19) * (fry.stretch ?? 1);
-  if (fry.y + bottom < cupMouthY || previousY - bottom > cupMouthY + 12) return false;
-  const halfWidth = (cupHalfWidth + itemRadius) * axisY / axisX;
-  const left = Math.min(previousPlayer, player) - halfWidth;
-  const right = Math.max(previousPlayer, player) + halfWidth;
-  return fry.x >= left && fry.x <= right;
+function itemFoot(item) {
+  if (bunMode) return 18;
+  return (item.cola ? 22 : item.chicken ? 21 : 18) * item.stretch;
+}
+
+function crossesCup(item, previousY, previousX, previousPlayer) {
+  const foot = itemFoot(item);
+  const before = previousY + foot;
+  const after = item.y + foot;
+  if (before >= cupMouthY || after < cupMouthY || after <= before) return false;
+  const at = (cupMouthY - before) / (after - before);
+  const itemX = previousX + (item.x - previousX) * at;
+  const cupX = previousPlayer + (player - previousPlayer) * at;
+  const itemHalfWidth = bunMode ? (item.kind === 'twins' ? 27 : 21) : item.cola ? 14 : item.chicken ? 16 : 7;
+  return Math.abs(itemX - cupX) <= (cupHalfWidth + itemHalfWidth) * axisY / axisX;
 }
 
 function catchPulse(now) {
@@ -304,10 +314,10 @@ function drawCatchBurst(now) {
     if (!effect.fry || effect.label === '−1') continue;
     const t = (now - effect.at) / 380;
     if (t < 0 || t >= 1) continue;
-    const bonus = effect.label === '+5';
+    const bonus = effect.label === '+5' || effect.label === '+3' || effect.combo;
     const twins = effect.label === '+2';
     ctx.globalAlpha = (1 - t) * .85;
-    ctx.strokeStyle = bonus ? '#f7ae27' : '#ffc96c';
+    ctx.strokeStyle = effect.fry.cola ? '#71cfe3' : bonus ? '#f7ae27' : '#ffc96c';
     ctx.lineWidth = 2 * (1 - t);
     ctx.beginPath();
     ctx.ellipse(0, 0, cupHalfWidth + t * 17, 7 + t * 5, 0, 0, Math.PI * 2);
@@ -318,7 +328,7 @@ function drawCatchBurst(now) {
       const distance = 12 + t * (bonus ? 55 : 35);
       const x = Math.cos(angle) * distance;
       const y = Math.sin(angle) * distance + 20 * t * t;
-      ctx.fillStyle = (bunMode ? ['#fffdf0', '#ffe6ba', '#ffffff'] : ['#ffe49a', '#ff9ab1', '#ffffff'])[i % 3];
+      ctx.fillStyle = (effect.fry.cola ? ['#c7f6ff', '#79d4ed', '#ffffff'] : bunMode ? ['#fffdf0', '#ffe6ba', '#ffffff'] : ['#ffe49a', '#ff9ab1', '#ffffff'])[i % 3];
       ctx.beginPath();
       ctx.arc(x, y, (bonus ? 3 : 2) * (1 - t * .7), 0, Math.PI * 2);
       ctx.fill();
@@ -435,13 +445,6 @@ function draw() {
   }
   ctx.fillStyle = bunMode ? '#f7d9b4' : '#efd0fb';
   ctx.fillRect(0, 326, width, 34);
-  for (const fry of fries) {
-    if (bunMode) {
-      drawBun(fry);
-      continue;
-    }
-    drawFry(fry);
-  }
   if (squirrel.complete && squirrel.naturalWidth) {
     const latest = catches.at(-1);
     const age = latest ? performance.now() - latest.at : Infinity;
@@ -457,6 +460,13 @@ function draw() {
   const now = performance.now();
   catches = catches.filter(catchEffect => now - catchEffect.at < 600);
   drawCup(now);
+  for (const fry of fries) {
+    if (bunMode) {
+      drawBun(fry);
+      continue;
+    }
+    drawFry(fry);
+  }
   drawCatchBurst(now);
   for (const effect of catches) {
     const progress = Math.max(0, (now - effect.at) / 600);
@@ -477,8 +487,10 @@ function draw() {
     ctx.strokeStyle = '#fff';
     ctx.fillStyle = effect.label === '−1' ? '#854f9b' : '#a7195b';
     const labelY = cupMouthY - 30;
-    ctx.strokeText(effect.label, effect.x * axisX / axisY, labelY - spread);
-    ctx.fillText(effect.label, effect.x * axisX / axisY, labelY - spread);
+    const label = effect.combo ? effect.label + ' ✦ ' + L('Combo', 'コンボ') + ' ×' + effect.combo : effect.label;
+    if (effect.combo) ctx.font = 'bold 18px sans-serif';
+    ctx.strokeText(label, labelX, labelY - spread);
+    ctx.fillText(label, labelX, labelY - spread);
     if ((effect.label === "+1" || effect.label === "+5") && !reducedMotion.matches) {
       ctx.fillStyle = '#d98711';
       ctx.font = '19px sans-serif';
@@ -504,26 +516,31 @@ function step(now) {
     return;
   }
   const direction = Number(keys.has('ArrowRight')) - Number(keys.has('ArrowLeft'));
-  const previousPlayer = player;
+  const previousPlayer = previousCatchPlayer;
   move(player + (held || direction) * 270 * dt);
+  previousCatchPlayer = player;
   if (practicing && fries.length === 0) {
     fries.push({ x: width / 2, y: 80, tilt: .15, stretch: 1, smiles: true });
   } else if (!practicing && elapsed >= nextSpawn) {
     const rare = bunMode && elapsed >= rareBunAt;
     const chicken = !bunMode && elapsed >= chickenAt;
+    const cola = !bunMode && !chicken && elapsed >= colaAt;
     if (chicken) chickenAt = elapsed + 7 + Math.random() * 3;
+    if (cola) colaAt = elapsed + 8 + Math.random() * 3;
     if (rare) rareBunAt = Infinity;
     const kind = bunMode ? nextBunKind(rare) : undefined;
-    fries.push({ x: 22 + Math.random() * (width - 44), y: bunMode ? -24 : -14, tilt: Math.random() - .5, stretch: .8 + Math.random() * .4, rare, chicken, kind, smiles: !bunMode || bunPoints[kind] > 0 });
+    fries.push({ x: 22 + Math.random() * (width - 44), y: bunMode ? -24 : -14, tilt: Math.random() - .5, stretch: .8 + Math.random() * .4, rare, chicken, cola, kind, smiles: !bunMode || bunPoints[kind] > 0 });
     nextSpawn = elapsed + Math.max(level.interval * .55, level.interval - elapsed / 90);
   }
   fries = fries.filter(fry => {
     const previousY = fry.y;
     fry.y += (practicing ? 95 : level.speed + elapsed * level.acceleration) * dt;
-    if (crossesCup(fry, previousY, previousPlayer)) {
+    const previousX = fry.x;
+    if (fry.cola) fry.x = Math.max(16, Math.min(width - 16, fry.x + Math.sin(now / 220) * 34 * dt));
+    if (crossesCup(fry, previousY, previousX, previousPlayer)) {
       const halfWidth = cupHalfWidth * axisY / axisX;
       const offset = Math.max(-halfWidth, Math.min(halfWidth, fry.x - player));
-      const effect = { x: player, at: now, fry, offset };
+      const effect = { x: player, at: now, fry: { ...fry, y: cupMouthY - itemFoot(fry) }, offset };
       if (practicing) {
         practicing = false;
         practiced = true;
@@ -532,13 +549,17 @@ function step(now) {
         catches.push({ ...effect, label: '✓' });
         return false;
       }
-      const points = bunMode ? (bunPoints[fry.kind] ?? (fry.rare ? 5 : fry.smiles ? 1 : -1)) : fry.chicken ? 5 : 1;
+      const points = bunMode ? (bunPoints[fry.kind] ?? (fry.rare ? 5 : fry.smiles ? 1 : -1)) : fry.chicken ? 5 : fry.cola ? 3 : 1;
       score += points;
       scoreOutput.value = score;
-      catches.push({ ...effect, label: points > 0 ? '+' + points : '−1' });
+      streak = points > 0 ? streak + 1 : 0;
+      const combo = streak > 0 && streak % 5 === 0 ? streak : 0;
+      catches.push({ ...effect, label: points > 0 ? '+' + points : '−1', combo });
       return false;
     }
-    return fry.y < height + (bunMode ? 25 : 23);
+    const visible = fry.y < height + (bunMode ? 25 : 23);
+    if (!visible && (!bunMode || bunPoints[fry.kind] > 0)) streak = 0;
+    return visible;
   });
   draw();
   requestAnimationFrame(step);
@@ -564,7 +585,8 @@ stopButton.addEventListener('click', () => {
 startButton.addEventListener('click', () => {
   gameScores.start(selectedLevel);
   practicing = !bunMode && !practiced;
-  player = width / 2;
+  player = previousCatchPlayer = width / 2;
+  streak = 0;
   fries = [];
   catches = [];
   scoreOutput.value = score = 0;
@@ -572,6 +594,7 @@ startButton.addEventListener('click', () => {
   nextSpawn = 0;
   rareBunAt = bunMode ? 8 + Math.random() * 7 : Infinity;
   chickenAt = bunMode ? Infinity : 3;
+  colaAt = bunMode ? Infinity : 6;
   bunBag = [];
   keys.clear(); held = 0; dragId = null;
   startTime = previous = performance.now();
@@ -582,7 +605,7 @@ startButton.addEventListener('click', () => {
   difficultyButtons.forEach(button => { button.disabled = true; });
   music.currentTime = 0;
   playMusic();
-  result.textContent = bunMode ? L('Smiley +1 · Twins +2 · Glitter +5. Avoid Devil and Burnt −1!', 'にこにこ +1・ふたご +2・キラキラ +5。デビルとこげこげ −1 はよけてね！') : practicing ? L('Catch this fry to start!', 'このフライを つかまえて スタート！') : L('Fries +1 · Chicken +5!', 'ポテト +1・チキン +5！');
+  result.textContent = bunMode ? L('Smiley +1 · Twins +2 · Glitter +5. Avoid Devil and Burnt −1!', 'にこにこ +1・ふたご +2・キラキラ +5。デビルとこげこげ −1 はよけてね！') : practicing ? L('Catch this fry to start!', 'このフライを つかまえて スタート！') : L('Fries +1 · Chicken +5 · Cola +3!', 'ポテト +1・チキン +5・コーラ +3！');
   requestAnimationFrame(step);
 });
 
