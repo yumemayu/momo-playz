@@ -249,10 +249,49 @@ function crossesCup(fry, previousY, previousPlayer) {
   return fry.x >= left && fry.x <= right;
 }
 
+function catchPulse(now) {
+  if (bunMode || reducedMotion.matches) return 0;
+  const latest = catches.at(-1);
+  if (!latest || latest.label === '−1') return 0;
+  const t = (now - latest.at) / 280;
+  return t >= 0 && t < 1 ? Math.sin(t * Math.PI * 2) * Math.exp(-3 * t) : 0;
+}
+
+function drawCatchBurst(now) {
+  if (bunMode || reducedMotion.matches) return;
+  ctx.save();
+  ctx.translate(player, cupMouthY);
+  ctx.scale(axisY / axisX * (1 + catchPulse(now) * .13), 1 - catchPulse(now) * .16);
+  for (const effect of catches) {
+    if (!effect.fry || effect.label === '−1') continue;
+    const t = (now - effect.at) / 380;
+    if (t < 0 || t >= 1) continue;
+    const bonus = effect.label === '+5';
+    ctx.globalAlpha = (1 - t) * .85;
+    ctx.strokeStyle = bonus ? '#f7ae27' : '#ffc96c';
+    ctx.lineWidth = 2 * (1 - t);
+    ctx.beginPath();
+    ctx.ellipse(0, 0, cupHalfWidth + t * 17, 7 + t * 5, 0, Math.PI * 2);
+    ctx.stroke();
+    const count = bonus ? 10 : 6;
+    for (let i = 0; i < count; i++) {
+      const angle = Math.PI + (i + .5) / count * Math.PI;
+      const distance = 12 + t * (bonus ? 55 : 35);
+      const x = Math.cos(angle) * distance;
+      const y = Math.sin(angle) * distance + 20 * t * t;
+      ctx.fillStyle = ['#ffe49a', '#ff9ab1', '#ffffff'][i % 3];
+      ctx.beginPath();
+      ctx.arc(x, y, (bonus ? 3 : 2) * (1 - t * .7), 0, Math.PI * 2);
+      ctx.fill();
+    }
+  }
+  ctx.restore();
+}
+
 function drawCup(now) {
   ctx.save();
   ctx.translate(player, cupMouthY);
-  ctx.scale(axisY / axisX, 1);
+  ctx.scale(axisY / axisX * (1 + catchPulse(now) * .13), 1 - catchPulse(now) * .16);
 
   ctx.fillStyle = bunMode ? '#865235' : '#7f2438';
   ctx.beginPath();
@@ -262,13 +301,14 @@ function drawCup(now) {
 
   for (const effect of catches) {
     if (!effect.fry || reducedMotion.matches) continue;
-    const progress = Math.max(0, (now - effect.at) / 135);
+    const progress = Math.max(0, (now - effect.at) / (bunMode ? 135 : 190));
+    const ease = 1 - Math.pow(1 - Math.min(1, progress), 3);
     if (progress >= 1) continue;
     const item = {
       ...effect.fry,
-      x: player + effect.offset * (1 - progress),
-      y: cupMouthY + (bunMode ? 19 : 27) * progress,
-      stretch: effect.fry.stretch * (1 - progress),
+      x: player + effect.offset * (1 - ease),
+      y: effect.fry.y + (cupMouthY + (bunMode ? 19 : 27) - effect.fry.y) * ease,
+      stretch: effect.fry.stretch * (1 - progress * .85),
       sink: 1 - progress,
     };
     if (bunMode) drawBun(item);
@@ -277,7 +317,7 @@ function drawCup(now) {
 
   ctx.save();
   ctx.translate(player, cupMouthY);
-  ctx.scale(axisY / axisX, 1);
+  ctx.scale(axisY / axisX * (1 + catchPulse(now) * .13), 1 - catchPulse(now) * .16);
   if (bunMode) {
     const bamboo = ctx.createLinearGradient(0, 0, 0, 27);
     bamboo.addColorStop(0, '#ffe2a8');
@@ -358,23 +398,31 @@ function draw() {
   if (squirrel.complete && squirrel.naturalWidth) {
     const latest = catches.at(-1);
     const age = latest ? performance.now() - latest.at : Infinity;
+    const bounce = catchPulse(performance.now());
     const shake = !reducedMotion.matches && latest?.label === '−1' && age < 260
       ? Math.sin(age / 12) * 5 * (1 - age / 260) : 0;
     // The canvas fills a responsive rectangle, so its two axes may scale differently.
     const size = squirrelSize * Math.min(axisX, axisY);
     const spriteWidth = size / axisX;
     const spriteHeight = size / axisY;
-    ctx.drawImage(squirrel, player + shake - spriteWidth / 2, 334 - spriteHeight, spriteWidth, spriteHeight);
+    ctx.drawImage(squirrel, player + shake - spriteWidth * (1 + bounce * .035) / 2, 334 - spriteHeight - bounce * 4, spriteWidth * (1 + bounce * .035), spriteHeight);
   }
   const now = performance.now();
   catches = catches.filter(catchEffect => now - catchEffect.at < 600);
   drawCup(now);
+  drawCatchBurst(now);
   for (const effect of catches) {
     const progress = Math.max(0, (now - effect.at) / 600);
     const spread = reducedMotion.matches ? 0 : 35 * progress;
     ctx.save();
     ctx.setTransform(axisY, 0, 0, axisY, 0, 0);
     ctx.globalAlpha = 1 - progress;
+    const pop = !bunMode && !reducedMotion.matches ? 1 + .22 * Math.sin(Math.PI * Math.min(1, progress * 4)) : 1;
+    const labelX = effect.x * axisX / axisY;
+    const labelTop = cupMouthY - 30 - spread;
+    ctx.translate(labelX, labelTop);
+    ctx.scale(pop, pop);
+    ctx.translate(-labelX, -labelTop);
     ctx.textAlign = 'center';
     const handwriting = getComputedStyle(document.documentElement).getPropertyValue('--game-handwriting');
     ctx.font = 'bold 25px ' + handwriting.trim();
