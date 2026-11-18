@@ -115,6 +115,9 @@
     }
     svg.addEventListener('pointerdown',e=>{
       if(!playing||busy||e.button!==0||activePointer!==null)return;
+      // Keep the finger-sized hit area after resizing or rotating the device.
+      const currentMatrix=svg.getScreenCTM(),currentScale=Math.hypot(currentMatrix.a||1,currentMatrix.b||0)||1;
+      tracker.tolerance=24/currentScale;tracker.deadzone=7/currentScale;tracker.snap=15/currentScale;
       const target=e.target.closest('[data-edge]');
       activePointer=e.pointerId;svg.setPointerCapture(e.pointerId);
       update(tracker.begin(point(e),target?Number(target.dataset.edge):null));e.preventDefault();
