@@ -13,7 +13,7 @@
   // Recently played: remember which picker cards were tapped.
   const KEY = 'momoRecentGames';
   const MAX = 8;
-  const mainPicker = document.querySelector('main nav.game-picker:not(.recent-picker)');
+  const mainPicker = document.querySelector('main nav.game-picker[aria-labelledby="all-games-title"]');
   const section = document.getElementById('recent');
   const recentPicker = document.getElementById('recent-picker');
   if (!mainPicker || !section || !recentPicker) return;
@@ -35,7 +35,7 @@
   const main = document.querySelector('main');
   if (main) {
     main.addEventListener('click', (event) => {
-      const link = event.target.closest('nav.game-picker a, #mission-action, #surprise-result');
+      const link = event.target.closest('nav.game-picker a, .toy-play, #mission-action, #surprise-result');
       if (!link || link.pathname.endsWith('/sticker-book/')) return;
       const path = pathOf(link);
       const list = load().filter((item) => item !== path);

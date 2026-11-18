@@ -11,7 +11,9 @@
 <script defer src="language.js"></script>
 <script defer src="stickers.js?v=daily-stickers"></script>
 <script defer src="install-hint.js"></script>
-<script defer src="home.js?v=daily-mission"></script>
+<script defer src="home.js?v=toy-shelf"></script>
+<link rel="stylesheet" href="toy-shelf.css">
+<script defer src="toy-shelf.js"></script>
 <script defer src="popular.js?v=pop-3"></script>
 <script defer src="coins.js?v=coin-1"></script>
   <link rel="manifest" href="manifest.webmanifest">
@@ -29,6 +31,27 @@
   <img src="assets/momo-squirrels.png" alt="" width="130" height="99">
   <h1>Momo Playz</h1>
 </header>
+<section class="toy-shelf" aria-labelledby="toy-shelf-title">
+  <h2 id="toy-shelf-title" data-ja="きょうのおもちゃ棚">Today’s Toy Shelf</h2>
+  <p data-ja="おもちゃをタップしてみよう">Tap a toy to see it move</p>
+  <div class="toy-shelf-row">
+    <article class="toy-shelf-item toy-pudding">
+      <button class="toy-preview" type="button" aria-label="Animate Pudding Table Jump" data-ja-label="プリンのテーブルジャンプを動かす"><span class="toy-art" aria-hidden="true"></span></button>
+      <h3 data-ja="プリンのテーブルジャンプ">Pudding Table Jump</h3>
+      <a class="toy-play" href="./pudding-table-jump/" aria-label="Play Pudding Table Jump" data-ja-label="プリンのテーブルジャンプを遊ぶ" data-ja="あそぶ">Play</a>
+    </article>
+    <article class="toy-shelf-item toy-bun">
+      <button class="toy-preview" type="button" aria-label="Animate Bun Shop Owner" data-ja-label="肉まん屋オーナーを動かす"><span class="toy-art" aria-hidden="true"></span></button>
+      <h3 data-ja="肉まん屋オーナー">Bun Shop Owner</h3>
+      <a class="toy-play" href="./bun-owner/" aria-label="Play Bun Shop Owner" data-ja-label="肉まん屋オーナーを遊ぶ" data-ja="あそぶ">Play</a>
+    </article>
+    <article class="toy-shelf-item toy-capybara">
+      <button class="toy-preview" type="button" aria-label="Animate Capybara Onsen Merge" data-ja-label="カピバラ温泉マージを動かす"><span class="toy-art" aria-hidden="true"></span></button>
+      <h3 data-ja="カピバラ温泉マージ">Capybara Onsen Merge</h3>
+      <a class="toy-play" href="./capybara-merge/" aria-label="Play Capybara Onsen Merge" data-ja-label="カピバラ温泉マージを遊ぶ" data-ja="あそぶ">Play</a>
+    </article>
+  </div>
+</section>
 <section class="home-play" id="home-play" hidden>
   <div class="home-mission">
     <h2 data-ja="今日のミッション">Today’s mission</h2>
@@ -53,7 +76,8 @@
   <h2 class="newgames-title"><span aria-hidden="true">🆕</span> <span data-ja="新着ゲーム">New games</span></h2>
   <nav class="game-picker newgames-picker" id="newgames-picker" aria-label="New games"></nav>
 </section>
-<nav class="game-picker" aria-label="Choose a game">
+<h2 class="all-games-title" id="all-games-title" data-ja="すべてのゲーム">All Games</h2>
+<nav class="game-picker" aria-labelledby="all-games-title">
 <a href="fry-catch/"><img class="game-art" src="assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
 <a href="./smiley-bun-catch/"><img class="game-art" src="assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
 <a href="./bun-owner/"><img class="game-art" src="assets/game-bun.png" alt="" width="40" height="40"><span data-ja="肉まん屋オーナー">Bun Shop Owner</span><span class="new-badge" data-new-until="2026-12-07">NEW</span></a>

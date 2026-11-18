@@ -1,0 +1,16 @@
+.toy-shelf{margin:12px 0 18px;padding:clamp(12px,3vw,24px);text-align:center;background:#fff7eb;border:2px solid #f1deca;border-radius:24px;color:#67372f}
+.toy-shelf h2{font-size:clamp(1.3rem,4.2vw,2.35rem);margin:0}
+.toy-shelf p{margin:.15rem 0 .65rem;color:#80504a;font-size:.9rem}
+.toy-shelf-row{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:clamp(4px,2vw,20px);position:relative}
+.toy-shelf-item{display:grid;grid-template-rows:auto 1fr auto;justify-items:center;min-width:0;--button:#f9afc3}
+.toy-bun{--button:#b4e4b4}.toy-capybara{--button:#d6b9f1}
+.toy-preview{display:block;width:100%;border:0;padding:0;border-radius:14px;background:transparent;cursor:pointer;touch-action:manipulation}
+.toy-art{display:block;width:100%;aspect-ratio:4/3;border-radius:14px 14px 7px 7px;background:url(assets/toy-shelf.jpg) no-repeat;background-size:362% 362%;box-shadow:0 5px 0 #dba66e}
+.toy-pudding .toy-art{background-position:11.45% 28%}
+.toy-bun .toy-art{background-position:48.66% 28%}
+.toy-capybara .toy-art{background-position:89.7% 28%}
+.toy-shelf h3{font-size:clamp(.72rem,2vw,1.03rem);line-height:1.2;margin:12px 0 8px;overflow-wrap:anywhere}
+.toy-play{display:grid;place-items:center;min-height:44px;min-width:min(100%,90px);padding:5px 8px;border-radius:999px;color:#50263b;background:var(--button);text-decoration:none;font-weight:800}
+.toy-preview:focus-visible,.toy-play:focus-visible{outline:3px solid #754676;outline-offset:3px}
+.toy-preview[data-playing]{box-shadow:0 0 0 3px #e2a2ab}
+.all-games-title{font-size:1.25rem;margin:20px 0 8px}
