@@ -44,7 +44,7 @@ function serve(s,id=s.selected){
  const perfect=g.mistakes===0;s.streak=perfect?s.streak+1:0;s.bestStreak=Math.max(s.bestStreak,s.streak);
  const combo=perfect&&s.streak%3===0?10:0,earned=reward(g.order,g.mistakes)+combo;
  s.coins+=earned;s.served++;if(perfect)s.perfect++;
- g.status='served';g.reaction=1.3;
+ g.status='served';g.reaction=1.8;
  s.selected=s.guests.find(x=>x.status==='waiting')?.id??null;
  return {ok:true,earned,combo,perfect};
 }
