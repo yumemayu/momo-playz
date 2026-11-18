@@ -1,5 +1,5 @@
 .toy-shelf {
-  max-width: 640px;
+  max-width: 500px;
   margin: 10px auto 14px;
   padding: 10px clamp(9px, 2vw, 15px) 4px;
   text-align: center;
@@ -33,7 +33,7 @@
 .toy-art {
   display: block;
   width: 100%;
-  aspect-ratio: 1.14;
+  aspect-ratio: 1.3;
   object-fit: contain;
   object-position: center bottom;
   filter: drop-shadow(0 3px 2px #79472135);
@@ -43,8 +43,33 @@
   display: block;
   width: 100%;
   height: auto;
-  margin-top: -4.1%;
+  margin-top: -3.6%;
   pointer-events: none;
 }
 .all-games-title { font-size: 1.25rem; margin: 16px 0 8px; }
 [aria-labelledby="all-games-title"].game-picker { margin-bottom: 14px; }
+
+.toy-game-links {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 4%;
+  padding-inline: 9%;
+  margin: 0 0 4px;
+}
+.toy-play {
+  justify-self: center;
+  display: grid;
+  place-items: center;
+  min-width: min(100%, 76px);
+  min-height: 44px;
+  padding: 3px 8px;
+  border-radius: 999px;
+  color: #50263b;
+  font-size: .82rem;
+  font-weight: 800;
+  text-decoration: none;
+}
+.toy-play-pudding { background: #ffd0df; }
+.toy-play-bun { background: #d2ebcf; }
+.toy-play-capybara { background: #e6d3f7; }
+.toy-play:focus-visible { outline: 3px solid #754676; outline-offset: 3px; }
