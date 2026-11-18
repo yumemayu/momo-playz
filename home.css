@@ -128,33 +128,9 @@ main header { position: relative; }
   height: 28px;
   margin: 0;
 }
-#all-games-picker[data-compact] > a:nth-of-type(n+9) { display: none; }
-.home-more {
-  display: block;
-  margin: 0 auto 12px;
-  padding: 7px 13px;
-  min-height: 44px;
-  border: 1px solid #ceb1d6;
-  border-radius: 999px;
-  background: #f2e1f7;
-  color: #57345f;
-  font: inherit;
-  cursor: pointer;
-}
-.home-more[hidden] { display: none; }
-.home-secondary {
-  margin: 6px 0;
-  padding: 0 10px;
-  border: 1px solid #e8cee0;
-  border-radius: 12px;
-  background: #fff9fd;
-}
-.home-secondary summary { padding-block: 10px; cursor: pointer; font-size: .9rem; }
-.home-secondary nav { padding-bottom: 10px; }
 @media (max-width: 600px) {
   #all-games-picker { grid-template-columns: repeat(2, minmax(0,1fr)); }
-  #all-games-picker[data-compact] > a:nth-of-type(n+5) { display: none; }
-  .home-play { gap: 4px; padding: 7px 9px; }
+    .home-play { gap: 4px; padding: 7px 9px; }
   .home-mission { flex-basis: 100%; gap: 3px 7px; }
   .home-mission h2 { font-size: .88rem; }
   .home-mission p, #mission-action, #surprise-game { font-size: .78rem; }
@@ -212,3 +188,40 @@ main header { position: relative; }
   #surprise-game { white-space: normal; padding-inline: 7px; }
   #surprise-result { max-width: 100%; overflow-wrap: anywhere; }
 }
+
+.home-game-row {
+  --row-accent: #fff0bb;
+  margin: 10px 0;
+  background: color-mix(in srgb, var(--row-accent) 35%, #fff);
+  border: 1px solid color-mix(in srgb, var(--row-accent) 75%, #b89aab);
+  border-radius: 14px;
+  padding: 6px 9px 3px;
+}
+.home-game-row.popular { --row-accent: #e5d5fc; }
+.home-game-row.recent { --row-accent: #d3efea; }
+.home-game-row h2 { margin: 0; font-size: .96rem; }
+.home-game-row nav.game-picker {
+  grid-template-columns: none;
+  grid-auto-flow: column;
+  grid-auto-columns: clamp(108px, 18vw, 155px);
+  gap: 7px;
+  overflow-x: auto;
+  scroll-snap-type: x proximity;
+  margin: 0;
+  padding: 5px 3px 7px;
+}
+.home-game-row nav.game-picker > a {
+  min-width: 0;
+  min-height: 64px;
+  padding: 5px 8px;
+  font-size: .77rem;
+  line-height: 1.15;
+  scroll-snap-align: start;
+}
+.home-game-row .game-art, .home-game-row .picker-illustration {
+  width: 23px;
+  height: 23px;
+  margin: 0;
+}
+.home-game-row .pop-count { font-size: .64rem; }
+.home-game-row .pop-medal { font-size: .8rem; left: 4px; top: 2px; }

@@ -113,20 +113,3 @@
   renderMission();
   panel.hidden = false;
 })();
-
-(() => {
-  const picker = document.querySelector('#all-games-picker');
-  const toggle = document.querySelector('#all-games-toggle');
-  if (!picker || !toggle) return;
-
-  function render(expanded) {
-    picker.toggleAttribute('data-compact', !expanded);
-    toggle.setAttribute('aria-expanded', String(expanded));
-    toggle.textContent = expanded
-      ? momoLanguage.pick('Show fewer games', '一覧をたたむ')
-      : momoLanguage.pick('Show all games', 'すべてのゲームを見る');
-  }
-  toggle.hidden = false;
-  toggle.addEventListener('click', () => render(toggle.getAttribute('aria-expanded') !== 'true'));
-  momoLanguage.subscribe(() => render(toggle.getAttribute('aria-expanded') === 'true'));
-})();
