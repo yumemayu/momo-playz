@@ -55,6 +55,8 @@ function drawAll(ui,g){
   const ui=mount('shape-passage');ui.levels.find(x=>x.dataset.level===level).emit('click');ui.press('start');
   for(let round=0;round<3;round++){
    const puzzle=ui.passages.at(-1),choices=ui.get('puzzle-field').querySelector('.solid-choices').children;
+   assert.ok(choices.every(c=>!c.classes.has('correct')),'no answer highlight before selection');
+   assert.equal(ui.get('puzzle-field').querySelector('.passage-moving-front').children.length,0,'no matching demonstration solid before selection');
    choices[(puzzle.answer+1)%choices.length].emit('click');assert.ok(!ui.get('puzzle-field').querySelector('.puzzle-next'));
    choices[puzzle.answer].emit('click');await Promise.resolve();await Promise.resolve();
    assert.ok(ui.get('puzzle-field').querySelector('.puzzle-next'));ui.get('puzzle-field').querySelector('.puzzle-next').emit('click');

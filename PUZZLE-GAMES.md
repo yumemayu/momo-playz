@@ -43,3 +43,14 @@ They are not visual browser or physical touch-device tests.
 - Add links to the new pages throughout older games' navigation when releasing
   the complete puzzle collection. This change adds home-page entry points and
   includes the existing games in both new pages' common navigation.
+
+## Depth reasoning and answer disclosure
+
+Only Practice uses flat introductory solids. Other levels stagger connected cube
+columns across depth: no single depth slice displays the full hole profile.
+Candidates have identical cube counts, and wrong options relocate a visible end
+cube instead of adding a conspicuous extra cube. Hard/Expert use larger profiles
+and more depth. The scene contains no demonstration solid before a selection;
+green success styling and the moving solid appear only after a correct answer.
+Concept images with a matching example and preselected green B do not represent
+the unanswered game state and must not be used as its visual specification.

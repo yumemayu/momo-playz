@@ -169,7 +169,7 @@
     const holeWidth=Math.max(...puzzle.hole.map(c=>c[0]))+1;
     const hx=Math.floor((8-holeWidth)/2),hy=1;
     const holeKeys=new Set(puzzle.hole.map(([x,y])=>`${x+hx},${y+hy}`));
-    const behind=make('g'),wall=make('g'),inFront=make('g');
+    const behind=make('g',{class:'passage-moving-back'}),wall=make('g'),inFront=make('g',{class:'passage-moving-front'});
     scene.append(behind);
     // Front wall tiles are genuinely absent at the opening, revealing the far side.
     const backTiles=make('g');

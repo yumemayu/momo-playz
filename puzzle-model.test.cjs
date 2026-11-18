@@ -30,6 +30,12 @@ for(const level of M.levels)for(let i=0;i<500;i++){
   const p=M.passage(level,rng);passages++;
   assert.equal(p.options.filter(c=>M.fits(c,p.hole)).length,1,'exactly one correct option');
   assert.ok(M.fits(p.options[p.answer],p.hole));
+  assert.equal(new Set(p.options.map(c=>c.length)).size,1,'cube count cannot reveal the answer');
+  if(level!=='practice'){
+    const target=p.options[p.answer];
+    assert.ok(new Set(target.map(c=>c[2])).size>=3,'several layers of depth');
+    for(const z of new Set(target.map(c=>c[2])))assert.notEqual(M.projection(target.filter(c=>c[2]===z)),M.projection(p.hole),'no flat slice displays the complete answer');
+  }
   for(const option of p.options)assert.ok(connected(option),'options must be connected solids');
   assert.equal(p.options.length,['practice','easy'].includes(level)?3:4);
 }

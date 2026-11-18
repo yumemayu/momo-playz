@@ -65,24 +65,76 @@
   }
   function fits(cubes,hole) {return projection(cubes)===projection(hole);}
   const silhouettes=[[[0,0],[0,1],[1,0]],[[0,0],[1,0],[2,0],[1,1]],[[0,0],[1,0],[1,1],[2,1]],[[0,0],[1,0],[2,0],[0,1],[2,1]],[[0,0],[1,0],[2,0],[1,1],[1,2]],[[0,0],[1,0],[2,0],[2,1],[2,2],[1,2]]];
+  function connected(cubes) {
+    if(!cubes.length)return false;
+    const keys=new Set(cubes.map(c=>c.join(','))),seen=new Set([cubes[0].join(',')]),queue=[cubes[0]];
+    while(queue.length){
+      const c=queue.shift();
+      for(let axis=0;axis<3;axis++)for(const delta of [-1,1]){
+        const n=c.slice();n[axis]+=delta;const key=n.join(',');
+        if(keys.has(key)&&!seen.has(key)){seen.add(key);queue.push(n);}
+      }
+    }
+    return seen.size===keys.size;
+  }
+  function distanceMap(shape,start) {
+    const cells=new Set(shape.map(p=>p.join(','))),dist=new Map([[start.join(','),0]]),queue=[start];
+    while(queue.length){
+      const [x,y]=queue.shift(),d=dist.get(`${x},${y}`);
+      for(const n of [[x+1,y],[x-1,y],[x,y+1],[x,y-1]]){
+        const key=n.join(',');if(cells.has(key)&&!dist.has(key)){dist.set(key,d+1);queue.push(n);}
+      }
+    }
+    return dist;
+  }
+  function depthSolid(shape,difficulty) {
+    if(difficulty===0)return shape.map(([x,y])=>[x,y,0]);
+    // Start at a graph extremity, then stagger adjacent columns along z. Their
+    // intervals overlap to keep the solid connected, but no z-slice spells out
+    // the complete answer. The player must mentally project the whole solid.
+    const first=distanceMap(shape,shape[0]);
+    const endpoint=shape.reduce((a,b)=>first.get(b.join(','))>first.get(a.join(','))?b:a);
+    const distances=distanceMap(shape,endpoint),cubes=[];
+    for(const [x,y]of shape){
+      const z=distances.get(`${x},${y}`);
+      cubes.push([x,y,z],[x,y,z+1]);
+    }
+    return cubes;
+  }
   function passage(level, rng=Math.random) {
     const difficulty=levels.indexOf(level);
-    const shape=silhouettes[Math.floor(rng()*(difficulty===0?2:silhouettes.length))];
-    const target=shape.map(([x,y])=>[x,y,0]);
-    if(difficulty>0) {
-      const [x,y]=target[Math.floor(rng()*target.length)];target.push([x,y,1]);
-      if(difficulty>2)target.push([x,y,2]);
+    const pool=difficulty===0?silhouettes.slice(0,2):difficulty===1?silhouettes.slice(0,3):difficulty>=3?silhouettes.slice(3):silhouettes;
+    const shape=pool[Math.floor(rng()*pool.length)];
+    const target=depthSolid(shape,difficulty),count=difficulty<2?3:4;
+    if(difficulty>=3){
+      const root=target.find(c=>c[2]===0);target.push([root[0],root[1],-1]);
+      target.forEach(c=>c[2]++);
+      if(difficulty===4){const tip=target.reduce((a,b)=>b[2]>a[2]?b:a);target.push([tip[0],tip[1],tip[2]+1]);}
     }
-    // Incorrect options have an extra/missing projected cell, including rear cubes.
-    const right=shape.reduce((a,b)=>b[0]>a[0]?b:a,shape[0]);
-    const extra=target.map(c=>c.slice());
-    if(difficulty>1&&!extra.some(([x,y,z])=>x===right[0]&&y===right[1]&&z===1))extra.push([right[0],right[1],1]);
-    extra.push([right[0]+1,right[1],difficulty>1?1:0]);
-    const missing=target.filter(([x,y])=>x!==shape[shape.length-1][0]||y!==shape[shape.length-1][1]);
-    const mirrored=target.map(([x,y,z])=>[y,x,z]);
-    const wrong=[extra,missing];
-    if(difficulty>=2)wrong.push(fits(mirrored,target)?[...extra,[0,Math.max(...shape.map(c=>c[1]))+1,0]]:mirrored);
-    const options=[target,...wrong];
+    const maxX=Math.max(...target.map(c=>c[0])),maxY=Math.max(...target.map(c=>c[1]));
+    const wrong=[],seen=new Set();
+    // Move a visible end cube instead of adding/removing one: all choices have
+    // the same cube count. A moved front cube is visible, never an unknowable
+    // change hidden entirely behind the other cubes.
+    for(let remove=0;remove<target.length;remove++){
+      const rest=target.filter((_,i)=>i!==remove);if(!connected(rest))continue;
+      const keys=new Set(rest.map(c=>c.join(',')));
+      for(const [x,y,z]of rest){
+        if(keys.has([x,y,z+1].join(',')))continue;
+        for(const added of [[x+1,y,z],[x-1,y,z],[x,y+1,z],[x,y-1,z]]){
+          if(added.some(v=>v<0)||keys.has(added.join(',')))continue;
+          const candidate=[...rest,added];
+          if(fits(candidate,target))continue;
+          const key=candidate.map(c=>c.join(',')).sort().join(';');
+          if(seen.has(key))continue;seen.add(key);
+          const sameBounds=Math.max(...candidate.map(c=>c[0]))===maxX&&Math.max(...candidate.map(c=>c[1]))===maxY;
+          wrong.push({cubes:candidate,priority:(sameBounds?1:0)+rng()*.8});
+        }
+      }
+    }
+    wrong.sort((a,b)=>b.priority-a.priority);
+    if(wrong.length<count-1)throw new Error('Not enough distinct connected distractors');
+    const options=[target,...wrong.slice(0,count-1).map(p=>p.cubes)];
     for(let i=options.length-1;i>0;i--){const j=Math.floor(rng()*(i+1));[options[i],options[j]]=[options[j],options[i]];}
     return {hole:shape.map(([x,y])=>[x,y,0]),options,answer:options.findIndex(c=>fits(c,target))};
   }
@@ -92,7 +144,8 @@
     return [ox+(x*.82-z*.92)*scale,oy+(x*.36-y+z*.5)*scale];
   }
   function travelDepth(progress,cubes) {
-    const front=6,back=-Math.max(...cubes.map(c=>c[2]))-2;
+    const maxDepth=Math.max(...cubes.map(c=>c[2]));
+    const front=Math.max(2,6-maxDepth*.55),back=-maxDepth-2;
     return front+(back-front)*Math.max(0,Math.min(1,progress));
   }
   // Split visible cube faces at the wall plane so the wall actually occludes them.
