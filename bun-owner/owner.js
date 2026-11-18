@@ -26,7 +26,7 @@ function menu(){const shelf=$('shelf');shelf.replaceChildren();for(const k of M.
 function guests(){
  const list=$('customers');list.replaceChildren();cardUI=new Map();
  for(let slot=0;slot<3;slot++){
-  const g=state?.guests.find(x=>x.slot===slot);if(!g){const empty=el('div','guest-card empty');empty.setAttribute('aria-hidden','true');list.append(empty);continue;}
+  const g=state?.guests.find(x=>x.slot===slot);if(!g){const empty=el('article','guest-card empty');empty.setAttribute('aria-hidden','true');const eb=el('div','guest-order'),ep=el('button','portrait-button'),em=el('div','patience'),et=el('div','guest-tray'),ed=el('button','guest-deliver');ep.type='button';ed.type='button';ep.disabled=true;ed.disabled=true;em.append(el('i'));for(let n=0;n<3;n++){const cell=el('button','tray-cell');cell.type='button';cell.disabled=true;et.append(cell);}empty.append(eb,ep,em,et,ed);list.append(empty);continue;}
   const card=el('article','guest-card');card.dataset.guest=String(g.id);card.classList.toggle('selected',g.id===state.selected&&g.status==='waiting');card.classList.add('is-'+g.status);
   const bubble=el('div','guest-order');
   if(g.status==='waiting'){
