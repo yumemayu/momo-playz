@@ -6,7 +6,16 @@
     normal: ['Smiley', 'にこにこ'], twins: ['Twins', 'ふたご'],
     glitter: ['Glitter', 'キラキラ'], devil: ['Devil', 'デビル']
   };
-  const guests = ['🐰', '🐱', '🐻', '🐼', '🦊', '🐿️'];
+  const animalGuests = ['rabbit', 'cat', 'bear', 'panda', 'fox', 'squirrel'];
+  const guestNames = { papa: ['Papa', 'パパ'], mama: ['Mama', 'ママ'], baby: ['Baby boy', 'あかちゃん'], girl: ['Momo', 'Momo'], friend: ["Momo’s friend", 'Momoのともだち'], rabbit: ['Rabbit', 'うさぎさん'], cat: ['Cat', 'ねこさん'], bear: ['Bear', 'くまさん'], panda: ['Panda', 'パンダさん'], fox: ['Fox', 'きつねさん'], squirrel: ['Squirrel', 'リスさん'] };
+  const growthKey = 'momo:bun-owner:shop:v1';
+  let shopProgress = { coins: 0, days: 0 };
+  try {
+    const saved = JSON.parse(localStorage.getItem(growthKey) || 'null');
+    if (saved && Number.isSafeInteger(saved.coins) && saved.coins >= 0 && saved.coins < 1e9 && Number.isSafeInteger(saved.days) && saved.days >= 0) shopProgress = saved;
+  } catch {}
+  function dayGuests(day) { return [animalGuests[day % 6], 'mama', 'girl', 'papa', 'baby', 'friend']; }
+  let guests = dayGuests(shopProgress.days);
   const key = 'momo:bun-owner:records:v1';
   let state = { phase: 'welcome', round: 0, coins: 0, perfect: 0, mistakes: 0, tray: [], order: [] };
   let feedback = null;
@@ -15,7 +24,7 @@
   let records = [];
   try {
     const saved = JSON.parse(localStorage.getItem(key) || '[]');
-    if (Array.isArray(saved)) records = saved.filter(r => typeof r.name === 'string' && Number.isSafeInteger(r.score) && r.score >= 0 && r.score <= 170).slice(0, 20);
+    if (Array.isArray(saved)) records = saved.filter(r => typeof r.name === 'string' && Number.isSafeInteger(r.score) && r.score >= 0 && r.score <= 150).slice(0, 20);
   } catch {}
   const pick = (...labels) => momoLanguage.pick(...labels);
   const name = kind => pick(...names[kind]);
@@ -81,13 +90,46 @@
       row.append(art(kind, 52), quantity); $('order').append(row);
     }
   }
+  function renderCustomer() {
+    const id = guests[Math.min(state.round, 5)];
+    const label = pick(...guestNames[id]);
+    $('customer').replaceChildren();
+    if (CustomerArt.urls?.[id]) {
+      const image = document.createElement('img'); image.src = CustomerArt.urls[id];
+      image.alt = ''; image.draggable = false; $('customer').append(image);
+    }
+    $('customer').classList.toggle('customer-small', id === 'girl' || id === 'friend');
+    $('customer').classList.toggle('customer-friend', id === 'friend');
+    $('customer').classList.toggle('customer-baby', id === 'baby');
+    $('customer-name').textContent = label;
+  }
+  function renderGrowth() {
+    const upgrades = [['noren', 100, 'Curtain', 'のれん'], ['sign', 250, 'Shop sign', '看板'], ['plant', 450, 'Little plant', '鉢植え']];
+    $('upgrades').replaceChildren();
+    for (const [id, price, en, ja] of upgrades) {
+      const earned = shopProgress.coins >= price;
+      const badge = document.createElement('span'); badge.className = earned ? 'earned' : '';
+      badge.textContent = (earned ? '✓ ' : '') + pick(en, ja); $('upgrades').append(badge);
+      $('shop').classList.toggle('grown-' + id, earned);
+    }
+    $('shop-plant').hidden = shopProgress.coins < 450;
+    const next = upgrades.find(item => shopProgress.coins < item[1]);
+    $('growth-note').textContent = next
+      ? pick('Total ' + shopProgress.coins + ' coins · ' + (next[1] - shopProgress.coins) + ' to ' + next[2], '累計 ' + shopProgress.coins + 'コイン・' + next[3] + 'まで あと' + (next[1] - shopProgress.coins))
+      : pick('Your little shop is blooming!', 'お店が すてきに育ったね！');
+  }
   function render() {
     $('coins').textContent = state.coins;
     $('served').textContent = state.round + (state.phase === 'served' ? 1 : 0);
     if (state.phase === 'closed') $('served').textContent = 6;
-    $('customer').textContent = guests[Math.min(state.round, 5)];
+    renderCustomer();
+    renderGrowth();
+    $('paper-bag').hidden = state.phase !== 'served';
     $('greeting').textContent = state.phase === 'served'
       ? pick('Thank you! So fluffy! ♡', 'ありがとう！ ほかほかだね ♡')
+      : guests[state.round] === 'papa' ? pick('The big order, please!', 'いつもの大盛り、ください！')
+      : guests[state.round] === 'mama' ? pick('My favorite twins, please!', '大好きなふたご、ください！')
+      : guests[state.round] === 'baby' ? pick('One little bun, please!', 'にくまん ひとつ！')
       : pick('May I have these buns?', 'この肉まん、ください！');
     $('order-note').textContent = state.phase === 'served' ? pick('One happy guest!', 'お客さん にっこり！')
       : pick('No rush. Take your time ♡', 'ゆっくりで だいじょうぶ ♡');
@@ -119,7 +161,8 @@
   }
   function start() {
     if (!artReady || !['welcome', 'closed'].includes(state.phase)) return;
-    state = { phase: 'ordering', round: 0, coins: 0, perfect: 0, mistakes: 0, tray: [], order: M.makeOrder(0) };
+    guests = dayGuests(shopProgress.days);
+    state = { phase: 'ordering', round: 0, coins: 0, perfect: 0, mistakes: 0, tray: [], order: M.makeOrder(0, Math.random, guests[0]) };
     say('Your first guest! Swipe a bun into the steamer.', 'はじめてのお客さん！ 肉まんをせいろへ入れてね。'); render();
   }
   function serve() {
@@ -146,6 +189,8 @@
   function close() {
     if (state.phase !== 'served' || state.round !== 5) return;
     state.phase = 'closed';
+    shopProgress.coins += state.coins; shopProgress.days++;
+    try { localStorage.setItem(growthKey, JSON.stringify(shopProgress)); } catch {}
     const nickname = momoNickname.read();
     if (nickname) {
       const previous = records.find(r => r.name.toLowerCase() === nickname.toLowerCase());
@@ -162,7 +207,7 @@
   function next() {
     if (state.phase !== 'served') return;
     if (state.round === 5) { close(); return; }
-    state.round++; state.tray = []; state.mistakes = 0; state.order = M.makeOrder(state.round); state.phase = 'ordering';
+    state.round++; state.tray = []; state.mistakes = 0; state.order = M.makeOrder(state.round, Math.random, guests[state.round]); state.phase = 'ordering';
     say('Welcome! Here is your next order.', 'いらっしゃいませ！ つぎの注文だよ。'); render();
   }
   function endDrag() {
@@ -212,5 +257,5 @@
   $('start').addEventListener('click', start); $('serve').addEventListener('click', serve); $('next').addEventListener('click', next);
   $('clear').addEventListener('click', () => { if (state.phase === 'ordering') { endDrag(); state.tray = []; render(); } });
   momoLanguage.subscribe(() => { endDrag(); render(); });
-  BunShopArt.ready.then(() => { artReady = true; render(); });
+  Promise.all([BunShopArt.ready, CustomerArt.ready]).then(() => { artReady = true; render(); });
 })();

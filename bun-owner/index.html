@@ -22,14 +22,14 @@
 <details data-nickname-panel class="nickname-panel"><summary>Set nickname</summary><form><label><span data-ja="ニックネーム（なくても遊べるよ）">Nickname (optional)</span><input maxlength="20" autocomplete="off"></label><button data-ja="保存">Save</button></form><small role="status"></small></details>
 <div class="shop-stats"><span>🪙 <strong id="coins">0</strong> <span data-ja="売上">coins</span></span><span>♡ <strong id="served">0</strong> / 6 <span data-ja="人">guests</span></span><span id="best"></span></div>
 <section class="shop" id="shop" aria-label="Bun shop" data-ja-label="肉まん屋さん">
-  <div class="awning"><span data-ja="ほかほか肉まん">FRESH &amp; FLUFFY</span></div>
+  <div class="shop-sign" id="shop-sign"><span data-ja="まちの肉まん屋">THE LITTLE BUN SHOP</span></div><div class="awning"><span data-ja="ほかほか">STEAMED BUNS</span></div>
   <div class="customer-area" id="customer-area">
-    <div class="customer" id="customer" aria-hidden="true">🐰</div>
+    <div class="guest-portrait"><div class="customer" id="customer" aria-hidden="true"></div><span class="customer-name" id="customer-name"></span></div>
     <div class="order-card"><p id="greeting"></p><div id="order" class="order" aria-label="Customer order" data-ja-label="お客さんの注文"></div><small id="order-note"></small></div>
   </div>
-  <div class="counter">
+  <div class="window-sill"></div><div class="plant" id="shop-plant" hidden aria-hidden="true"><i></i><b></b></div><div class="counter">
     <span class="steam s1" aria-hidden="true">〰</span><span class="steam s2" aria-hidden="true">〰</span>
-    <div class="steamer" id="steamer" aria-label="Your steamer" data-ja-label="じぶんのせいろ"><div id="tray" class="tray"></div></div>
+    <div class="steamer" id="steamer" aria-label="Your steamer" data-ja-label="じぶんのせいろ"><div id="tray" class="tray"></div><div class="paper-bag" id="paper-bag" hidden><span data-ja="ありがとう">THANK YOU</span><i>♡</i></div></div>
     <p class="tray-guide" id="tray-guide" data-ja="ここへスワイプ ↓">Swipe buns here ↓</p>
     <div class="shelf" id="shelf" aria-label="Bun menu" data-ja-label="肉まんメニュー"></div>
   </div>
@@ -38,10 +38,11 @@
 </section>
 <p class="message" id="message" role="status" aria-live="polite"></p>
 <div class="actions"><button id="start" class="primary" data-ja="★ 開店する">★ Play</button><button id="serve" class="primary" hidden data-ja="おわたし！ ↑">Serve! ↑</button><button id="next" class="primary" hidden data-ja="つぎのお客さん →">Next guest →</button><button id="clear" class="secondary" hidden data-ja="せいろを空にする">Empty steamer</button></div>
+<section class="shop-growth"><strong data-ja="お店の成長">Your growing shop</strong><div id="upgrades"></div><p id="growth-note"></p></section>
 <p class="reward-note" data-ja="肉まん1組で10コイン。ぴったり一発でおわたしできると＋5！">10 coins per menu item · first-try delivery bonus +5!</p>
 <section class="records"><h2 data-ja="この端末のランキング">Leaderboard on this device</h2><ol id="records"></ol><p id="record-note"></p></section>
 <nav class="related"><a href="../smiley-bun-catch/" data-ja="肉まんキャッチ →">Bun Catch →</a><a href="../" data-ja="ゲームいちらん →">All games →</a></nav>
 </main>
 <footer class="feedback"><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a><small>Copyright Momo.squirrels</small></footer>
-<script src="../language.js"></script><script src="../nickname.js"></script><script src="../stickers.js?v=daily-stickers"></script><script src="model.js"></script><script src="bun-art.js"></script><script src="owner.js"></script>
+<script src="../language.js"></script><script src="../nickname.js"></script><script src="../stickers.js?v=daily-stickers"></script><script src="model.js"></script><script src="bun-art.js"></script><script src="customers-art.js"></script><script src="owner.js"></script>
 </body></html>
