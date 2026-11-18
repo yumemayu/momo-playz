@@ -1,0 +1,47 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title data-en-title="Bun Shop Owner | Momo Playz">肉まん屋オーナー | Momo Playz</title>
+<link rel="stylesheet" href="../language.css">
+<link rel="stylesheet" href="../nickname.css">
+<link rel="stylesheet" href="../game-title-banner.css">
+<link rel="stylesheet" href="owner.css">
+<link rel="manifest" href="../manifest.webmanifest">
+<meta name="theme-color" content="#f272a7">
+<link rel="apple-touch-icon" href="../icons/icon-512.png">
+<script defer src="../pwa.js"></script>
+</head>
+<body data-game="bun-owner">
+<main>
+<a class="back" href="../" data-ja="← ゲームいちらん">← All games</a>
+<header class="game-heading game-title-banner"><span class="game-title-rainbow" aria-hidden="true">🌈</span><span class="game-title-art" aria-hidden="true"></span><h1 data-ja="肉まん屋オーナー">Bun Shop Owner</h1></header>
+<p class="intro" data-ja="ちいさな肉まん屋さん、きょうも開店！">Your little bun shop is open for business!</p>
+<details class="howto"><summary data-ja="あそびかた">How to play</summary><p data-ja="① 注文を見る　② 肉まんをせいろへスワイプ　③ おわたし！ タップでも入れられます。せいろの肉まんはタップで戻せます。時間制限はありません。">1. Read the order. 2. Swipe buns into the steamer. 3. Serve! You can also tap to add a bun, and tap a bun in the steamer to return it. No time limit.</p></details>
+<details data-nickname-panel class="nickname-panel"><summary>Set nickname</summary><form><label><span data-ja="ニックネーム（なくても遊べるよ）">Nickname (optional)</span><input maxlength="20" autocomplete="off"></label><button data-ja="保存">Save</button></form><small role="status"></small></details>
+<div class="shop-stats"><span>🪙 <strong id="coins">0</strong> <span data-ja="売上">coins</span></span><span>♡ <strong id="served">0</strong> / 6 <span data-ja="人">guests</span></span><span id="best"></span></div>
+<section class="shop" id="shop" aria-label="Bun shop" data-ja-label="肉まん屋さん">
+  <div class="awning"><span data-ja="ほかほか肉まん">FRESH &amp; FLUFFY</span></div>
+  <div class="customer-area" id="customer-area">
+    <div class="customer" id="customer" aria-hidden="true">🐰</div>
+    <div class="order-card"><p id="greeting"></p><div id="order" class="order" aria-label="Customer order" data-ja-label="お客さんの注文"></div><small id="order-note"></small></div>
+  </div>
+  <div class="counter">
+    <span class="steam s1" aria-hidden="true">〰</span><span class="steam s2" aria-hidden="true">〰</span>
+    <div class="steamer" id="steamer" aria-label="Your steamer" data-ja-label="じぶんのせいろ"><div id="tray" class="tray"></div></div>
+    <p class="tray-guide" id="tray-guide" data-ja="ここへスワイプ ↓">Swipe buns here ↓</p>
+    <div class="shelf" id="shelf" aria-label="Bun menu" data-ja-label="肉まんメニュー"></div>
+  </div>
+  <div id="welcome" class="welcome"><strong data-ja="いらっしゃいませ！">Welcome!</strong><p data-ja="注文どおりに肉まんを入れて、お客さんに届けよう。">Pack the right buns and make your customers smile.</p><span data-ja="6人のお客さん・時間制限なし">6 guests · no time limit</span></div>
+  <div id="day-result" class="day-result" hidden role="status"><span class="result-stars" aria-hidden="true">✦ ✦ ✦</span><h2 id="day-title"></h2><strong id="day-coins"></strong><p id="day-caption"></p></div>
+</section>
+<p class="message" id="message" role="status" aria-live="polite"></p>
+<div class="actions"><button id="start" class="primary" data-ja="★ 開店する">★ Play</button><button id="serve" class="primary" hidden data-ja="おわたし！ ↑">Serve! ↑</button><button id="next" class="primary" hidden data-ja="つぎのお客さん →">Next guest →</button><button id="clear" class="secondary" hidden data-ja="せいろを空にする">Empty steamer</button></div>
+<p class="reward-note" data-ja="肉まん1つで10コイン。ぴったり一発でおわたしできると＋5！">10 coins per menu item · first-try delivery bonus +5!</p>
+<section class="records"><h2 data-ja="この端末のランキング">Leaderboard on this device</h2><ol id="records"></ol><p id="record-note"></p></section>
+<nav class="related"><a href="../smiley-bun-catch/" data-ja="肉まんキャッチ →">Bun Catch →</a><a href="../" data-ja="ゲームいちらん →">All games →</a></nav>
+</main>
+<footer class="feedback"><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a><small>Copyright Momo.squirrels</small></footer>
+<script src="../language.js"></script><script src="../nickname.js"></script><script src="../stickers.js?v=daily-stickers"></script><script src="model.js"></script><script src="bun-art.js"></script><script src="owner.js"></script>
+</body></html>
