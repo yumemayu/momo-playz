@@ -113,3 +113,34 @@
   renderMission();
   panel.hidden = false;
 })();
+
+/* Category filter for All Games (2026-11-19). */
+(() => {
+  const picker = document.querySelector('#all-games-picker');
+  const chips = document.querySelector('#cat-chips');
+  if (!picker || !chips) return;
+  const CAT = {
+    'cube-net': 'puzzle', 'cube-count': 'puzzle', 'shadow-light': 'puzzle',
+    'whats-next': 'puzzle', 'flow': 'puzzle', 'lights-out': 'puzzle',
+    'hit-blow': 'puzzle', 'minesweeper': 'puzzle', 'hanoi': 'puzzle',
+    'quoridor': 'puzzle', 'cat-trap': 'puzzle', 'one-stroke': 'puzzle',
+    'fry-catch': 'action', 'smiley-bun-catch': 'action', 'glasses-cat': 'action',
+    'dodgeball': 'action', 'capybara-tap': 'action', 'pudding-table-jump': 'action',
+    'capybara-merge': 'relax', 'capybara-memory': 'relax', 'bun-owner': 'relax',
+    'switch-shine': 'relax',
+    'piano': 'music', 'clicky-keys': 'music', 'bun-lights': 'music'
+  };
+  picker.querySelectorAll('a[href]').forEach(a => {
+    const dir = a.getAttribute('href').replace(/^\.\//, '').replace(/\/$/, '');
+    a.dataset.cat = CAT[dir] || 'relax';
+  });
+  chips.addEventListener('click', e => {
+    const btn = e.target.closest('.cat-chip');
+    if (!btn) return;
+    chips.querySelectorAll('.cat-chip').forEach(c => c.classList.toggle('is-on', c === btn));
+    const cat = btn.dataset.cat;
+    picker.querySelectorAll('a[href]').forEach(a => {
+      a.classList.toggle('cat-hide', cat !== 'all' && a.dataset.cat !== cat);
+    });
+  });
+})();

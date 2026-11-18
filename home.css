@@ -206,3 +206,37 @@ main header { position: relative; }
   header { flex-wrap: wrap; }
   .coin-chip { margin-left: auto; }
 }
+
+/* --- Home shelves + category chips (2026-11-19) --- */
+.home-game-row .game-picker {
+  display: flex;
+  flex-wrap: nowrap;
+  overflow-x: auto;
+  scroll-snap-type: x mandatory;
+  padding-bottom: 10px;
+  -webkit-overflow-scrolling: touch;
+}
+.home-game-row .game-picker > a {
+  flex: 0 0 128px;
+  scroll-snap-align: start;
+}
+.home-game-row .game-picker .game-name {
+  white-space: normal;
+  overflow: visible;
+  text-overflow: clip;
+}
+/* NEW badges live only in the New games shelf */
+#all-games-picker .new-badge, #popular-picker .new-badge, #recent-picker .new-badge { display: none; }
+.cat-chips { display: flex; flex-wrap: wrap; gap: 8px; margin: 4px 0 14px; }
+.cat-chip {
+  font: inherit; font-weight: 700; cursor: pointer;
+  border: 2px solid #f2b8d0; background: #fff; color: #8a4b6b;
+  border-radius: 999px; padding: 7px 16px;
+}
+.cat-chip.is-on { background: #f272a7; border-color: #f272a7; color: #fff; }
+#all-games-picker > a.cat-hide { display: none; }
+@media (max-width: 560px) {
+  header { padding-right: 100px; gap: 8px; }
+  header img { width: 52px; }
+  header h1 { font-size: 23px; white-space: nowrap; }
+}

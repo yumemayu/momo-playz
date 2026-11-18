@@ -7,11 +7,11 @@
 <meta name="description" content="Play Momo Playz games, from Fry Catch and Momo Piano to circuit puzzles.">
 <link rel="stylesheet" href="game-picker.css">
 <link rel="stylesheet" href="language.css">
-<link rel="stylesheet" href="home.css?v=full-card-layout-2">
+<link rel="stylesheet" href="home.css?v=full-card-layout-3">
 <script defer src="language.js"></script>
 <script defer src="stickers.js?v=daily-stickers"></script>
 <script defer src="install-hint.js"></script>
-<script defer src="home.js?v=game-rows"></script>
+<script defer src="home.js?v=game-rows-2"></script>
 <link rel="stylesheet" href="toy-shelf.css?v=compact-home">
 <script defer src="toy-shelf.js?v=wood"></script>
 <script defer src="popular.js?v=pop-3"></script>
@@ -76,7 +76,14 @@
   <h2 id="recent-title" class="recent-title"><span aria-hidden="true">🕒</span> <span data-ja="さいきん遊んだ">Recently played</span></h2>
   <nav class="game-picker recent-picker" id="recent-picker" aria-label="Recently played games"></nav>
 </section>
-<h2 class="all-games-title" id="all-games-title" data-ja="すべてのゲーム">All Games</h2>
+<div class="cat-chips" id="cat-chips" role="group" aria-label="Game categories">
+    <button type="button" class="cat-chip is-on" data-cat="all" data-ja="すべて">All</button>
+    <button type="button" class="cat-chip" data-cat="puzzle" data-ja="🧩 パズル">🧩 Puzzles</button>
+    <button type="button" class="cat-chip" data-cat="action" data-ja="🏃 アクション">🏃 Action</button>
+    <button type="button" class="cat-chip" data-cat="relax" data-ja="🍮 まったり">🍮 Relax</button>
+    <button type="button" class="cat-chip" data-cat="music" data-ja="🎵 おんがく">🎵 Music</button>
+  </div>
+  <h2 class="all-games-title" id="all-games-title" data-ja="すべてのゲーム">All Games</h2>
 <nav class="game-picker" id="all-games-picker" aria-labelledby="all-games-title">
 <a href="fry-catch/"><img class="game-art" src="assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
 <a href="./smiley-bun-catch/"><img class="game-art" src="assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
