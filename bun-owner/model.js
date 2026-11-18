@@ -42,11 +42,11 @@ function serve(s,id=s.selected){
  const check=difference(g.order,g.tray);
  if(!check.matches){g.mistakes++;s.streak=0;return {ok:false,...check};}
  const perfect=g.mistakes===0;s.streak=perfect?s.streak+1:0;s.bestStreak=Math.max(s.bestStreak,s.streak);
- const combo=perfect&&s.streak%3===0?10:0,earned=reward(g.order,g.mistakes)+combo;
+ const combo=perfect&&s.streak%3===0?10:0,fever=s.mode==='rush'&&s.phase==='open'&&s.elapsed>=75,earned=(reward(g.order,g.mistakes)+combo)*(fever?2:1);
  s.coins+=earned;s.served++;if(perfect)s.perfect++;
  g.status='served';g.reaction=1.8;
  s.selected=s.guests.find(x=>x.status==='waiting')?.id??null;
- return {ok:true,earned,combo,perfect};
+ return {ok:true,earned,combo,perfect,fever};
 }
 function advance(s,seconds){
  let changed=false,departures=0,arrivals=0;

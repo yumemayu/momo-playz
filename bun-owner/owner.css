@@ -109,3 +109,12 @@ main > .records{order:10}
   .portrait-button{height:185px}
   .guest-order{height:76px;min-height:76px}
 }
+.steam-puff{position:absolute;border-radius:50%;background:radial-gradient(circle,rgba(255,255,255,.98) 0%,rgba(255,255,255,.6) 45%,rgba(255,255,255,0) 70%);filter:drop-shadow(0 3px 4px rgba(160,120,90,.35));pointer-events:none;opacity:0}
+.combo-pill{background:#fbe5aa;border:2px solid #d37b50;border-radius:999px;padding:3px 12px;font-weight:bold;color:#b25636;font-size:14px}
+.fever-pill{background:#e2483d;border:2px solid #ffb03a;border-radius:999px;padding:3px 12px;font-weight:bold;color:#fff;font-size:14px;animation:fever-blink .5s ease-in-out infinite alternate}
+body.fever .restaurant{animation:fever-glow 1s ease-in-out infinite alternate}
+body.fever #clock{color:#d3382c}
+.reward-float.fever{background:#ffd9a8;border-color:#e2483d;color:#b22d24}
+@keyframes fever-glow{from{box-shadow:0 7px 0 #e6c9c4,0 0 22px 6px rgba(255,150,40,.4)}to{box-shadow:0 7px 0 #e6c9c4,0 0 42px 14px rgba(255,150,40,.72)}}
+@keyframes fever-blink{from{transform:scale(1)}to{transform:scale(1.07)}}
+@media(prefers-reduced-motion:reduce){.steam-puff{display:none}.fever-pill,body.fever .restaurant{animation:none}}
