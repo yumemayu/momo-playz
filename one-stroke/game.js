@@ -54,7 +54,7 @@
       }else{puzzle=puzzles[round];resetPuzzle();prompt();}
     });next.focus({preventScroll:true});
   }
-  function prompt(){status(state.node!==null?say('Continue from the yellow point. Lift and continue any time.','黄色い点から つづきをかこう。指をはなしても つづけられるよ。'):say('Choose a start. Use every line once. Tap or slide.','はじめの点をえらぼう。すべての線を1回ずつ。タップでもなぞってもOK。'));}
+  function prompt(){status(state.node!==null?say('Continue from the pink point. Lift and continue any time.','ピンクの点から つづきをかこう。指をはなしても つづけられるよ。'):say('Choose a start. Use every line once. Tap or slide.','はじめの点をえらぼう。すべての線を1回ずつ。タップでもなぞってもOK。'));}
   function accept(edge,keepCanvas=false){
     if(!playing||busy)return false;
     const next=M.trace(puzzle,state,edge);
@@ -63,7 +63,7 @@
     if(keepCanvas){
       const bases=field.querySelectorAll('.stroke-base'),hits=field.querySelectorAll('.stroke-hit');
       state.used.forEach(i=>{bases[i].classList.add('traced');hits[i].setAttribute('aria-disabled','true');hits[i].setAttribute('tabindex','-1');});
-      field.querySelectorAll('.stroke-node').forEach((el,i)=>{el.classList.toggle('current',i===state.node);el.setAttribute('r',i===state.node?10:6);});
+      field.querySelectorAll('.stroke-node').forEach((el,i)=>{el.classList.toggle('current',i===state.node);el.setAttribute('r',i===state.node?13:9);});
       field.querySelector('.stroke-tally').textContent=`${state.used.length} / ${puzzle.edges.length}`;controls();
     }else render();
     if(state.used.length===puzzle.edges.length)complete();else prompt();return true;
@@ -80,8 +80,8 @@
       hit.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;e.preventDefault();if(!playing||busy)return;if(state.node===null)state.node=edge.a;accept(i);});
     });
     puzzle.points.forEach(([x,y],i)=>{
-      const dot=make('circle',{cx:x,cy:y,r:state.node===i?10:6,class:state.node===i?'stroke-node current':'stroke-node'});svg.append(dot);
-      if(state.node===null&&level==='practice'&&(M.degrees(puzzle)[i]%2||M.degrees(puzzle).every(d=>d%2===0)))svg.append(make('circle',{cx:x,cy:y,r:13,class:'start-hint'}));
+      const dot=make('circle',{cx:x,cy:y,r:state.node===i?13:9,class:state.node===i?'stroke-node current':'stroke-node'});svg.append(dot);
+      if(state.node===null&&level==='practice'&&(M.degrees(puzzle)[i]%2||M.degrees(puzzle).every(d=>d%2===0)))svg.append(make('circle',{cx:x,cy:y,r:17,class:'start-hint'}));
     });
     const tally=make('text',{x:220,y:374,'text-anchor':'middle',class:'stroke-tally'},`${state.used.length} / ${puzzle.edges.length}`);svg.append(tally);
     field.append(svg);
@@ -102,11 +102,11 @@
         accept(step.edge,true);
         if(busy)break;
       }
-      svg.querySelectorAll('.stroke-node').forEach((dot,i)=>{const current=i===state.node&&!result.progress;dot.classList.toggle('current',current);dot.setAttribute('r',current?10:6);});
+      svg.querySelectorAll('.stroke-node').forEach((dot,i)=>{const current=i===state.node&&!result.progress;dot.classList.toggle('current',current);dot.setAttribute('r',current?13:9);});
       if(state.node!==null){svg.querySelectorAll('.start-hint').forEach(h=>h.remove());if(!busy)prompt();}
       if(!result.progress||busy){progressPath?.remove();pen?.remove();progressPath=pen=null;return;}
       const progress=result.progress,path=paths[progress.edge],length=path.getTotalLength(),traced=length*progress.fraction;
-      if(!progressPath){progressPath=make('path',{fill:'none',stroke:'#f272a7','stroke-width':9,'stroke-linecap':'round','pointer-events':'none'});svg.append(progressPath);}
+      if(!progressPath){progressPath=make('path',{fill:'none',stroke:'#f272a7','stroke-width':12,'stroke-linecap':'round','pointer-events':'none'});svg.append(progressPath);}
       progressPath.setAttribute('d',puzzle.edges[progress.edge].d);
       progressPath.setAttribute('stroke-dasharray',`${traced} ${length}`);
       progressPath.setAttribute('stroke-dashoffset',progress.forward?0:-(length-traced));
