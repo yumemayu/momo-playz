@@ -1,11 +1,14 @@
 'use strict';
-/* Home page: popularity ranking (most players per game, all time).
-   Fast path: the score service's ?action=popular (one request).
-   Fallback: read each game's leaderboard per level and count distinct
-   nicknames. Results are cached in localStorage for 24 hours. */
+/* Home page sections: popularity ranking + new games.
+   Popularity: ranked by how many times games were played (score posts).
+   Fast path: the score service's ?action=popular (one request, includes
+   play counts). Fallback: count distinct nicknames per game from the
+   leaderboards. Cached in localStorage for 24 hours.
+   New games: cloned from the main picker cards that still carry a NEW
+   badge — no network needed. */
 (() => {
   const URL = 'https://script.google.com/macros/s/AKfycbwIZWAIOqgmjctFItur6QacLZqf2zL6paAyLxFeCoV1cAnD2O3yV70ZiKiprBi1xTdIVQ/exec';
-  const CACHE_KEY = 'momo:popular:v1';
+  const CACHE_KEY = 'momo:popular:v2';
   const TTL = 24 * 60 * 60 * 1000;
   const GAMES = {
     'fry-catch': ['fries', ['super-easy', 'easy', 'medium', 'hard', 'impossible']],
@@ -29,17 +32,41 @@
     'cube-count': ['cube-count', ['easy', 'normal', 'hard']],
     'whats-next': ['whats-next', ['easy', 'normal', 'hard']]
   };
-  const section = document.getElementById('popular');
-  const picker = document.getElementById('popular-picker');
-  const mainPicker = document.querySelector('main nav.game-picker:not(.recent-picker):not(.popular-picker)');
-  if (!section || !picker || !mainPicker) return;
+  const mainPicker = document.querySelector('main nav.game-picker:not(.recent-picker):not(.popular-picker):not(.newgames-picker)');
+  if (!mainPicker) return;
 
   function anchorFor(dir) {
     return mainPicker.querySelector(`a[href="./${dir}/"], a[href="${dir}/"]`);
   }
 
-  function render(counts) {
-    const ranked = Object.entries(counts)
+  /* ---------- New games (instant, from NEW badges) ---------- */
+  (function renderNewGames() {
+    const section = document.getElementById('newgames');
+    const picker = document.getElementById('newgames-picker');
+    if (!section || !picker) return;
+    const today = new Date();
+    const todayStr = `${today.getFullYear()}-${String(today.getMonth() + 1).padStart(2, '0')}-${String(today.getDate()).padStart(2, '0')}`;
+    const badged = [];
+    mainPicker.querySelectorAll('a').forEach((a, idx) => {
+      const badge = a.querySelector('.new-badge[data-new-until]');
+      if (badge && badge.dataset.newUntil >= todayStr) badged.push({ a, idx, until: badge.dataset.newUntil });
+    });
+    badged.sort((x, y) => y.until.localeCompare(x.until) || y.idx - x.idx);
+    badged.slice(0, 5).forEach(({ a }) => {
+      const clone = a.cloneNode(true);
+      clone.removeAttribute('aria-current');
+      picker.append(clone);
+    });
+    if (picker.children.length) section.hidden = false;
+  })();
+
+  /* ---------- Popularity ranking ---------- */
+  const section = document.getElementById('popular');
+  const picker = document.getElementById('popular-picker');
+  if (!section || !picker) return;
+
+  function render(metric, values) {
+    const ranked = Object.entries(values)
       .filter(([, n]) => n > 0)
       .sort((a, b) => b[1] - a[1])
       .slice(0, 5);
@@ -59,8 +86,13 @@
       a.append(medal);
       const count = document.createElement('span');
       count.className = 'pop-count';
-      count.textContent = `${n} players`;
-      count.dataset.ja = `${n}にん あそんだ`;
+      if (metric === 'plays') {
+        count.textContent = `${n} plays`;
+        count.dataset.ja = `${n}回 あそばれた`;
+      } else {
+        count.textContent = `${n} players`;
+        count.dataset.ja = `${n}にん あそんだ`;
+      }
       a.append(count);
       picker.append(a);
     });
@@ -72,18 +104,17 @@
     return res.json();
   }
 
-  async function fetchCounts() {
+  async function fetchRanking() {
     try {
       const data = await fetchJSON(`${URL}?action=popular&period=all`);
-      if (data && data.counts && typeof data.counts === 'object') return data.counts;
+      if (data && data.plays && typeof data.plays === 'object') return { metric: 'plays', values: data.plays };
+      if (data && data.counts && typeof data.counts === 'object') return { metric: 'players', values: data.counts };
     } catch { /* fall through to the scan */ }
     const jobs = [];
     const names = {};
     for (const [, [gameId, levels]] of Object.entries(GAMES)) {
       names[gameId] = new Set();
-      for (const lv of levels) {
-        jobs.push({ gameId, lv });
-      }
+      for (const lv of levels) jobs.push({ gameId, lv });
     }
     let next = 0;
     async function worker() {
@@ -96,19 +127,19 @@
       }
     }
     await Promise.all(Array.from({ length: 6 }, worker));
-    const counts = {};
-    for (const [gameId, set] of Object.entries(names)) counts[gameId] = set.size;
-    return counts;
+    const values = {};
+    for (const [gameId, set] of Object.entries(names)) values[gameId] = set.size;
+    return { metric: 'players', values };
   }
 
   let cached = null;
   try { cached = JSON.parse(localStorage.getItem(CACHE_KEY) || 'null'); } catch { cached = null; }
-  if (cached && Date.now() - cached.at < TTL && cached.counts) {
-    render(cached.counts);
+  if (cached && Date.now() - cached.at < TTL && cached.values) {
+    render(cached.metric, cached.values);
   } else {
-    fetchCounts().then(counts => {
-      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), counts })); } catch { /* storage unavailable */ }
-      render(counts);
+    fetchRanking().then(({ metric, values }) => {
+      try { localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), metric, values })); } catch { /* storage unavailable */ }
+      render(metric, values);
     }).catch(() => {});
   }
 })();
