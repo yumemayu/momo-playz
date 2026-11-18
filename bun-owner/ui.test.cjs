@@ -15,7 +15,7 @@ class E{
  vm.runInContext(fs.readFileSync(__dirname+'/owner.js','utf8'),ctx);await new Promise(resolve=>setImmediate(resolve));
  a.equal($('start').disabled,false);$('start').emit('click');a.equal(state.mode,'rush');a.equal($('customers').children.length,3);
  const clickKind=k=>{$('shelf').emit('click',{target:$('shelf').children.find(e=>e.dataset.kind===k),detail:0})};
- clickKind('normal');a.equal(M.waiting(state).tray.length,1);a.ok($('customers').children[1].children[3].children[0].animations.length);a.ok($('customers').children[1].children[3].animations.length);$('serve').emit('click');a.equal(state.served,1);a.ok($('customers').children[1].children[1].children.some(e=>e.className==='happy-badge'));a.equal($('effects').children.length,6);a.equal($('coins').animations.length,1);a.equal(tones.length,3);for(const f of timers.splice(0))f();a.equal($('effects').children.length,0);$('serve').emit('click');a.equal(state.served,1);
+ clickKind('normal');a.equal(M.waiting(state).tray.length,1);a.ok($('customers').children[1].children[3].children[0].animations.length);a.ok($('customers').children[1].children[3].animations.length);$('serve').emit('click');a.equal(state.served,1);a.ok($('customers').children[1].children[0].children.some(e=>e.className==='happy-badge'));a.equal($('effects').children.length,6);a.equal($('coins').animations.length,1);a.equal(tones.length,3);for(const f of timers.splice(0))f();a.equal($('effects').children.length,0);$('serve').emit('click');a.equal(state.served,1);
  now=21000;raf(now);a.equal(state.guests.length,1);a.equal(state.guests[0].character,'mama');
  const bun=$('shelf').children[0];$('shelf').emit('pointerdown',{target:bun,pointerId:1,button:0,clientX:1,clientY:1});doc.emit('pointercancel');doc.emit('pointerup',{pointerId:1,clientX:50,clientY:200});a.equal(M.waiting(state).tray.length,0);
  $('shelf').emit('pointerdown',{target:bun,pointerId:2,button:0,clientX:1,clientY:1});doc.emit('pointermove',{pointerId:2,clientX:500,clientY:500});doc.emit('pointerup',{pointerId:2,clientX:500,clientY:500});a.equal(M.waiting(state).tray.length,0);
@@ -30,7 +30,7 @@ class E{
  for(const f of timers.splice(0))f();now+=2000;raf(now);win.matchMedia=()=>({matches:false});
  for(let i=0;i<2;i++){for(const kind of [...M.waiting(state).order])clickKind(kind);$('serve').emit('click');if(i===1)a.ok($('effects').children.some(e=>e.className==='reward-float combo'));now+=2000;raf(now);}
 
- const beforeWrong=state.coins;clickKind('devil');$('serve').emit('click');a.equal(state.coins,beforeWrong);a.ok($('customers').children[1].children.some(e=>e.className==='oops-badge'));a.ok(!$('customers').children[1].children[1].children.some(e=>e.className==='happy-badge'));
+ const beforeWrong=state.coins;clickKind('devil');$('serve').emit('click');a.equal(state.coins,beforeWrong);a.ok($('customers').children[1].children.some(e=>e.className==='oops-badge'));a.ok(!$('customers').children[1].children[0].children.some(e=>e.className==='happy-badge'));
  const toneCount=tones.length;$('sound-toggle').emit('click');$('serve').emit('click');a.equal(tones.length,toneCount);a.equal(storage.get('momo:bun-owner:sound'),'off');
  console.log('UI: tap/drag/swipe, cancelled/off-target drags, hidden-tab pause, close/save, combo effects and reduced motion passed');
 })().catch(e=>{console.error(e);process.exitCode=1});
