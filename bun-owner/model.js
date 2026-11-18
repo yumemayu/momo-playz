@@ -69,6 +69,7 @@ function advance(s,seconds){
   if(!waiting(s))s.selected=s.guests.find(g=>g.status==='waiting')?.id??null;
   if(s.phase==='open'){
    if(s.mode==='relaxed'&&!s.guests.length&&s.generated<6){arrival(s);arrivals++;changed=true;}
+   if(s.mode==='rush'&&!s.guests.length&&s.elapsed<90)s.nextArrival=Math.min(s.nextArrival,s.elapsed+2);
    if(s.mode==='rush'&&s.elapsed>=s.nextArrival&&s.elapsed<90&&s.guests.length<capacity(s)){
     arrival(s);s.nextArrival=s.elapsed+(s.elapsed<45?7:5);arrivals++;changed=true;
    }
