@@ -27,6 +27,21 @@
   --banner-color: #ffe7d3;
   --banner-ink: #a83c14;
 }
+/* same wide bun art as bun-owner: keep its side clear of the banner edge on PC */
+[data-game="buns"] .game-title-art {
+  background-size: auto 84%;
+  background-position: right 8px center;
+}
+[data-game="bun-owner"] {
+  --banner-art: url("assets/game-bun.png");
+  --banner-color: #ffe0c7;
+  --banner-ink: #b03a24;
+}
+/* the bun art is wide: shrink it a touch so its side clears the banner edge on PC */
+[data-game="bun-owner"] .game-title-art {
+  background-size: auto 84%;
+  background-position: right 8px center;
+}
 [data-game="cats"] {
   --banner-art: url("assets/game-cat.png");
   --banner-color: #d9ecff;
