@@ -7,7 +7,7 @@
 <meta name="description" content="Play Momo Playz games, from Fry Catch and Momo Piano to circuit puzzles.">
 <link rel="stylesheet" href="game-picker.css">
 <link rel="stylesheet" href="language.css">
-<link rel="stylesheet" href="home.css?v=compact-home">
+<link rel="stylesheet" href="home.css?v=mission-gift">
 <script defer src="language.js"></script>
 <script defer src="stickers.js?v=daily-stickers"></script>
 <script defer src="install-hint.js"></script>
@@ -33,12 +33,12 @@
 </header>
 <section class="home-play" id="home-play" hidden>
   <div class="home-mission">
-    <h2 data-ja="今日のミッション">Today’s mission</h2>
+    <h2><span aria-hidden="true">🎯</span> <span data-ja="今日のミッション">Today’s mission</span></h2>
     <p id="mission-task"></p>
     <a id="mission-action"></a>
   </div>
   <div class="home-surprise">
-    <button type="button" id="surprise-game" data-ja="✦ おまかせ">✦ Surprise me</button>
+    <button type="button" id="surprise-game"><span aria-hidden="true">🎁</span> <span data-ja="おまかせ">Surprise me</span></button>
     <a id="surprise-result" hidden></a>
     <span id="surprise-announcement" class="home-sr-only" role="status"></span>
   </div>

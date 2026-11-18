@@ -159,3 +159,56 @@ main header { position: relative; }
   .home-mission h2 { font-size: .88rem; }
   .home-mission p, #mission-action, #surprise-game { font-size: .78rem; }
 }
+
+/* Keep the two quick ways into a game visible above the toy shelf. */
+.home-play {
+  display: grid;
+  grid-template-columns: minmax(0, 1fr) auto;
+  align-items: stretch;
+  gap: 8px;
+  padding: 0;
+  border: 0;
+  background: transparent;
+}
+.home-mission, .home-surprise {
+  min-width: 0;
+  padding: 8px 10px;
+  border: 1px solid #e9b4cb;
+  border-radius: 15px;
+  background: #ffedf4;
+  box-shadow: 0 2px 0 #efc9da;
+}
+.home-mission h2 { color: #71314e; }
+#mission-action {
+  min-height: 40px;
+  background: #ffd3e5;
+  border-color: #df9cb8;
+  color: #652841;
+}
+.home-surprise {
+  justify-content: center;
+  border-color: #d8c0eb;
+  background: #f5ebff;
+  box-shadow: 0 2px 0 #e4d2f2;
+}
+#surprise-game {
+  gap: 6px;
+  min-height: 40px;
+  background: #e6d4fb;
+  border-color: #c6a8df;
+  color: #4e2868;
+  white-space: nowrap;
+}
+#surprise-result { background: #fff9ff; }
+#mission-action:focus-visible, #surprise-game:focus-visible, #surprise-result:focus-visible {
+  outline: 2px solid #754676;
+  outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  .home-play { grid-template-columns: minmax(0, 1fr) minmax(0, .72fr); }
+  .home-mission, .home-surprise { padding: 7px; gap: 4px; }
+  .home-mission p { width: 100%; }
+  .home-surprise { align-content: center; }
+  #surprise-game { white-space: normal; padding-inline: 7px; }
+  #surprise-result { max-width: 100%; overflow-wrap: anywhere; }
+}
