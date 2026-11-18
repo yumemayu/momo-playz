@@ -1,5 +1,5 @@
 .toy-shelf {
-  max-width: 500px;
+  max-width: 360px;
   margin: 10px auto 14px;
   padding: 10px clamp(9px, 2vw, 15px) 4px;
   text-align: center;
@@ -60,12 +60,12 @@
   justify-self: center;
   display: grid;
   place-items: center;
-  min-width: min(100%, 76px);
+  min-width: min(100%, 80px);
   min-height: 44px;
   padding: 3px 8px;
   border-radius: 999px;
   color: #50263b;
-  font-size: .82rem;
+  font-size: .76rem;
   font-weight: 800;
   text-decoration: none;
 }

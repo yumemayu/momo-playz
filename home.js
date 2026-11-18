@@ -70,7 +70,7 @@
   const surprise = document.querySelector('#surprise-game');
   const result = document.querySelector('#surprise-result');
   const announcement = document.querySelector('#surprise-announcement');
-  const links = Array.from(document.querySelectorAll('main nav.game-picker:not(.recent-picker) a[href]'));
+  const links = Array.from(document.querySelectorAll('#all-games-picker a[href]'));
   let selected;
 
   function renderMission() {
@@ -112,4 +112,21 @@
   setInterval(renderMission, 60000);
   renderMission();
   panel.hidden = false;
+})();
+
+(() => {
+  const picker = document.querySelector('#all-games-picker');
+  const toggle = document.querySelector('#all-games-toggle');
+  if (!picker || !toggle) return;
+
+  function render(expanded) {
+    picker.toggleAttribute('data-compact', !expanded);
+    toggle.setAttribute('aria-expanded', String(expanded));
+    toggle.textContent = expanded
+      ? momoLanguage.pick('Show fewer games', '一覧をたたむ')
+      : momoLanguage.pick('Show all games', 'すべてのゲームを見る');
+  }
+  toggle.hidden = false;
+  toggle.addEventListener('click', () => render(toggle.getAttribute('aria-expanded') !== 'true'));
+  momoLanguage.subscribe(() => render(toggle.getAttribute('aria-expanded') === 'true'));
 })();
