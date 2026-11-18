@@ -1,0 +1,62 @@
+/* Cube Net — find the net that folds into the cube */
+.cn-board {
+  background: #fffdf6;
+  border: 3px solid #f2b544;
+  border-radius: 22px;
+  padding: 16px 12px 14px;
+  text-align: center;
+}
+.cn-cube svg { width: min(210px, 62vw); height: auto; }
+.cn-answers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+.cn-net {
+  background: #fff;
+  border: 2.5px solid #ecd8cc;
+  border-radius: 18px;
+  padding: 10px 6px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.cn-net .letter {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f272a7;
+  color: #fff;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.cn-net svg { width: 100%; max-width: 150px; height: auto; }
+.cn-board.preview .cn-net { cursor: default; }
+.cn-net.right {
+  border-color: #34b06f;
+  background: #e7f9ee;
+  box-shadow: 0 0 0 3px #34b06f55;
+}
+.cn-net.wrong {
+  border-color: #e84f7a;
+  background: #ffeef3;
+  animation: cn-shake .4s ease;
+}
+.cn-net:disabled { opacity: .92; }
+@keyframes cn-shake {
+  20% { transform: translateX(-5px); }
+  45% { transform: translateX(5px); }
+  70% { transform: translateX(-3px); }
+  90% { transform: translateX(2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cn-net.wrong { animation: none; }
+}
+@media (max-width: 560px) {
+  .cn-answers { grid-template-columns: 1fr; }
+  .cn-net svg { max-width: 170px; }
+}
+.cn-verdict { font-size: 1.05rem; font-weight: 800; color: #7a3b63; min-height: 1.4em; }
