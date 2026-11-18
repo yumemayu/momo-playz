@@ -208,3 +208,29 @@
   .milestone-banner { animation: none; }
   .hn-confetti { display: none; }
 }
+
+/* Challenge + disk-style variants */
+.hn-variants { display: flex; flex-direction: column; gap: 6px; margin: 2px 0 4px; }
+.variant-row { display: flex; align-items: center; gap: 8px; flex-wrap: wrap; }
+.variant-row strong { font-size: .95rem; color: #7a3b63; min-width: 4.2em; }
+.variant-row button {
+  border: 2.5px solid #ecd8cc; background: #fff; color: #57344a;
+  font-weight: 800; font-size: .92rem; border-radius: 999px;
+  padding: 6px 14px; cursor: pointer; font-family: inherit;
+}
+.variant-row button[aria-pressed="true"] { border-color: #f272a7; background: #ffe3ef; }
+@media (max-width: 679px) { .hn-variants { order: 3; } }
+body[data-skin="stars"] .hn-disk::after {
+  content: ''; position: absolute; inset: 0; border-radius: 999px; pointer-events: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 2l2.4 6.2L21 9l-5 4.2 1.8 6.8L12 16.4 6.2 20 8 13.2 3 9l6.6-.8z' fill='%23ffffff' fill-opacity='.8'/%3E%3C/svg%3E");
+  background-size: 13px 13px; background-position: center;
+}
+body[data-skin="dots"] .hn-disk::after {
+  content: ''; position: absolute; inset: 0; border-radius: 999px; pointer-events: none;
+  background-image: radial-gradient(circle at 7px 7px, rgba(255, 255, 255, .85) 3.4px, transparent 4.2px);
+  background-size: 16px 16px;
+}
+body[data-skin="rainbow"] .hn-disk::after {
+  content: ''; position: absolute; inset: 0; border-radius: 999px; pointer-events: none;
+  background-image: repeating-linear-gradient(90deg, rgba(255, 100, 130, .5) 0 9px, rgba(255, 207, 63, .5) 9px 18px, rgba(52, 206, 139, .5) 18px 27px, rgba(79, 163, 255, .5) 27px 36px);
+}

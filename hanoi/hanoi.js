@@ -16,6 +16,10 @@
   const pegEls = Array.from(document.querySelectorAll('.hn-peg'));
   const undo = document.querySelector('#undo');
   const restart = document.querySelector('#restart');
+  const goalEl = document.querySelector('.hn-goal');
+  const goalLabel = document.querySelector('#goal-label');
+  const challengeButtons = Array.from(document.querySelectorAll('[data-challenge]'));
+  const skinButtons = Array.from(document.querySelectorAll('[data-skin]'));
   const levelButtons = Array.from(document.querySelectorAll('[data-level]'));
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -25,6 +29,11 @@
     normal: { disks: 4, par: 15 },
     hard: { disks: 5, par: 31 },
     expert: { disks: 6, par: 63 }
+  };
+  const CHALLENGES = {
+    right: { from: 0, to: 2 },
+    middle: { from: 0, to: 1 },
+    left: { from: 2, to: 0 }
   };
   let DISK_H = 30;
   let PITCH = 33;
@@ -40,7 +49,8 @@
       bannerWin: 'クリア！',
       bannerPerfect: '最短 {p} 手で クリア！',
       bannerSub: '{m} 手・{s} 秒で クリア！',
-      cantPlace: '大きい円盤は小さい円盤の上に置けないよ'
+      cantPlace: '大きい円盤は小さい円盤の上に置けないよ',
+      goal: { right: 'ゴールは右の棒', middle: 'ゴールは真ん中の棒', left: 'ゴールは左の棒' }
     },
     en: {
       retry: 'Play again', on: 'Sound on', off: 'Sound off',
@@ -50,12 +60,18 @@
       bannerWin: 'Cleared!',
       bannerPerfect: 'Solved in the minimum {p} moves!',
       bannerSub: '{m} moves in {s} seconds!',
-      cantPlace: "A bigger disk can't sit on a smaller one"
+      cantPlace: "A bigger disk can't sit on a smaller one",
+      goal: { right: 'Goal: the right peg', middle: 'Goal: the middle peg', left: 'Goal: the left peg' }
     }
   };
 
   let language = 'en';
   let level = 'normal';
+  let challenge = 'right';
+  let skin = 'candy';
+  try { skin = localStorage.getItem('momo:hanoi:skin') || 'candy'; } catch {}
+  if (!['candy', 'rainbow', 'stars', 'dots'].includes(skin)) skin = 'candy';
+  function goalPeg() { return CHALLENGES[challenge].to; }
   let playing = false;
   let playedRound = false;
   let over = false;
@@ -187,7 +203,9 @@
     const n = diskCount();
     PITCH = n === 6 ? 28 : 33;
     DISK_H = PITCH - 3;
-    pegs = [Array.from({ length: n }, (_, i) => n - i), [], []];
+    pegs = [[], [], []];
+    pegs[CHALLENGES[challenge].from] = Array.from({ length: n }, (_, i) => n - i);
+    goalEl.style.left = ((goalPeg() * 2 + 1) / 6 * 100) + '%';
     diskEls.forEach(el => el.remove());
     diskEls = new Map();
     for (let size = 1; size <= n; size++) {
@@ -236,6 +254,7 @@
     restart.hidden = !playing;
     undo.disabled = !playing || over || busy || !!held || !history.length;
     restart.disabled = !playing || busy;
+    goalLabel.textContent = copy[language].goal[challenge];
     renderStats();
   }
 
@@ -336,7 +355,7 @@
     history.push({ size, from, to });
     held = null;
     busy = false;
-    if (pegs[2].length === diskCount()) {
+    if (pegs[goalPeg()].length === diskCount()) {
       finishGame();
       return;
     }
@@ -440,7 +459,7 @@
     const colors = ['#ff6482', '#ffcf3f', '#34ce8b', '#4fa3ff', '#9b7ff2', '#ff9f43'];
     const boardRect = board.getBoundingClientRect();
     const fieldRect = field.getBoundingClientRect();
-    const cx = fieldRect.left - boardRect.left + pegCenter(2);
+    const cx = fieldRect.left - boardRect.left + pegCenter(goalPeg());
     const cy = fieldRect.top - boardRect.top + 110;
     for (let i = 0; i < 42; i++) {
       const piece = document.createElement('span');
@@ -464,7 +483,7 @@
 
   function towerHop() {
     if (reducedMotion.matches) return;
-    pegs[2].forEach((size, i) => {
+    pegs[goalPeg()].forEach((size, i) => {
       diskEls.get(size).animate(
         [
           { transform: 'translateY(0)' },
@@ -535,6 +554,22 @@
   stop.addEventListener('click', stopGame);
   undo.addEventListener('click', undoMove);
   restart.addEventListener('click', restartRound);
+  challengeButtons.forEach(button => button.addEventListener('click', () => {
+    if (playing || button.dataset.challenge === challenge) return;
+    challenge = button.dataset.challenge;
+    challengeButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+    setup();
+    render();
+  }));
+  function applySkin() {
+    document.body.dataset.skin = skin;
+    skinButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice.dataset.skin === skin)));
+  }
+  skinButtons.forEach(button => button.addEventListener('click', () => {
+    skin = button.dataset.skin;
+    try { localStorage.setItem('momo:hanoi:skin', skin); } catch {}
+    applySkin();
+  }));
   sound.addEventListener('click', () => {
     muted = !muted;
     sound.setAttribute('aria-pressed', String(!muted));
@@ -557,6 +592,7 @@
       renderLanguage();
     });
   }
+  applySkin();
   setup();
   render();
 })();
