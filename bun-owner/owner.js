@@ -1,261 +1,73 @@
-(() => {
-  'use strict';
-  const M = BunOwnerModel;
-  const $ = id => document.getElementById(id);
-  const names = {
-    normal: ['Smiley', 'にこにこ'], twins: ['Twins', 'ふたご'],
-    glitter: ['Glitter', 'キラキラ'], devil: ['Devil', 'デビル']
-  };
-  const animalGuests = ['rabbit', 'cat', 'bear', 'panda', 'fox', 'squirrel'];
-  const guestNames = { papa: ['Papa', 'パパ'], mama: ['Mama', 'ママ'], baby: ['Baby boy', 'あかちゃん'], girl: ['Momo', 'Momo'], friend: ["Momo’s friend", 'Momoのともだち'], rabbit: ['Rabbit', 'うさぎさん'], cat: ['Cat', 'ねこさん'], bear: ['Bear', 'くまさん'], panda: ['Panda', 'パンダさん'], fox: ['Fox', 'きつねさん'], squirrel: ['Squirrel', 'リスさん'] };
-  const growthKey = 'momo:bun-owner:shop:v1';
-  let shopProgress = { coins: 0, days: 0 };
-  try {
-    const saved = JSON.parse(localStorage.getItem(growthKey) || 'null');
-    if (saved && Number.isSafeInteger(saved.coins) && saved.coins >= 0 && saved.coins < 1e9 && Number.isSafeInteger(saved.days) && saved.days >= 0) shopProgress = saved;
-  } catch {}
-  function dayGuests(day) { return [animalGuests[day % 6], 'mama', 'girl', 'papa', 'baby', 'friend']; }
-  let guests = dayGuests(shopProgress.days);
-  const key = 'momo:bun-owner:records:v1';
-  let state = { phase: 'welcome', round: 0, coins: 0, perfect: 0, mistakes: 0, tray: [], order: [] };
-  let feedback = null;
-  let drag = null;
-  let artReady = false;
-  let records = [];
-  try {
-    const saved = JSON.parse(localStorage.getItem(key) || '[]');
-    if (Array.isArray(saved)) records = saved.filter(r => typeof r.name === 'string' && Number.isSafeInteger(r.score) && r.score >= 0 && r.score <= 150).slice(0, 20);
-  } catch {}
-  const pick = (...labels) => momoLanguage.pick(...labels);
-  const name = kind => pick(...names[kind]);
-  function art(kind, width = 64) {
-    const image = document.createElement('img');
-    image.src = BunShopArt.urls[kind] || '../assets/game-bun.png';
-    image.width = width; image.height = width;
-    image.alt = name(kind);
-    image.draggable = false;
-    return image;
-  }
-  function say(en, ja) { feedback = [en, ja]; $('message').textContent = pick(en, ja); }
-  function animate(element, cls) {
-    element.classList.remove(cls);
-    void element.offsetWidth;
-    element.classList.add(cls);
-  }
-  function renderRecords() {
-    const list = $('records'); list.replaceChildren();
-    [...records].sort((a, b) => b.score - a.score).slice(0, 5).forEach(row => {
-      const item = document.createElement('li'), label = document.createElement('span'), score = document.createElement('strong');
-      label.textContent = row.name; score.textContent = row.score + pick(' coins', ' コイン');
-      item.append(label, score); list.append(item);
-    });
-    $('record-note').textContent = records.length
-      ? pick('Nickname records stay on this device.', 'ニックネーム付きの記録は、この端末に保存されます。')
-      : pick('Add a nickname to keep your shop record here.', 'ニックネームを設定すると、お店の記録がここに残ります。');
-    $('best').textContent = records.length ? pick('Best ', 'ベスト ') + Math.max(...records.map(r => r.score)) : '';
-  }
-  function renderMenu() {
-    const shelf = $('shelf'); shelf.replaceChildren();
-    for (const kind of M.menu) {
-      const button = document.createElement('button');
-      button.type = 'button'; button.className = 'menu-bun'; button.dataset.kind = kind;
-      button.disabled = state.phase !== 'ordering';
-      button.setAttribute('aria-label', pick(`Add ${name(kind)} bun`, `${name(kind)}肉まんを入れる`));
-      const label = document.createElement('span'); label.textContent = name(kind);
-      button.append(art(kind), label); shelf.append(button);
-    }
-  }
-  function renderTray() {
-    $('tray').replaceChildren();
-    for (let i = 0; i < 3; i++) {
-      const slot = document.createElement('div'); slot.className = 'tray-slot';
-      const kind = state.tray[i];
-      if (kind) {
-        const button = document.createElement('button'); button.type = 'button'; button.dataset.slot = i;
-        button.disabled = state.phase !== 'ordering';
-        button.setAttribute('aria-label', pick(`Return ${name(kind)} bun`, `${name(kind)}肉まんを戻す`));
-        button.append(art(kind)); slot.append(button);
-      }
-      $('tray').append(slot);
-    }
-  }
-  function renderOrder() {
-    $('order').replaceChildren();
-    const used = {};
-    for (const kind of state.order) used[kind] = (used[kind] || 0) + 1;
-    for (const [kind, count] of Object.entries(used)) {
-      const row = document.createElement('div'); row.className = 'order-item';
-      if (state.tray.filter(k => k === kind).length === count) row.classList.add('done');
-      const quantity = document.createElement('strong'); quantity.textContent = '×' + count;
-      row.append(art(kind, 52), quantity); $('order').append(row);
-    }
-  }
-  function renderCustomer() {
-    const id = guests[Math.min(state.round, 5)];
-    const label = pick(...guestNames[id]);
-    $('customer').replaceChildren();
-    if (CustomerArt.urls?.[id]) {
-      const image = document.createElement('img'); image.src = CustomerArt.urls[id];
-      image.alt = ''; image.draggable = false; $('customer').append(image);
-    }
-    $('customer').classList.toggle('customer-small', id === 'girl' || id === 'friend');
-    $('customer').classList.toggle('customer-friend', id === 'friend');
-    $('customer').classList.toggle('customer-baby', id === 'baby');
-    $('customer-name').textContent = label;
-  }
-  function renderGrowth() {
-    const upgrades = [['noren', 100, 'Curtain', 'のれん'], ['sign', 250, 'Shop sign', '看板'], ['plant', 450, 'Little plant', '鉢植え']];
-    $('upgrades').replaceChildren();
-    for (const [id, price, en, ja] of upgrades) {
-      const earned = shopProgress.coins >= price;
-      const badge = document.createElement('span'); badge.className = earned ? 'earned' : '';
-      badge.textContent = (earned ? '✓ ' : '') + pick(en, ja); $('upgrades').append(badge);
-      $('shop').classList.toggle('grown-' + id, earned);
-    }
-    $('shop-plant').hidden = shopProgress.coins < 450;
-    const next = upgrades.find(item => shopProgress.coins < item[1]);
-    $('growth-note').textContent = next
-      ? pick('Total ' + shopProgress.coins + ' coins · ' + (next[1] - shopProgress.coins) + ' to ' + next[2], '累計 ' + shopProgress.coins + 'コイン・' + next[3] + 'まで あと' + (next[1] - shopProgress.coins))
-      : pick('Your little shop is blooming!', 'お店が すてきに育ったね！');
-  }
-  function render() {
-    $('coins').textContent = state.coins;
-    $('served').textContent = state.round + (state.phase === 'served' ? 1 : 0);
-    if (state.phase === 'closed') $('served').textContent = 6;
-    renderCustomer();
-    renderGrowth();
-    $('paper-bag').hidden = state.phase !== 'served';
-    $('greeting').textContent = state.phase === 'served'
-      ? pick('Thank you! So fluffy! ♡', 'ありがとう！ ほかほかだね ♡')
-      : guests[state.round] === 'papa' ? pick('The big order, please!', 'いつもの大盛り、ください！')
-      : guests[state.round] === 'mama' ? pick('My favorite twins, please!', '大好きなふたご、ください！')
-      : guests[state.round] === 'baby' ? pick('One little bun, please!', 'にくまん ひとつ！')
-      : pick('May I have these buns?', 'この肉まん、ください！');
-    $('order-note').textContent = state.phase === 'served' ? pick('One happy guest!', 'お客さん にっこり！')
-      : pick('No rush. Take your time ♡', 'ゆっくりで だいじょうぶ ♡');
-    $('welcome').hidden = state.phase !== 'welcome';
-    $('day-result').hidden = state.phase !== 'closed';
-    $('start').hidden = !['welcome', 'closed'].includes(state.phase);
-    $('start').disabled = !artReady;
-    $('start').textContent = state.phase === 'closed' ? pick('★ Play again', '★ もういちど開店') : pick('★ Play', '★ 開店する');
-    $('serve').hidden = state.phase !== 'ordering';
-    $('serve').disabled = !state.tray.length;
-    $('clear').hidden = state.phase !== 'ordering';
-    $('clear').disabled = !state.tray.length;
-    $('next').hidden = state.phase !== 'served';
-    $('next').textContent = state.round === 5 ? pick('Close the shop →', 'お店をしめる →') : pick('Next guest →', 'つぎのお客さん →');
-    if (feedback) $('message').textContent = pick(...feedback);
-    renderMenu(); renderTray(); renderOrder(); renderRecords();
-    if (state.phase === 'closed') renderResult();
-  }
-  function add(kind) {
-    if (state.phase !== 'ordering' || !M.menu.includes(kind)) return;
-    if (state.tray.length >= 3) { say('The steamer is full. Tap a bun to return it.', 'せいろがいっぱい。肉まんをタップすると戻せるよ。'); return; }
-    state.tray.push(kind);
-    feedback = null; $('message').textContent = '';
-    render(); animate($('steamer'), 'pop');
-  }
-  function remove(index) {
-    if (state.phase !== 'ordering' || index < 0 || index >= state.tray.length) return;
-    state.tray.splice(index, 1); feedback = null; $('message').textContent = ''; render();
-  }
-  function start() {
-    if (!artReady || !['welcome', 'closed'].includes(state.phase)) return;
-    guests = dayGuests(shopProgress.days);
-    state = { phase: 'ordering', round: 0, coins: 0, perfect: 0, mistakes: 0, tray: [], order: M.makeOrder(0, Math.random, guests[0]) };
-    say('Your first guest! Swipe a bun into the steamer.', 'はじめてのお客さん！ 肉まんをせいろへ入れてね。'); render();
-  }
-  function serve() {
-    if (state.phase !== 'ordering' || !state.tray.length) return;
-    const check = M.difference(state.order, state.tray);
-    if (!check.matches) {
-      state.mistakes++;
-      const excess = check.extra.length;
-      say(excess ? 'Almost! Tap the extra buns to return them.' : 'Almost! Add the missing buns.', excess ? 'おしい！ ちがう肉まんはタップして戻してね。' : 'もうすこし！ 足りない肉まんを入れてね。');
-      animate($('steamer'), 'pop'); return;
-    }
-    const earned = M.reward(state.order, state.mistakes);
-    state.coins += earned;
-    if (!state.mistakes) state.perfect++;
-    state.phase = 'served';
-    say(`Thank you! +${earned} coins${!state.mistakes ? ' · Perfect +5!' : ''}`, `ありがとう！ ＋${earned}コイン${!state.mistakes ? '・ぴったりボーナス＋5！' : ''}`);
-    render(); animate($('customer'), 'happy'); animate($('steamer'), 'pop');
-  }
-  function renderResult() {
-    $('day-title').textContent = pick('A lovely day at your shop!', 'きょうも お店は大にぎわい！');
-    $('day-coins').textContent = '🪙 ' + state.coins;
-    $('day-caption').textContent = pick(`6 happy guests\n${state.perfect} first-try deliveries!`, `6人のお客さん にっこり！\nぴったりおわたし ${state.perfect}回！`);
-  }
-  function close() {
-    if (state.phase !== 'served' || state.round !== 5) return;
-    state.phase = 'closed';
-    shopProgress.coins += state.coins; shopProgress.days++;
-    try { localStorage.setItem(growthKey, JSON.stringify(shopProgress)); } catch {}
-    const nickname = momoNickname.read();
-    if (nickname) {
-      const previous = records.find(r => r.name.toLowerCase() === nickname.toLowerCase());
-      if (!previous || state.coins > previous.score) {
-        records = records.filter(r => r !== previous);
-        records.push({ name: nickname, score: state.coins });
-        records.sort((a, b) => b.score - a.score); records = records.slice(0, 20);
-        try { localStorage.setItem(key, JSON.stringify(records)); } catch { /* Keep the session record. */ }
-      }
-    }
-    window.momoStickers?.award('bun-owner');
-    say('Wonderful work, owner!', 'オーナー、おつかれさま！'); render();
-  }
-  function next() {
-    if (state.phase !== 'served') return;
-    if (state.round === 5) { close(); return; }
-    state.round++; state.tray = []; state.mistakes = 0; state.order = M.makeOrder(state.round, Math.random, guests[state.round]); state.phase = 'ordering';
-    say('Welcome! Here is your next order.', 'いらっしゃいませ！ つぎの注文だよ。'); render();
-  }
-  function endDrag() {
-    if (!drag) return;
-    drag.ghost?.remove(); drag = null; $('steamer').classList.remove('drop-ready');
-  }
-  function inside(element, x, y) {
-    const r = element.getBoundingClientRect();
-    return x >= r.left && x <= r.right && y >= r.top && y <= r.bottom;
-  }
-  function down(event, source) {
-    if (state.phase !== 'ordering' || drag || (event.button !== undefined && event.button !== 0)) return;
-    const button = event.target.closest(source === 'shelf' ? '[data-kind]' : '[data-slot]');
-    if (!button || button.disabled) return;
-    event.preventDefault();
-    const kind = source === 'shelf' ? button.dataset.kind : state.tray[Number(button.dataset.slot)];
-    drag = { id: event.pointerId, source, kind, index: Number(button.dataset.slot), x: event.clientX, y: event.clientY, moved: false, ghost: null };
-    button.setPointerCapture(event.pointerId);
-  }
-  function move(event) {
-    if (!drag || drag.id !== event.pointerId) return;
-    if (Math.hypot(event.clientX - drag.x, event.clientY - drag.y) > 9) drag.moved = true;
-    if (drag.moved) {
-      event.preventDefault();
-      if (!drag.ghost) { drag.ghost = art(drag.kind, 78); drag.ghost.className = 'drag-ghost'; document.body.append(drag.ghost); }
-      drag.ghost.style.left = event.clientX + 'px'; drag.ghost.style.top = event.clientY + 'px';
-      $('steamer').classList.toggle('drop-ready', drag.source === 'shelf' && inside($('steamer'), event.clientX, event.clientY));
-    }
-  }
-  function up(event) {
-    if (!drag || drag.id !== event.pointerId) return;
-    const action = { ...drag }; endDrag();
-    if (action.source === 'shelf') {
-      if (!action.moved || inside($('steamer'), event.clientX, event.clientY)) add(action.kind);
-    } else if (!action.moved) remove(action.index);
-    else if (inside($('customer-area'), event.clientX, event.clientY)) serve();
-  }
-  $('shelf').addEventListener('pointerdown', e => down(e, 'shelf'));
-  $('tray').addEventListener('pointerdown', e => down(e, 'tray'));
-  document.addEventListener('pointermove', move, { passive: false });
-  document.addEventListener('pointerup', up);
-  document.addEventListener('pointercancel', endDrag);
-  document.addEventListener('lostpointercapture', e => { if (drag?.id === e.pointerId) endDrag(); });
-  window.addEventListener('blur', endDrag);
-  $('shelf').addEventListener('click', e => { if (e.detail === 0) { const b = e.target.closest('[data-kind]'); if (b) add(b.dataset.kind); } });
-  $('tray').addEventListener('click', e => { if (e.detail === 0) { const b = e.target.closest('[data-slot]'); if (b) remove(Number(b.dataset.slot)); } });
-  $('start').addEventListener('click', start); $('serve').addEventListener('click', serve); $('next').addEventListener('click', next);
-  $('clear').addEventListener('click', () => { if (state.phase === 'ordering') { endDrag(); state.tray = []; render(); } });
-  momoLanguage.subscribe(() => { endDrag(); render(); });
-  Promise.all([BunShopArt.ready, CustomerArt.ready]).then(() => { artReady = true; render(); });
+(()=>{
+'use strict';
+const M=BunOwnerModel,$=id=>document.getElementById(id),pick=(en,ja)=>momoLanguage.pick(en,ja);
+const names={normal:['Smiley','にこにこ'],twins:['Twins','ふたご'],glitter:['Glitter','キラキラ'],devil:['Devil','デビル']};
+const people={papa:['Papa','パパ'],mama:['Mama','ママ'],baby:['Baby boy','赤ちゃん'],girl:['Momo','Momo'],friend:["Momo’s friend",'Momoのお友達'],rabbit:['Rabbit','うさぎさん'],cat:['Cat','ねこさん'],bear:['Bear','くまさん'],panda:['Panda','パンダさん'],fox:['Fox','きつねさん'],squirrel:['Squirrel','リスさん']};
+let mode='rush',state=null,phase='welcome',ready=false,drag=null,feedback=null,previous=0,frame=null,saved=false,cardUI=new Map();
+const growthKey='momo:bun-owner:shop:v1';let progress={coins:0,days:0};
+try{const p=JSON.parse(localStorage.getItem(growthKey)||'null');if(p&&Number.isSafeInteger(p.coins)&&p.coins>=0&&p.coins<1e9&&Number.isSafeInteger(p.days)&&p.days>=0)progress=p;}catch{}
+function el(tag,cls,text){const e=document.createElement(tag);if(cls)e.className=cls;if(text!==undefined)e.textContent=text;return e;}
+function art(kind){const i=el('img');i.src=BunShopArt.urls[kind]||'../assets/game-bun.png';i.alt=pick(...names[kind]);i.draggable=false;return i;}
+function say(en,ja){feedback=[en,ja];$('message').textContent=pick(en,ja);}
+function playing(){return state&&['open','closing'].includes(state.phase);}
+function recordKey(){return 'momo:bun-owner:records:v2:'+mode;}
+function readRecords(){try{const r=JSON.parse(localStorage.getItem(recordKey())||'[]');return Array.isArray(r)?r.filter(x=>typeof x.name==='string'&&Number.isSafeInteger(x.score)&&x.score>=0&&x.score<1e6):[];}catch{return [];}}
+function records(){const rows=readRecords().sort((a,b)=>b.score-a.score).slice(0,5);$('records').replaceChildren();for(const r of rows){const row=el('li'),name=el('span','',r.name),score=el('strong','',r.score+pick(' coins',' コイン'));row.append(name,score);$('records').append(row);}$('record-note').textContent=pick('This device · '+(mode==='rush'?'Busy shop':'Relaxed shop'), 'この端末・'+(mode==='rush'?'わいわい営業':'のんびり営業'));$('best').textContent=rows.length?pick('Best ','ベスト ')+rows[0].score:'';}
+function growth(){const items=[['sign',100,'Shop sign','看板'],['pot',250,'Bun pot','肉まん鉢'],['stars',450,'Little stars','星のかざり']];$('upgrades').replaceChildren();for(const [id,n,en,ja] of items){const earned=progress.coins>=n;$('upgrades').append(el('span',earned?'earned':'',(earned?'✓ ':'')+pick(en,ja)));$('shop').classList.toggle('grown-'+id,earned);}$('shop-extra').hidden=progress.coins<450;const next=items.find(x=>progress.coins<x[1]);$('growth-note').textContent=next?pick('Total '+progress.coins+' · '+(next[1]-progress.coins)+' to '+next[2],'累計 '+progress.coins+'コイン・'+next[3]+'まで あと'+(next[1]-progress.coins)):pick('Your shop is blooming!','お店がすてきに育ったね！');}
+function menu(){const shelf=$('shelf');shelf.replaceChildren();for(const k of M.menu){const b=el('button','menu-bun');b.type='button';b.dataset.kind=k;b.disabled=!playing();b.setAttribute('aria-label',pick('Add '+names[k][0],names[k][1]+'肉まんを入れる'));b.append(art(k),el('span','',pick(...names[k])));shelf.append(b);}}
+function guests(){
+ const list=$('customers');list.replaceChildren();cardUI=new Map();
+ for(let slot=0;slot<3;slot++){
+  const g=state?.guests.find(x=>x.slot===slot);if(!g){const empty=el('div','guest-card empty');empty.setAttribute('aria-hidden','true');list.append(empty);continue;}
+  const card=el('article','guest-card');card.dataset.guest=String(g.id);card.classList.toggle('selected',g.id===state.selected&&g.status==='waiting');card.classList.add('is-'+g.status);
+  const bubble=el('div','guest-order');
+  if(g.status==='waiting'){
+   const line=el('div','order-icons');const counts={};for(const kind of g.order)counts[kind]=(counts[kind]||0)+1;
+   for(const [kind,n] of Object.entries(counts)){const item=el('span','order-item');item.classList.toggle('done',g.tray.filter(k=>k===kind).length===n);item.append(art(kind),el('strong','','×'+n));line.append(item);}bubble.append(line);
+  }else bubble.append(el('span','reaction',g.status==='served'?pick('Thank you! ♡','ありがとう！ ♡'):pick('Maybe next time…','また来るね…')));
+  const portrait=el('button','portrait-button');portrait.type='button';portrait.dataset.select=String(g.id);portrait.disabled=g.status!=='waiting';portrait.setAttribute('aria-label',pick('Choose '+people[g.character][0],people[g.character][1]+'の注文をえらぶ'));
+  const image=el('img','guest-image');image.src=CustomerArt.urls[g.character]||'';image.alt='';image.draggable=false;
+  if(g.character==='girl')image.classList.add('sister');if(g.character==='friend')image.classList.add('friend');if(g.character==='baby')image.classList.add('baby');
+  portrait.append(image);if(g.status==='disappointed')portrait.append(el('span','disappointed-dots','…'));
+  const meter=el('div','patience');meter.setAttribute('role','progressbar');meter.setAttribute('aria-label',pick('Waiting time','待ち時間'));meter.setAttribute('aria-valuemin','0');meter.setAttribute('aria-valuemax','100');meter.hidden=mode==='relaxed'||g.status!=='waiting';const bar=el('i');meter.append(bar);
+  const tray=el('div','guest-tray');tray.dataset.tray=String(g.id);tray.setAttribute('aria-label',pick('Steamer','せいろ'));
+  for(let n=0;n<3;n++){const cell=el('button','tray-cell');cell.type='button';cell.dataset.guest=String(g.id);cell.dataset.slot=String(n);cell.disabled=g.status!=='waiting';if(g.tray[n]){cell.append(art(g.tray[n]));cell.setAttribute('aria-label',pick('Return '+names[g.tray[n]][0],names[g.tray[n]][1]+'を戻す'));}else{cell.dataset.select=String(g.id);cell.setAttribute('aria-label',pick('Select this steamer','このせいろをえらぶ'));}tray.append(cell);}
+  if(g.status==='served'){const bag=el('div','mini-bag','♡');bag.setAttribute('aria-hidden','true');tray.append(bag);}
+  const deliver=el('button','guest-deliver',pick('Here you go!','どうぞ！'));deliver.type='button';deliver.dataset.deliver=String(g.id);deliver.disabled=g.status!=='waiting'||!g.tray.length;
+  card.append(bubble,portrait,meter,tray,deliver);list.append(card);cardUI.set(g.id,{card,portrait,tray,meter,bar});
+ }
+}
+function status(){
+ $('coins').textContent=state?.coins||0;$('served').textContent=state?.served||0;
+ $('clock').textContent=mode==='relaxed'?pick('No rush','のんびり'):state?.phase==='closing'?pick('Last orders','さいごの注文'):pick('Time ','あと ')+Math.max(0,Math.ceil(90-(state?.elapsed||0)))+pick('s','秒');
+ for(const g of state?.guests||[]){const u=cardUI.get(g.id);if(!u)continue;const ratio=g.patience/g.maxPatience;u.bar.style.width=100*ratio+'%';u.meter.setAttribute('aria-valuenow',String(Math.round(100*ratio)));u.card.classList.toggle('worry',g.status==='waiting'&&mode==='rush'&&state.phase==='open'&&ratio<.35);u.card.classList.toggle('selected',g.id===state.selected&&g.status==='waiting');}
+}
+function render(){
+ const current=state?.phase||phase;$('welcome').hidden=current!=='welcome';$('day-result').hidden=current!=='closed';$('start').hidden=playing();$('start').disabled=!ready;$('start').textContent=current==='closed'?pick('★ Play again','★ もういちど開店'):pick('★ Play','★ 開店する');
+ $('serve').hidden=!playing();$('clear').hidden=!playing();const selected=state&&M.waiting(state);$('serve').disabled=!selected?.tray.length;$('clear').disabled=!selected?.tray.length;
+ document.querySelectorAll('[data-mode]').forEach(b=>{b.disabled=playing();b.setAttribute('aria-pressed',String(b.dataset.mode===mode));});
+ $('welcome-mode').textContent=mode==='rush'?pick('90 seconds · up to 3 guests','90秒・お客さんは最大3人'):pick('6 guests · no time limit','6人のお客さん・時間制限なし');
+ if(feedback)$('message').textContent=pick(...feedback);
+ guests();menu();status();growth();records();if(current==='closed')result();
+}
+function result(){$('day-title').textContent=pick('Thanks for a lovely day!','オーナー、おつかれさま！');$('day-coins').textContent='🪙 '+state.coins;$('day-caption').textContent=pick(state.served+' happy guests · '+state.perfect+' perfect deliveries\nBest streak '+state.bestStreak+(state.left?' · '+state.left+' will visit again':''),state.served+'人におとどけ・ぴったり '+state.perfect+'回\n最高 '+state.bestStreak+'連続'+(state.left?'・また来てね '+state.left+'人':''));}
+function saveDay(){if(saved)return;saved=true;progress.coins+=state.coins;progress.days++;try{localStorage.setItem(growthKey,JSON.stringify(progress));}catch{}const nickname=momoNickname.read();if(nickname){let rows=readRecords(),old=rows.find(r=>r.name.toLowerCase()===nickname.toLowerCase());if(!old||state.coins>old.score){rows=rows.filter(r=>r!==old);rows.push({name:nickname,score:state.coins});rows.sort((a,b)=>b.score-a.score);try{localStorage.setItem(recordKey(),JSON.stringify(rows.slice(0,20)));}catch{}}}window.momoStickers?.award('bun-owner');}
+function tick(now){if(!state||state.phase==='closed'){frame=null;return;}const dt=document.hidden?0:Math.max(0,(now-previous)/1000);previous=now;const event=M.advance(state,dt);if(event.departures)say('See you next time…','また来てね…');if(state.phase==='closing')say('Finish the last orders. No rush!','新しい来店はおしまい。さいごの注文をゆっくりどうぞ！');if(state.phase==='closed'){endDrag();saveDay();say('Wonderful work, owner!','きょうもおつかれさま！');render();frame=null;return;}if(event.changed){endDrag();render();}else status();frame=requestAnimationFrame(tick);}
+function start(){if(!ready||playing())return;endDrag();state=M.create(mode,progress.days);saved=false;previous=performance.now();say('Welcome! Choose a guest, then pack their steamer.','いらっしゃいませ！ お客さんをえらんで、その人のせいろへ入れてね。');render();if(frame!==null)cancelAnimationFrame(frame);frame=requestAnimationFrame(tick);}
+function add(kind,id=state?.selected){if(!state)return;const ok=M.add(state,kind,id);if(!ok){if(M.waiting(state,id)?.tray.length===3)say('The steamer is full. Tap a bun to return it.','せいろがいっぱい。肉まんをタップすると戻せるよ。');return;}feedback=null;$('message').textContent='';render();}
+function remove(index,id){if(state&&M.remove(state,index,id))render();}
+function deliver(id=state?.selected){if(!state)return;const r=M.serve(state,id);if(!r)return;if(!r.ok)say(r.extra.length?'Return the extra buns and try again.':'Add the missing buns.',r.extra.length?'おしい！ ちがう肉まんをタップして戻してね。':'もうすこし！ 足りない肉まんを入れてね。');else say('Thank you! +'+r.earned+(r.combo?' · combo +10!':''),'ありがとう！ ＋'+r.earned+'コイン'+(r.combo?'・連続ボーナス＋10！':''));render();}
+function endDrag(){if(!drag)return;drag.ghost?.remove();drag=null;for(const u of cardUI.values())u.tray.classList.remove('drop-ready');}
+function contains(e,x,y){const r=e.getBoundingClientRect();return x>=r.left&&x<=r.right&&y>=r.top&&y<=r.bottom;}
+function target(x,y,part){for(const [id,u] of cardUI)if(M.waiting(state,id)&&contains(u[part],x,y))return id;return null;}
+function down(event,source){if(!playing()||drag||(event.button!==undefined&&event.button!==0))return;const b=event.target.closest(source==='shelf'?'[data-kind]':'[data-slot]');if(!b||b.disabled)return;const id=Number(b.dataset.guest);const kind=source==='shelf'?b.dataset.kind:M.waiting(state,id)?.tray[Number(b.dataset.slot)];if(!kind)return;event.preventDefault();drag={id:event.pointerId,source,kind,guest:id,index:Number(b.dataset.slot),x:event.clientX,y:event.clientY,moved:false,ghost:null};b.setPointerCapture(event.pointerId);}
+function move(event){if(!drag||drag.id!==event.pointerId)return;if(Math.hypot(event.clientX-drag.x,event.clientY-drag.y)>9)drag.moved=true;if(!drag.moved)return;event.preventDefault();if(!drag.ghost){drag.ghost=art(drag.kind);drag.ghost.className='drag-ghost';document.body.append(drag.ghost);}drag.ghost.style.left=event.clientX+'px';drag.ghost.style.top=event.clientY+'px';const id=target(event.clientX,event.clientY,'tray');for(const [guest,u] of cardUI)u.tray.classList.toggle('drop-ready',drag.source==='shelf'&&id===guest);}
+function up(event){if(!drag||drag.id!==event.pointerId)return;const d={...drag};endDrag();if(d.source==='shelf'){const id=d.moved?target(event.clientX,event.clientY,'tray'):state.selected;if(id)add(d.kind,id);}else if(!d.moved)remove(d.index,d.guest);else if(target(event.clientX,event.clientY,'portrait')===d.guest)deliver(d.guest);}
+$('shelf').addEventListener('pointerdown',e=>down(e,'shelf'));$('customers').addEventListener('pointerdown',e=>down(e,'tray'));
+document.addEventListener('pointermove',move,{passive:false});document.addEventListener('pointerup',up);document.addEventListener('pointercancel',endDrag);document.addEventListener('lostpointercapture',e=>{if(drag?.id===e.pointerId)endDrag();});window.addEventListener('blur',endDrag);document.addEventListener('visibilitychange',()=>{previous=performance.now();endDrag();});
+$('shelf').addEventListener('click',e=>{const b=e.target.closest('[data-kind]');if(e.detail===0&&b)add(b.dataset.kind);});
+$('customers').addEventListener('click',e=>{const serve=e.target.closest('[data-deliver]');if(serve){deliver(Number(serve.dataset.deliver));return;}const choose=e.target.closest('[data-select]');if(choose&&state&&M.select(state,Number(choose.dataset.select))){render();return;}const slot=e.target.closest('[data-slot]');if(slot&&e.detail===0)remove(Number(slot.dataset.slot),Number(slot.dataset.guest));});
+$('start').addEventListener('click',start);$('serve').addEventListener('click',()=>deliver());$('clear').addEventListener('click',()=>{const g=state&&M.waiting(state);if(g){endDrag();g.tray=[];render();}});
+document.querySelectorAll('[data-mode]').forEach(b=>b.addEventListener('click',()=>{if(playing())return;mode=b.dataset.mode;state=null;phase='welcome';feedback=null;render();}));
+momoLanguage.subscribe(()=>{endDrag();render();});Promise.all([BunShopArt.ready,CustomerArt.ready]).then(()=>{ready=true;render();});
 })();

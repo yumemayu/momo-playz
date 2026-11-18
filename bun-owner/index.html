@@ -18,28 +18,22 @@
 <a class="back" href="../" data-ja="← ゲームいちらん">← All games</a>
 <header class="game-heading game-title-banner"><span class="game-title-rainbow" aria-hidden="true">🌈</span><span class="game-title-art" aria-hidden="true"></span><h1 data-ja="肉まん屋オーナー">Bun Shop Owner</h1></header>
 <p class="intro" data-ja="ちいさな肉まん屋さん、きょうも開店！">Your little bun shop is open for business!</p>
-<details class="howto"><summary data-ja="あそびかた">How to play</summary><p data-ja="① 注文を見る　② 肉まんをせいろへスワイプ　③ おわたし！ タップでも入れられます。せいろの肉まんはタップで戻せます。時間制限はありません。">1. Read the order. 2. Swipe buns into the steamer. 3. Serve! You can also tap to add a bun, and tap a bun in the steamer to return it. No time limit.</p></details>
+<details class="howto"><summary data-ja="あそびかた">How to play</summary><p data-ja="① お客さんをえらぶ　② その人のせいろへスワイプ　③「どうぞ！」。タップでも入れられます。せいろの肉まんを上にスワイプしても届けられます。90秒後は、残った注文を届けて閉店。のんびり営業には時間制限がありません。">1. Choose a guest. 2. Swipe buns into their steamer. 3. Here you go! You can also tap to add or return buns, or swipe a packed bun up to deliver. After 90 seconds, finish the last orders. Relaxed mode has no time limit.</p></details>
 <details data-nickname-panel class="nickname-panel"><summary>Set nickname</summary><form><label><span data-ja="ニックネーム（なくても遊べるよ）">Nickname (optional)</span><input maxlength="20" autocomplete="off"></label><button data-ja="保存">Save</button></form><small role="status"></small></details>
-<div class="shop-stats"><span>🪙 <strong id="coins">0</strong> <span data-ja="売上">coins</span></span><span>♡ <strong id="served">0</strong> / 6 <span data-ja="人">guests</span></span><span id="best"></span></div>
-<section class="shop" id="shop" aria-label="Bun shop" data-ja-label="肉まん屋さん">
-  <div class="shop-sign" id="shop-sign"><span data-ja="まちの肉まん屋">THE LITTLE BUN SHOP</span></div><div class="awning"><span data-ja="ほかほか">STEAMED BUNS</span></div>
-  <div class="customer-area" id="customer-area">
-    <div class="guest-portrait"><div class="customer" id="customer" aria-hidden="true"></div><span class="customer-name" id="customer-name"></span></div>
-    <div class="order-card"><p id="greeting"></p><div id="order" class="order" aria-label="Customer order" data-ja-label="お客さんの注文"></div><small id="order-note"></small></div>
-  </div>
-  <div class="window-sill"></div><div class="plant" id="shop-plant" hidden aria-hidden="true"><i></i><b></b></div><div class="counter">
-    <span class="steam s1" aria-hidden="true">〰</span><span class="steam s2" aria-hidden="true">〰</span>
-    <div class="steamer" id="steamer" aria-label="Your steamer" data-ja-label="じぶんのせいろ"><div id="tray" class="tray"></div><div class="paper-bag" id="paper-bag" hidden><span data-ja="ありがとう">THANK YOU</span><i>♡</i></div></div>
-    <p class="tray-guide" id="tray-guide" data-ja="ここへスワイプ ↓">Swipe buns here ↓</p>
-    <div class="shelf" id="shelf" aria-label="Bun menu" data-ja-label="肉まんメニュー"></div>
-  </div>
-  <div id="welcome" class="welcome"><strong data-ja="いらっしゃいませ！">Welcome!</strong><p data-ja="注文どおりに肉まんを入れて、お客さんに届けよう。">Pack the right buns and make your customers smile.</p><span data-ja="6人のお客さん・時間制限なし">6 guests · no time limit</span></div>
+<div class="modes" role="group" aria-label="Shop mode" data-ja-label="営業モード"><button type="button" data-mode="rush" aria-pressed="true" data-ja="わいわい営業">Busy shop</button><button type="button" data-mode="relaxed" aria-pressed="false" data-ja="のんびり営業">Relaxed shop</button></div>
+<div class="shop-stats"><span>🪙 <strong id="coins">0</strong> <span data-ja="売上">coins</span></span><span>♡ <strong id="served">0</strong> <span data-ja="人におとどけ">served</span></span><strong id="clock">90</strong><span id="best"></span></div>
+<section class="shop restaurant" id="shop" aria-label="Bun restaurant" data-ja-label="肉まんレストラン">
+  <div class="restaurant-sign" data-ja="ほかほか肉まん">FRESH &amp; FLUFFY</div>
+  <div class="guest-lanes" id="customers"></div>
+  <div class="restaurant-counter"><div class="shelf" id="shelf" aria-label="Bun menu" data-ja-label="肉まんメニュー"></div></div>
+  <div id="welcome" class="welcome"><strong data-ja="いらっしゃいませ！">Welcome!</strong><p data-ja="注文をえらんで、せいろに肉まんを入れよう。">Choose an order and pack its steamer.</p><span id="welcome-mode"></span></div>
   <div id="day-result" class="day-result" hidden role="status"><span class="result-stars" aria-hidden="true">✦ ✦ ✦</span><h2 id="day-title"></h2><strong id="day-coins"></strong><p id="day-caption"></p></div>
+  <div class="shop-extra" id="shop-extra" hidden aria-hidden="true">✦</div>
 </section>
 <p class="message" id="message" role="status" aria-live="polite"></p>
-<div class="actions"><button id="start" class="primary" data-ja="★ 開店する">★ Play</button><button id="serve" class="primary" hidden data-ja="おわたし！ ↑">Serve! ↑</button><button id="next" class="primary" hidden data-ja="つぎのお客さん →">Next guest →</button><button id="clear" class="secondary" hidden data-ja="せいろを空にする">Empty steamer</button></div>
+<div class="actions"><button id="start" class="primary" data-ja="★ 開店する">★ Play</button><button id="serve" class="primary" hidden data-ja="どうぞ！ ↑">Here you go! ↑</button><button id="clear" class="secondary" hidden data-ja="選んだせいろを空にする">Empty selected steamer</button></div>
 <section class="shop-growth"><strong data-ja="お店の成長">Your growing shop</strong><div id="upgrades"></div><p id="growth-note"></p></section>
-<p class="reward-note" data-ja="肉まん1組で10コイン。ぴったり一発でおわたしできると＋5！">10 coins per menu item · first-try delivery bonus +5!</p>
+<p class="reward-note" data-ja="肉まん1組で10コイン。ぴったり一発で＋5。3回連続ぴったりで＋10！">10 coins per menu item · first-try +5 · every 3 perfect deliveries +10!</p>
 <section class="records"><h2 data-ja="この端末のランキング">Leaderboard on this device</h2><ol id="records"></ol><p id="record-note"></p></section>
 <nav class="related"><a href="../smiley-bun-catch/" data-ja="肉まんキャッチ →">Bun Catch →</a><a href="../" data-ja="ゲームいちらん →">All games →</a></nav>
 </main>
