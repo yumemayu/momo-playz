@@ -21,3 +21,17 @@
 @media (min-width:1101px),(orientation:landscape) and (min-width:700px){.puzzle-board{height:min(var(--game-field-height),calc(100dvh - 250px));min-height:240px}}
 
 .stroke-pen{fill:#ffcf3f;stroke:#b07824;stroke-width:2;filter:drop-shadow(0 0 4px #ffcf3f)}
+
+/* Action feedback: newest line pulses, current point hops, a rejected
+   line flashes red, and solving bursts a celebration over the field. */
+.stroke-base.just{animation:stroke-just .5s ease}
+@keyframes stroke-just{0%{stroke-width:21}100%{stroke-width:12}}
+.stroke-base.bad{stroke:#e84f7a;transform-box:fill-box;animation:stroke-bad .35s ease}
+@keyframes stroke-bad{20%,60%{transform:translateX(-2.5px)}40%,80%{transform:translateX(2.5px)}}
+.stroke-node.current{transform-box:fill-box;transform-origin:center;animation:node-pop .3s ease}
+@keyframes node-pop{40%{transform:scale(1.3)}}
+.puzzle-board.solved .stroke-base{animation:solved-glow .7s ease}
+@keyframes solved-glow{40%{filter:brightness(1.35) drop-shadow(0 0 6px #ffb84d)}}
+.clear-pop{position:absolute;inset:0;display:grid;place-items:center;font-size:3.4rem;pointer-events:none;z-index:2;animation:clear-pop .95s ease forwards}
+@keyframes clear-pop{0%{transform:scale(.4);opacity:0}35%{transform:scale(1.15);opacity:1}70%{transform:scale(1)}100%{transform:scale(1.05);opacity:0}}
+@media (prefers-reduced-motion:reduce){.stroke-base.just,.stroke-base.bad,.stroke-node.current,.puzzle-board.solved .stroke-base,.clear-pop{animation:none}}

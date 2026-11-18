@@ -21,6 +21,8 @@
     }catch{}
   }
   function status(text){line.textContent=text;}
+  function popTone(step){if(muted)return;try{audio??=new(window.AudioContext||window.webkitAudioContext)();audio.resume().catch(()=>{});const f=Math.min(1180,600+step*45),o=audio.createOscillator(),g=audio.createGain(),t=audio.currentTime;o.type='sine';o.frequency.value=f;g.gain.setValueAtTime(.0001,t);g.gain.exponentialRampToValueAtTime(.11,t+.012);g.gain.exponentialRampToValueAtTime(.0001,t+.16);o.connect(g);g.connect(audio.destination);o.start(t);o.stop(t+.18);o.onended=()=>{o.disconnect();g.disconnect();};}catch{}}
+  function markBad(i){const b=field.querySelectorAll('.stroke-base')[i];if(!b)return;b.classList.add('bad');setTimeout(()=>b.classList.remove('bad'),400);}
   function controls(){
     $('#start').disabled=playing;$('#start').textContent=round===3?'Play again':'Play';
     for(const id of ['stop','restart'])$('#'+id).hidden=!playing;
@@ -42,6 +44,7 @@
   }
   function complete(){
     if(!playing||busy)return;busy=true;tone(true);board.classList.add('solved');
+    const pop=document.createElement('div');pop.className='clear-pop';pop.textContent='🎉';pop.setAttribute('aria-hidden','true');field.append(pop);
     status(say('Beautiful! You did it! ✨','できた！ やったね！ ✨'));
     const next=document.createElement('button');next.type='button';next.className='puzzle-next';
     next.textContent=round===2?say('See results ★','けっかをみる ★'):say('Next puzzle →','つぎのもんだい →');
@@ -58,11 +61,12 @@
   function accept(edge,keepCanvas=false){
     if(!playing||busy)return false;
     const next=M.trace(puzzle,state,edge);
-    if(!next){tone(false,true);flash(true);status(say('That line is used, or not connected. Try Undo.','その線は とおったか、つながっていないよ。もどすも つかえるよ。'));return false;}
-    history.push({node:state.node,used:[...state.used]});state=next;tone();
+    if(!next){tone(false,true);flash(true);markBad(edge);status(say('That line is used, or not connected. Try Undo.','その線は とおったか、つながっていないよ。もどすも つかえるよ。'));return false;}
+    history.push({node:state.node,used:[...state.used]});state=next;popTone(state.used.length);
     if(keepCanvas){
       const bases=field.querySelectorAll('.stroke-base'),hits=field.querySelectorAll('.stroke-hit');
       state.used.forEach(i=>{bases[i].classList.add('traced');hits[i].setAttribute('aria-disabled','true');hits[i].setAttribute('tabindex','-1');});
+      bases.forEach((b,j)=>b.classList.toggle('just',j===state.used[state.used.length-1]));
       field.querySelectorAll('.stroke-node').forEach((el,i)=>{el.classList.toggle('current',i===state.node);el.setAttribute('r',i===state.node?13:9);});
       field.querySelector('.stroke-tally').textContent=`${state.used.length} / ${puzzle.edges.length}`;controls();
     }else render();
@@ -74,7 +78,7 @@
     if(busy)svg.append(make('path',{d:puzzle.edges.map(e=>e.d).join(' '),fill:'#fff0cb',stroke:'none',class:'drawing-fill'}));
     const paths=[];
     puzzle.edges.forEach((edge,i)=>{
-      svg.append(make('path',{d:edge.d,class:'stroke-base'+(used.has(i)?' traced':''),fill:'none'}));
+      svg.append(make('path',{d:edge.d,class:'stroke-base'+(used.has(i)?' traced':'')+(i===state.used[state.used.length-1]?' just':''),fill:'none'}));
       const hit=make('path',{d:edge.d,class:'stroke-hit',fill:'none',tabindex:playing&&!used.has(i)?0:-1,role:'button','aria-label':say(`Line ${i+1}${used.has(i)?', drawn':''}`,`線 ${i+1}${used.has(i)?' かけた':''}`),'aria-disabled':String(!playing||busy||used.has(i))});
       hit.dataset.edge=i;svg.append(hit);paths.push(hit);
       hit.addEventListener('keydown',e=>{if(e.key!=='Enter'&&e.key!==' ')return;e.preventDefault();if(!playing||busy)return;if(state.node===null)state.node=edge.a;accept(i);});
@@ -91,7 +95,7 @@
       return Array.from({length:count+1},(_,k)=>path.getPointAtLength(length*k/count));
     });
     const tracker=new OneStrokeGesture.Tracker(puzzle,geometry,state,{tolerance:24/scale,deadzone:7/scale,snap:15/scale});
-    let activePointer=null,progressPath=null,pen=null;
+    let activePointer=null,progressPath=null,pen=null,downEdge=null,downUsed=0,downNode=null;
     function point(e){const p=new DOMPoint(e.clientX,e.clientY);return p.matrixTransform(svg.getScreenCTM().inverse());}
     function update(result){
       if(result.node!==null&&!result.completed.length&&(state.node===null||(!state.used.length&&!result.progress)))state.node=result.node;
@@ -119,6 +123,7 @@
       const currentMatrix=svg.getScreenCTM(),currentScale=Math.hypot(currentMatrix.a||1,currentMatrix.b||0)||1;
       tracker.tolerance=24/currentScale;tracker.deadzone=7/currentScale;tracker.snap=15/currentScale;
       const target=e.target.closest('[data-edge]');
+      downEdge=target?Number(target.dataset.edge):null;downUsed=state.used.length;downNode=state.node;
       activePointer=e.pointerId;svg.setPointerCapture(e.pointerId);
       update(tracker.begin(point(e),target?Number(target.dataset.edge):null));e.preventDefault();
     });
@@ -130,7 +135,16 @@
     });
     svg.addEventListener('pointerup',e=>{
       if(activePointer!==e.pointerId)return;
-      activePointer=null;if(playing&&!busy)update(tracker.end(point(e)));
+      activePointer=null;
+      if(playing&&!busy){
+        const res=tracker.end(point(e)),hadProgress=!!res.progress;
+        update(res);
+        if(downEdge!==null&&state.used.length===downUsed&&!hadProgress&&state.node===downNode&&!busy){
+          tone(false,true);markBad(downEdge);
+          status(say('That line is used, or not connected. Try Undo.','その線は とおったか、つながっていないよ。もどすも つかえるよ。'));
+        }
+      }
+      downEdge=null;
     });
     svg.addEventListener('pointercancel',e=>{
       if(activePointer!==e.pointerId)return;
