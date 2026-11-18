@@ -113,15 +113,19 @@
 
   function matrixQuestion() {
     const shapes = shuffle([0, 1, 2, 3, 4, 5]).slice(0, 3);
-    const color = rnd(5);
+    const colors = shuffle([0, 1, 2, 3, 4]).slice(0, 3);
+    const colorOf = s => colors[shapes.indexOf(s)];
     const grid = [];
     for (let r = 0; r < 3; r++) {
       const row = [];
-      for (let c = 0; c < 3; c++) row.push({ s: shapes[(r + c) % 3], c: color });
+      for (let c = 0; c < 3; c++) {
+        const s = shapes[(r + c) % 3];
+        row.push({ s, c: colorOf(s) });
+      }
       grid.push(row);
     }
     const answer = grid[2][2];
-    const options = shuffle(shapes.map(s => ({ s, c: color })));
+    const options = shuffle(shapes.map(s => ({ s, c: colorOf(s) })));
     return { kind: 'matrix', grid, answer, options, correctIndex: options.findIndex(t => t.s === answer.s) };
   }
 

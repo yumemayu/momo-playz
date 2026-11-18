@@ -17,7 +17,7 @@
   font-weight: 800;
   font-size: .92rem;
 }
-.wn-stage svg { width: min(340px, 82vw); height: auto; }
+.wn-tile svg { width: 58px; height: 58px; display: block; }
 .wn-answers {
   display: grid;
   grid-template-columns: repeat(3, 1fr);
