@@ -37,6 +37,8 @@ nav.game-picker > .picker-minesweeper { --picker-color: #d9f2e2; }
 nav.game-picker > .picker-hanoi { --picker-color: #ffe6c7; }
 nav.game-picker > .picker-cubenet { --picker-color: #ffd7e8; }
 nav.game-picker > .picker-shadowlight { --picker-color: #ffedb0; }
+nav.game-picker > .picker-cubecount { --picker-color: #d8f3dc; }
+nav.game-picker > .picker-whatsnext { --picker-color: #e7ddff; }
 nav.game-picker > .picker-cubenet { --picker-color: #ffd7e8; }
 nav.game-picker > .picker-memory { --picker-color: #fff2cd; }
 nav.game-picker > .picker-bath { --picker-color: #def4fa; }

@@ -1,0 +1,77 @@
+/* What's Next — find the pattern */
+.wn-board {
+  background: #fffdf6;
+  border: 3px solid #a06cd5;
+  border-radius: 22px;
+  padding: 16px 12px 14px;
+  text-align: center;
+}
+/* The shared .game-field height cap is for play fields; the question
+   board must grow with the blocks + shadows it contains. */
+.wn-board.game-field { height: auto; min-height: 0; }
+.wn-chip {
+  display: inline-block;
+  background: #f1eaff;
+  border-radius: 999px;
+  padding: 3px 14px;
+  font-weight: 800;
+  font-size: .92rem;
+}
+.wn-stage svg { width: min(340px, 82vw); height: auto; }
+.wn-answers {
+  display: grid;
+  grid-template-columns: repeat(3, 1fr);
+  gap: 10px;
+  margin-top: 10px;
+}
+.wn-opt {
+  background: #fff;
+  border: 2.5px solid #ecd8cc;
+  border-radius: 18px;
+  padding: 10px 6px 12px;
+  cursor: pointer;
+  font-family: inherit;
+  transition: border-color .15s ease, background .15s ease, transform .15s ease;
+}
+.wn-opt .letter {
+  display: inline-grid;
+  place-items: center;
+  width: 28px;
+  height: 28px;
+  border-radius: 50%;
+  background: #f272a7;
+  color: #fff;
+  font-weight: 900;
+  margin-bottom: 6px;
+}
+.wn-seq { display: flex; justify-content: center; align-items: center; gap: 8px; flex-wrap: wrap; padding: 8px 0 4px; }
+.wn-tile { width: 60px; height: 60px; background: #fff; border: 2.5px solid #e3d5f5; border-radius: 16px; display: grid; place-items: center; }
+.wn-tile.q { border-style: dashed; border-color: #a06cd5; background: #f6efff; font-size: 1.6rem; font-weight: 900; color: #a06cd5; }
+.wn-matrix { display: grid; grid-template-columns: repeat(3, 60px); gap: 8px; justify-content: center; padding: 8px 0 4px; }
+.wn-opt svg { width: 58px; height: 58px; }
+.wn-board.preview .wn-opt { cursor: default; }
+.wn-opt.right {
+  border-color: #34b06f;
+  background: #e7f9ee;
+  box-shadow: 0 0 0 3px #34b06f55;
+}
+.wn-opt.wrong {
+  border-color: #e84f7a;
+  background: #ffeef3;
+  animation: wn-shake .4s ease;
+}
+.wn-opt:disabled { opacity: .92; }
+@keyframes wn-shake {
+  20% { transform: translateX(-5px); }
+  45% { transform: translateX(5px); }
+  70% { transform: translateX(-3px); }
+  90% { transform: translateX(2px); }
+}
+@media (prefers-reduced-motion: reduce) {
+  .wn-opt.wrong { animation: none; }
+}
+@media (max-width: 560px) {
+  .wn-answers { grid-template-columns: 1fr; }
+  .wn-opt svg { max-width: 170px; }
+}
+.wn-verdict { font-size: 1.05rem; font-weight: 800; color: #7a3b63; min-height: 1.4em; }

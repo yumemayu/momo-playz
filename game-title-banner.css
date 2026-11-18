@@ -82,6 +82,16 @@
   --banner-color: #ffe9d6;
   --banner-ink: #9a4a12;
 }
+[data-game="cube-count"] {
+  --banner-art: url("cube-count/banner.svg");
+  --banner-color: #d8f3dc;
+  --banner-ink: #2e7d4f;
+}
+[data-game="whats-next"] {
+  --banner-art: url("whats-next/banner.svg");
+  --banner-color: #e7ddff;
+  --banner-ink: #7a4fa3;
+}
 [data-game="shadow-light"] {
   --banner-art: url("shadow-light/banner.svg");
   --banner-color: #ffedbe;
