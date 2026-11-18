@@ -156,6 +156,7 @@
   }
 
   const lastLayout = { easy: -1, normal: -1, hard: -1 };
+  let previewFresh = false;
   function setupPuzzle() {
     const base = PUZZLES[level];
     size = base.size;
@@ -431,7 +432,9 @@
     if (playing) return;
     ensureAudio();
     gameScores.start(level);
-    setupPuzzle();
+    // The preview puzzle is the first puzzle: never swap it on Play.
+    if (previewFresh) previewFresh = false;
+    else setupPuzzle();
     seconds = 0;
     verdict.textContent = '';
     playing = true;
@@ -501,6 +504,7 @@
     levelButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
     gameScores.showLevel(level);
     setupPuzzle();
+    previewFresh = true;
   }));
 
   start.addEventListener('click', begin);
@@ -513,6 +517,7 @@
   });
 
   setupPuzzle();
+  previewFresh = true;
   setControls();
   momoLanguage.subscribe(code => { language = code; renderLanguage(); });
 })();

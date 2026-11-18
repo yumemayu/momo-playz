@@ -89,6 +89,7 @@
   }
   let playing = false;
   let playedRound = false;
+  let previewFresh = true;
   let over = false;
   let pegs = [[], [], []];
   let diskEls = new Map();
@@ -524,7 +525,9 @@
 
   function begin() {
     if (playing) return;
-    startRound();
+    // The preview round is the first round: never re-roll it on Play.
+    startRound(!previewFresh);
+    previewFresh = false;
   }
 
   function finishGame() {
@@ -582,7 +585,9 @@
     level = button.dataset.level;
     levelButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
     gameScores.showLevel(level);
+    rollRound();
     setup();
+    previewFresh = true;
     render();
   }));
   window.addEventListener('resize', () => layoutAll());
@@ -593,6 +598,7 @@
       renderLanguage();
     });
   }
+  rollRound();
   setup();
   render();
 })();

@@ -153,9 +153,10 @@
   }
   function begin(){
     if(playing)return;epoch++;round=0;errors=0;elapsed=0;began=performance.now();
-    puzzles=[...M.drawings[level]];
-    for(let i=puzzles.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[puzzles[i],puzzles[j]]=[puzzles[j],puzzles[i]];}
-    puzzle=puzzles[0];playing=true;gameScores.start(level);resetPuzzle();prompt();
+    // The preview drawing is the first puzzle: never swap it on Play.
+    if(previewFresh){previewFresh=false;const rest=[...M.drawings[level]].filter(d=>d!==puzzle);for(let i=rest.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[rest[i],rest[j]]=[rest[j],rest[i]];}puzzles=[puzzle,...rest];}
+    else{puzzles=[...M.drawings[level]];for(let i=puzzles.length-1;i>0;i--){const j=Math.floor(Math.random()*(i+1));[puzzles[i],puzzles[j]]=[puzzles[j],puzzles[i]];}puzzle=puzzles[0];}
+    playing=true;gameScores.start(level);resetPuzzle();prompt();
     clearInterval(timer);timer=setInterval(()=>{elapsed=Math.floor((performance.now()-began)/1000);$('#time').textContent=elapsed;},250);
   }
   $('#start').addEventListener('click',begin);
@@ -163,7 +164,8 @@
   $('#undo').addEventListener('click',()=>{if(!playing||busy||!history.length)return;state=history.pop();errors++;render();prompt();});
   $('#restart').addEventListener('click',()=>{if(!playing)return;epoch++;errors++;resetPuzzle();prompt();});
   $('#sound').addEventListener('click',()=>{muted=!muted;$('#sound').setAttribute('aria-pressed',String(!muted));controls();if(!muted)tone();});
-  document.querySelectorAll('[data-level]').forEach(b=>b.addEventListener('click',()=>{if(playing)return;level=b.dataset.level;round=0;puzzle=M.drawings[level][0];state={node:null,used:[]};gameScores.showLevel(level);render();}));
+  document.querySelectorAll('[data-level]').forEach(b=>b.addEventListener('click',()=>{if(playing)return;level=b.dataset.level;round=0;puzzle=M.drawings[level][0];previewFresh=true;state={node:null,used:[]};gameScores.showLevel(level);render();}));
+  let previewFresh=true;
   puzzle=M.drawings[level][0];state={node:null,used:[]};
   momoLanguage.subscribe(value=>{
     lang=value;labels.forEach(({el,prop,en,ja})=>{const text=lang==='ja'?ja:en;if(prop==='textContent')el.textContent=text;else el.setAttribute(prop,text);});

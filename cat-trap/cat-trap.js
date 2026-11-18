@@ -285,6 +285,7 @@
     setTimeout(() => puff.remove(), 520);
   }
 
+  let previewFresh = false;
   function newPuzzle() {
     field.classList.add('no-anim');
     history.length = 0;
@@ -436,7 +437,9 @@
     if (playing) return;
     ensureAudio();
     gameScores.start(level);
-    newPuzzle();
+    // The preview setup is the first round: never swap it on Play.
+    if (previewFresh) previewFresh = false;
+    else newPuzzle();
     playing = true;
     playedRound = true;
     setControls();
@@ -466,6 +469,7 @@
     } else {
       gameScores.finish(0, false);
       newPuzzle();
+      previewFresh = true;
     }
     start.textContent = copy[language].retry;
     setControls();
@@ -478,6 +482,7 @@
     level = button.dataset.level;
     levelButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
     newPuzzle();
+    previewFresh = true;
     renderLanguage();
   }));
 
@@ -505,6 +510,7 @@
 
   buildBoard();
   newPuzzle();
+  previewFresh = true;
   setControls();
   momoLanguage.subscribe(code => { language = code; renderLanguage(); render(); });
 })();

@@ -34,6 +34,7 @@
   let level = 'easy';
   let playing = false;
   let playedRound = false;
+  let previewFresh = false;
   let grid = [];
   let tiles = [];
   let moves = 0;
@@ -228,7 +229,9 @@
     verdict.textContent = '';
     playing = true;
     playedRound = true;
-    newPuzzle();
+    // The preview puzzle is the first puzzle: never swap it on Play.
+    if (previewFresh) { previewFresh = false; render(); }
+    else newPuzzle();
     setControls();
   }
 
@@ -288,6 +291,7 @@
     levelButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
     gameScores.showLevel(level);
     newPuzzle();
+    previewFresh = true;
   }));
 
   start.addEventListener('click', begin);
@@ -300,6 +304,7 @@
   });
 
   newPuzzle();
+  previewFresh = true;
   setControls();
   momoLanguage.subscribe(code => { language = code; renderLanguage(); });
 })();
