@@ -10,12 +10,12 @@
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="hanoi.css">
+<link rel="stylesheet" href="hanoi.css?v=ux-1">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
 <script defer src="../scores.js?v=shared-nickname"></script>
-<script defer src="hanoi.js"></script>
+<script defer src="hanoi.js?v=ux-1"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
   <link rel="manifest" href="../manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
@@ -46,6 +46,7 @@
       <button type="button" data-level="easy" aria-pressed="false"><span class="level-icon" aria-hidden="true">🌼</span><span data-en="Easy">かんたん</span></button>
       <button type="button" data-level="normal" aria-pressed="true"><span class="level-icon" aria-hidden="true">🦋</span><span data-en="Normal">ふつう</span></button>
       <button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-en="Hard">むずかしい</span></button>
+      <button type="button" data-level="expert" aria-pressed="false"><span class="level-icon" aria-hidden="true">🌟</span><span data-en="Expert">ちょうむずかしい</span></button>
     </div>
   </fieldset>
   <div class="play-stack">
@@ -92,6 +93,8 @@
     <div class="play-row">
       <button class="play-primary" id="start" type="button">Play</button>
       <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
+      <button class="stop-button" id="undo" type="button" hidden>↩ <span data-en="Undo">もどす</span></button>
+      <button class="stop-button" id="restart" type="button" hidden>↻ <span data-en="Restart">さいしょから</span></button>
     </div>
   </div>
   <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>

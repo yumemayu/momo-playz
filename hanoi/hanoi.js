@@ -13,6 +13,9 @@
   const stop = document.querySelector('#stop');
   const sound = document.querySelector('#sound');
   const zones = Array.from(document.querySelectorAll('.hn-zone'));
+  const pegEls = Array.from(document.querySelectorAll('.hn-peg'));
+  const undo = document.querySelector('#undo');
+  const restart = document.querySelector('#restart');
   const levelButtons = Array.from(document.querySelectorAll('[data-level]'));
   const reducedMotion = matchMedia('(prefers-reduced-motion: reduce)');
 
@@ -20,10 +23,11 @@
     practice: { disks: 2, par: 3, practice: true },
     easy: { disks: 3, par: 7 },
     normal: { disks: 4, par: 15 },
-    hard: { disks: 5, par: 31 }
+    hard: { disks: 5, par: 31 },
+    expert: { disks: 6, par: 63 }
   };
-  const DISK_H = 30;
-  const PITCH = 33;
+  let DISK_H = 30;
+  let PITCH = 33;
   const BASE = 14;
   const FLIGHT_TOP = 4;
 
@@ -58,6 +62,7 @@
   let pegs = [[], [], []];
   let diskEls = new Map();
   let held = null;
+  let history = [];
   let busy = false;
   let moves = 0;
   let seconds = 0;
@@ -144,13 +149,15 @@
   }
 
   function diskCount() { return LEVELS[level].disks; }
+  function rankOf(size) { const n = diskCount(); return n === 6 ? size : size + (5 - n); }
+  function maxRank() { return diskCount() === 6 ? 6 : 5; }
   function pegCenter(peg) { return field.clientWidth * (peg * 2 + 1) / 6; }
   function diskWidth(size) {
     const zoneW = field.clientWidth / 3;
     const maxW = Math.min(120, zoneW - 8);
     const minW = maxW * 0.44;
-    const rank = size + (5 - diskCount());
-    return minW + (maxW - minW) * (rank - 1) / 4;
+    const rank = rankOf(size);
+    return minW + (maxW - minW) * (rank - 1) / (maxRank() - 1);
   }
   function restTop(lvl) {
     return field.clientHeight - BASE - (lvl + 1) * PITCH + (PITCH - DISK_H);
@@ -178,17 +185,22 @@
 
   function setup() {
     const n = diskCount();
+    PITCH = n === 6 ? 28 : 33;
+    DISK_H = PITCH - 3;
     pegs = [Array.from({ length: n }, (_, i) => n - i), [], []];
     diskEls.forEach(el => el.remove());
     diskEls = new Map();
     for (let size = 1; size <= n; size++) {
       const el = document.createElement('span');
       el.className = 'hn-disk';
-      el.dataset.rank = String(size + (5 - n));
+      el.dataset.rank = String(rankOf(size));
+      el.style.height = DISK_H + 'px';
       disksLayer.append(el);
       diskEls.set(size, el);
     }
     held = null;
+    history = [];
+    clearDrops();
     busy = false;
     over = false;
     moves = 0;
@@ -220,8 +232,21 @@
     zones.forEach(zone => { zone.disabled = !playing || over; });
     start.textContent = playedRound && !playing ? copy[language].retry : 'Play';
     stop.hidden = !playing;
+    undo.hidden = !playing;
+    restart.hidden = !playing;
+    undo.disabled = !playing || over || busy || !!held || !history.length;
+    restart.disabled = !playing || busy;
     renderStats();
   }
+
+  function markDrops() {
+    pegEls.forEach((pegEl, peg) => {
+      if (!held || peg === held.from) { pegEl.classList.remove('can-drop'); return; }
+      const top = pegs[peg][pegs[peg].length - 1];
+      pegEl.classList.toggle('can-drop', top === undefined || top > held.size);
+    });
+  }
+  function clearDrops() { pegEls.forEach(pegEl => pegEl.classList.remove('can-drop')); }
 
   function dur(ms) { return reducedMotion.matches ? Math.min(ms, 40) : ms; }
   async function animate(el, frames, options) {
@@ -251,6 +276,7 @@
     el.style.top = FLIGHT_TOP + 'px';
     held = { size, from };
     el.classList.add('held');
+    markDrops();
     playPickup();
     startTimerOnce();
     busy = false;
@@ -261,6 +287,7 @@
     const { size, from } = held;
     const el = diskEls.get(size);
     el.classList.remove('held');
+    clearDrops();
     busy = true;
     const target = restTop(pegs[from].length - 1);
     await animate(el,
@@ -277,6 +304,7 @@
     const { size, from } = held;
     const el = diskEls.get(size);
     el.classList.remove('held');
+    clearDrops();
     busy = true;
     pegs[from].pop();
     pegs[to].push(size);
@@ -305,6 +333,7 @@
     puff(to, targetTop);
     playDrop();
     moves += 1;
+    history.push({ size, from, to });
     held = null;
     busy = false;
     if (pegs[2].length === diskCount()) {
@@ -312,6 +341,44 @@
       return;
     }
     render();
+  }
+
+  async function undoMove() {
+    if (!playing || over || busy || held || !history.length) return;
+    const { size, from, to } = history.pop();
+    busy = true;
+    render();
+    const el = diskEls.get(size);
+    pegs[to].pop();
+    pegs[from].push(size);
+    const targetTop = restTop(pegs[from].length - 1);
+    const fromTop = parseFloat(el.style.top);
+    await animate(el,
+      [{ top: fromTop + 'px' }, { top: FLIGHT_TOP + 'px' }],
+      { duration: dur(160), easing: 'ease-out', fill: 'forwards' });
+    el.style.top = FLIGHT_TOP + 'px';
+    const startLeft = parseFloat(el.style.left);
+    const targetLeft = pegCenter(from) - diskWidth(size) / 2;
+    const glide = el.animate(
+      [{ left: startLeft + 'px' }, { left: targetLeft + 'px' }],
+      { duration: dur(240), easing: 'ease-in-out', fill: 'forwards' });
+    try { await glide.finished; } catch {}
+    el.style.left = targetLeft + 'px';
+    await animate(el,
+      [{ top: FLIGHT_TOP + 'px' }, { top: targetTop + 'px' }],
+      { duration: dur(200), easing: 'ease-in', fill: 'forwards' });
+    el.style.top = targetTop + 'px';
+    puff(from, targetTop);
+    playDrop();
+    moves -= 1;
+    turnLine.textContent = copy[language].go;
+    busy = false;
+    render();
+  }
+
+  function restartRound() {
+    if (!playing || busy) return;
+    startRound();
   }
 
   function illegalWiggle() {
@@ -455,6 +522,7 @@
     if (held) {
       diskEls.get(held.size).classList.remove('held');
       held = null;
+      clearDrops();
       layoutAll();
     }
     turnLine.textContent = '';
@@ -465,6 +533,8 @@
   zones.forEach(zone => zone.addEventListener('click', () => onZone(Number(zone.dataset.peg))));
   start.addEventListener('click', begin);
   stop.addEventListener('click', stopGame);
+  undo.addEventListener('click', undoMove);
+  restart.addEventListener('click', restartRound);
   sound.addEventListener('click', () => {
     muted = !muted;
     sound.setAttribute('aria-pressed', String(!muted));
