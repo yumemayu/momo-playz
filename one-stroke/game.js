@@ -49,7 +49,7 @@
       if(!playing||!busy)return;
       round++;
       if(round===3){
-        playing=false;clearInterval(timer);elapsed=Math.floor((performance.now()-began)/1000);
+        next.remove();playing=false;clearInterval(timer);elapsed=Math.floor((performance.now()-began)/1000);
         gameScores.finish(Math.max(100,3000-elapsed*2-errors*100),true);controls();status(say('Three puzzles cleared! 🎉','3もん クリア！ 🎉'));$('#start').focus({preventScroll:true});
       }else{puzzle=puzzles[round];resetPuzzle();prompt();}
     });next.focus({preventScroll:true});

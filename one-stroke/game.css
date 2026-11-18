@@ -15,6 +15,7 @@
 .puzzle-board.solved .stroke-base{stroke:#eb8b45}.puzzle-board.solved{box-shadow:0 0 0 4px #ffdf94,0 4px 0 #e8bc79}
 .puzzle-board.wrong{animation:puzzle-shake .25s}.puzzle-board.spark{animation:puzzle-pop .25s}
 .turn-line{min-height:2.6em;margin:0 0 6px;text-align:center;font:bold .95rem var(--game-handwriting);color:#7a3b63}
-body[data-game="one-stroke"] .game-title-banner{--banner-art:url(banner.svg);--banner-color:#e8f4e5;--banner-ink:#4a7958}
 @keyframes puzzle-shake{25%{transform:translateX(-4px)}75%{transform:translateX(4px)}}@keyframes puzzle-pop{50%{filter:brightness(1.06)}}
 @media(prefers-reduced-motion:reduce){.puzzle-board.wrong,.puzzle-board.spark{animation:none}.stroke-base{transition:none}}
+.puzzle-board.solved .stroke-tally{visibility:hidden}
+@media (min-width:1101px),(orientation:landscape) and (min-width:700px){.puzzle-board{height:min(var(--game-field-height),calc(100dvh - 250px));min-height:240px}}

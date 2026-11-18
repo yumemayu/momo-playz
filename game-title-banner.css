@@ -174,3 +174,9 @@
   --banner-color: #e7e0ff;
   --banner-ink: #5a3d99;
 }
+
+[data-game="one-stroke"] {
+  --banner-art: url("one-stroke/banner.svg");
+  --banner-color: #e8f4e5;
+  --banner-ink: #4a7958;
+}
