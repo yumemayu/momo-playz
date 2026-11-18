@@ -71,7 +71,8 @@ let axisX = 1;
 let axisY = 1;
 
 function move(position) {
-  player = Math.max(squirrelSize * .38, Math.min(width - squirrelSize * .38, position));
+  const margin = Math.min(width / 2, cupHalfWidth * axisY / axisX);
+  player = Math.max(margin, Math.min(width - margin, position));
 }
 
 function drawBun(bun) {
