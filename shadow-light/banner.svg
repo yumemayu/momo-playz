@@ -1,0 +1,25 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 400 400">
+  <g fill="#f6b73e">
+    <path d="M48 44 l4.5 10.5 L63 59 l-10.5 4.5 L48 74 l-4.5 -10.5 L33 59 l10.5 -4.5 Z"/>
+    <path d="M348 60 l3.5 8.5 L360 72 l-8.5 3.5 L348 84 l-3.5 -8.5 L336 72 l8.5 -3.5 Z"/>
+  </g>
+  <rect x="52" y="52" width="296" height="296" rx="36" fill="#fff8ec"/>
+  <g transform="translate(96,84)">
+    <circle cx="26" cy="26" r="17" fill="#ffb84d"/>
+    <g stroke="#ffb84d" stroke-width="6" stroke-linecap="round">
+      <line x1="26" y1="-2" x2="26" y2="5"/><line x1="-2" y1="26" x2="5" y2="26"/><line x1="47" y1="26" x2="54" y2="26"/>
+      <line x1="6" y1="6" x2="11" y2="11"/><line x1="46" y1="6" x2="41" y2="11"/>
+    </g>
+  </g>
+  <g stroke="#b08968" stroke-width="4" stroke-linejoin="round">
+    <polygon points="200,150 252,176 200,202 148,176" fill="#ffedb0"/>
+    <polygon points="148,176 200,202 200,254 148,228" fill="#f2d67c"/>
+    <polygon points="200,202 252,176 252,228 200,254" fill="#e0b95c"/>
+    <polygon points="252,124 304,150 252,176 200,150" fill="#ffd7e8"/>
+    <polygon points="252,176 304,150 304,202 252,228" fill="#e79ec0"/>
+    <polygon points="200,150 252,176 252,228 200,202" fill="#f3b8d0"/>
+  </g>
+  <rect x="118" y="282" width="52" height="40" rx="8" fill="#57344a"/>
+  <rect x="176" y="262" width="52" height="60" rx="8" fill="#57344a"/>
+  <rect x="234" y="242" width="52" height="80" rx="8" fill="#57344a"/>
+</svg>

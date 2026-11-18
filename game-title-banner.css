@@ -82,6 +82,11 @@
   --banner-color: #ffe9d6;
   --banner-ink: #9a4a12;
 }
+[data-game="shadow-light"] {
+  --banner-art: url("shadow-light/banner.svg");
+  --banner-color: #ffedbe;
+  --banner-ink: #c47b12;
+}
 [data-game="cube-net"] {
   --banner-art: url("cube-net/banner.svg");
   --banner-color: #ffe3ef;
