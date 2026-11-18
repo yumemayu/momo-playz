@@ -458,7 +458,7 @@ function finishGame(completed = false) {
   difficultyButtons.forEach(button => { button.disabled = false; });
   startButton.textContent = L('Play again', 'もういちど');
   gameScores.finish(score, completed);
-  result.textContent = bunMode ? L('Final score: ', 'スコア：') + score : L('You caught ' + score + (score === 1 ? ' fry!' : ' fries!'), 'フライを ' + score + 'こ つかまえた！');
+  result.textContent = L('Final score: ', 'スコア：') + score;
   draw();
 }
 stopButton.addEventListener('click', () => {
