@@ -258,3 +258,24 @@ footer.feedback .momo-language { position: static; opacity: 1; box-shadow: none;
 .cat-chip.is-on[data-cat="action"] { background: #f59e42; border-color: #f59e42; }
 .cat-chip.is-on[data-cat="relax"]  { background: #4fbe7d; border-color: #4fbe7d; }
 .cat-chip.is-on[data-cat="music"]  { background: #9a76e8; border-color: #9a76e8; }
+
+/* --- New / Popular tabs (2026-11-19) --- */
+.home-tabs { display: flex; gap: 8px; margin: 26px 0 12px; }
+.home-tab {
+  font: inherit; font-weight: 900; cursor: pointer;
+  border: 2px solid #f2b8d0; background: #fff; color: #8a4b6b;
+  border-radius: 999px; padding: 8px 18px; font-size: 1rem;
+}
+.home-tab.is-on { background: #f272a7; border-color: #f272a7; color: #fff; }
+#newgames > h2, #popular > h2 { display: none; }
+#newgames, #popular { margin-top: 0; }
+.pop-wait { font-weight: 700; color: #b08968; padding: 6px 2px; }
+/* Popular accents: hearts, a popularity band, one loved ribbon */
+#popular-picker > a { overflow: hidden; padding-top: 16px; }
+#popular-picker .game-art { flex: none; width: 42px; height: 42px; }
+#popular-picker .pop-hearts { position: absolute; top: 4px; left: 6px; z-index: 2; color: #f272a7; font-size: .68rem; letter-spacing: 1px; }
+#popular-picker > a.pop-top { border-color: #f272a7; box-shadow: 0 0 0 2px #f9c6dd, 0 4px 10px #f272a733; }
+#popular-picker .pop-ribbon { position: absolute; top: 4px; right: 6px; z-index: 3; background: #f272a7; color: #fff; font-size: .6rem; font-weight: 900; border-radius: 999px; padding: 2px 7px; }
+#popular-picker .pop-band { position: relative; width: 100%; height: 14px; margin-top: 6px; background: #ffd3e8; border-radius: 999px; overflow: hidden; }
+#popular-picker .pop-band i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #f9a8cd, #f272a7); }
+#popular-picker .pop-band b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: .58rem; font-weight: 900; color: #8a2c57; letter-spacing: .03em; }

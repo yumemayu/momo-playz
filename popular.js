@@ -58,7 +58,7 @@
       clone.removeAttribute('aria-current');
       picker.append(clone);
     });
-    if (picker.children.length) section.hidden = false;
+    if (picker.children.length) { section.dataset.ready = '1'; if (window.momoHomeTabs) window.momoHomeTabs.refresh(); else section.hidden = false; }
   })();
 
   /* ---------- Popularity ranking ---------- */
@@ -73,31 +73,44 @@
       .slice(0, 5);
     if (!ranked.length) return;
     picker.textContent = '';
-    const medals = ['🥇', '🥈', '🥉', '4', '5'];
+    const pick = (en, ja) => (typeof momoLanguage !== 'undefined' && momoLanguage.pick) ? momoLanguage.pick(en, ja) : en;
+    const max = ranked.length ? ranked[0][1] : 1;
     ranked.forEach(([gameId, n], i) => {
       const dir = Object.keys(GAMES).find(d => GAMES[d][0] === gameId);
       const source = dir && anchorFor(dir);
       if (!source) return;
       const a = source.cloneNode(true);
       a.removeAttribute('aria-current');
-      const medal = document.createElement('span');
-      medal.className = 'pop-medal';
-      medal.textContent = medals[i];
-      medal.setAttribute('aria-hidden', 'true');
-      a.append(medal);
-      const count = document.createElement('span');
-      count.className = 'pop-count';
+      const hearts = document.createElement('span');
+      hearts.className = 'pop-hearts';
+      hearts.setAttribute('aria-hidden', 'true');
+      hearts.textContent = n >= 10 ? '♥♥♥' : n >= 5 ? '♥♥' : '♥';
+      a.prepend(hearts);
+      const band = document.createElement('span');
+      band.className = 'pop-band';
+      const fill = document.createElement('i');
+      fill.style.width = `${Math.round((n / max) * 100)}%`;
+      const tag = document.createElement('b');
       if (metric === 'plays') {
-        count.textContent = `${n} plays`;
-        count.dataset.ja = `${n}回 あそばれた`;
+        tag.textContent = pick(`♥ ${n}`, `♥ ${n}回`);
+        tag.dataset.ja = `♥ ${n}回`;
       } else {
-        count.textContent = `${n} players`;
-        count.dataset.ja = `${n}にん あそんだ`;
+        tag.textContent = pick(`♥ ${n}`, `♥ ${n}にん`);
+        tag.dataset.ja = `♥ ${n}にん`;
       }
-      a.append(count);
+      band.append(fill, tag);
+      a.append(band);
+      if (i === 0) {
+        a.classList.add('pop-top');
+        const ribbon = document.createElement('span');
+        ribbon.className = 'pop-ribbon';
+        ribbon.textContent = pick('💗 Most loved!', '💗 みんな大好き！');
+        ribbon.dataset.ja = '💗 みんな大好き！';
+        a.append(ribbon);
+      }
       picker.append(a);
     });
-    if (picker.children.length) section.hidden = false;
+    if (picker.children.length) { section.dataset.ready = '1'; if (window.momoHomeTabs) window.momoHomeTabs.refresh(); else section.hidden = false; }
   }
 
   async function fetchJSON(url) {

@@ -7,14 +7,14 @@
 <meta name="description" content="Play Momo Playz games, from Fry Catch and Momo Piano to circuit puzzles.">
 <link rel="stylesheet" href="game-picker.css">
 <link rel="stylesheet" href="language.css">
-<link rel="stylesheet" href="home.css?v=full-card-layout-7">
+<link rel="stylesheet" href="home.css?v=full-card-layout-8">
 <script defer src="language.js"></script>
 <script defer src="stickers.js?v=daily-stickers"></script>
 <script defer src="install-hint.js"></script>
-<script defer src="home.js?v=game-rows-3"></script>
+<script defer src="home.js?v=game-rows-4"></script>
 <link rel="stylesheet" href="toy-shelf.css?v=compact-home">
 <script defer src="toy-shelf.js?v=daily1"></script>
-<script defer src="popular.js?v=pop-4"></script>
+<script defer src="popular.js?v=pop-5"></script>
 <script defer src="coins.js?v=coin-2"></script>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
@@ -64,13 +64,18 @@
     <a class="toy-play toy-play-capybara" href="./capybara-merge/" aria-label="Find me in Capybara Onsen Merge" data-ja-label="カピバラ温泉マージでみつけてね" data-ja="みつけてね">Find me</a>
   </div>
 </section>
+<div class="home-tabs" role="tablist" aria-label="Game shelves">
+  <button type="button" class="home-tab is-on" data-tab="new" data-ja="🆕 新着ゲーム">🆕 New games</button>
+  <button type="button" class="home-tab" data-tab="pop" data-ja="💗 人気のゲーム">💗 Popular games</button>
+</div>
 <section class="newgames home-game-row" id="newgames" aria-labelledby="newgames-title" hidden>
   <h2 id="newgames-title" class="newgames-title"><span aria-hidden="true">🆕</span> <span data-ja="新着ゲーム">New games</span></h2>
   <nav class="game-picker newgames-picker" id="newgames-picker" aria-label="New games"></nav>
 </section>
 <section class="popular home-game-row" id="popular" aria-labelledby="popular-title" hidden>
-  <h2 id="popular-title" class="popular-title"><span aria-hidden="true">🏆</span> <span data-ja="人気ランキング">Popularity ranking</span></h2>
+  <h2 id="popular-title" class="popular-title"><span aria-hidden="true">💗</span> <span data-ja="人気のゲーム">Popular games</span></h2>
   <nav class="game-picker popular-picker" id="popular-picker" aria-label="Popular games"></nav>
+  <p class="pop-wait" data-ja="あそぶと人気のゲームが出てくるよ">Play some games and the popular ones will appear here!</p>
 </section>
 <section class="recent home-game-row" id="recent" aria-labelledby="recent-title" hidden>
   <h2 id="recent-title" class="recent-title"><span aria-hidden="true">🕒</span> <span data-ja="さいきん遊んだ">Recently played</span></h2>

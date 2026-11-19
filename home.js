@@ -152,3 +152,37 @@
   const footer = document.querySelector('footer.feedback');
   if (pill && footer) footer.append(pill);
 })();
+
+/* New / Popular tab switcher (2026-11-19). popular.js marks its section
+   ready when data renders and calls refresh() here. */
+(() => {
+  const bar = document.querySelector('.home-tabs');
+  const newSec = document.getElementById('newgames');
+  const popSec = document.getElementById('popular');
+  if (!bar || !newSec || !popSec) return;
+  let current = 'new';
+  try { current = localStorage.getItem('momo:home-tab') || 'new'; } catch { /* ignore */ }
+  const wait = popSec.querySelector('.pop-wait');
+  function apply() {
+    const newReady = newSec.dataset.ready === '1' || newSec.querySelector('#newgames-picker')?.children.length > 0;
+    const popReady = popSec.dataset.ready === '1';
+    let show = current;
+    if (show === 'new' && !newReady && popReady) show = 'pop';
+    if (show === 'pop' && !popReady && newReady) show = 'new';
+    bar.querySelectorAll('.home-tab').forEach(b => b.classList.toggle('is-on', b.dataset.tab === show));
+    newSec.hidden = show !== 'new';
+    popSec.hidden = show !== 'pop';
+    if (wait) wait.hidden = popReady;
+    /* 'current' stays the visitor's own choice: the fallback above is
+       only a display state while the other shelf has no data yet. */
+  }
+  bar.addEventListener('click', e => {
+    const b = e.target.closest('.home-tab');
+    if (!b) return;
+    current = b.dataset.tab;
+    try { localStorage.setItem('momo:home-tab', current); } catch { /* ignore */ }
+    apply();
+  });
+  window.momoHomeTabs = { refresh: apply };
+  apply();
+})();
