@@ -560,3 +560,8 @@ main > .guide-toggle { order: 2; }
 
 /* Live stats sit directly above the play field (common spec). */
 .play-stack > .stats { margin: 0 2px 6px; }
+
+@media (max-width: 1100px) and (orientation: portrait), (max-width: 699px) {
+  main:has(> .play-stack) { padding-top: 60px; }
+  main:has(> .play-stack) > .game-title-banner { margin-top: 0; }
+}
