@@ -618,6 +618,7 @@ main[data-board-layout] > .play-stack {
 @media (max-width: 679px), (orientation: portrait) and (max-width: 1100px) {
   main[data-board-layout] { display: flex; flex-direction: column; gap: 10px; }
   [data-board-layout] .game-sidebar > .game-heading { margin-top: 0; }
+  [data-board-layout] .game-guide { order: 8; }
   [data-board-layout] .wn-tile { width: min(10vw, 40px); height: min(10vw, 40px); }
   [data-board-layout] .wn-tile svg, [data-board-layout] .wn-opt svg { width: 100%; height: 34px; }
   [data-board-layout] .wn-matrix { grid-template-columns: repeat(3, min(10vw, 40px)); }
