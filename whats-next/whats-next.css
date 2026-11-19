@@ -75,3 +75,9 @@
   .wn-opt svg { max-width: 170px; }
 }
 .wn-verdict { font-size: 1.05rem; font-weight: 800; color: #7a3b63; min-height: 1.4em; }
+
+/* Keep the question, controls and ranking in the same rounded typeface. */
+body[data-game="whats-next"],
+[data-game="whats-next"] :is(.game-title-banner h1, button, input, output, .score-board h2) {
+  font-family: var(--game-handwriting);
+}

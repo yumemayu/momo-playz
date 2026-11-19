@@ -1,37 +1,52 @@
-* { box-sizing: border-box; }
-[hidden] { display: none !important; }
-body {
-  margin: 0;
-  min-height: 100dvh;
-  padding: 64px 12px 24px;
-  background: repeating-conic-gradient(#ffedf4 0% 25%, #fff7fa 0% 50%) 0 0 / 32px 32px;
-  color: #633b56;
-  font: 700 1rem system-ui, sans-serif;
+.soda-main {
+  --banner-color: #fbdce8;
+  --banner-ink: #85365a;
+}
+.soda-main .game-title-banner h1 span { white-space: normal; }
+.soda-title-art {
+  position: absolute;
+  inset: 8% 8% 18% auto;
+  display: grid;
+  place-items: center;
+  font-size: clamp(2.5rem, 26cqi, 5rem);
+}
+.soda-main .difficulty select {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 2px solid #e9a8c1;
+  border-radius: 14px;
+  background: #fff;
+  color: inherit;
+  font: inherit;
+}
+.soda-board {
+  container-type: inline-size;
+  padding: 14px clamp(10px, 3vw, 24px);
+  border: 3px solid #e8adc6;
+  border-radius: 22px;
+  background: #fff9ee;
   text-align: center;
 }
-.soda-main {
-  max-width: 580px;
-  margin: auto;
-  padding: 20px clamp(10px, 3vw, 24px);
-  border: 2px solid #f1c4d5;
-  border-radius: 28px;
-  background: #fff9ee;
+.soda-board .actions {
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: center;
+  gap: 8px;
 }
-h1 { font-size: clamp(1.45rem, 5vw, 2.15rem); margin: 0; }
-main > p { line-height: 1.5; }
-button, .stage-picker select {
-  min-height: 44px; min-width: 44px; padding: 6px 12px; border: 2px solid #e9a8c1;
-  border-radius: 18px; background: #fff; color: inherit; font: inherit; cursor: pointer;
-  touch-action: manipulation;
+.soda-main #ready-card {
+  position: static;
+  transform: none;
+  pointer-events: auto;
+  margin: 10px auto 0;
 }
-button[aria-pressed="true"] { background: #ffcee3; }
-button:disabled { opacity: .5; cursor: default; }
-.stage-picker, .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.soda-main #ready-card .player-setup { margin-bottom: 0; }
 .glasses {
   display: grid; grid-template-columns: repeat(3, minmax(0, 80px));
   justify-content: center; gap: 32px 9px; padding-top: 40px;
 }
-@media (min-width: 520px) { .glasses { grid-template-columns: repeat(5, minmax(0, 80px)); } }
+@container (min-width: 420px) {
+  .glasses { grid-template-columns: repeat(5, minmax(0, 80px)); }
+}
 .glass {
   position: relative;
   width: 100%;
@@ -77,14 +92,13 @@ button:disabled { opacity: .5; cursor: default; }
 .pink { background: #f38cb1; } .green { background: #9be09a; } .blue { background: #8ed9f5; }
 .topping { position: absolute; left: 50%; bottom: 88%; translate: -50% 0; font-size: 2rem; animation: pop .25s ease-out; }
 @keyframes pop { from { transform: translateY(-10px) scale(.7); opacity: 0; } }
-#message { min-height: 3em; }
+#message { min-height: 1.5em; }
 @media (prefers-reduced-motion: reduce) {
   .glass { transition: none; } .topping { animation: none; }
 }
 
 .topping { white-space: nowrap; font-size: 1.65rem; }
 
-main { background: #fff6e9; border-color: #e2bba7; color: #593933; }
 .awning {
   height: 25px;
   margin: -7px 0 18px;
@@ -109,25 +123,26 @@ main { background: #fff6e9; border-color: #e2bba7; color: #593933; }
 }
 #celebration img { width: 82%; height: 82%; object-fit: contain; transform: translateX(3%); }
 
-.stage-picker { align-items: center; }
 .yellow { background: #ffe477; }
 .orange { background: #ffb477; }
 .purple { background: #b69aeb; }
 .red { background: #d95568; }
 
-.soda-main .score-board { margin: 24px auto 16px; width: 100%; position: static; }
-.soda-nickname { display: grid; gap: 8px; justify-items: center; }
-.soda-nickname input { max-width: 100%; }
-.soda-games-link {
+
+.soda-main .momo-home-link {
+  position: absolute;
+  right: 10px;
+  bottom: 8px;
   display: inline-flex;
   align-items: center;
-  min-height: 44px;
-  padding: 0 14px;
-  border: 2px solid #e9a8c1;
-  border-radius: 18px;
-  background: white;
-  color: #84395e;
+  min-height: 36px;
+  padding: 4px 12px;
+  border: 2.5px solid #f272a7;
+  border-radius: 999px;
+  background: #fff;
+  color: #c2437e;
+  font-size: .85rem;
+  font-weight: 900;
+  text-decoration: none;
+  box-shadow: 0 2px 6px #b0896833;
 }
-.soda-main .feedback { margin-top: 16px; }
-
-body[data-game="cream-soda"] > .momo-home-link { position: absolute; top: 8px; left: 8px; }
