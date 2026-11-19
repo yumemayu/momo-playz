@@ -345,7 +345,7 @@ const gameScores = (() => {
   gameScores.start = (...args) => { awarded = false; return origStart(...args); };
   gameScores.finish = (score, completed, growth) => {
     const result = origFinish(score, completed, growth);
-    if (!awarded) {
+    if (!awarded && !document.body.hasAttribute('data-stage-rewards')) {
       awarded = true;
       const gain = completed ? 10 : 2;
       const before = get();

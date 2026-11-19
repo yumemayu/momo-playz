@@ -1,0 +1,70 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Cream Soda Shop · Momo Playz</title>
+  <meta name="description" content="Sort colorful cream sodas in this Momo Playz puzzle.">
+  <meta name="theme-color" content="#f272a7">
+  <meta name="apple-mobile-web-app-title" content="Cream Soda">
+  <link rel="apple-touch-icon" href="../icons/icon-512.png">
+  <link rel="manifest" href="manifest.webmanifest">
+  <link rel="stylesheet" href="../game.css?v=level-cards">
+  <link rel="stylesheet" href="../nickname.css?v=compact">
+  <link rel="stylesheet" href="../language.css">
+  <link rel="stylesheet" href="soda.css?v=shared-ui">
+  <script defer src="../language.js"></script>
+  <script defer src="../pwa.js"></script>
+  <script defer src="../soda-gems.js"></script>
+  <script defer src="../nickname.js?v=compact"></script>
+  <script defer src="../scores.js?v=soda-ranking"></script>
+  <script defer src="soda.js?v=shared-ui"></script>
+</head>
+<body data-game="cream-soda" data-stage-rewards>
+<a class="momo-home-link soda-games-link" href="../" data-ja="🏠 ホーム">🏠 Home</a>
+<main class="soda-main">
+  <div class="awning" aria-hidden="true"></div>
+  <h1 data-ja="クリームソーダ屋さん">Cream Soda Shop</h1>
+  <p data-ja="同じ色をひとつのグラスにそろえよう。グラスをふたつ、順番にタップしてね。">Tap two glasses to pour. Fill each glass with one color.</p>
+  <label class="stage-picker">
+    <span data-ja="ステージ">Stage</span>
+    <select id="levels"><option value="0">1 / 12</option></select>
+  </label>
+  <div id="glasses" class="glasses"></div>
+  <div id="celebration" hidden><img src="melon-soda.webp" alt="" width="180" height="180"></div>
+  <p id="message" role="status"></p>
+  <div class="actions">
+    <button id="undo" type="button" data-ja="ひとつ戻す">Undo</button>
+    <button id="reset" type="button" data-ja="やりなおす">Restart</button>
+    <button id="next" type="button" data-ja="つぎのステージ" hidden>Next stage</button>
+  </div>
+  <div id="score-card" class="game-card" role="status" hidden>
+    <span data-ja="スコア">Score</span> <strong id="final-score"></strong>
+    <p></p>
+  </div>
+  <section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title" data-ja="ランキング">Leaderboard</h2>
+      <div class="score-period" aria-label="Ranking period" role="group">
+        <button type="button" data-period="weekly" aria-pressed="true" data-ja="今週">This week</button>
+        <button type="button" data-period="all" aria-pressed="false" data-ja="すべて">All time</button>
+      </div>
+    </div>
+    <p data-ja="ステージ別。少ない手数でクリアすると高得点！">Each stage has its own ranking. Fewer pours earn a higher score!</p>
+    <div id="ready-card">
+      <div class="soda-nickname">
+        <label for="nickname" data-ja="ニックネーム（任意）">Nickname (optional)</label>
+        <input id="nickname" maxlength="20" autocomplete="off">
+      </div>
+    </div>
+    <button type="button" id="change-player" class="change-player" data-ja="ニックネームをかえる" hidden>Change nickname</button>
+    <p id="personal-best" class="personal-best"></p>
+    <ol id="score-list"></ol>
+  </section>
+  <nav aria-label="Momo Playz">
+    <a class="soda-games-link" href="../#all-games-title" data-ja="すべてのゲーム">All Games</a>
+  </nav>
+  <footer class="feedback"><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a><small>Copyright Momo.squirrels</small></footer>
+</main>
+</body>
+</html>

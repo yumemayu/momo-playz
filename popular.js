@@ -8,9 +8,10 @@
    badge — no network needed. */
 (() => {
   const URL = 'https://script.google.com/macros/s/AKfycbwIZWAIOqgmjctFItur6QacLZqf2zL6paAyLxFeCoV1cAnD2O3yV70ZiKiprBi1xTdIVQ/exec';
-  const CACHE_KEY = 'momo:popular:v3';
+  const CACHE_KEY = 'momo:popular:v4';
   const TTL = 24 * 60 * 60 * 1000;
   const GAMES = {
+    'cream-soda': ['cream-soda', Array.from({length: 12}, (_, index) => `stage-${index + 1}`)],
     'fry-catch': ['fries', ['super-easy', 'easy', 'medium', 'hard', 'impossible']],
     'smiley-bun-catch': ['buns', ['super-easy', 'easy', 'medium', 'hard', 'impossible']],
     'glasses-cat': ['cats', ['easy', 'normal', 'hard']],

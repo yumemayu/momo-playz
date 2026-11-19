@@ -1,0 +1,133 @@
+* { box-sizing: border-box; }
+[hidden] { display: none !important; }
+body {
+  margin: 0;
+  min-height: 100dvh;
+  padding: 64px 12px 24px;
+  background: repeating-conic-gradient(#ffedf4 0% 25%, #fff7fa 0% 50%) 0 0 / 32px 32px;
+  color: #633b56;
+  font: 700 1rem system-ui, sans-serif;
+  text-align: center;
+}
+.soda-main {
+  max-width: 580px;
+  margin: auto;
+  padding: 20px clamp(10px, 3vw, 24px);
+  border: 2px solid #f1c4d5;
+  border-radius: 28px;
+  background: #fff9ee;
+}
+h1 { font-size: clamp(1.45rem, 5vw, 2.15rem); margin: 0; }
+main > p { line-height: 1.5; }
+button, .stage-picker select {
+  min-height: 44px; min-width: 44px; padding: 6px 12px; border: 2px solid #e9a8c1;
+  border-radius: 18px; background: #fff; color: inherit; font: inherit; cursor: pointer;
+  touch-action: manipulation;
+}
+button[aria-pressed="true"] { background: #ffcee3; }
+button:disabled { opacity: .5; cursor: default; }
+.stage-picker, .actions { display: flex; flex-wrap: wrap; justify-content: center; gap: 8px; }
+.glasses {
+  display: grid; grid-template-columns: repeat(3, minmax(0, 80px));
+  justify-content: center; gap: 32px 9px; padding-top: 40px;
+}
+@media (min-width: 520px) { .glasses { grid-template-columns: repeat(5, minmax(0, 80px)); } }
+.glass {
+  position: relative;
+  width: 100%;
+  height: 108px;
+  padding: 0;
+  border: 0;
+  border-radius: 12px;
+  background: transparent;
+  isolation: isolate;
+  transition: transform .18s;
+}
+.glass[aria-pressed="true"] {
+  transform: translateY(-8px);
+  background: #fff0bf;
+  outline: 2px solid #d18b47;
+}
+.liquid, .glass::before {
+  position: absolute;
+  inset: 9px 2px 0;
+  clip-path: polygon(0 0, 100% 0, 88% 93%, 77% 100%, 23% 100%, 12% 93%);
+}
+.glass::before {
+  content: "";
+  background: #a18476;
+}
+.liquid {
+  display: flex;
+  flex-direction: column-reverse;
+  padding: 16px 2px 4px;
+  background: linear-gradient(100deg, #fffaf3, #ffffff 24%, #fff6ec 32%, #fffdf6);
+}
+.glass::after {
+  content: "";
+  position: absolute;
+  inset: 1px 1px auto;
+  height: 15px;
+  border: 2px solid #a18476;
+  border-bottom-color: #806458;
+  border-radius: 50%;
+  box-shadow: inset 0 -2px #fff;
+}
+.layer { display: block; height: 25%; border-top: 2px solid #ffffff9c; }
+.pink { background: #f38cb1; } .green { background: #9be09a; } .blue { background: #8ed9f5; }
+.topping { position: absolute; left: 50%; bottom: 88%; translate: -50% 0; font-size: 2rem; animation: pop .25s ease-out; }
+@keyframes pop { from { transform: translateY(-10px) scale(.7); opacity: 0; } }
+#message { min-height: 3em; }
+@media (prefers-reduced-motion: reduce) {
+  .glass { transition: none; } .topping { animation: none; }
+}
+
+.topping { white-space: nowrap; font-size: 1.65rem; }
+
+main { background: #fff6e9; border-color: #e2bba7; color: #593933; }
+.awning {
+  height: 25px;
+  margin: -7px 0 18px;
+  border-radius: 12px 12px 9px 9px;
+  background: repeating-linear-gradient(90deg, #ed9eae 0 8.33%, #ffe4de 8.33% 16.66%);
+  box-shadow: 0 3px #e5b5a9;
+}
+.glasses {
+  padding-bottom: 14px;
+  border-bottom: 9px solid #e9b897;
+  border-radius: 0 0 10px 10px;
+}
+.topping { z-index: 1; }
+#celebration {
+  width: min(100%, 220px);
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  margin: 20px auto 0;
+  border-radius: 50%;
+  background: #ffecd1;
+}
+#celebration img { width: 82%; height: 82%; object-fit: contain; transform: translateX(3%); }
+
+.stage-picker { align-items: center; }
+.yellow { background: #ffe477; }
+.orange { background: #ffb477; }
+.purple { background: #b69aeb; }
+.red { background: #d95568; }
+
+.soda-main .score-board { margin: 24px auto 16px; width: 100%; position: static; }
+.soda-nickname { display: grid; gap: 8px; justify-items: center; }
+.soda-nickname input { max-width: 100%; }
+.soda-games-link {
+  display: inline-flex;
+  align-items: center;
+  min-height: 44px;
+  padding: 0 14px;
+  border: 2px solid #e9a8c1;
+  border-radius: 18px;
+  background: white;
+  color: #84395e;
+}
+.soda-main .feedback { margin-top: 16px; }
+
+body[data-game="cream-soda"] > .momo-home-link { position: absolute; top: 8px; left: 8px; }
