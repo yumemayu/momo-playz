@@ -146,3 +146,5 @@
   text-decoration: none;
   box-shadow: 0 2px 6px #b0896833;
 }
+
+.soda-board [hidden] { display: none; }
