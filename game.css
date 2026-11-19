@@ -607,7 +607,7 @@ main[data-board-layout] > .play-stack {
   gap: 18px 8px;
   padding-block: 18px 10px;
 }
-[data-board-layout] .wn-board {
+[data-board-layout] .play-stage > .wn-board {
   display: flex;
   flex-direction: column;
   justify-content: safe center;
