@@ -573,6 +573,7 @@ main[data-board-layout] {
 }
 main[data-board-layout] > .play-stack {
   width: min(100%, var(--board-width));
+  max-inline-size: none;
   min-width: 0;
   margin: 0 auto;
 }
