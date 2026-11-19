@@ -279,3 +279,19 @@ footer.feedback .momo-language { position: static; opacity: 1; box-shadow: none;
 #popular-picker .pop-band { position: relative; width: 100%; height: 14px; margin-top: 6px; background: #ffd3e8; border-radius: 999px; overflow: hidden; }
 #popular-picker .pop-band i { position: absolute; left: 0; top: 0; bottom: 0; background: linear-gradient(90deg, #f9a8cd, #f272a7); }
 #popular-picker .pop-band b { position: absolute; inset: 0; display: flex; align-items: center; justify-content: center; font-size: .58rem; font-weight: 900; color: #8a2c57; letter-spacing: .03em; }
+
+.gem-gain:empty, .gem-celebration:empty { display: none; }
+.gem-gain { animation: none; }
+.gem-celebration {
+  padding: 5px 9px;
+  border: 1px solid #bea4e7;
+  border-radius: 999px;
+  background: #f5eeff;
+  color: #523575;
+  font-size: .8rem;
+  box-shadow: 0 2px 8px #8864bb33;
+  pointer-events: none;
+}
+@media (prefers-reduced-motion: reduce) {
+  .coin-pop { animation: none; }
+}
