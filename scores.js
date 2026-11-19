@@ -318,7 +318,7 @@ const gameScores = (() => {
   });
 })();
 
-// Game coins: finishing a game earns coins on this device.
+// Gem rewards: finishing a game earns gems on this device.
 // Completed game +10, stopped game +2. Shown on the home page (coins.js).
 (() => {
   const KEY = 'momo:coins';
@@ -326,7 +326,7 @@ const gameScores = (() => {
   const get = () => { try { return parseInt(localStorage.getItem(KEY) || '0', 10) || 0; } catch { return 0; } };
   const set = v => { try { localStorage.setItem(KEY, String(v)); } catch { /* storage unavailable */ } };
   const style = document.createElement('style');
-  style.textContent = '.coin-toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#fff8d6;border:2.5px solid #f6b73e;color:#7a4d12;font-weight:900;font-size:1.05rem;padding:10px 20px;border-radius:999px;box-shadow:0 6px 18px #b0896844;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;z-index:60}.coin-toast.show{opacity:1;transform:translate(-50%,0)}';
+  style.textContent = '.coin-toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#f4edff;border:2.5px solid #bda2ec;color:#563980;font-weight:900;font-size:1.05rem;padding:10px 20px;border-radius:999px;box-shadow:0 6px 18px #8a65bb44;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;z-index:60}.coin-toast.show{opacity:1;transform:translate(-50%,0)}';
   document.head.append(style);
   const toast = document.createElement('div');
   toast.className = 'coin-toast';
@@ -351,10 +351,10 @@ const gameScores = (() => {
       const before = get();
       const after = before + gain;
       set(after);
-      let msg = pick(`🪙 +${gain} Coins!`, `🪙 コイン +${gain}！`);
+      let msg = pick(`💎 +${gain} Gems!`, `💎 ジェム +${gain}！`);
       if (Math.floor(after / 50) > Math.floor(before / 50)) {
         const milestone = Math.floor(after / 50) * 50;
-        msg += pick(` You reached ${milestone} coins! 🎉`, ` ${milestone}コイン達成！🎉`);
+        msg += pick(` You reached ${milestone} gems! 🎉`, ` ${milestone}ジェム達成！🎉`);
       }
       setTimeout(() => showToast(msg), 350);
     }
