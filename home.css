@@ -248,3 +248,13 @@ footer.feedback .momo-language { position: static; opacity: 1; box-shadow: none;
      mission panel, so it stays hidden there (tap the chip for the hint). */
   .coin-goal { display: none; }
 }
+
+/* --- Category tints for All Games (2026-11-19) --- */
+#all-games-picker > a[data-cat="puzzle"] { background: #e9f6ff; border-color: #b7dff8; }
+#all-games-picker > a[data-cat="action"] { background: #fff3e2; border-color: #ffd9a8; }
+#all-games-picker > a[data-cat="relax"]  { background: #eafaf0; border-color: #b9e8cd; }
+#all-games-picker > a[data-cat="music"]  { background: #f6efff; border-color: #d9c8ff; }
+.cat-chip.is-on[data-cat="puzzle"] { background: #4aa8e0; border-color: #4aa8e0; }
+.cat-chip.is-on[data-cat="action"] { background: #f59e42; border-color: #f59e42; }
+.cat-chip.is-on[data-cat="relax"]  { background: #4fbe7d; border-color: #4fbe7d; }
+.cat-chip.is-on[data-cat="music"]  { background: #9a76e8; border-color: #9a76e8; }
