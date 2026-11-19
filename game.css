@@ -565,3 +565,92 @@ main > .guide-toggle { order: 2; }
   main:has(> .play-stack) { padding-top: 60px; }
   main:has(> .play-stack) > .game-title-banner { margin-top: 0; }
 }
+
+/* Shared board and sidebar for games using the device-sized layout. */
+main[data-board-layout] {
+  --board-width: 360px;
+  --board-height: 300px;
+}
+main[data-board-layout] > .play-stack {
+  width: min(100%, var(--board-width));
+  min-width: 0;
+  margin: 0 auto;
+}
+[data-board-layout] .game-sidebar { display: contents; }
+[data-board-layout] .game-sidebar > .game-heading { order: 1; }
+[data-board-layout] .game-guide { order: 2; }
+[data-board-layout] .game-sidebar > .difficulty { order: 3; }
+[data-board-layout] .game-sidebar > .music { order: 9; }
+[data-board-layout] .game-sidebar > .score-board { order: 10; }
+[data-board-layout] .game-guide h2 { margin: 0 0 5px; font-size: 1rem; }
+[data-board-layout] .game-guide ol { margin: 0; padding-inline-start: 1.25em; }
+[data-board-layout] .game-guide li + li { margin-top: 3px; }
+[data-board-layout] .play-hud { min-height: 64px; }
+[data-board-layout] .play-hud > :is(.stats, .turn-line) { margin: 0 0 4px; }
+[data-board-layout] :is(.play-stage > .game-field, .soda-board) {
+  display: block;
+  box-sizing: border-box;
+  width: 100%;
+  height: var(--board-height);
+  min-height: 0;
+  max-height: none;
+  aspect-ratio: auto;
+  margin: 0;
+}
+[data-board-layout] :is(.play-row, .soda-actions) { margin-top: 8px; }
+[data-board-layout] .soda-actions { display: flex; flex-wrap: wrap; gap: 8px; justify-content: center; }
+[data-board-layout] .soda-actions [hidden] { display: none; }
+[data-board-layout] .soda-board { overflow: auto; }
+[data-board-layout] .soda-board .glasses {
+  grid-template-columns: repeat(5, minmax(0, 80px));
+  gap: 18px 8px;
+  padding-block: 18px 10px;
+}
+[data-board-layout] .wn-board {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  overflow: auto;
+}
+[data-board-layout] .wn-answers { grid-template-columns: repeat(3, minmax(0, 1fr)); }
+
+@media (max-width: 679px), (orientation: portrait) and (max-width: 1100px) {
+  main[data-board-layout] { display: flex; flex-direction: column; gap: 10px; }
+  [data-board-layout] .game-sidebar > .game-heading { margin-top: 0; }
+  [data-board-layout] .wn-tile { width: min(10vw, 40px); height: min(10vw, 40px); }
+  [data-board-layout] .wn-tile svg, [data-board-layout] .wn-opt svg { width: 100%; height: 34px; }
+  [data-board-layout] .wn-matrix { grid-template-columns: repeat(3, min(10vw, 40px)); }
+  [data-board-layout] .soda-board .glass { height: 76px; }
+  [data-board-layout] .soda-board #celebration { width: min(100%, 165px); }
+}
+@media (orientation: landscape) and (min-width: 680px), (min-width: 1101px) {
+  main[data-board-layout] {
+    --board-width: 640px;
+    --board-height: 400px;
+    --sidebar-width: 250px;
+    --layout-gap: 20px;
+    display: grid;
+    grid-template: "sidebar play" auto "picker picker" auto / minmax(0, var(--sidebar-width)) minmax(0, var(--board-width));
+    align-items: start;
+    gap: var(--layout-gap);
+    max-width: calc(var(--sidebar-width) + var(--board-width) + var(--layout-gap) + 48px);
+  }
+  [data-board-layout] .game-sidebar {
+    display: flex;
+    flex-direction: column;
+    grid-area: sidebar;
+    min-width: 0;
+    gap: 12px;
+  }
+  [data-board-layout] .game-sidebar > * { margin-block: 0; }
+  main[data-board-layout] > .play-stack { grid-area: play; }
+  main[data-board-layout] > nav { grid-area: picker; }
+}
+@media (min-width: 1101px) {
+  main[data-board-layout] {
+    --board-width: 800px;
+    --board-height: 440px;
+    --sidebar-width: 280px;
+    --layout-gap: 24px;
+  }
+}
