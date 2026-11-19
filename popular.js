@@ -106,11 +106,14 @@
   }
 
   async function fetchRanking() {
-    try {
-      const data = await fetchJSON(`${URL}?action=popular&period=all`);
-      if (data && data.plays && typeof data.plays === 'object') return { metric: 'plays', values: data.plays };
-      if (data && data.counts && typeof data.counts === 'object') return { metric: 'players', values: data.counts };
-    } catch { /* fall through to the scan */ }
+    for (let attempt = 0; attempt < 2; attempt++) {
+      try {
+        const data = await fetchJSON(`${URL}?action=popular&period=all`);
+        if (data && data.plays && typeof data.plays === 'object') return { metric: 'plays', values: data.plays };
+        if (data && data.counts && typeof data.counts === 'object') return { metric: 'players', values: data.counts };
+      } catch { /* retry once, then fall through to the scan */ }
+      if (attempt === 0) await new Promise(r => setTimeout(r, 1200));
+    }
     const jobs = [];
     const names = {};
     for (const [, [gameId, levels]] of Object.entries(GAMES)) {
@@ -144,8 +147,16 @@
       // hide the ranking for a day. The next visit simply tries again.
       if (hasData(values)) {
         try { localStorage.setItem(CACHE_KEY, JSON.stringify({ at: Date.now(), metric, values })); } catch { /* storage unavailable */ }
+        render(metric, values);
+      } else if (cached && hasData(cached.values)) {
+        // The fetch came back empty (offline, throttled, a hiccup):
+        // show the last good ranking rather than nothing at all.
+        render(cached.metric, cached.values);
+      } else {
+        render(metric, values);
       }
-      render(metric, values);
-    }).catch(() => {});
+    }).catch(() => {
+      if (cached && hasData(cached.values)) render(cached.metric, cached.values);
+    });
   }
 })();
