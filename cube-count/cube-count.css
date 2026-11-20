@@ -79,5 +79,5 @@
   overflow: auto;
 }
 [data-board-layout] .cc-blocks svg {
-  width: min(100%, 300px, calc(var(--board-height) - 145px));
+  width: min(100%, 310px, calc(var(--board-height) - 125px));
 }

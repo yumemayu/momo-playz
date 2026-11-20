@@ -76,19 +76,22 @@
   display: flex;
   flex-direction: column;
   justify-content: safe center;
+  padding-block: 8px;
   overflow: auto;
 }
 [data-board-layout] .sl-answers {
   grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 4px;
 }
 [data-board-layout] .sl-opt {
   display: flex;
   flex-direction: column;
   align-items: center;
+  padding-block: 5px;
 }
 [data-board-layout] .sl-opt svg {
   width: min(100%, clamp(48px, calc(var(--board-height) - 255px), 90px));
 }
 [data-board-layout] .sl-blocks svg {
-  width: min(100%, calc(var(--board-height) - 230px));
+  width: min(100%, calc(var(--board-height) - 210px));
 }
