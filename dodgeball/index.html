@@ -6,7 +6,7 @@
 <title data-en-title="Momo Dodgeball">Momo ドッジボール</title>
 <link rel="stylesheet" href="../language.css">
 <link rel="stylesheet" href="../game.css?v=level-cards">
-<link rel="stylesheet" href="dodgeball.css?v=dodge-navigation">
+<link rel="stylesheet" href="dodgeball.css?v=nickname-card">
 <link rel="stylesheet" href="../game-title-banner.css">
 <script defer src="../language.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
@@ -20,10 +20,11 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Momo Dodgeball">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="dodgeball">
-<main>
+<main data-board-layout data-game-toolbar>
+  <div class="game-sidebar">
   <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
@@ -31,15 +32,37 @@
   </header>
   <a class="home-link" href="../" data-ja="← ゲーム集にもどる">← All games</a>
   <fieldset class="match-modes">
-    <legend data-ja="あそびかた">Game mode</legend>
+    <legend data-ja="モードをえらぶ">Game mode</legend>
     <button type="button" data-mode="practice" data-level="practice" aria-pressed="false"><span data-ja="5球練習">5-shot practice</span></button>
     <button type="button" data-mode="match" data-level="match" aria-pressed="true"><span data-ja="ねこと対戦">Play against Cat</span></button>
   </fieldset>
-  <div class="wide-bar"><button type="button" class="wide-btn" data-wide-btn aria-pressed="false">⛶ Bigger</button></div>
-    <section class="court" aria-label="Dodgeball court" data-ja-label="ドッジボールコート">
+  <div class="game-guide"><h2 data-ja="あそびかた">How to play</h2><ol>
+    <li data-ja="コートをタップしてボールを投げよう">Tap the court to throw.</li>
+    <li data-ja="ドラッグでねらって、はなして投げられるよ">Drag to aim, then release to throw.</li>
+    <li data-ja="ねこの番は左右にタップかスワイプでよけよう">On Cat’s turn, tap or swipe sideways to dodge.</li>
+  </ol></div>
+  <section class="score-board" aria-labelledby="board-title">
+<div class="score-board-heading">
+<h2 id="board-title"><span data-ja="ランキング">Leaderboard</span></h2>
+<span id="score-level"></span>
+<div class="score-period" aria-label="Ranking period" role="group">
+<button type="button" data-period="weekly" aria-pressed="true" data-ja="今週">This week</button>
+<button type="button" data-period="all" aria-pressed="false" data-ja="すべて">All time</button>
+</div>
+</div>
+<p class="personal-best" id="personal-best"></p>
+<ol id="score-list"></ol>
+</section>
+  </div>
+  <div class="play-stack">
+  <div class="play-hud">
+  <div class="wide-bar"><button id="change-player" class="change-player" type="button" data-ja="ニックネームを設定">Set nickname</button><button type="button" class="wide-btn" data-wide-btn aria-pressed="false">⛶ Bigger</button></div>
+    <div class="score"><span data-ja="ヒット">Hits</span> <strong id="hits">0</strong> <span aria-hidden="true">·</span> <span data-ja="のこり">Left</span> <strong id="left">5</strong><span id="cat-score" hidden> · <span data-ja="ねこ">Cat</span> <strong id="cat-hits">0</strong></span></div>
+  </div>
+  <div class="play-stage">
+    <section class="court game-field" aria-label="Dodgeball court" data-ja-label="ドッジボールコート">
     <div class="windows" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="floor" aria-hidden="true"></div>
-    <div class="score"><span data-ja="ヒット">Hits</span> <strong id="hits">0</strong> <span aria-hidden="true">·</span> <span data-ja="のこり">Left</span> <strong id="left">5</strong><span id="cat-score" hidden> · <span data-ja="ねこ">Cat</span> <strong id="cat-hits">0</strong></span></div>
     <div class="opponent" aria-hidden="true">
       <img src="cat.webp" alt="" draggable="false">
       <img class="hit-face" data-face="squint" src="cat-squint.webp?v=catchlights" alt="" draggable="false">
@@ -68,30 +91,19 @@
       <button type="button" id="retry" data-ja="もういちど">Play again</button>
     </div>
   </section>
-  <p id="guide">Click the court where you want to throw. Keyboard: ← → to aim, Space to throw.</p>
-  <p id="status" class="sr-only" role="status"></p>
-  <div id="ready-card">
+  <div class="game-card" id="ready-card" hidden>
     <div class="player-setup">
       <label for="nickname" data-ja="ニックネーム（任意）">Nickname (optional)</label>
       <input id="nickname" maxlength="20" autocomplete="off">
     </div>
   </div>
-  <button class="change-player" id="change-player" type="button" hidden data-ja="ニックネームをかえる">Change nickname</button>
+  </div>
+  <p id="guide">Click the court where you want to throw. Keyboard: ← → to aim, Space to throw.</p>
+  <p id="status" class="sr-only" role="status"></p>
   <div hidden><div id="score-card" hidden><strong id="final-score"></strong><p></p></div></div>
-  <section class="score-board" aria-labelledby="board-title">
-<div class="score-board-heading">
-<h2 id="board-title"><span data-ja="ランキング">Leaderboard</span></h2>
-<span id="score-level"></span>
-<div class="score-period" aria-label="Ranking period" role="group">
-<button type="button" data-period="weekly" aria-pressed="true" data-ja="今週">This week</button>
-<button type="button" data-period="all" aria-pressed="false" data-ja="すべて">All time</button>
-</div>
-</div>
-<p class="personal-best" id="personal-best"></p>
-<ol id="score-list"></ol>
-</section>
+  </div>
+</main>
   <footer><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a>
 <a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a></footer>
-</main>
 </body>
 </html>
