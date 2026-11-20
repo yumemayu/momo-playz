@@ -63,3 +63,24 @@
 /* The shared .game-field height cap is for play fields; the question
    board must grow with the cube + nets it contains. */
 .cn-board.game-field { height: auto; min-height: 0; }
+
+[data-board-layout] .play-stage > .cn-board {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  overflow: auto;
+}
+[data-board-layout] .cn-cube svg {
+  width: min(100%, 165px, calc(var(--board-height) - 200px));
+}
+[data-board-layout] .cn-answers {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+}
+[data-board-layout] .cn-net {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+[data-board-layout] .cn-net svg {
+  width: min(100%, 125px);
+}
