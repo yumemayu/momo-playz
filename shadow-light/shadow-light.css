@@ -71,3 +71,38 @@
   .sl-opt svg { max-width: 170px; }
 }
 .sl-verdict { font-size: 1.05rem; font-weight: 800; color: #7a3b63; min-height: 1.4em; }
+
+[data-board-layout] .play-stage > .sl-board {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  padding-block: 8px;
+  overflow: auto;
+}
+[data-board-layout] .sl-answers {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  margin-top: 4px;
+}
+[data-board-layout] .sl-opt {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  padding-block: 5px;
+}
+[data-board-layout] .sl-opt svg {
+  width: min(100%, clamp(48px, calc(var(--board-height) - 255px), 90px));
+}
+[data-board-layout] .sl-blocks svg {
+}
+[data-board-layout] .sl-opt > br {
+  display: none;
+}
+[data-board-layout] .sl-opt .letter {
+  margin-bottom: 2px;
+}
+[data-board-layout] .sl-blocks svg {
+  display: block;
+  width: min(100%, 340px);
+  height: calc((var(--board-height) - 175px) * 5 / 6);
+  margin-inline: auto;
+}

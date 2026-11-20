@@ -6,16 +6,16 @@
 <title data-en-title="Shadow Light | Momo.squirrels">シャドーライト | Momo.squirrels</title>
 <meta name="description" content="光を当てたらどんな影ができるか当てる、空間認識のパズル。10問にチャレンジ。ブラウザで遊べる無料パズルゲームです。">
 <link rel="canonical" href="https://yumemayu.github.io/momo-playz/shadow-light/">
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="shadow-light.css?v=sl-1">
+<link rel="stylesheet" href="shadow-light.css?v=larger-blocks">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
 <script defer src="../scores.js?v=gem-rewards"></script>
-<script defer src="shadow-light.js?v=sl-2"></script>
+<script defer src="shadow-light.js?v=larger-blocks"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
@@ -24,21 +24,24 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Shadow Light">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="shadow-light">
-<main class="sl-main">
+<main class="sl-main" data-board-layout data-game-toolbar>
+  <div class="game-sidebar">
   <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Shadow Light">シャドーライト</span></h1>
   </header>
-  <button type="button" class="guide-toggle" aria-expanded="true" aria-controls="pic-guide">🖼 <span data-en="How to play">あそびかた</span></button>
-  <div class="pic-guide" id="pic-guide" role="img" aria-label="How to play Shadow Light in pictures">
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><circle cx="13" cy="12" r="6" fill="#ffb84d"/><g stroke="#ffb84d" stroke-width="2" stroke-linecap="round"><line x1="13" y1="2" x2="13" y2="5"/><line x1="3" y1="12" x2="6" y2="12"/><line x1="6" y1="5" x2="8" y2="7"/></g><polygon points="38,12 50,18 38,24 26,18" fill="#ffedb0" stroke="#c9a44a" stroke-width="1.4"/><polygon points="26,18 38,24 38,34 26,28" fill="#f2d67c" stroke="#c9a44a" stroke-width="1.4"/><polygon points="38,24 50,18 50,28 38,34" fill="#e0b95c" stroke="#c9a44a" stroke-width="1.4"/></svg><figcaption data-en="Blocks and light">積み木と光をみる</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="14" y="24" width="11" height="11" rx="2" fill="#57344a"/><rect x="27" y="24" width="11" height="11" rx="2" fill="#57344a"/><rect x="27" y="11" width="11" height="11" rx="2" fill="#57344a"/><rect x="40" y="24" width="11" height="11" rx="2" fill="#57344a"/><rect x="40" y="11" width="11" height="11" rx="2" fill="#57344a"/><rect x="40" y="0" width="11" height="11" rx="2" fill="#57344a" transform="translate(0,0)"/></svg><figcaption data-en="Picture the shadow">影を想像する</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="8" y="8" width="48" height="30" rx="10" fill="#fff3d6" stroke="#f2b544" stroke-width="2"/><rect x="18" y="22" width="10" height="10" rx="2" fill="#57344a"/><rect x="30" y="16" width="10" height="16" rx="2" fill="#57344a"/><rect x="42" y="22" width="10" height="10" rx="2" fill="#f272a7"/><circle cx="47" cy="14" r="4.5" fill="#f272a7" stroke="#fff" stroke-width="2"/></svg><figcaption data-en="Tap the shadow">影をタップ</figcaption></figure>
-  </div>
+    <section class="game-guide" aria-labelledby="game-guide-title">
+      <h2 id="game-guide-title" data-en="How to play">あそびかた</h2>
+      <ol>
+        <li data-en="Look at the blocks and the light direction">積み木と光の向きを見る</li>
+        <li data-en="Think about hidden blocks too">隠れた積み木の影も考える</li>
+        <li data-en="Tap the matching shadow">正しい影をタップ</li>
+      </ol>
+    </section>
   <fieldset class="difficulty">
     <legend data-en="Choose a level">レベルを えらぶ</legend>
     <div class="level-buttons" role="group" aria-label="レベル" data-en-label="Level">
@@ -47,12 +50,28 @@
       <button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-en="Hard">むずかしい</span></button>
     </div>
   </fieldset>
+  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+  <section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true"><circle cx="14" cy="13" r="7" fill="#ffb84d"/><polygon points="36,14 50,21 36,28 22,21" fill="#ffedb0" stroke="#c9a44a" stroke-width="1.6"/><polygon points="22,21 36,28 36,40 22,33" fill="#f2d67c" stroke="#c9a44a" stroke-width="1.6"/><polygon points="36,28 50,21 50,33 36,40" fill="#e0b95c" stroke="#c9a44a" stroke-width="1.6"/></svg><span data-en="Leaderboard">ランキング</span></h2>
+      <span id="score-level"></span>
+      <div class="score-period" aria-label="Ranking period" role="group">
+        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
+        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
+      </div>
+    </div>
+    <p class="personal-best" id="personal-best"></p>
+    <ol id="score-list"></ol>
+  </section>
+  </div>
   <div class="play-stack">
+    <div class="play-hud">
   <div class="stats sl-stats">
       <span><span data-en="Question">もんだい</span> <output id="qnum">1 / 10</output></span>
-      <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
+      <span><span data-en="Time">じかん</span> <output id="time">0</output><span data-en="s">秒</span></span>
     </div>
     <p class="turn-line" id="turn-line" role="status"></p>
+    </div>
     <div class="play-stage">
       <div class="sl-board game-field preview" id="board">
         <div><span class="sl-chip" id="light-chip"></span></div>
@@ -80,20 +99,6 @@
       <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
     </div>
   </div>
-  <p id="instructions" data-en="Look at the blocks and where the light comes from. Only one shadow is right — watch out for blocks hiding behind others.">積み木と、光がくる向きをよく見よう。影は1つだけ。後ろに隠れた積み木も影になるよ。</p>
-  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
-  <section class="score-board" aria-labelledby="board-title">
-    <div class="score-board-heading">
-      <h2 id="board-title"><svg width="24" height="24" viewBox="0 0 64 64" aria-hidden="true"><circle cx="14" cy="13" r="7" fill="#ffb84d"/><polygon points="36,14 50,21 36,28 22,21" fill="#ffedb0" stroke="#c9a44a" stroke-width="1.6"/><polygon points="22,21 36,28 36,40 22,33" fill="#f2d67c" stroke="#c9a44a" stroke-width="1.6"/><polygon points="36,28 50,21 50,33 36,40" fill="#e0b95c" stroke="#c9a44a" stroke-width="1.6"/></svg><span data-en="Leaderboard">ランキング</span></h2>
-      <span id="score-level"></span>
-      <div class="score-period" aria-label="Ranking period" role="group">
-        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
-        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
-      </div>
-    </div>
-    <p class="personal-best" id="personal-best"></p>
-    <ol id="score-list"></ol>
-  </section>
   <nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>

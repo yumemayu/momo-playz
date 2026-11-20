@@ -71,3 +71,13 @@
   .cc-opt svg { max-width: 170px; }
 }
 .cc-verdict { font-size: 1.05rem; font-weight: 800; color: #7a3b63; min-height: 1.4em; }
+
+[data-board-layout] .play-stage > .cc-board {
+  display: flex;
+  flex-direction: column;
+  justify-content: safe center;
+  overflow: auto;
+}
+[data-board-layout] .cc-blocks svg {
+  width: min(100%, 310px, calc(var(--board-height) - 125px));
+}

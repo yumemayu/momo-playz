@@ -261,6 +261,11 @@
 
   function renderQuestion() {
     blocksEl.innerHTML = blocksSVG(current.H, current.dir);
+    const illustration = blocksEl.firstElementChild;
+    const { x, y, width, height } = illustration.getBBox();
+    const inset = 8;
+    illustration.setAttribute('viewBox',
+      [x - inset, y - inset, width + inset * 2, height + inset * 2].join(' '));
     chipEl.textContent = copy[language].light[current.dir];
     answersEl.innerHTML = '';
     current.options.forEach((sil, i) => {
