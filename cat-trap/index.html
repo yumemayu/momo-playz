@@ -17,10 +17,10 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="A glasses-wearing cat on a mint-green block board.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="cat-trap.css?v=hex-board">
+<link rel="stylesheet" href="cat-trap.css?v=shared-layout">
 <link rel="stylesheet" href="../game-title-banner.css">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
@@ -35,20 +35,23 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Trap the Cat">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="cat-trap">
-<main class="trap-main">
+<main class="trap-main" data-board-layout data-game-toolbar>
+  <div class="game-sidebar">
   <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Trap the">ねこを</span><br><span data-en="Cat">かこもう！</span></h1>
   </header>
+  <div class="game-guide">
   <button type="button" class="guide-toggle" aria-expanded="true" aria-controls="pic-guide">🖼 <span data-en="How to play">あそびかた</span></button>
   <div class="pic-guide" id="pic-guide" role="img" aria-label="How to play Trap the Cat in pictures">
     <figure><svg viewBox="0 0 64 46" aria-hidden="true"><polygon points="32,6 45.05,13.5 45.05,28.5 32,36 18.95,28.5 18.95,13.5" fill="#cedf7b" stroke="#a9bd54" stroke-width="1.6"/><polygon points="32,6 45.05,13.5 45.05,28.5 32,36 18.95,28.5 18.95,13.5" fill="#747b36"/><circle cx="32" cy="21" r="16" fill="none" stroke="#f272a7" stroke-width="2.5"/><circle cx="45" cy="34" r="4.5" fill="#f272a7" stroke="#fff" stroke-width="2"/></svg><figcaption data-en="Tap a hex to block it">タップでブロック</figcaption></figure>
     <figure><svg viewBox="0 0 64 46" aria-hidden="true"><polygon points="20,11 30.439999999999998,17.0 30.439999999999998,29.0 20,35 9.56,29.0 9.56,17.0" fill="#cedf7b"/><g fill="#4a4443"><path d="M12.350000000000001 18.6 l2.5 -5.1 l5 2.975 z"/><path d="M27.65 18.6 l-2.5 -5.1 l-5 2.975 z"/><circle cx="20" cy="22.85" r="8.075"/></g><circle cx="17.11" cy="22" r="1.3" fill="#ffd76e"/><circle cx="22.89" cy="22" r="1.3" fill="#ffd76e"/><path d="M18.64 25.740000000000002 q1.36 1.36 2.72 0" stroke="#ffd76e" stroke-width="1.1" fill="none" stroke-linecap="round"/><path d="M36 23 L47 23 M43 18.5 L47.5 23 L43 27.5" stroke="#f272a7" stroke-width="2.6" fill="none" stroke-linecap="round" stroke-linejoin="round"/></svg><figcaption data-en="The cat moves 1 hex">猫は1マス動く</figcaption></figure>
     <figure><svg viewBox="0 0 64 46" aria-hidden="true"><polygon points="32,-1.5 40.265,3.25 40.265,12.75 32,17.5 23.735,12.75 23.735,3.25" fill="#747b36"/><polygon points="48,6.5 56.265,11.25 56.265,20.75 48,25.5 39.735,20.75 39.735,11.25" fill="#747b36"/><polygon points="48,23.5 56.265,28.25 56.265,37.75 48,42.5 39.735,37.75 39.735,28.25" fill="#747b36"/><polygon points="32,31.5 40.265,36.25 40.265,45.75 32,50.5 23.735,45.75 23.735,36.25" fill="#747b36"/><polygon points="16,23.5 24.265,28.25 24.265,37.75 16,42.5 7.734999999999999,37.75 7.734999999999999,28.25" fill="#747b36"/><polygon points="16,6.5 24.265,11.25 24.265,20.75 16,25.5 7.734999999999999,20.75 7.734999999999999,11.25" fill="#747b36"/><polygon points="32,13.5 41.57,19.0 41.57,30.0 32,35.5 22.43,30.0 22.43,19.0" fill="#cedf7b"/><g fill="#4a4443"><path d="M24.8 20.8 l2.5 -4.800000000000001 l5 2.8000000000000003 z"/><path d="M39.2 20.8 l-2.5 -4.800000000000001 l-5 2.8000000000000003 z"/><circle cx="32" cy="24.8" r="7.6000000000000005"/></g><circle cx="29.28" cy="24" r="1.3" fill="#ffd76e"/><circle cx="34.72" cy="24" r="1.3" fill="#ffd76e"/><path d="M30.72 27.52 q1.2800000000000002 1.2800000000000002 2.5600000000000005 0" stroke="#ffd76e" stroke-width="1.1" fill="none" stroke-linecap="round"/></svg><figcaption data-en="Surround the cat!">猫を囲めば勝ち</figcaption></figure>
+  </div>
   </div>
   <fieldset class="difficulty">
     <legend data-en="Choose a level">レベルを えらぶ</legend>
@@ -58,13 +61,28 @@
       <button type="button" data-level="hard" aria-pressed="false"><svg class="level-art" viewBox="0 0 64 64" aria-hidden="true"><path d="M9 30 11 11 26 19 Q32 17 38 19 L53 11 55 30 C65 65 -1 65 9 30Z" fill="#d2b0eb" stroke="#57344a" stroke-width="2"/><path d="M15 17 21 23 14 26Z M49 17 50 26 43 23Z" fill="#f987aa"/><circle cx="23" cy="35" r="2.2" fill="#57344a"/><circle cx="41" cy="35" r="2.2" fill="#57344a"/><path d="M28 43Q30 46 32 42Q34 46 37 43" fill="none" stroke="#57344a" stroke-width="2" stroke-linecap="round"/><path d="M29 35h6" stroke="#493153" stroke-width="3"/><circle cx="22" cy="35" r="7" fill="none" stroke="#493153" stroke-width="3"/><circle cx="42" cy="35" r="7" fill="none" stroke="#493153" stroke-width="3"/></svg><span data-en="Hard">むずかしい</span></button>
     </div>
   </fieldset>
+  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+  <section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
+      <span id="score-level"></span>
+      <div class="score-period" aria-label="Ranking period" role="group">
+        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
+        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
+      </div>
+    </div>
+    <p class="personal-best" id="personal-best"></p>
+    <ol id="score-list"></ol>
+  </section>
+  </div>
   <div class="play-stack">
-  <div class="stats trap-stats">
+  <div class="play-hud"><div class="stats trap-stats">
       <span class="stat-card trap-hud"><span aria-hidden="true">🐾</span><span class="trap-hud-label" data-en="Moves">てかず</span> <output id="moves">0</output><span class="trap-hud-level" id="hud-level"></span></span>
     </div>
     <div class="trap-tools" aria-label="Board tools">
       <button type="button" id="trap-undo" data-en="↶ Undo" disabled>↶ もどす</button>
       <button type="button" id="trap-new" data-en="↻ New">↻ あたらしく</button>
+    </div>
     </div>
     <div class="play-stage">
       <div class="trap-field game-field" id="field" role="group" aria-label="ねこの いる ばん" data-en-label="Cat board"></div>
@@ -89,19 +107,6 @@
       <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
     </div>
   </div>
-  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
-  <section class="score-board" aria-labelledby="board-title">
-    <div class="score-board-heading">
-      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
-      <span id="score-level"></span>
-      <div class="score-period" aria-label="Ranking period" role="group">
-        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
-        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
-      </div>
-    </div>
-    <p class="personal-best" id="personal-best"></p>
-    <ol id="score-list"></ol>
-  </section>
   <nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
