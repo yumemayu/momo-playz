@@ -10,12 +10,12 @@
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="minesweeper.css?v=shared-layout">
+<link rel="stylesheet" href="minesweeper.css?v=mode-labels">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
 <script defer src="../scores.js?v=gem-rewards"></script>
-<script defer src="minesweeper.js"></script>
+<script defer src="minesweeper.js?v=mode-labels"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
@@ -38,9 +38,9 @@
     <section class="game-guide" aria-labelledby="game-guide-title">
       <h2 id="game-guide-title" data-en="How to play">あそびかた</h2>
       <ol>
-        <li data-en="Open a tile. The first tap is safe">マスを開く。最初の1タップはセーフ</li>
+        <li data-en="Tap a tile to open it. Your first tap is safe">マスをタップしてあける。最初の1タップはセーフ</li>
         <li data-en="Numbers count the mines around a tile">数字はまわりの地雷の数</li>
-        <li data-en="🚩 Place a flag on tiles that might hide a mine. Tap the face to restart">地雷がありそうなマスに 🚩 はたを立てる。顔ボタンでやり直し</li>
+        <li data-en="Choose 🚩 Place a flag, then tap a tile. Choose Open to switch back">「🚩 はたを立てる」を選んでマスをタップ。「あける」で元にもどる</li>
       </ol>
     </section>
   <fieldset class="difficulty">
@@ -82,9 +82,13 @@
           <span class="ms-counter" hidden>⏱ <output id="clock">0:00</output></span>
         </div>
         <div class="ms-mode" role="group" aria-label="モード" data-en-label="Mode">
-          <button type="button" id="mode-open" class="selected" data-en="Open">あける</button>
-          <button type="button" id="mode-flag">🚩 <span data-en="Place a flag">はたを立てる</span></button>
+          <button type="button" id="mode-open" class="selected" aria-pressed="true"><span data-en="Open">あける</span></button>
+          <button type="button" id="mode-flag" aria-pressed="false">🚩 <span data-en="Place a flag">はたを立てる</span></button>
         </div>
+        <p id="mode-hint" class="ms-mode-hint" role="status" hidden>
+          <span data-en="Tap a tile to open it.">マスをタップすると、あくよ</span>
+          <span data-en="Tap a tile to place or remove a flag." hidden>マスをタップすると、はたをつけたり外したりできるよ</span>
+        </p>
         <div class="ms-grid" id="grid" role="group" aria-label="ボード" data-en-label="Board"></div>
       </div>
       <div class="game-card" id="ready-card">

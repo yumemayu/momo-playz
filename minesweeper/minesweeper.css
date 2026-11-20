@@ -328,3 +328,18 @@ body.game-wide .ms-board { width: min(96vw, calc(100dvh - 255px)); margin-inline
 [data-board-layout] .ms-face { width: 44px; height: 44px; }
 [data-board-layout] .ms-counter[hidden] { display: none; }
 [data-board-layout] .ms-mode { margin: 0 0 6px; }
+
+.ms-mode button::before {
+  content: "✓" / "";
+  display: inline-block;
+  width: 1.25em;
+  visibility: hidden;
+}
+.ms-mode button[aria-pressed="true"]::before { visibility: visible; }
+.ms-mode button.selected { color: #482039; }
+.ms-mode-hint {
+  margin: 0 0 6px;
+  text-align: center;
+  font-size: .85rem;
+  color: #482039;
+}
