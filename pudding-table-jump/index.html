@@ -16,7 +16,7 @@
 <link rel="stylesheet" href="../nickname.css">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
-<link rel="stylesheet" href="pudding.css?v=wide-jump">
+<link rel="stylesheet" href="pudding.css?v=shared-ready-card">
 <script defer src="../language.js"></script>
 <script defer src="../nickname.js"></script>
 <script defer src="../stickers.js?v=daily-stickers"></script>
@@ -37,14 +37,6 @@
       <li data-ja="次のお皿に着地しよう">Land on the next plate.</li>
     </ol></div>
     <div class="music"><button id="sound" type="button" aria-label="Sound" aria-pressed="false">🔇</button></div>
-  <div class="game-card" id="ready-card">
-    <strong data-ja="はじめよう！">Ready to play?</strong>
-    <div class="player-setup">
-      <label for="nickname" data-ja="ニックネーム（任意）">Nickname (optional)</label>
-      <input id="nickname" maxlength="20" autocomplete="off" placeholder="e.g. Mochi" data-ja-placeholder="例：もち" aria-describedby="player-hint">
-      <small id="player-hint" data-ja="ニックネームを入れて全3ステージをクリアすると、ランキングに載るよ。">Enter a nickname and clear all 3 stages to join the leaderboard.</small>
-    </div>
-  </div>
   <section class="score-board" aria-labelledby="board-title">
     <div class="score-board-heading">
       <h2 id="board-title"><span aria-hidden="true">🍮</span> <span data-ja="リーダーボード">Leaderboard</span></h2>
@@ -59,6 +51,14 @@
   <div class="play-stack">
   <div class="play-hud"><div class="stats"><span><strong id="stage"></strong></span></div><div id="scoreline"><span id="score"></span><span id="combo"></span></div></div>
   <div class="play-stage"><div class="scene game-field" id="scene" aria-hidden="true"><div class="window"></div><div id="plates"></div><span id="target" class="target-marker" hidden></span><canvas id="arc"></canvas><div class="pudding" id="pudding"><div class="body" id="body"><div class="caramel"></div><div class="face"><b>·</b> •ᴗ• <b>·</b></div></div></div></div>
+  <div class="game-card" id="ready-card">
+    <strong data-ja="はじめよう！">Ready to play?</strong>
+    <div class="player-setup">
+      <label for="nickname" data-ja="ニックネーム（任意）">Nickname (optional)</label>
+      <input id="nickname" maxlength="20" autocomplete="off" placeholder="e.g. Mochi" data-ja-placeholder="例：もち" aria-describedby="player-hint">
+      <small id="player-hint" data-ja="ニックネームを入れて全3ステージをクリアすると、ランキングに載るよ。">Enter a nickname and clear all 3 stages to join the leaderboard.</small>
+    </div>
+  </div>
   </div>
   <div class="pudding-controls">
     <progress id="power" max="1" value="0" aria-label="Jump power"></progress>
