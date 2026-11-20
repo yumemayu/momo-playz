@@ -1,0 +1,15 @@
+[data-board-layout] .play-stage > .cat-grid {
+  display: grid;
+  grid-template-columns: repeat(8, minmax(0, 1fr));
+  align-content: center;
+  overflow: auto;
+}
+[data-board-layout] .cat-grid button {
+  min-height: 0;
+  width: 100%;
+}
+@media (max-width: 679px), (orientation: portrait) and (max-width: 1100px) {
+  [data-board-layout] .play-stage > .cat-grid {
+    grid-template-columns: repeat(5, minmax(0, 1fr));
+  }
+}

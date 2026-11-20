@@ -179,3 +179,9 @@
 @media (prefers-reduced-motion: reduce) {
   .milestone-banner { animation: none; }
 }
+
+[data-board-layout] .play-stage > .trap-field {
+  height: min(var(--board-height), calc(75vw - 18px));
+  width: min(100%, calc(var(--board-height) * 4 / 3));
+  margin-inline: auto;
+}

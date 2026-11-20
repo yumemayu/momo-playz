@@ -3,8 +3,9 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Find the Glasses Cat by Momo.squirrels</title>
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
+<link rel="stylesheet" href="layout.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
   <link rel="manifest" href="./manifest.webmanifest">
@@ -14,15 +15,29 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Find the Glasses Cat">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 <body data-game="cats">
-<main>
+<main data-board-layout data-game-toolbar>
+<div class="game-sidebar">
 <header class="game-heading game-title-banner"><span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1 data-ja="メガネ猫さがし">Find the Glasses Cat</h1></header>
-<div class="cat-example" id="cat-example"><strong data-ja="メガネを かけた ねこを タップ！">Tap the cats wearing glasses!</strong></div>
+<div class="cat-example game-guide" id="cat-example"><strong data-ja="メガネを かけた ねこを タップ！">Tap the cats wearing glasses!</strong></div>
+<section class="score-board" aria-labelledby="board-title">
+<div class="score-board-heading">
+<h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="38" height="38"><span data-ja="ランキング">Leaderboard</span></h2>
+<div class="score-period" aria-label="Ranking period" role="group">
+<button type="button" data-period="weekly" aria-pressed="true" data-ja="今週">This week</button>
+<button type="button" data-period="all" aria-pressed="false" data-ja="すべて">All time</button>
+</div>
+</div>
+<p class="personal-best" id="personal-best"></p>
+<ol id="score-list"></ol>
+</section>
+</div>
 <div class="play-stack">
-  <div class="stats"><span><img class="stat-icon" src="../assets/game-cat.png" alt=""> <output id="score">0</output><span data-ja=" ひき みつけた"> found</span></span><span><output id="time">30s left</output></span></div>
+  <div class="play-hud"><div class="stats"><span><img class="stat-icon" src="../assets/game-cat.png" alt=""> <output id="score">0</output><span data-ja=" ひき みつけた"> found</span></span><span><output id="time">30s left</output></span></div>
+</div>
 <div class="play-stage">
 <div class="cat-grid game-field" id="cats" aria-label="Cats"></div>
 <div class="game-card" id="ready-card">
@@ -37,19 +52,8 @@
 <button class="change-player" id="change-player" type="button" hidden data-ja="ニックネームをかえる">Change nickname</button>
 <div class="play-row"><button class="play-primary" id="play" type="button">Play</button><button class="stop-button" id="stop" type="button" hidden data-ja="■ ストップ">■ Stop</button></div>
 <button id="practice" type="button" data-ja="れんしゅう">Practice</button>
-</div>
 <p id="result" role="status"></p>
-<section class="score-board" aria-labelledby="board-title">
-<div class="score-board-heading">
-<h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="38" height="38"><span data-ja="ランキング">Leaderboard</span></h2>
-<div class="score-period" aria-label="Ranking period" role="group">
-<button type="button" data-period="weekly" aria-pressed="true" data-ja="今週">This week</button>
-<button type="button" data-period="all" aria-pressed="false" data-ja="すべて">All time</button>
 </div>
-</div>
-<p class="personal-best" id="personal-best"></p>
-<ol id="score-list"></ol>
-</section>
 <nav class="game-picker" aria-label="Choose a game">
 <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
 <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
