@@ -5,7 +5,9 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title data-en-title="Bun Lights">肉まんライト</title>
   <link rel="stylesheet" href="../language.css">
+  <link rel="stylesheet" href="../game.css?v=level-cards">
   <link rel="stylesheet" href="../toy-box/toys.css?v=bun-mix2">
+  <link rel="stylesheet" href="layout.css">
   <link rel="stylesheet" href="../game-title-banner.css">
   <script defer src="../language.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
@@ -19,30 +21,25 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Bun Lights">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="bun-lights">
-<main>
-  <header><a href="../" data-ja="← ゲーム一覧">← Games</a></header>
+<main class="bun-lights-main" data-board-layout data-game-toolbar>
+  <aside class="game-sidebar">
     <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-ja="むぎゅっと肉まんライト">Squishy Bun Lights</span></h1>
   </header>
-<section id="bun" class="toy">
-    
-    <p data-ja="長押しでむぎゅっ。２つ光らせると色がまざるよ！">Hold to squish. Light up two buns to mix their colors!</p>
-    <div class="bun-tray" id="bun-tray">
-      <span class="bun-mixed-glow" aria-hidden="true"></span>
-      <div class="bun-mix-result" id="bun-mix-result" hidden>
-        <div class="bun-mix-swatches" aria-hidden="true"></div>
-        <p class="bun-mix-label" id="bun-mix-label" role="status"></p>
-      </div>
-      <div class="bun-night-sky" aria-hidden="true"><span class="bun-moon"></span><span class="bun-stars">✦</span></div>
-      <button class="bun strawberry" aria-label="Strawberry" data-ja-label="いちご" aria-pressed="false"><span class="bun-cap" aria-hidden="true"><span class="bun-face"></span></span></button>
-      <button class="bun soda" aria-label="Soda" data-ja-label="ソーダ" aria-pressed="false"><span class="bun-cap" aria-hidden="true"><span class="bun-face"></span></span></button>
-      <button class="bun milk" aria-label="Milk" data-ja-label="ミルク" aria-pressed="false"><span class="bun-cap" aria-hidden="true"><span class="bun-face"></span></span></button>
-    </div>
+  <div class="game-guide">
+    <h2 data-ja="あそびかた">How to play</h2>
+    <ol>
+      <li data-ja="肉まんをタップすると光るよ。長押しでむぎゅっ！">Tap a bun to light it up. Hold it to squish!</li>
+      <li data-ja="２つ光らせて、どんな色になるか見てみよう。">Light up two buns and see what color they make.</li>
+      <li data-ja="色チャレンジでは、表示された順に肉まんを押そう。">In Color Challenge, tap the buns in the order shown.</li>
+    </ol>
+  </div>
+  <div class="bun-modes">
     <button id="bun-mission" class="action" data-ja="30秒の色チャレンジ">30-second Color Challenge</button>
     <button id="bun-night" class="action" type="button" aria-pressed="false" data-ja="☾ おやすみモード">☾ Night light</button>
     <div id="bun-night-controls" class="night-controls" hidden>
@@ -53,6 +50,22 @@
         <option value="5" data-ja="5分">5 min</option>
       </select>
       <output id="bun-night-clock" for="bun-night-duration" aria-live="off"></output>
+    </div>
+  </div>
+  </aside>
+  <div class="play-stack">
+  <section id="bun" class="play-stage" aria-label="Bun lights" data-ja-label="肉まんライト">
+
+    <div class="bun-tray" id="bun-tray">
+      <span class="bun-mixed-glow" aria-hidden="true"></span>
+      <div class="bun-mix-result" id="bun-mix-result" hidden>
+        <div class="bun-mix-swatches" aria-hidden="true"></div>
+        <p class="bun-mix-label" id="bun-mix-label" role="status"></p>
+      </div>
+      <div class="bun-night-sky" aria-hidden="true"><span class="bun-moon"></span><span class="bun-stars">✦</span></div>
+      <button class="bun strawberry" aria-label="Strawberry" data-ja-label="いちご" aria-pressed="false"><span class="bun-cap" aria-hidden="true"><span class="bun-face"></span></span></button>
+      <button class="bun soda" aria-label="Soda" data-ja-label="ソーダ" aria-pressed="false"><span class="bun-cap" aria-hidden="true"><span class="bun-face"></span></span></button>
+      <button class="bun milk" aria-label="Milk" data-ja-label="ミルク" aria-pressed="false"><span class="bun-cap" aria-hidden="true"><span class="bun-face"></span></span></button>
     </div>
     <p id="bun-status" class="status" role="status"></p>
   </section>
@@ -65,9 +78,10 @@
   </form>
   <small role="status"></small>
 </details>
+  </div>
+</main>
   <footer><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a>
 <a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a></footer>
-</main>
 <span id="sticker-announcement" class="toy-sr-only" role="status"></span>
 </body>
 </html>
