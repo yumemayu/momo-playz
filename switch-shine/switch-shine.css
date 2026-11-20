@@ -16,7 +16,9 @@
 * { box-sizing: border-box; }
 body { margin: 0; }
 [hidden] { display: none !important; }
-main { max-width: 1250px; margin: auto; padding: 14px clamp(12px, 3vw, 30px) 20px; }
+.switch-main[data-board-layout] { padding-top: 64px; }
+.switch-main .modes { order: 3; }
+.switch-main .play-hud { min-height: 0; }
 header { display: flex; align-items: baseline; flex-wrap: wrap; gap: 4px 16px; padding-right: 100px; margin: 0 0 12px; }
 header a { color: var(--signal); font-size: .82rem; }
 h1 { margin: 0; font-size: clamp(1.35rem, 4vw, 2.2rem); letter-spacing: -.04em; }
@@ -33,10 +35,22 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--pink); outline-
 }
 button[aria-pressed="true"]:not(.input) { color: #ffffff; border-color: transparent; background: linear-gradient(135deg, #ff8fb8, #ffb52e); }
 .toolbar { justify-content: space-between; margin: 12px 0; }
-#goal { margin: 0; color: #e2711d; font-weight: 700; font-size: clamp(.78rem, 2.6vw, 1rem); }
+#goal {
+  align-self: center;
+  margin: 8px 8px 0;
+  padding: 6px 12px;
+  border: 1px solid #f3deab;
+  border-radius: 14px;
+  background: #fff8df;
+  color: #71461c;
+  font-weight: 700;
+  font-size: clamp(.78rem, 2.6vw, 1rem);
+  text-align: center;
+}
+.switch-main[data-board-layout] .play-stage > .board { display: flex; flex-direction: column; }
+.circuit-area { position: relative; flex: 1; min-height: 0; }
 .board {
   width: 100%;
-  height: clamp(285px, calc(100dvh - 216px), 570px);
   position: relative;
   overflow: hidden;
   border: 3px solid #ffffff;
@@ -99,15 +113,15 @@ button[aria-pressed="true"]:not(.input) { color: #ffffff; border-color: transpar
 }
 .records strong { color: var(--signal); }
 .records select {
-  min-height: 36px;
-  padding-inline: 6px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--text);
+  min-height: 44px;
+  min-width: 68px;
+  padding: 0 12px;
+  border: 2px solid #e9a8c1;
+  border-radius: 14px;
+  background: #fff;
+  color: inherit;
   font: inherit;
 }
-body:has(.records:not([hidden])) .board { height: clamp(285px, calc(100dvh - 260px), 570px); }
 
 .milestone-banner {
   position: absolute;
@@ -174,10 +188,6 @@ body:has(.records:not([hidden])) .board { height: clamp(285px, calc(100dvh - 260
 }
 
 /* ---- Lab "book" mode: one gate per page, like the picture book ---- */
-body:has(#book:not([hidden])) .board { height: clamp(300px, calc(100dvh - 300px), 570px); }
-@media (max-width: 640px) {
-  body:has(#book:not([hidden])) .board { height: clamp(280px, calc(100dvh - 440px), 570px); }
-}
 #book { position: absolute; inset: 0; transition: background .35s ease; }
 #book-wires { position: absolute; inset: 0; width: 100%; height: 100%; }
 .bwire { fill: none; stroke: rgba(40, 20, 30, .55); stroke-width: 5; stroke-linejoin: round; stroke-linecap: round; vector-effect: non-scaling-stroke; transition: stroke .15s; }
@@ -246,3 +256,9 @@ body:has(#book:not([hidden])) .board { height: clamp(300px, calc(100dvh - 300px)
 .feedback { margin: 14px auto 0; padding: 0 16px 22px; text-align: center; }
 .feedback small { display: block; }
 .feedback a { display: inline-flex; align-items: center; justify-content: center; min-height: 44px; padding: 6px 16px; color: inherit; text-underline-offset: 3px; }
+
+/* Size circuit parts to the board so neighboring parts stay distinct on phones. */
+.switch-main .board { container-type: inline-size; }
+.switch-main .board .input { width: clamp(44px, 12cqi, 96px); }
+
+.records label { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }
