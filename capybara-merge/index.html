@@ -17,10 +17,10 @@
 <meta property="og:image:height" content="630">
 <meta property="og:image:alt" content="Two capybaras meeting in a stone hot spring.">
 <meta name="twitter:card" content="summary_large_image">
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="merge.css?v=level-cards">
+<link rel="stylesheet" href="merge.css?v=shared-layout">
 <link rel="stylesheet" href="../game-title-banner.css">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
@@ -36,33 +36,46 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Capybara Onsen Merge">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="capybara">
-<main class="capy-main">
-  <header class="game-heading game-title-banner">
+<main class="capy-main" data-board-layout data-game-toolbar>
+<div class="game-sidebar"><header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Capybara">カピバラ</span><br><span data-en="Onsen Merge">温泉マージ</span></h1>
   </header>
-  <fieldset class="difficulty capy-modes">
-    <legend data-en="Game mode">あそびかた</legend>
+<div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+<section class="game-guide" aria-labelledby="game-guide-title"><h2 id="game-guide-title" data-ja="あそびかた">How to play</h2><ol id="instructions"><li data-ja="つぎのピースを見る">Look at the next piece.</li><li data-ja="左右にうごかしておとす">Move left or right, then drop.</li><li data-ja="同じピースをくっつける">Merge matching pieces.</li></ol></section>
+<fieldset class="difficulty capy-modes">
+    <legend data-en="Game mode">モードをえらぶ</legend>
     <div class="level-buttons">
     <button type="button" data-level="quick" aria-pressed="true"><span class="level-icon" aria-hidden="true">⏱</span><span data-en="1-Minute Merge">1分マージ</span></button>
     <button type="button" data-level="standard" aria-pressed="false"><span class="level-icon" aria-hidden="true">♨</span><span data-en="Relaxed Merge">ゆったりマージ</span></button>
     </div>
   </fieldset>
-  <div class="stats capy-stats">
-    <span id="quick-clock"><span class="capy-stat-label" data-en="Time">のこり</span> <output id="quick-time" aria-live="off">60</output><span data-en="sec">秒</span></span>
-    <span><span class="capy-stat-label" data-en="Score">スコア</span> <output id="score">0</output></span>
-    <span><span class="capy-stat-label" data-en="Next">つぎ</span> <img id="next-piece" src="pieces/1.webp" alt="ゆず" width="44" height="44"></span>
-  </div>
-  <section class="capy-guide" aria-labelledby="guide-title">
+<section class="capy-guide" aria-labelledby="guide-title">
     <h2 id="guide-title" data-en="Growth Guide">成長ずかん</h2>
     <ol id="growth"></ol>
     <p id="growth-best">いちばん育った姿 —</p>
   </section>
-  <div class="play-stack">
+<section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><img src="pieces/4.webp" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
+      <span id="score-level"></span>
+      <div class="score-period" aria-label="Ranking period" role="group">
+        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
+        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
+      </div>
+    </div>
+    <p class="personal-best" id="personal-best"></p>
+    <ol id="score-list"></ol>
+  </section></div>
+<div class="play-stack"><div class="play-hud"><div class="stats capy-stats">
+    <span><span class="capy-stat-label" data-en="Score">スコア</span> <output id="score">0</output></span>
+<span id="quick-clock"><span class="capy-stat-label" data-en="Time left">残り</span> <output id="quick-time" aria-live="off">60</output><span data-en="s">秒</span></span>
+    <span><span class="capy-stat-label" data-en="Next">つぎ</span> <img id="next-piece" src="pieces/1.webp" alt="ゆず" width="44" height="44"></span>
+  </div></div>
     <div class="play-stage">
       <canvas class="game-field" id="field" width="360" height="420" tabindex="0"
         aria-label="温泉の盤面" data-en-label="Onsen play area" aria-describedby="instructions">カピバラ温泉の盤面</canvas>
@@ -76,37 +89,23 @@
         </div>
       </div>
     </div>
-    <div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
-      <span data-en="Score">スコア</span><strong id="final-score"></strong>
-      <p></p><span id="final-growth"></span>
-    </div>
-    <button type="button" id="change-player" class="change-player" data-en="Change nickname" hidden>ニックネームをかえる</button>
     <div class="play-row">
       <button class="play-primary" id="start" type="button">Play</button>
       <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
     </div>
+<div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
+      <span data-en="Score">スコア</span><strong id="final-score"></strong>
+      <p></p><span id="final-growth"></span>
+    </div>
+    <button type="button" id="change-player" class="change-player" data-en="Change nickname" hidden>ニックネームをかえる</button>
     <div class="controls move-pad" role="group" aria-label="アイテムのそうさ" data-en-label="Piece controls">
       <button id="left" type="button" aria-label="左へ" data-en-label="Move left" disabled>←</button>
       <button id="drop" type="button" data-en="Drop" disabled>おとす</button>
       <button id="right" type="button" aria-label="右へ" data-en-label="Move right" disabled>→</button>
     </div>
-  </div>
-  <p id="instructions" data-en="Move a piece left or right, then drop it. Matching pieces merge!">左右にうごかして、同じアイテムをくっつけよう。</p>
   <p id="notice" class="capy-notice" role="status" aria-live="polite"></p>
-  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
-  <section class="score-board" aria-labelledby="board-title">
-    <div class="score-board-heading">
-      <h2 id="board-title"><img src="pieces/4.webp" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
-      <span id="score-level"></span>
-      <div class="score-period" aria-label="Ranking period" role="group">
-        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
-        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
-      </div>
-    </div>
-    <p class="personal-best" id="personal-best"></p>
-    <ol id="score-list"></ol>
-  </section>
-  <nav class="game-picker" aria-label="Choose a game">
+</div>
+<nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
     <a href="../bun-owner/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="肉まん屋オーナー">Bun Shop Owner</span></a>

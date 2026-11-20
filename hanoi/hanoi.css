@@ -224,3 +224,6 @@ body[data-skin="rainbow"] .hn-disk::after {
   content: ''; position: absolute; inset: 0; border-radius: 999px; pointer-events: none;
   background-image: repeating-linear-gradient(90deg, rgba(255, 100, 130, .5) 0 9px, rgba(255, 207, 63, .5) 9px 18px, rgba(52, 206, 139, .5) 18px 27px, rgba(79, 163, 255, .5) 27px 36px);
 }
+[data-game-toolbar] .hn-board .hn-chip:has(#clock){display:none}
+[data-game-toolbar] .play-stage > .hn-board {display:flex;flex-direction:column;justify-content:center}
+[data-game-toolbar].hn-main .play-row {flex-wrap:wrap}
