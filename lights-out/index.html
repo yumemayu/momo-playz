@@ -6,11 +6,11 @@
 <title data-en-title="Lights Out | Momo.squirrels">ライトアウト | Momo.squirrels</title>
 <meta name="description" content="光るパネルを押して、全部の明かりを消すパズル。押すと自分と上下左右が反転する、ブラウザで遊べる無料パズルゲームです。">
 <link rel="canonical" href="https://yumemayu.github.io/momo-fry-catch/lights-out/">
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="lights-out.css">
+<link rel="stylesheet" href="lights-out.css?v=shared-layout">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js?v=daily-stickers"></script>
 <script defer src="../nickname.js?v=compact"></script>
@@ -24,22 +24,18 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Lights Out">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="lights-out">
-<main class="lights-main">
-  <header class="game-heading game-title-banner">
+<main class="lights-main" data-board-layout data-game-toolbar>
+<div class="game-sidebar"><header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Lights Out">ライトアウト</span></h1>
   </header>
-  <button type="button" class="guide-toggle" aria-expanded="true" aria-controls="pic-guide">🖼 <span data-en="How to play">あそびかた</span></button>
-  <div class="pic-guide" id="pic-guide" role="img" aria-label="How to play Lights Out in pictures">
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="17" y="7" width="30" height="30" rx="7" fill="#ffd93d" stroke="#e8a90c" stroke-width="2"/><circle cx="32" cy="22" r="16" fill="none" stroke="#f272a7" stroke-width="2.5"/><circle cx="44.5" cy="35" r="4.5" fill="#f272a7" stroke="#fff" stroke-width="2"/></svg><figcaption data-en="Tap a panel">パネルを押す</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="8" y="4" width="13" height="13" rx="3" fill="#efe9f5" stroke="#e0d4ea" stroke-width="1.6"/><rect x="25" y="4" width="13" height="13" rx="3" fill="#ffd93d" stroke="#e0d4ea" stroke-width="1.6"/><rect x="42" y="4" width="13" height="13" rx="3" fill="#efe9f5" stroke="#e0d4ea" stroke-width="1.6"/><rect x="8" y="17" width="13" height="13" rx="3" fill="#ffd93d" stroke="#e0d4ea" stroke-width="1.6"/><rect x="25" y="17" width="13" height="13" rx="3" fill="#ffd93d" stroke="#e0d4ea" stroke-width="1.6"/><rect x="42" y="17" width="13" height="13" rx="3" fill="#ffd93d" stroke="#e0d4ea" stroke-width="1.6"/><rect x="8" y="30" width="13" height="13" rx="3" fill="#efe9f5" stroke="#e0d4ea" stroke-width="1.6"/><rect x="25" y="30" width="13" height="13" rx="3" fill="#ffd93d" stroke="#e0d4ea" stroke-width="1.6"/><rect x="42" y="30" width="13" height="13" rx="3" fill="#efe9f5" stroke="#e0d4ea" stroke-width="1.6"/></svg><figcaption data-en="A cross of panels flips">押すと十字が反転</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="8" y="4" width="13" height="13" rx="3" fill="#4a4460" stroke="#37324a" stroke-width="1.6"/><rect x="25" y="4" width="13" height="13" rx="3" fill="#4a4460" stroke="#37324a" stroke-width="1.6"/><rect x="42" y="4" width="13" height="13" rx="3" fill="#4a4460" stroke="#37324a" stroke-width="1.6"/><rect x="8" y="17" width="13" height="13" rx="3" fill="#4a4460" stroke="#37324a" stroke-width="1.6"/><rect x="25" y="17" width="13" height="13" rx="3" fill="#4a4460" stroke="#37324a" stroke-width="1.6"/><rect x="42" y="17" width="13" height="13" rx="3" fill="#4a4460" stroke="#37324a" stroke-width="1.6"/><rect x="8" y="30" width="13" height="13" rx="3" fill="#4a4460" stroke="#37324a" stroke-width="1.6"/><rect x="25" y="30" width="13" height="13" rx="3" fill="#4a4460" stroke="#37324a" stroke-width="1.6"/><rect x="42" y="30" width="13" height="13" rx="3" fill="#4a4460" stroke="#37324a" stroke-width="1.6"/><path d="M54 2 l1.4 3 3 1.4 -3 1.4 -1.4 3 -1.4 -3 -3 -1.4 3 -1.4 z" fill="#f6b73e"/></svg><figcaption data-en="All dark = clear!">全部消えたらクリア</figcaption></figure>
-  </div>
-  <fieldset class="difficulty">
+<div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+<section class="game-guide" aria-labelledby="game-guide-title"><h2 id="game-guide-title" data-ja="あそびかた">How to play</h2><ol id="instructions"><li data-ja="明かりをタップ">Tap a light.</li><li data-ja="となりの明かりも切り替わる">It flips the neighbouring lights too.</li><li data-ja="ぜんぶ消そう">Turn all the lights off.</li></ol></section>
+<fieldset class="difficulty">
     <legend data-en="Choose a level">レベルを えらぶ</legend>
     <div class="level-buttons" role="group" aria-label="レベル" data-en-label="Level">
       <button type="button" data-level="easy" aria-pressed="true"><span class="level-icon" aria-hidden="true">🌼</span><span data-en="Easy">かんたん</span></button>
@@ -47,13 +43,25 @@
       <button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-en="Hard">むずかしい</span></button>
     </div>
   </fieldset>
-  <div class="play-stack">
+<section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
+      <span id="score-level"></span>
+      <div class="score-period" aria-label="Ranking period" role="group">
+        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
+        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
+      </div>
+    </div>
+    <p class="personal-best" id="personal-best"></p>
+    <ol id="score-list"></ol>
+  </section></div>
+<div class="play-stack"><div class="play-hud">
   <div class="stats lights-stats">
       <span><span data-en="Moves">てかず</span> <output id="moves">0</output></span>
       <span><span data-en="Lights on">ついている明かり</span> <output id="lights-left">0</output></span>
     </div>
     <p class="turn-line" id="turn-line" role="status"></p>
-    <div class="play-stage">
+    </div><div class="play-stage">
       <div class="lo-board game-field" id="board" role="group" aria-label="ボード" data-en-label="Board"></div>
       <div class="game-card" id="ready-card">
         <img src="../assets/game-cat.png" alt="" width="58" height="58">
@@ -65,31 +73,18 @@
         </div>
       </div>
     </div>
-    <div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
+    <div class="play-row">
+      <button class="play-primary" id="start" type="button">Play</button>
+      <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
+    </div>
+<div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
       <span data-en="Score">スコア</span><strong id="final-score"></strong>
       <div class="lights-verdict" id="lights-verdict"></div>
       <p></p>
     </div>
     <button type="button" id="change-player" class="change-player" data-en="Change nickname" hidden>ニックネームをかえる</button>
-    <div class="play-row">
-      <button class="play-primary" id="start" type="button">Play</button>
-      <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
-    </div>
   </div>
-  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
-  <section class="score-board" aria-labelledby="board-title">
-    <div class="score-board-heading">
-      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
-      <span id="score-level"></span>
-      <div class="score-period" aria-label="Ranking period" role="group">
-        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
-        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
-      </div>
-    </div>
-    <p class="personal-best" id="personal-best"></p>
-    <ol id="score-list"></ol>
-  </section>
-  <nav class="game-picker" aria-label="Choose a game">
+<nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
     <a href="../bun-owner/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="肉まん屋オーナー">Bun Shop Owner</span></a>

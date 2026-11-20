@@ -4,7 +4,6 @@
   const scoreOutput = document.querySelector('#score');
   const comboOutput = document.querySelector('#combo');
   const timeOutput = document.querySelector('#time');
-  const timeFill = document.querySelector('#time-fill');
   const start = document.querySelector('#start');
   const stop = document.querySelector('#stop');
   const sound = document.querySelector('#sound');
@@ -255,8 +254,7 @@
     scoreOutput.value = String(score).padStart(4, '0');
     comboOutput.value = '×' + combo;
     const left = Math.max(0, Math.ceil(remaining));
-    timeOutput.value = Math.floor(left / 60) + ':' + String(left % 60).padStart(2, '0');
-    if (timeFill) timeFill.style.width = Math.max(0, Math.min(100, remaining / ROUND_SECONDS * 100)) + '%';
+    timeOutput.value = String(left);
   }
 
   function setControls() {

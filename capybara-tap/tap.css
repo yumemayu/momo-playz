@@ -1,39 +1,3 @@
-/* HUD cards, like the mock: white cards with a thick brown outline. */
-.tap-stats { justify-content: stretch; flex-wrap: nowrap; gap: 8px; }
-.tap-stats > span {
-  flex: 1;
-  display: inline-flex;
-  align-items: center;
-  justify-content: center;
-  flex-wrap: wrap;
-  gap: 2px 6px;
-  min-height: 56px;
-  padding: 4px 8px;
-  border: 3px solid #4a2c1a;
-  border-radius: 16px;
-  background: #fff;
-  color: #4a2c1a;
-  box-shadow: 0 3px 0 rgba(74, 44, 26, .25);
-}
-.tap-stat-label { font-size: .8rem; letter-spacing: .04em; }
-.tap-stats output { color: #4a2c1a; font-size: 1.3rem; font-weight: bold; }
-.time-bar {
-  flex-basis: 100%;
-  display: block;
-  height: 11px;
-  border: 2.5px solid #4a2c1a;
-  border-radius: 999px;
-  background: #fff;
-  overflow: hidden;
-}
-#time-fill {
-  display: block;
-  height: 100%;
-  width: 100%;
-  border-radius: 999px;
-  background: linear-gradient(90deg, #8fdcf7, #4fb6e8);
-  transition: width .2s linear;
-}
 .level-art { width: 34px; height: 34px; object-fit: contain; }
 /* The ready/score cards float over the tub; the spots carry z-index 1,
    so the cards need a higher one or the water rings paint over them. */
@@ -176,7 +140,6 @@
   .spot.golden .spot-inner::before, .spot.golden .spot-inner::after { animation: none; }
   .float-point { animation: none; opacity: 0; }
   .burst-star { display: none; }
-  #time-fill { transition: none; }
 }
 
 .milestone-banner {
@@ -217,3 +180,5 @@
 @media (prefers-reduced-motion: reduce) {
   .milestone-banner { animation: none; }
 }
+
+[data-board-layout] .play-stage > .bath-field { display: grid; }
