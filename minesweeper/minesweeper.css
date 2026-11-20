@@ -314,16 +314,31 @@ body.game-wide { overflow: hidden; }
 body.game-wide .ms-main { position: fixed; inset: 0; z-index: 80; max-width: none; overflow: auto; background: #fff0f5; display: flex; flex-direction: column; align-items: center; }
 body.game-wide .game-heading, body.game-wide .guide-toggle, body.game-wide .pic-guide, body.game-wide .level-buttons, body.game-wide .stats, body.game-wide .score-board, body.game-wide main nav, body.game-wide .ms-main fieldset { display: none; }
 body.game-wide .play-stack { width: 100%; align-items: center; }
-body.game-wide .ms-board { width: min(96vw, calc(100dvh - 255px)); margin-inline: auto; }
 
-[data-board-layout] .ms-board {
-  overflow: auto;
+
+[data-board-layout] .play-stage > .ms-board {
+  display: flex;
+  flex-direction: column;
   padding: 8px;
 }
-[data-board-layout] .ms-grid {
-  width: min(100%, max(300px, calc(var(--board-height) - 108px)));
+.ms-board > :not(.ms-grid-space) { flex-shrink: 0; }
+.ms-grid-space {
+  flex: 1;
+  min-height: 0;
+  container-type: size;
+}
+.ms-grid-space .ms-grid {
+  width: min(100%, 100cqh);
   margin-inline: auto;
 }
+body.game-wide main.ms-main[data-board-layout] {
+  --board-width: min(96vw, 720px);
+  --board-height: max(440px, calc(100dvh - 185px));
+  padding: 12px 0;
+}
+body.game-wide .ms-main .game-guide { display: none; }
+body.game-wide .ms-main .play-hud { min-height: 0; }
+body.game-wide .ms-main .play-hud .stats { display: flex; }
 [data-board-layout] .ms-status { margin-bottom: 6px; }
 [data-board-layout] .ms-face { width: 44px; height: 44px; }
 [data-board-layout] .ms-counter[hidden] { display: none; }

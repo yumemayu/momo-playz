@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="minesweeper.css?v=mode-labels">
+<link rel="stylesheet" href="minesweeper.css?v=board-fit">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
@@ -89,7 +89,9 @@
           <span data-en="Tap a tile to open it.">マスをタップすると、あくよ</span>
           <span data-en="Tap a tile to place or remove a flag." hidden>マスをタップすると、はたをつけたり外したりできるよ</span>
         </p>
-        <div class="ms-grid" id="grid" role="group" aria-label="ボード" data-en-label="Board"></div>
+        <div class="ms-grid-space">
+          <div class="ms-grid" id="grid" role="group" aria-label="ボード" data-en-label="Board"></div>
+        </div>
       </div>
       <div class="game-card" id="ready-card">
         <img src="../assets/game-cat.png" alt="" width="58" height="58">
