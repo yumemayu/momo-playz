@@ -31,6 +31,11 @@ const gameScores = (() => {
   onlineNote.className = 'online-note';
   onlineNote.hidden = true;
   scoreList.after(best, onlineNote);
+  const columnLabels = document.createElement('div');
+  columnLabels.className = 'score-columns';
+  columnLabels.hidden = true;
+  columnLabels.setAttribute('aria-hidden', 'true');
+  if (scoreList.closest('[data-board-layout]')) scoreList.before(columnLabels);
 
   function restoreNickname() {
     if (editingNickname || nameInput.readOnly) return;
@@ -100,6 +105,17 @@ const gameScores = (() => {
 
   function drawRows(rows, record) {
     scoreList.replaceChildren();
+    if (columnLabels.isConnected) {
+      columnLabels.hidden = rows.length === 0;
+      if (rows.length) {
+        const headings = [['Rank', '順位'], ['Nickname', 'ニックネーム'], ['Score', 'スコア']];
+        columnLabels.replaceChildren(...headings.map(([en, ja]) => {
+          const label = document.createElement('span');
+          label.textContent = momoLanguage.pick(en, ja);
+          return label;
+        }));
+      }
+    }
     let place = 0;
     rows.slice(0, 10).forEach((row, index) => {
       if (row.score !== rows[index - 1]?.score) place = index + 1;

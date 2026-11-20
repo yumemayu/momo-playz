@@ -656,3 +656,54 @@ main[data-board-layout] > .play-stack {
     --layout-gap: 24px;
   }
 }
+
+/* Keep each level card aligned even when its label needs two lines. */
+[data-board-layout] .level-buttons {
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-auto-rows: 1fr;
+  gap: 6px;
+}
+[data-board-layout] .level-buttons button {
+  min-width: 0;
+  min-height: 68px;
+  grid-template-rows: 26px minmax(2.3em, auto);
+  align-content: center;
+  align-items: center;
+  padding: 4px 2px;
+  font-size: clamp(.68rem, 1.15vw, .86rem);
+  line-height: 1.15;
+}
+[data-board-layout] .level-buttons button > :last-child {
+  width: 100%;
+  text-align: center;
+  overflow-wrap: anywhere;
+}
+[data-board-layout] .level-buttons .level-icon,
+[data-board-layout] .level-buttons .level-art {
+  min-height: 0;
+  width: 26px;
+  height: 26px;
+}
+[data-board-layout] .difficulty select { width: 100%; }
+
+[data-board-layout] .score-board {
+  --leaderboard-columns: 3.1em minmax(0, 1fr) minmax(3.6em, auto);
+}
+[data-board-layout] .score-board .score-columns,
+[data-board-layout] .score-board li {
+  display: grid;
+  grid-template-columns: var(--leaderboard-columns);
+  gap: 6px;
+  align-items: center;
+  padding-inline: 6px;
+}
+[data-board-layout] .score-columns {
+  margin-top: 6px;
+  color: #735663;
+  font-size: inherit;
+}
+[data-board-layout] .score-columns span { font-size: .69rem; }
+[data-board-layout] .score-columns span:first-child { text-align: center; }
+[data-board-layout] .score-columns span:last-child,
+[data-board-layout] .score-board li > strong { text-align: right; }
+[data-board-layout] .score-columns[hidden] { display: none; }
