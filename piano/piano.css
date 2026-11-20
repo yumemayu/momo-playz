@@ -1,4 +1,5 @@
-#momo-piano-levels { display:grid; grid-template-columns:minmax(0,390px); justify-content:center; gap:10px; max-width:470px; margin:auto; padding:12px; box-sizing:border-box; color:#49336b; }
+.piano-sidebar { color:#49336b; }
+#momo-piano-levels { padding-top:64px; color:#49336b; }
   #momo-piano-levels * { box-sizing:border-box; }
   #momo-piano-levels .phone { min-height:490px; border:3px solid #fff8fc; border-radius:30px; overflow:hidden; display:flex; flex-direction:column; box-shadow:0 7px 19px #51326824, 0 0 0 1px #d6b7e4; }
   #momo-piano-levels [hidden] { display:none !important; }
@@ -55,8 +56,8 @@
 
 
 body { margin:0; background:#fff0f7; font-family:Nunito,"Hiragino Maru Gothic ProN",sans-serif; }
-#momo-piano-levels { max-width:860px; grid-template-columns:minmax(0,520px); }
-#momo-piano-levels .piano-sidebar { display:grid; gap:11px; min-width:0; }
+#momo-piano-levels .choices { order:3; }
+#momo-piano-levels .level-buttons { order:3; }
 #momo-piano-levels .choices { width:100%; grid-template-columns:1fr 1fr; }
 #momo-piano-levels .choices [aria-pressed="true"] { outline:2px solid #9659a5; outline-offset:-2px; }
 #momo-piano-levels .choices [aria-pressed="false"] { background:#fff6fc; }
@@ -64,8 +65,7 @@ body { margin:0; background:#fff0f7; font-family:Nunito,"Hiragino Maru Gothic Pr
 #momo-piano-levels .game-picker { grid-column: 1 / -1; }
 #momo-piano-levels button { cursor:pointer; }
 @media (min-width:760px) {
-  #momo-piano-levels { grid-template-columns:minmax(215px,275px) minmax(0,540px); gap:14px; align-items:start; }
-  #momo-piano-levels .momo-art { min-height:300px; justify-content:center; }
+  #momo-piano-levels .momo-art { min-height:240px; justify-content:center; }
   #momo-piano-levels .choices { grid-template-columns:1fr; }
   #momo-piano-levels .piano { padding-inline:40px; }
   #momo-piano-levels .key { height:108px; }
