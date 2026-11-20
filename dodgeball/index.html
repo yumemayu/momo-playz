@@ -6,7 +6,7 @@
 <title data-en-title="Momo Dodgeball">Momo ドッジボール</title>
 <link rel="stylesheet" href="../language.css">
 <link rel="stylesheet" href="../game.css?v=level-cards">
-<link rel="stylesheet" href="dodgeball.css?v=shared-layout">
+<link rel="stylesheet" href="dodgeball.css?v=nickname-card">
 <link rel="stylesheet" href="../game-title-banner.css">
 <script defer src="../language.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
@@ -56,7 +56,7 @@
   </div>
   <div class="play-stack">
   <div class="play-hud">
-  <div class="wide-bar"><button type="button" class="wide-btn" data-wide-btn aria-pressed="false">⛶ Bigger</button></div>
+  <div class="wide-bar"><button id="change-player" class="change-player" type="button" data-ja="ニックネームを設定">Set nickname</button><button type="button" class="wide-btn" data-wide-btn aria-pressed="false">⛶ Bigger</button></div>
     <div class="score"><span data-ja="ヒット">Hits</span> <strong id="hits">0</strong> <span aria-hidden="true">·</span> <span data-ja="のこり">Left</span> <strong id="left">5</strong><span id="cat-score" hidden> · <span data-ja="ねこ">Cat</span> <strong id="cat-hits">0</strong></span></div>
   </div>
   <div class="play-stage">
@@ -91,16 +91,15 @@
       <button type="button" id="retry" data-ja="もういちど">Play again</button>
     </div>
   </section>
-  </div>
-  <p id="guide">Click the court where you want to throw. Keyboard: ← → to aim, Space to throw.</p>
-  <p id="status" class="sr-only" role="status"></p>
-  <div id="ready-card">
+  <div class="game-card" id="ready-card" hidden>
     <div class="player-setup">
       <label for="nickname" data-ja="ニックネーム（任意）">Nickname (optional)</label>
       <input id="nickname" maxlength="20" autocomplete="off">
     </div>
   </div>
-  <button class="change-player" id="change-player" type="button" hidden data-ja="ニックネームをかえる">Change nickname</button>
+  </div>
+  <p id="guide">Click the court where you want to throw. Keyboard: ← → to aim, Space to throw.</p>
+  <p id="status" class="sr-only" role="status"></p>
   <div hidden><div id="score-card" hidden><strong id="final-score"></strong><p></p></div></div>
   </div>
 </main>

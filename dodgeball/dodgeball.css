@@ -233,5 +233,9 @@ body.game-wide [data-board-layout] .play-stage > .court { height: calc(100dvh - 
 [data-board-layout] .match-modes { order: 3; min-width: 0; }
 [data-board-layout] .play-hud { display: flex; align-items: center; justify-content: space-between; flex-wrap: wrap-reverse; gap: 6px; }
 [data-board-layout] .play-hud .score { position: static; order: -1; translate: none; }
-[data-board-layout] .wide-bar { margin: 0 0 0 auto; }
+[data-board-layout] .wide-bar { flex-wrap: wrap; gap: 6px; margin: 0 0 0 auto; }
+[data-board-layout] .wide-bar .change-player { margin: 0; }
+[data-board-layout] .wide-bar [hidden] { display: none; }
+[data-board-layout] .play-stage > #ready-card { z-index: 3; }
+[data-board-layout] .play-stage > #ready-card:focus-within { outline: 2px solid #dba4c1; }
 [data-game-toolbar] .game-sidebar .home-link { display: none; }

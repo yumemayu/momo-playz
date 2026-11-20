@@ -135,7 +135,15 @@ body.fever #clock{color:#d3382c}
 @media(max-width:600px){.shop>.shop-stats{font-size:13px;padding:7px 10px;gap:4px 10px}.shop>.shop-stats #clock{font-size:17px}}
 
 /* The shop can grow vertically when larger orders need more room. */
-body[data-game="bun-owner"] main[data-board-layout] { padding-top: 64px; }
+body[data-game="bun-owner"] > .momo-game-toolbar {
+  position: sticky;
+  inset: 0 auto auto;
+  width: max-content;
+  margin: 6px max(8px, env(safe-area-inset-right)) 0 auto;
+}
+body[data-game="bun-owner"]:has(> .momo-game-toolbar) main[data-board-layout] {
+  padding-top: 16px;
+}
 [data-board-layout] .play-stage > .shop { width: 100%; min-height: var(--board-height); margin: 0; }
 [data-board-layout] .game-sidebar > .intro { order: 2; }
 [data-board-layout] .game-sidebar > .modes { order: 3; }
