@@ -134,7 +134,6 @@
     let step = 0;
     const roll = root.querySelector('.falling-roll');
     const playScreen = roll.parentElement;
-    const avatar = root.querySelector('.avatar');
     const celebration = root.querySelector('.celebration');
     const reduceMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
     const beatMs = 510;
@@ -262,11 +261,6 @@
         {opacity:1, transform:'translate(-50%, -9px) scale(1.15)', offset:.35},
         {opacity:0, transform:'translate(-50%, -26px) scale(.8)'}
       ], {duration:430}));
-      feedback.push(avatar.animate([
-        {transform:'translateY(0) rotate(0)'},
-        {transform:finished ? 'translateY(-19px) rotate(-6deg)' : 'translateY(-8px) rotate(-3deg)', offset:.4},
-        {transform:'translateY(0) rotate(0)'}
-      ], {duration:finished ? 650 : 270}));
       if (finished) feedback.push(celebration.animate([
         {opacity:.2, transform:'scale(.84)'},
         {opacity:1, transform:'scale(1.05)', offset:.7},
@@ -300,11 +294,6 @@
             { transform: `translateY(${64 + Math.random() * 90}px) rotate(${Math.random() * 320 - 160}deg)`, opacity: 0 }
           ], { duration: 1150 + Math.random() * 500, easing: 'cubic-bezier(.2,.7,.3,1)' });
         }
-        avatar.animate([
-          { transform: 'translateY(0) rotate(0)' },
-          { transform: 'translateY(-19px) rotate(-6deg)', offset: .4 },
-          { transform: 'translateY(0) rotate(0)' }
-        ], { duration: 650 });
       }
       roll.append(banner);
       [0, 2, 4, 7].forEach((keyIndex, i) => setTimeout(() => playNote(keyIndex), i * 95));
