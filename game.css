@@ -581,7 +581,7 @@ main[data-board-layout] > .play-stack {
 [data-board-layout] .game-sidebar > .game-heading { order: 1; }
 [data-board-layout] .game-guide { order: 2; }
 [data-board-layout] .game-sidebar > .difficulty { order: 3; }
-[data-board-layout] .game-sidebar > .music { order: 9; }
+[data-board-layout] .game-sidebar > .music { order: 1; }
 [data-board-layout] .game-sidebar > .score-board { order: 10; }
 [data-board-layout] .game-guide h2 { margin: 0 0 5px; font-size: 1rem; }
 [data-board-layout] .game-guide ol { margin: 0; padding-inline-start: 1.25em; }
