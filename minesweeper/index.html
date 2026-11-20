@@ -6,16 +6,16 @@
 <title data-en-title="Minesweeper | Momo.squirrels">マインスイーパ | Momo.squirrels</title>
 <meta name="description" content="数字のヒントで地雷の場所を推理する、昔ながらのロジックゲーム。地雷じゃないマスを全部開けたら勝ち。ブラウザで遊べる無料パズルゲームです。">
 <link rel="canonical" href="https://yumemayu.github.io/momo-playz/minesweeper/">
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="minesweeper.css">
+<link rel="stylesheet" href="minesweeper.css?v=side-controls">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
 <script defer src="../scores.js?v=gem-rewards"></script>
-<script defer src="minesweeper.js"></script>
+<script defer src="minesweeper.js?v=mode-labels"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
@@ -24,22 +24,25 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Minesweeper">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="minesweeper">
-<main class="ms-main">
+<main class="ms-main" data-board-layout data-game-toolbar>
+  <div class="game-sidebar">
     <div class="wide-bar"><button type="button" class="wide-btn" data-wide-btn aria-pressed="false">⛶ Bigger</button></div>
   <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Minesweeper">マインスイーパ</span></h1>
   </header>
-  <button type="button" class="guide-toggle" aria-expanded="true" aria-controls="pic-guide">🖼 <span data-en="How to play">あそびかた</span></button>
-  <div class="pic-guide" id="pic-guide" role="img" aria-label="How to play Minesweeper in pictures">
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="17" y="5" width="30" height="30" rx="7" fill="#9fe3c3" stroke="#57b981" stroke-width="1.6"/><circle cx="32" cy="20" r="15.5" fill="none" stroke="#f272a7" stroke-width="2.5"/><circle cx="44.5" cy="33.5" r="4.5" fill="#f272a7" stroke="#fff" stroke-width="2"/></svg><figcaption data-en="Tap a tile">マスをタップ</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="6" y="3" width="16" height="16" rx="4" fill="#ffd9e2"/><g stroke="#57344a" stroke-width="1.6" stroke-linecap="round"><line x1="7.4" y1="11" x2="20.6" y2="11"/><line x1="14" y1="4.4" x2="14" y2="17.6"/><line x1="8.4" y1="5.4" x2="19.6" y2="16.6"/><line x1="8.4" y1="16.6" x2="19.6" y2="5.4"/></g><circle cx="14" cy="11" r="4.6" fill="#57344a"/><circle cx="12.2" cy="9.2" r="1.5" fill="#fff"/><rect x="24" y="3" width="16" height="16" rx="4" fill="#fffaf0" stroke="#eee3d2" stroke-width="1.6"/><text x="32" y="16" font-size="11" font-weight="900" fill="#3b82c4" text-anchor="middle">2</text><rect x="42" y="3" width="16" height="16" rx="4" fill="#ffd9e2"/><g stroke="#57344a" stroke-width="1.6" stroke-linecap="round"><line x1="43.4" y1="11" x2="56.6" y2="11"/><line x1="50" y1="4.4" x2="50" y2="17.6"/><line x1="44.4" y1="5.4" x2="55.6" y2="16.6"/><line x1="44.4" y1="16.6" x2="55.6" y2="5.4"/></g><circle cx="50" cy="11" r="4.6" fill="#57344a"/><circle cx="48.2" cy="9.2" r="1.5" fill="#fff"/><rect x="6" y="23" width="16" height="16" rx="4" fill="#9fe3c3"/><rect x="24" y="23" width="16" height="16" rx="4" fill="#9fe3c3"/><rect x="42" y="23" width="16" height="16" rx="4" fill="#9fe3c3"/></svg><figcaption data-en="The number = mines around">数字＝まわりの地雷</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="17" y="5" width="30" height="30" rx="7" fill="#9fe3c3" stroke="#57b981" stroke-width="1.6"/><line x1="30" y1="34" x2="30" y2="12" stroke="#8a5a2a" stroke-width="2.6" stroke-linecap="round"/><path d="M30 12 L44 16.5 L30 21 z" fill="#ef476f"/></svg><figcaption data-en="Flag the mines">地雷には旗</figcaption></figure>
-  </div>
+    <section class="game-guide" aria-labelledby="game-guide-title">
+      <h2 id="game-guide-title" data-en="How to play">あそびかた</h2>
+      <ol>
+        <li data-en="Tap a tile to open it. Your first tap is safe">マスをタップしてあける。最初の1タップはセーフ</li>
+        <li data-en="Numbers count the mines around a tile">数字はまわりの地雷の数</li>
+        <li data-en="Choose 🚩 Place a flag, then tap a tile. Choose Open to switch back">「🚩 はたを立てる」を選んでマスをタップ。「あける」で元にもどる</li>
+      </ol>
+    </section>
   <fieldset class="difficulty">
     <legend data-en="Choose a level">レベルを えらぶ</legend>
     <div class="level-buttons" role="group" aria-label="レベル" data-en-label="Level">
@@ -49,23 +52,45 @@
       <button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-en="Hard">むずかしい</span></button>
     </div>
   </fieldset>
+  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+  <section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
+      <span id="score-level"></span>
+      <div class="score-period" aria-label="Ranking period" role="group">
+        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
+        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
+      </div>
+    </div>
+    <p class="personal-best" id="personal-best"></p>
+    <ol id="score-list"></ol>
+  </section>
+  </div>
   <div class="play-stack">
+    <div class="play-hud">
   <div class="stats ms-stats">
       <span><span data-en="Opened">あけたマス</span> <output id="opened">0</output></span>
-      <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
+      <span><span data-en="Time">じかん</span> <output id="time">0</output><span data-en="s">秒</span></span>
     </div>
     <p class="turn-line" id="turn-line" role="status"></p>
+    </div>
     <div class="play-stage">
       <div class="ms-board game-field preview" id="board">
         <div class="ms-status">
           <span class="ms-counter">💣 <span data-en="Mines">のこり</span> <output id="mines-left">12</output></span>
           <button type="button" class="ms-face" id="face" aria-label="さいしょから" data-en-label="Start over"></button>
-          <span class="ms-counter">⏱ <output id="clock">0:00</output></span>
+          <span class="ms-counter" hidden>⏱ <output id="clock">0:00</output></span>
         </div>
-        <div class="ms-grid" id="grid" role="group" aria-label="ボード" data-en-label="Board"></div>
         <div class="ms-mode" role="group" aria-label="モード" data-en-label="Mode">
-          <button type="button" id="mode-open" class="selected" data-en="Open">あける</button>
-          <button type="button" id="mode-flag">🚩 <span data-en="Flag">はた</span></button>
+          <button type="button" id="mode-open" class="selected" aria-pressed="true"><span data-en="Open">あける</span></button>
+          <button type="button" id="mode-flag" aria-pressed="false">🚩 <span data-en="Place a flag">はたを立てる</span></button>
+        </div>
+        <p id="mode-hint" class="ms-mode-hint" role="status" hidden>
+          <span data-en="Tap a tile to open it.">マスをタップすると、あくよ</span>
+          <span data-en="Tap a tile to place or remove a flag." hidden>マスをタップすると、はたをつけたり外したりできるよ</span>
+        </p>
+        <div class="ms-grid-space">
+          <div class="ms-grid" id="grid" role="group" aria-label="ボード" data-en-label="Board"></div>
         </div>
       </div>
       <div class="game-card" id="ready-card">
@@ -89,20 +114,6 @@
       <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
     </div>
   </div>
-  <p id="instructions" data-en="Your first tap is always safe. The face button starts the game over.">最初の1タップは絶対にセーフ。顔のボタンで最初からやり直せるよ。</p>
-  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
-  <section class="score-board" aria-labelledby="board-title">
-    <div class="score-board-heading">
-      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
-      <span id="score-level"></span>
-      <div class="score-period" aria-label="Ranking period" role="group">
-        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
-        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
-      </div>
-    </div>
-    <p class="personal-best" id="personal-best"></p>
-    <ol id="score-list"></ol>
-  </section>
   <nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>

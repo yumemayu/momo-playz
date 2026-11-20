@@ -9,6 +9,7 @@
   const timeOutput = document.querySelector('#time');
   const modeOpenBtn = document.querySelector('#mode-open');
   const modeFlagBtn = document.querySelector('#mode-flag');
+  const modeHint = document.querySelector('#mode-hint');
   const turnLine = document.querySelector('#turn-line');
   const verdict = document.querySelector('#ms-verdict');
   const start = document.querySelector('#start');
@@ -292,6 +293,11 @@
     setFace(over ? (endState === 'win' ? 'cool' : 'dead') : faceState === 'wow' ? 'wow' : 'smile');
     modeOpenBtn.classList.toggle('selected', mode === 'open');
     modeFlagBtn.classList.toggle('selected', mode === 'flag');
+    modeOpenBtn.setAttribute('aria-pressed', String(mode === 'open'));
+    modeFlagBtn.setAttribute('aria-pressed', String(mode === 'flag'));
+    modeHint.hidden = !playing || over;
+    modeHint.children[0].hidden = mode !== 'open';
+    modeHint.children[1].hidden = mode !== 'flag';
     modeOpenBtn.disabled = !playing || over;
     modeFlagBtn.disabled = !playing || over;
     start.textContent = playedRound && !playing ? copy[language].retry : 'Play';
