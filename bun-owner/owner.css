@@ -133,3 +133,24 @@ body.fever #clock{color:#d3382c}
 .shop>.shop-stats{background:rgba(255,248,232,.95);border:2px solid #e9b558;border-radius:18px;box-shadow:0 2px 6px rgba(87,52,74,.18);padding:8px 14px;margin:0 2px 10px;font-size:16px;justify-content:flex-start;gap:6px 16px}
 .shop>.shop-stats #clock{font-size:20px;color:#57344a}
 @media(max-width:600px){.shop>.shop-stats{font-size:13px;padding:7px 10px;gap:4px 10px}.shop>.shop-stats #clock{font-size:17px}}
+
+/* The shop can grow vertically when larger orders need more room. */
+body[data-game="bun-owner"] main[data-board-layout] { padding-top: 64px; }
+[data-board-layout] .play-stage > .shop { width: 100%; min-height: var(--board-height); margin: 0; }
+[data-board-layout] .game-sidebar > .intro { order: 2; }
+[data-board-layout] .game-sidebar > .modes { order: 3; }
+[data-board-layout] .game-sidebar > .records { order: 10; }
+[data-game-toolbar] .game-sidebar > .back { display: none; }
+[data-board-layout] #start { max-width: 100%; }
+@media (orientation: landscape) and (min-width: 680px), (min-width: 1101px) {
+  [data-board-layout] .game-sidebar > .modes { flex-wrap: wrap; }
+}
+
+[data-board-layout] .shop:has(.welcome:not([hidden])) :is(.guest-lanes, .restaurant-counter) {
+  display: none;
+}
+[data-board-layout] .game-title-banner h1 { width: 60%; }
+[data-board-layout] .welcome-art { height: clamp(85px, 15vh, 145px); }
+[data-board-layout] .portrait-button { height: clamp(92px, 15vh, 140px); }
+[data-board-layout] .restaurant-counter { margin-top: 8px; }
+[data-board-layout] .menu-bun img { height: 60px; }
