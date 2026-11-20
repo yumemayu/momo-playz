@@ -5,7 +5,8 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title data-en-title="Switch &amp; Shine | Momo Games">ピカッとスイッチ | Momoゲーム集</title>
   <link rel="stylesheet" href="../language.css">
-  <link rel="stylesheet" href="switch-shine.css?v=book2">
+  <link rel="stylesheet" href="../game.css?v=level-cards">
+  <link rel="stylesheet" href="switch-shine.css?v=board-layout">
   <link rel="stylesheet" href="../game-title-banner.css">
   <script defer src="../language.js"></script>
   <script defer src="switch-shine.js?v=book1"></script>
@@ -16,19 +17,31 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Switch &amp; Shine">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="switch-shine">
-<main>
+<main class="switch-main" data-board-layout data-game-toolbar>
+  <div class="game-sidebar">
   <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1 data-ja="ピカッとスイッチ">Switch &amp; Shine</h1>
   </header>
-  <nav class="modes" aria-label="Game mode" data-ja-label="ゲームモード">
+  <div class="game-guide">
+    <h2 data-ja="あそびかた">How to play</h2>
+    <ol>
+      <li data-ja="スイッチを押して、ランプの変化を見よう。">Tap a switch and see what happens to the lights.</li>
+      <li data-ja="実験モードでは、ページをめくって回路を試そう。">In Lab, turn the pages to try different circuits.</li>
+      <li data-ja="チャレンジでは、スイッチを切り替えて、ランプをお題どおりにしよう。">In Challenge, set the switches to match the target lights.</li>
+    </ol>
+  </div>
+  <div class="modes" role="group" aria-label="Game mode" data-ja-label="ゲームモード">
     <button type="button" data-mode="lab" aria-pressed="true" data-ja="実験モード">Lab</button>
     <button type="button" data-mode="puzzle" aria-pressed="false" data-ja="チャレンジ">Challenge</button>
-  </nav>
+  </div>
+  </div>
+  <div class="play-stack">
+  <div class="play-hud">
   <div class="toolbar">
     <div id="gates" role="group" aria-label="Logic gates" data-ja-label="論理ゲート">
       <button type="button" data-gate="WIRE" aria-pressed="true">WIRE</button>
@@ -47,7 +60,9 @@
     <span><span data-ja="手数">Moves</span> <strong id="moves"></strong></span>
     <span><span data-ja="最少手数">Best</span> <strong id="best-moves"></strong></span>
   </div>
-  <section class="board" aria-label="Interactive circuit" data-ja-label="操作できる回路" aria-describedby="readout">
+  </div>
+  <div class="play-stage">
+  <section class="board game-field" aria-label="Interactive circuit" data-ja-label="操作できる回路" aria-describedby="readout">
     <svg id="wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"></svg>
     <div id="nodes"></div>
     <div id="book" hidden>
@@ -59,10 +74,12 @@
       <span class="book-count" id="book-count">1 / 6</span>
     </div>
   </section>
-  <footer class="readout">
+  </div>
+  <div class="readout">
     <p id="readout" role="status" aria-live="polite"></p>
     <button type="button" id="advance" hidden></button>
-  </footer>
+  </div>
+  </div>
 </main>
 <footer class="feedback"><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a>
 <small>Copyright Momo.squirrels</small>
