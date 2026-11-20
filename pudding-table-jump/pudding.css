@@ -62,3 +62,9 @@
 .pudding-main #ready-card{max-width:340px;justify-self:center;padding:9px 14px;gap:3px;margin:0}
 .pudding-main #ready-card > strong{font-size:1.1rem}
 .pudding-main #ready-card .player-setup{margin-top:3px}
+
+main.pudding-main[data-board-layout] { width: 100%; }
+[data-board-layout] .play-stage > .scene { height: var(--board-height); }
+[data-board-layout] #scoreline { justify-content: flex-start; }
+[data-board-layout] .pudding-controls { margin-top: 8px; }
+[data-board-layout] .game-sidebar > #ready-card { order: 7; }

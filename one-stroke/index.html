@@ -6,11 +6,11 @@
 <title data-en-title="One-Stroke Drawing | Momo.squirrels">ひとふでがき | Momo.squirrels</title>
 <meta name="description" content="ひとふでがき。5段階のレベルで遊べる無料の思考パズル。">
 <link rel="canonical" href="https://yumemayu.github.io/momo-playz/one-stroke/">
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css?v=one-stroke">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="game.css?v=gesture-5">
+<link rel="stylesheet" href="game.css?v=shared-layout">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
@@ -26,17 +26,20 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="One-Stroke Drawing">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="one-stroke">
-<main class="puzzle-main">
+<main class="puzzle-main" data-board-layout data-game-toolbar>
+  <div class="game-sidebar">
   <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="One Stroke">ひとふでがき</span></h1>
   </header>
+  <div class="game-guide">
   <button type="button" class="guide-toggle" aria-expanded="true" aria-controls="pic-guide">🖼 <span data-en="How to play">あそびかた</span></button>
   <div class="pic-guide" id="pic-guide" role="img" aria-label="How to play One-Stroke Drawing in pictures"><figure><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M35 78V43L65 20l30 23v35H35l60-35H35" fill="none" stroke="#f272a7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35" cy="78" r="7" fill="#ffcf3f"/></svg><figcaption data-en="Choose your start">はじめの点をえらぶ</figcaption></figure><figure><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M35 78V43L65 20l30 23v35H35l60-35H35" fill="none" stroke="#f272a7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35" cy="78" r="7" fill="#ffcf3f"/></svg><figcaption data-en="Use each line once">すべての線を1回ずつ</figcaption></figure><figure><svg viewBox="0 0 120 120" aria-hidden="true"><path d="M35 78V43L65 20l30 23v35H35l60-35H35" fill="none" stroke="#f272a7" stroke-width="7" stroke-linecap="round" stroke-linejoin="round"/><circle cx="35" cy="78" r="7" fill="#ffcf3f"/></svg><figcaption data-en="Complete the picture!">絵をかんせい！</figcaption></figure></div>
+  </div>
   <fieldset class="difficulty">
     <legend data-en="Choose a level">レベルを えらぶ</legend>
     <div class="level-buttons" role="group" aria-label="レベル" data-en-label="Level">
@@ -47,12 +50,27 @@
       <button type="button" data-level="expert" aria-pressed="false"><span class="level-icon" aria-hidden="true">🌟</span><span data-en="Expert">ちょうむずかしい</span></button>
     </div>
   </fieldset>
+  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+  <section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
+      <span id="score-level"></span>
+      <div class="score-period" aria-label="Ranking period" role="group">
+        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
+        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
+      </div>
+    </div>
+    <p class="personal-best" id="personal-best"></p>
+    <ol id="score-list"></ol>
+  </section>
+  </div>
   <div class="play-stack">
-  <div class="stats">
+  <div class="play-hud"><div class="stats">
       <span><span data-en="Lines">かけた線</span> <output id="moves">0</output></span>
-      <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
+      <span><span data-en="Time">じかん</span> <output id="time">0</output><span data-en="s">秒</span></span>
     </div>
     <p class="turn-line" id="turn-line" role="status"></p>
+    </div>
     <div class="play-stage">
       <div class="puzzle-board game-field" id="board">
         <div class="puzzle-bar"><span id="puzzle-progress"></span><span id="puzzle-name"></span></div>
@@ -81,19 +99,6 @@
       <button class="stop-button" id="restart" type="button" hidden>↻ <span data-en="Restart">さいしょから</span></button>
     </div>
   </div>
-  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
-  <section class="score-board" aria-labelledby="board-title">
-    <div class="score-board-heading">
-      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
-      <span id="score-level"></span>
-      <div class="score-period" aria-label="Ranking period" role="group">
-        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
-        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
-      </div>
-    </div>
-    <p class="personal-best" id="personal-best"></p>
-    <ol id="score-list"></ol>
-  </section>
 <nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>

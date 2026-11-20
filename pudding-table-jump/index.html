@@ -16,20 +16,27 @@
 <link rel="stylesheet" href="../nickname.css">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
-<link rel="stylesheet" href="pudding.css?v=centered-art">
+<link rel="stylesheet" href="pudding.css?v=shared-layout">
 <script defer src="../language.js"></script>
 <script defer src="../nickname.js"></script>
 <script defer src="../stickers.js?v=daily-stickers"></script>
 <script defer src="../scores.js?v=gem-rewards"></script>
-<script defer src="../pwa.js?v=home-button"></script>
+<script defer src="../pwa.js?v=shared-toolbar"></script>
 <script defer src="pudding.js"></script>
 </head>
 <body data-game="pudding-table-jump">
-<main class="pudding-main">
+<main class="pudding-main" data-board-layout data-game-toolbar>
+  <div class="game-sidebar">
   <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span><span class="game-title-art" aria-hidden="true"></span>
     <h1 data-ja="プリンのテーブルジャンプ">Pudding Table Jump</h1>
   </header>
+    <div class="game-guide"><h2 data-ja="あそびかた">How to play</h2><ol>
+      <li data-ja="ボタンを長押しして力をためる">Hold to build jump power.</li>
+      <li data-ja="ボタンをはなしてジャンプ">Release to jump.</li>
+      <li data-ja="次のお皿に着地しよう">Land on the next plate.</li>
+    </ol></div>
+    <div class="music"><button id="sound" type="button" aria-label="Sound" aria-pressed="false">🔇</button></div>
   <div class="game-card" id="ready-card">
     <strong data-ja="はじめよう！">Ready to play?</strong>
     <div class="player-setup">
@@ -38,16 +45,6 @@
       <small id="player-hint" data-ja="ニックネームを入れて全3ステージをクリアすると、ランキングに載るよ。">Enter a nickname and clear all 3 stages to join the leaderboard.</small>
     </div>
   </div>
-  <div class="pudding-toolbar"><strong id="stage"></strong><button id="sound" type="button" aria-label="Sound" aria-pressed="false">🔇</button></div>
-  <div class="scene" id="scene" aria-hidden="true"><div class="window"></div><div id="plates"></div><span id="target" class="target-marker" hidden></span><canvas id="arc"></canvas><div class="pudding" id="pudding"><div class="body" id="body"><div class="caramel"></div><div class="face"><b>·</b> •ᴗ• <b>·</b></div></div></div></div>
-  <div class="pudding-controls">
-    <div id="scoreline"><span id="score"></span><span id="combo"></span></div>
-    <progress id="power" max="1" value="0" aria-label="Jump power"></progress>
-    <button class="play-primary" id="jump" type="button">Hold to jump</button>
-    <p id="message" role="status"></p>
-  </div>
-  <div class="game-card" id="score-card" hidden><strong id="final-score"></strong><p></p></div>
-  <button type="button" id="change-player" class="change-player" data-ja="ニックネームをかえる" hidden>Change nickname</button>
   <section class="score-board" aria-labelledby="board-title">
     <div class="score-board-heading">
       <h2 id="board-title"><span aria-hidden="true">🍮</span> <span data-ja="リーダーボード">Leaderboard</span></h2>
@@ -58,6 +55,19 @@
     </div>
     <ol id="score-list"></ol><p class="personal-best" id="personal-best"></p>
   </section>
+  </div>
+  <div class="play-stack">
+  <div class="play-hud"><div class="stats"><span><strong id="stage"></strong></span></div><div id="scoreline"><span id="score"></span><span id="combo"></span></div></div>
+  <div class="play-stage"><div class="scene game-field" id="scene" aria-hidden="true"><div class="window"></div><div id="plates"></div><span id="target" class="target-marker" hidden></span><canvas id="arc"></canvas><div class="pudding" id="pudding"><div class="body" id="body"><div class="caramel"></div><div class="face"><b>·</b> •ᴗ• <b>·</b></div></div></div></div>
+  </div>
+  <div class="pudding-controls">
+    <progress id="power" max="1" value="0" aria-label="Jump power"></progress>
+    <button class="play-primary" id="jump" type="button">Hold to jump</button>
+    <p id="message" role="status"></p>
+  </div>
+  <div class="game-card" id="score-card" hidden><strong id="final-score"></strong><p></p></div>
+  <button type="button" id="change-player" class="change-player" data-ja="ニックネームをかえる" hidden>Change nickname</button>
+  </div>
   <nav class="game-picker" aria-label="Choose a game" data-ja-label="ゲームをえらぶ">
     <a href="../" data-ja="ゲーム一覧">All games</a>
   </nav>
