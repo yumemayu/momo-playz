@@ -284,11 +284,14 @@
       readout.textContent = '💡 ' + pick(...bookPages[bookIndex].hint);
       return;
     }
-    const targets = stage.target.map((value, i) => outputs[i].name + ' = ' + value).join(' / ');
+    const targets = stage.target.map((value, i) => {
+      const state = value ? pick('on', 'つける') : pick('off', 'けす');
+      return outputs[i].name + ' ' + state + ' (' + value + ')';
+    }).join(' / ');
     goal.textContent = pick('Goal ', 'お題 ') + (index + 1) + '/' + puzzles.length + '  ·  ' + targets;
     readout.textContent = solved
       ? (index === puzzles.length - 1 ? pick('All ' + puzzles.length + ' circuits solved!', puzzles.length + '問すべてクリア！') : pick('Circuit solved!', 'クリア！'))
-      : pick('Set the inputs to match the target outputs.', 'スイッチを切り替えて、お題と同じ出力にしよう。');
+      : pick('Tap the buttons on the left until every light on the right matches the goal.', '左の丸いボタンを押して、右のランプをぜんぶお題どおりにしよう。');
     advance.textContent = index === puzzles.length - 1 ? pick('Play again', 'もういちど') : pick('Next circuit →', '次の回路 →');
   }
 
