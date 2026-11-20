@@ -315,3 +315,16 @@ body.game-wide .ms-main { position: fixed; inset: 0; z-index: 80; max-width: non
 body.game-wide .game-heading, body.game-wide .guide-toggle, body.game-wide .pic-guide, body.game-wide .level-buttons, body.game-wide .stats, body.game-wide .score-board, body.game-wide main nav, body.game-wide .ms-main fieldset { display: none; }
 body.game-wide .play-stack { width: 100%; align-items: center; }
 body.game-wide .ms-board { width: min(96vw, calc(100dvh - 255px)); margin-inline: auto; }
+
+[data-board-layout] .ms-board {
+  overflow: auto;
+  padding: 8px;
+}
+[data-board-layout] .ms-grid {
+  width: min(100%, max(300px, calc(var(--board-height) - 108px)));
+  margin-inline: auto;
+}
+[data-board-layout] .ms-status { margin-bottom: 6px; }
+[data-board-layout] .ms-face { width: 44px; height: 44px; }
+[data-board-layout] .ms-counter[hidden] { display: none; }
+[data-board-layout] .ms-mode { margin: 0 0 6px; }

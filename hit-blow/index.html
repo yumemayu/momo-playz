@@ -6,11 +6,11 @@
 <title data-en-title="Hit &amp; Blow | Momo.squirrels">ヒット＆ブロー | Momo.squirrels</title>
 <meta name="description" content="ひみつの4色のコードを推理して当てる、昔ながらのロジックゲーム。赤ピンは色も場所も合ってる、白ピンは色だけ合ってる。ブラウザで遊べる無料パズルゲームです。">
 <link rel="canonical" href="https://yumemayu.github.io/momo-playz/hit-blow/">
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
-<link rel="stylesheet" href="hit-blow.css">
+<link rel="stylesheet" href="hit-blow.css?v=shared-layout">
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
@@ -24,21 +24,24 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Hit &amp; Blow">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="hit-blow">
-<main class="hb-main">
+<main class="hb-main" data-board-layout data-game-toolbar>
+  <div class="game-sidebar">
   <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Hit &amp; Blow">ヒット＆ブロー</span></h1>
   </header>
-  <button type="button" class="guide-toggle" aria-expanded="true" aria-controls="pic-guide">🖼 <span data-en="How to play">あそびかた</span></button>
-  <div class="pic-guide" id="pic-guide" role="img" aria-label="How to play Hit & Blow in pictures">
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><circle cx="11" cy="21" r="8" fill="#ff6b81"/><circle cx="8.2" cy="18.2" r="2.24" fill="#ffffff" opacity=".75"/><circle cx="25" cy="21" r="8" fill="#4da3ff"/><circle cx="22.2" cy="18.2" r="2.24" fill="#ffffff" opacity=".75"/><circle cx="39" cy="21" r="8" fill="#ffd93d"/><circle cx="36.2" cy="18.2" r="2.24" fill="#ffffff" opacity=".75"/><circle cx="53" cy="21" r="8" fill="#6bcb77"/><circle cx="50.2" cy="18.2" r="2.24" fill="#ffffff" opacity=".75"/></svg><figcaption data-en="Pick 4 colors">4つの色をえらぶ</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><circle cx="18" cy="21" r="9" fill="#ff6b81"/><circle cx="14.85" cy="17.85" r="2.5200000000000005" fill="#ffffff" opacity=".75"/><circle cx="44" cy="21" r="8" fill="#ef476f"/><circle cx="41.5" cy="18.5" r="2.4" fill="#fff" opacity=".7"/></svg><figcaption data-en="Red pin: color & place">赤ピン＝色も場所も○</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><circle cx="18" cy="21" r="9" fill="#4da3ff"/><circle cx="14.85" cy="17.85" r="2.5200000000000005" fill="#ffffff" opacity=".75"/><circle cx="44" cy="21" r="8" fill="#ffffff" stroke="#c9b8c4" stroke-width="2"/><circle cx="41.5" cy="18.5" r="2.4" fill="#e8dde3"/></svg><figcaption data-en="White pin: color only">白ピン＝色は○・場所は×</figcaption></figure>
-  </div>
+    <section class="game-guide" aria-labelledby="game-guide-title">
+      <h2 id="game-guide-title" data-en="How to play">あそびかた</h2>
+      <ol>
+        <li data-en="Choose colors in order and submit">色を順番に選んで決定</li>
+        <li data-en="Red pins mean right color and place">赤ピンは色も場所も正解</li>
+        <li data-en="White pins mean right color, wrong place">白ピンは色だけ正解</li>
+      </ol>
+    </section>
   <fieldset class="difficulty">
     <legend data-en="Choose a level">レベルを えらぶ</legend>
     <div class="level-buttons" role="group" aria-label="レベル" data-en-label="Level">
@@ -47,12 +50,29 @@
       <button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-en="Hard">むずかしい</span></button>
     </div>
   </fieldset>
+  <p id="instructions" data-en="Hard allows repeated colors, and you get 8 guesses.">むずかしいは色の重なりありで、チャンスは8回まで。</p>
+  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+  <section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
+      <span id="score-level"></span>
+      <div class="score-period" aria-label="Ranking period" role="group">
+        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
+        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
+      </div>
+    </div>
+    <p class="personal-best" id="personal-best"></p>
+    <ol id="score-list"></ol>
+  </section>
+  </div>
   <div class="play-stack">
+    <div class="play-hud">
   <div class="stats hb-stats">
       <span><span data-en="Guesses">回数</span> <output id="guesses">0</output></span>
-      <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
+      <span><span data-en="Time">じかん</span> <output id="time">0</output><span data-en="s">秒</span></span>
     </div>
     <p class="turn-line" id="turn-line" role="status"></p>
+    </div>
     <div class="play-stage">
       <div class="hb-board game-field preview" id="board">
         <div class="hb-secret-row">
@@ -67,11 +87,6 @@
           <button type="button" class="hb-back" id="back">⌫ <span data-en="Undo">もどす</span></button>
           <button type="button" class="hb-check" id="check" data-en="Check!">決定！</button>
         </div>
-        <p class="hb-legend">
-          <span class="hb-clue hit"></span><span data-en="Red pin = right color, right place">赤ピン ＝ 色も 場所も 合ってる</span><br>
-          <span class="hb-clue blow"></span><span data-en="White pin = right color, wrong place">白ピン ＝ 色は 合ってるけど 場所が ちがう</span><br>
-          <span data-en="Which colors matched stays secret — think it through!">どの色が当たったかは ヒミツ。推理して当てよう！</span>
-        </p>
       </div>
       <div class="game-card" id="ready-card">
         <img src="../assets/game-cat.png" alt="" width="58" height="58">
@@ -94,20 +109,6 @@
       <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
     </div>
   </div>
-  <p id="instructions" data-en="Hard allows repeated colors, and you get 8 guesses.">むずかしいは色の重なりありで、チャンスは8回まで。</p>
-  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
-  <section class="score-board" aria-labelledby="board-title">
-    <div class="score-board-heading">
-      <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
-      <span id="score-level"></span>
-      <div class="score-period" aria-label="Ranking period" role="group">
-        <button type="button" data-period="weekly" aria-pressed="true" data-en="This week">今週</button>
-        <button type="button" data-period="all" aria-pressed="false" data-en="All time">すべて</button>
-      </div>
-    </div>
-    <p class="personal-best" id="personal-best"></p>
-    <ol id="score-list"></ol>
-  </section>
   <nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
