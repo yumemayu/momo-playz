@@ -358,3 +358,29 @@ body.game-wide .ms-main .play-hud .stats { display: flex; }
   font-size: .85rem;
   color: #482039;
 }
+
+@media (min-width: 900px) and (orientation: landscape), (min-width: 1101px) {
+  body:not(.game-wide) [data-board-layout] .play-stage > .ms-board {
+    display: grid;
+    grid-template:
+      "status status" auto
+      "grid modes" auto
+      "grid hint" auto
+      "grid ." minmax(0, 1fr)
+      / minmax(0, 1fr) clamp(132px, 16vw, 175px);
+    column-gap: 8px;
+  }
+  body:not(.game-wide) [data-board-layout] .ms-status { grid-area: status; }
+  body:not(.game-wide) [data-board-layout] .ms-grid-space { grid-area: grid; }
+  body:not(.game-wide) [data-board-layout] .ms-mode {
+    grid-area: modes;
+    flex-direction: column;
+    padding: 2px;
+  }
+  body:not(.game-wide) [data-board-layout] .ms-mode button {
+    min-height: 44px;
+    padding: 6px;
+    font-size: .95rem;
+  }
+  body:not(.game-wide) [data-board-layout] .ms-mode-hint { grid-area: hint; }
+}
