@@ -93,5 +93,16 @@
   width: min(100%, clamp(48px, calc(var(--board-height) - 255px), 90px));
 }
 [data-board-layout] .sl-blocks svg {
-  width: min(100%, calc(var(--board-height) - 210px));
+}
+[data-board-layout] .sl-opt > br {
+  display: none;
+}
+[data-board-layout] .sl-opt .letter {
+  margin-bottom: 2px;
+}
+[data-board-layout] .sl-blocks svg {
+  display: block;
+  width: min(100%, 340px);
+  height: calc((var(--board-height) - 175px) * 5 / 6);
+  margin-inline: auto;
 }
