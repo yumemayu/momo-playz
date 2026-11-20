@@ -35,7 +35,20 @@ button:focus-visible, a:focus-visible { outline: 2px solid var(--pink); outline-
 }
 button[aria-pressed="true"]:not(.input) { color: #ffffff; border-color: transparent; background: linear-gradient(135deg, #ff8fb8, #ffb52e); }
 .toolbar { justify-content: space-between; margin: 12px 0; }
-#goal { margin: 0; color: #e2711d; font-weight: 700; font-size: clamp(.78rem, 2.6vw, 1rem); }
+#goal {
+  align-self: center;
+  margin: 8px 8px 0;
+  padding: 6px 12px;
+  border: 1px solid #f3deab;
+  border-radius: 14px;
+  background: #fff8df;
+  color: #71461c;
+  font-weight: 700;
+  font-size: clamp(.78rem, 2.6vw, 1rem);
+  text-align: center;
+}
+.switch-main[data-board-layout] .play-stage > .board { display: flex; flex-direction: column; }
+.circuit-area { position: relative; flex: 1; min-height: 0; }
 .board {
   width: 100%;
   position: relative;
@@ -100,12 +113,13 @@ button[aria-pressed="true"]:not(.input) { color: #ffffff; border-color: transpar
 }
 .records strong { color: var(--signal); }
 .records select {
-  min-height: 36px;
-  padding-inline: 6px;
-  border: 1px solid var(--line);
-  border-radius: 6px;
-  background: var(--surface);
-  color: var(--text);
+  min-height: 44px;
+  min-width: 68px;
+  padding: 0 12px;
+  border: 2px solid #e9a8c1;
+  border-radius: 14px;
+  background: #fff;
+  color: inherit;
   font: inherit;
 }
 
@@ -246,3 +260,5 @@ button[aria-pressed="true"]:not(.input) { color: #ffffff; border-color: transpar
 /* Size circuit parts to the board so neighboring parts stay distinct on phones. */
 .switch-main .board { container-type: inline-size; }
 .switch-main .board .input { width: clamp(44px, 12cqi, 96px); }
+
+.records label { display: inline-flex; align-items: center; gap: 6px; font-weight: 700; }

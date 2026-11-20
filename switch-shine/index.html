@@ -6,7 +6,7 @@
   <title data-en-title="Switch &amp; Shine | Momo Games">ピカッとスイッチ | Momoゲーム集</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../game.css?v=level-cards">
-  <link rel="stylesheet" href="switch-shine.css?v=board-layout">
+  <link rel="stylesheet" href="switch-shine.css?v=board-goal">
   <link rel="stylesheet" href="../game-title-banner.css">
   <script defer src="../language.js"></script>
   <script defer src="switch-shine.js?v=play-guide"></script>
@@ -32,7 +32,7 @@
     <ol>
       <li data-ja="左の丸いボタンを押そう。押すたびに 0 と 1 が切り替わるよ。">Tap a round button on the left to switch between 0 and 1.</li>
       <li data-ja="右のランプを見よう。1 は点灯、0 は消灯。実験モードの「›」で次の回路を試せるよ。">Watch the lights on the right. 1 means on and 0 means off. In Lab, tap › to try the next circuit.</li>
-      <li data-ja="チャレンジでは、右のランプをぜんぶ「お題」と同じにできたらクリア！">In Challenge, match every light on the right to the goal above the board.</li>
+      <li data-ja="チャレンジでは、右のランプをぜんぶ「お題」と同じにできたらクリア！">In Challenge, match every light on the right to the goal at the top of the board.</li>
     </ol>
   </div>
   <div class="modes" role="group" aria-label="Game mode" data-ja-label="ゲームモード">
@@ -51,7 +51,6 @@
       <button type="button" data-gate="XOR" aria-pressed="false">XOR</button>
       <button type="button" data-gate="NAND" aria-pressed="false">NAND</button>
     </div>
-    <p id="goal" hidden></p>
     <button type="button" id="reset" data-ja="リセット">Reset</button>
   </div>
   <div id="records" class="records" hidden>
@@ -62,16 +61,19 @@
   </div>
   </div>
   <div class="play-stage">
-  <section class="board game-field" aria-label="Interactive circuit" data-ja-label="操作できる回路" aria-describedby="readout">
-    <svg id="wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"></svg>
-    <div id="nodes"></div>
-    <div id="book" hidden>
-      <svg id="book-wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"></svg>
-      <div id="book-nodes"></div>
-      <div class="book-name" id="book-name">WIRE</div>
-      <button type="button" class="pager prev" id="book-prev" aria-label="Previous page">‹</button>
-      <button type="button" class="pager next" id="book-next" aria-label="Next page">›</button>
-      <span class="book-count" id="book-count">1 / 6</span>
+  <section class="board game-field" aria-label="Interactive circuit" data-ja-label="操作できる回路" aria-describedby="goal readout">
+    <p id="goal" hidden></p>
+    <div class="circuit-area">
+      <svg id="wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"></svg>
+      <div id="nodes"></div>
+      <div id="book" hidden>
+        <svg id="book-wires" viewBox="0 0 1000 440" preserveAspectRatio="none" aria-hidden="true"></svg>
+        <div id="book-nodes"></div>
+        <div class="book-name" id="book-name">WIRE</div>
+        <button type="button" class="pager prev" id="book-prev" aria-label="Previous page">‹</button>
+        <button type="button" class="pager next" id="book-next" aria-label="Next page">›</button>
+        <span class="book-count" id="book-count">1 / 6</span>
+      </div>
     </div>
   </section>
   </div>
