@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Smiley Bun Catch by Momo.squirrels</title>
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
@@ -14,19 +14,22 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Smiley Bun Catch">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../soda-gems.js"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 <body data-game="buns">
-<main>
+<main data-board-layout data-game-toolbar>
+<div class="game-sidebar">
 <header class="game-heading game-title-banner"><span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1 data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</h1></header>
-<div class="bun-rules">
+<div class="music"><button id="music" type="button" aria-pressed="true">Music on</button><label><span data-ja="音量">Volume</span> <input id="volume" type="range" min="0" max="100" value="25"></label></div>
+<section class="game-guide" aria-labelledby="game-guide-title"><h2 id="game-guide-title" data-ja="あそびかた">How to play</h2><ol><li data-ja="リスを左右にうごかす">Move the squirrel left or right.</li><li data-ja="いい肉まんをキャッチ">Catch the good buns.</li><li data-ja="デビルとこげこげはよける">Avoid devil and burnt buns.</li></ol><div class="bun-rules">
   <span><img data-bun-icon="normal" src="../assets/game-bun.png" alt="" width="40" height="40" style="object-fit:contain"> <span data-ja="にこにこ">Smiley</span> <strong>+1</strong></span>
   <span><img data-bun-icon="twins" src="../assets/game-bun.png" alt="" width="48" height="40" style="object-fit:contain"> <span data-ja="ふたご">Twins</span> <strong>+2</strong></span>
   <span><img data-bun-icon="glitter" src="../assets/game-bun.png" alt="" width="40" height="40" style="object-fit:contain"> <span data-ja="キラキラ">Glitter</span> <strong>+5</strong></span>
   <span><img data-bun-icon="devil" src="../assets/devil-bun.png" alt="" width="40" height="40" style="object-fit:contain"> <span data-ja="デビル">Devil</span> <strong>−1</strong></span>
   <span><img data-bun-icon="burnt" src="../assets/game-bun.png" alt="" width="40" height="40" style="object-fit:contain"> <span data-ja="こげこげ">Burnt</span> <strong>−1</strong></span>
-</div>
+</div></section>
 <fieldset class="difficulty"><legend data-ja="レベルをえらぶ">Pick a level</legend>
 <div class="level-buttons">
 <button type="button" data-level="super-easy" aria-pressed="false"><span class="level-icon" aria-hidden="true">🌱</span><span data-ja="とてもかんたん">Super Easy</span></button>
@@ -35,27 +38,6 @@
 <button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-ja="むずかしい">Hard</span></button>
 <button type="button" data-level="impossible" aria-pressed="false"><span class="level-icon" aria-hidden="true">🚀</span><span data-ja="超むずかしい">Impossible</span></button>
 </div></fieldset>
-<div class="play-stack">
-  <div class="stats"><span><img class="stat-icon" src="../assets/game-bun.png" alt=""> <output id="score">0</output> <span data-ja="点">points</span></span><span><output id="time">30</output><span data-ja="秒">s left</span></span></div>
-<div class="play-stage">
-<canvas class="game-field" id="field" aria-label="Smiley Bun Catch play area" data-ja-label="にこにこ肉まんキャッチの画面">Smiley Bun Catch play area</canvas>
-<div class="game-card" id="ready-card">
-<img src="../assets/game-bun.png" alt="" width="72" height="72">
-<strong data-ja="はじめよう！">Ready to play?</strong>
-<div class="player-setup"><label for="nickname" data-ja="ニックネーム">Your nickname?</label><input id="nickname" maxlength="20" placeholder="e.g. Mochi" data-ja-placeholder="例：もち" autocomplete="off" aria-describedby="player-hint"><small id="player-hint" data-ja="ニックネームは任意です。保存すると、この端末にスコアが残ります。">A nickname is optional. Add one to save your score on this device.</small></div>
-</div>
-</div>
-<div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
-<span data-ja="スコア">Final score</span><strong id="final-score"></strong><p></p>
-</div>
-<button class="change-player" id="change-player" type="button" hidden data-ja="ニックネームをかえる">Change nickname</button>
-<div class="play-row"><button class="play-primary" id="start" type="button">Play</button><button class="stop-button" id="stop" type="button" hidden data-ja="■ ストップ">■ Stop</button></div>
-<div class="controls move-pad" role="group" aria-label="Move left and right">
-<button id="left" aria-label="Move left">←</button><button id="right" aria-label="Move right">→</button>
-</div>
-</div>
-<p id="result" role="status" data-ja="ドラッグするか、やじるしボタンで うごかしてね">Drag on the game or use the arrow buttons.</p>
-<div class="music"><button id="music" type="button" aria-pressed="true">Music on</button><label><span data-ja="音量">Volume</span> <input id="volume" type="range" min="0" max="100" value="25"></label></div>
 <section class="score-board" aria-labelledby="board-title">
 <div class="score-board-heading">
 <h2 id="board-title"><img src="../assets/game-bun.png" alt="" width="38" height="38"><span data-ja="ランキング">Leaderboard</span></h2>
@@ -68,6 +50,29 @@
 <p class="personal-best" id="personal-best"></p>
 <ol id="score-list"></ol>
 </section>
+</div>
+<div class="play-stack">
+<div class="play-hud">
+  <div class="stats"><span><img class="stat-icon" src="../assets/game-bun.png" alt=""> <output id="score">0</output> <span data-ja="点">points</span></span><span><span data-ja="残り">Time left</span> <output id="time">30</output><span data-ja="秒">s</span></span></div>
+</div>
+<div class="play-stage">
+<canvas class="game-field" id="field" aria-label="Smiley Bun Catch play area" data-ja-label="にこにこ肉まんキャッチの画面">Smiley Bun Catch play area</canvas>
+<div class="game-card" id="ready-card">
+<img src="../assets/game-bun.png" alt="" width="72" height="72">
+<strong data-ja="はじめよう！">Ready to play?</strong>
+<div class="player-setup"><label for="nickname" data-ja="ニックネーム">Your nickname?</label><input id="nickname" maxlength="20" placeholder="e.g. Mochi" data-ja-placeholder="例：もち" autocomplete="off" aria-describedby="player-hint"><small id="player-hint" data-ja="ニックネームは任意です。保存すると、この端末にスコアが残ります。">A nickname is optional. Add one to save your score on this device.</small></div>
+</div>
+</div>
+<div class="play-row"><button class="play-primary" id="start" type="button">Play</button><button class="stop-button" id="stop" type="button" hidden data-ja="■ ストップ">■ Stop</button></div>
+<div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
+<span data-ja="スコア">Final score</span><strong id="final-score"></strong><p></p>
+</div>
+<button class="change-player" id="change-player" type="button" hidden data-ja="ニックネームをかえる">Change nickname</button>
+<div class="controls move-pad" role="group" aria-label="Move left and right">
+<button id="left" aria-label="Move left">←</button><button id="right" aria-label="Move right">→</button>
+</div>
+<p id="result" role="status" data-ja="ドラッグするか、やじるしボタンで うごかしてね">Drag on the game or use the arrow buttons.</p>
+</div>
 <nav class="game-picker" aria-label="Choose a game">
 <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
 <a aria-current="page" href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
@@ -99,7 +104,7 @@
 <script src="../language.js"></script>
 <script src="../stickers.js?v=daily-stickers"></script>
 <script src="../nickname.js?v=compact"></script>
-<script src="../scores.js?v=gem-rewards"></script>
+<script src="../scores.js?v=shared-toolbar"></script>
 <script src="../catch.js?v=front-rim-snacks"></script>
 </body>
 <script src="../tap.js"></script>

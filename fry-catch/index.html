@@ -3,7 +3,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Fry Catch by Momo.squirrels</title>
-<link rel="stylesheet" href="../game.css?v=audio-near-title">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
@@ -14,9 +14,10 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Fry Catch">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../soda-gems.js"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 <body data-game="fries">
-<main data-board-layout>
+<main data-board-layout data-game-toolbar>
 <div class="game-sidebar">
 <header class="game-heading game-title-banner"><span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
@@ -53,7 +54,7 @@
 </div>
 <div class="play-stack">
   <div class="play-hud">
-  <div class="stats"><span><img class="stat-icon" src="../assets/game-fries.png" alt=""> <output id="score">0</output> <span data-ja="点">points</span></span><span><output id="time">30</output><span data-ja="秒">s left</span></span></div>
+  <div class="stats"><span><img class="stat-icon" src="../assets/game-fries.png" alt=""> <output id="score">0</output> <span data-ja="点">points</span></span><span><span data-ja="残り">Time left</span> <output id="time">30</output><span data-ja="秒">s</span></span></div>
 </div>
   <div class="play-stage">
 <canvas class="game-field" id="field" aria-label="Fry Catch play area" data-ja-label="フライキャッチの画面">Fry Catch play area</canvas>
@@ -105,7 +106,7 @@
 <script src="../language.js"></script>
 <script src="../stickers.js?v=daily-stickers"></script>
 <script src="../nickname.js?v=compact"></script>
-<script src="../scores.js?v=leaderboard-columns"></script>
+<script src="../scores.js?v=shared-toolbar"></script>
 <script src="../catch.js?v=front-rim-snacks"></script>
 <script src="../tap.js"></script>
 </html>

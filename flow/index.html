@@ -6,7 +6,7 @@
 <title data-en-title="Flow | Momo.squirrels">フローパズル | Momo.squirrels</title>
 <meta name="description" content="同じ色の丸を線でつないで、盤面を全部うめるパズル。ブラウザで遊べる無料パズルゲームです。">
 <link rel="canonical" href="https://yumemayu.github.io/momo-fry-catch/flow/">
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
@@ -14,7 +14,7 @@
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js?v=daily-stickers"></script>
 <script defer src="../nickname.js?v=compact"></script>
-<script defer src="../scores.js?v=gem-rewards"></script>
+<script defer src="../scores.js?v=shared-toolbar"></script>
 <script defer src="flow.js?v=fl-2"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
   <link rel="manifest" href="./manifest.webmanifest">
@@ -24,22 +24,20 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Flow">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../soda-gems.js"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="flow">
-<main class="flow-main">
-  <header class="game-heading game-title-banner">
+<main class="flow-main" data-board-layout data-game-toolbar>
+<div class="game-sidebar">
+<header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Flow">フローパズル</span></h1>
   </header>
-  <button type="button" class="guide-toggle" aria-expanded="true" aria-controls="pic-guide">🖼 <span data-en="How to play">あそびかた</span></button>
-  <div class="pic-guide" id="pic-guide" role="img" aria-label="How to play Flow in pictures">
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="10" y="4" width="44" height="38" rx="5" fill="#fdf7ff" stroke="#e3d5f2" stroke-width="1.6"/><circle cx="21" cy="14" r="5" fill="#ff6b9d"/><circle cx="43" cy="32" r="5" fill="#ff6b9d"/><circle cx="43" cy="14" r="4" fill="#4da3ff"/><circle cx="21" cy="32" r="4" fill="#ffd93d"/></svg><figcaption data-en="Match the colors">同じ色同士を</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="10" y="4" width="44" height="38" rx="5" fill="#fdf7ff" stroke="#e3d5f2" stroke-width="1.6"/><path d="M21 14 L43 14 L43 32" fill="none" stroke="#ff6b9d" stroke-width="6" stroke-linecap="round" stroke-linejoin="round" opacity=".55"/><circle cx="21" cy="14" r="5" fill="#ff6b9d"/><circle cx="43" cy="32" r="5" fill="#ff6b9d"/></svg><figcaption data-en="Drag to connect">ドラッグで線を引く</figcaption></figure>
-    <figure><svg viewBox="0 0 64 46" aria-hidden="true"><rect x="10" y="4" width="44" height="38" rx="5" fill="#fdf7ff" stroke="#e3d5f2" stroke-width="1.6"/><path d="M21 14 L43 14 L43 32" fill="none" stroke="#ff6b9d" stroke-width="9" opacity=".5" stroke-linejoin="round"/><path d="M21 32 L21 23 L32 23" fill="none" stroke="#ffd93d" stroke-width="9" opacity=".55" stroke-linejoin="round"/><path d="M43 23 L54 23" stroke="#4da3ff" stroke-width="9" opacity=".0"/><circle cx="21" cy="14" r="4.6" fill="#ff6b9d"/><circle cx="43" cy="32" r="4.6" fill="#ff6b9d"/><circle cx="43" cy="14" r="4" fill="#4da3ff"/><circle cx="32" cy="32" r="4" fill="#4da3ff"/><circle cx="21" cy="32" r="4" fill="#ffd93d"/><circle cx="32" cy="23" r="4" fill="#ffd93d"/></svg><figcaption data-en="Fill every square">全部のマスをうめる</figcaption></figure>
-  </div>
-  <fieldset class="difficulty">
+<div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+<section class="game-guide" aria-labelledby="game-guide-title"><h2 id="game-guide-title" data-ja="あそびかた">How to play</h2><ol><li data-ja="おなじ色の点をつなぐ">Connect dots of the same colour.</li><li data-ja="ほかの線と交差させない">Keep the lines from crossing.</li><li data-ja="すべてのマスをうめる">Fill every square.</li></ol></section>
+<fieldset class="difficulty">
     <legend data-en="Choose a level">レベルを えらぶ</legend>
     <div class="level-buttons" role="group" aria-label="レベル" data-en-label="Level">
       <button type="button" data-level="easy" aria-pressed="true"><span class="level-icon" aria-hidden="true">🌼</span><span data-en="Easy">かんたん</span></button>
@@ -47,37 +45,7 @@
       <button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-en="Hard">むずかしい</span></button>
     </div>
   </fieldset>
-  <div class="play-stack">
-  <div class="stats flow-stats">
-      <span><span data-en="Pipes">つながった色</span> <output id="pipes">0/5</output></span>
-      <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
-    </div>
-    <p class="turn-line" id="turn-line" role="status"></p>
-    <div class="play-stage">
-      <div class="flow-board game-field" id="board" role="group" aria-label="ボード" data-en-label="Board"></div>
-      <div class="game-card" id="ready-card">
-        <img src="../assets/game-cat.png" alt="" width="58" height="58">
-        <strong data-en="Ready to play?">はじめよう！</strong>
-        <div class="player-setup">
-          <label for="nickname" data-en="Nickname">ニックネーム</label>
-          <input id="nickname" maxlength="20" placeholder="例：もち" data-en-placeholder="e.g. Mochi" autocomplete="off" aria-describedby="player-hint">
-          <small id="player-hint" data-en="Enter a nickname to save your score on this device.">なまえを入れると、この端末にスコアが残るよ。</small>
-        </div>
-      </div>
-    </div>
-    <div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
-      <span data-en="Score">スコア</span><strong id="final-score"></strong>
-      <div class="flow-verdict" id="flow-verdict"></div>
-      <p></p>
-    </div>
-    <button type="button" id="change-player" class="change-player" data-en="Change nickname" hidden>ニックネームをかえる</button>
-    <div class="play-row">
-      <button class="play-primary" id="start" type="button">Play</button>
-      <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
-    </div>
-  </div>
-  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
-  <section class="score-board" aria-labelledby="board-title">
+<section class="score-board" aria-labelledby="board-title">
     <div class="score-board-heading">
       <h2 id="board-title"><img src="../assets/game-cat.png" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
       <span id="score-level"></span>
@@ -89,7 +57,39 @@
     <p class="personal-best" id="personal-best"></p>
     <ol id="score-list"></ol>
   </section>
-  <nav class="game-picker" aria-label="Choose a game">
+</div>
+<div class="play-stack">
+<div class="play-hud">
+  <div class="stats flow-stats">
+      <span><span data-en="Pipes">つながった色</span> <output id="pipes">0/5</output></span>
+      <span><span data-en="Time">じかん</span> <output id="time">0</output></span>
+    </div>
+    <p class="turn-line" id="turn-line" role="status"></p>
+    </div>
+<div class="play-stage">
+      <div class="flow-board game-field" id="board" role="group" aria-label="ボード" data-en-label="Board"></div>
+      <div class="game-card" id="ready-card">
+        <img src="../assets/game-cat.png" alt="" width="58" height="58">
+        <strong data-en="Ready to play?">はじめよう！</strong>
+        <div class="player-setup">
+          <label for="nickname" data-en="Nickname">ニックネーム</label>
+          <input id="nickname" maxlength="20" placeholder="例：もち" data-en-placeholder="e.g. Mochi" autocomplete="off" aria-describedby="player-hint">
+          <small id="player-hint" data-en="Enter a nickname to save your score on this device.">なまえを入れると、この端末にスコアが残るよ。</small>
+        </div>
+      </div>
+    </div>
+    <div class="play-row">
+      <button class="play-primary" id="start" type="button">Play</button>
+      <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
+    </div>
+<div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
+      <span data-en="Score">スコア</span><strong id="final-score"></strong>
+      <div class="flow-verdict" id="flow-verdict"></div>
+      <p></p>
+    </div>
+    <button type="button" id="change-player" class="change-player" data-en="Change nickname" hidden>ニックネームをかえる</button>
+  </div>
+<nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
     <a href="../bun-owner/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="肉まん屋オーナー">Bun Shop Owner</span></a>

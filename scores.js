@@ -340,7 +340,7 @@ const gameScores = (() => {
   const KEY = 'momo:coins';
   let awarded = false;
   const get = () => { try { return parseInt(localStorage.getItem(KEY) || '0', 10) || 0; } catch { return 0; } };
-  const set = v => { try { localStorage.setItem(KEY, String(v)); } catch { /* storage unavailable */ } };
+  const set = v => { try { localStorage.setItem(KEY, String(v)); window.dispatchEvent(new Event('momo-gems-change')); } catch { /* storage unavailable */ } };
   const style = document.createElement('style');
   style.textContent = '.coin-toast{position:fixed;left:50%;bottom:22px;transform:translate(-50%,20px);background:#f4edff;border:2.5px solid #bda2ec;color:#563980;font-weight:900;font-size:1.05rem;padding:10px 20px;border-radius:999px;box-shadow:0 6px 18px #8a65bb44;opacity:0;pointer-events:none;transition:opacity .3s ease,transform .3s ease;z-index:60}.coin-toast.show{opacity:1;transform:translate(-50%,0)}';
   document.head.append(style);

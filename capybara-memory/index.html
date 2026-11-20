@@ -4,7 +4,7 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>カピバラ神経衰弱 | Momo.squirrels</title>
-<link rel="stylesheet" href="../game.css?v=common-home">
+<link rel="stylesheet" href="../game.css?v=shared-toolbar">
 <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../game-title-banner.css">
 <link rel="stylesheet" href="../language.css">
@@ -12,7 +12,7 @@
 <script defer src="../language.js"></script>
 <script defer src="../stickers.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
-<script defer src="../scores.js?v=gem-rewards"></script>
+<script defer src="../scores.js?v=shared-toolbar"></script>
 <script defer src="memory.js"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
   <link rel="manifest" href="./manifest.webmanifest">
@@ -22,16 +22,20 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Capybara Memory Match">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../soda-gems.js"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="capybara-memory">
-<main class="memory-main">
-  <header class="game-heading game-title-banner">
+<main class="memory-main" data-board-layout data-game-toolbar>
+<div class="game-sidebar">
+<header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-en="Capybara">カピバラ</span><br><span data-en="Memory Match">しんけいすいじゃく</span></h1>
   </header>
-  <fieldset class="difficulty">
+<div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
+<section class="game-guide" aria-labelledby="game-guide-title"><h2 id="game-guide-title" data-ja="あそびかた">How to play</h2><ol><li data-ja="カードを2まいめくる">Flip two cards.</li><li data-ja="おなじカピバラをさがす">Find matching capybaras.</li><li data-ja="ぜんぶペアにしよう">Match every pair.</li></ol></section>
+<fieldset class="difficulty">
     <legend data-en="Choose a level">レベルを えらぶ</legend>
     <div class="level-buttons" role="group" aria-label="レベル" data-en-label="Level">
       <button type="button" data-level="easy" aria-pressed="true"><img class="level-art" src="../capybara-merge/pieces/4.webp" alt="" width="34" height="34"><span data-en="Easy · 6 pairs">かんたん ・ 6ペア</span></button>
@@ -39,37 +43,7 @@
       <button type="button" data-level="hard" aria-pressed="false"><img class="level-art" src="../capybara-merge/pieces/10.webp" alt="" width="34" height="34"><span data-en="Hard · 10 pairs">むずかしい ・ 10ペア</span></button>
     </div>
   </fieldset>
-  <div class="play-stack">
-  <div class="stats memory-stats">
-      <span><span class="memory-stat-label" data-en="Pairs">ペア</span> <output id="pairs">0/6</output></span>
-      <span><span class="memory-stat-label" data-en="Moves">てかず</span> <output id="moves">0</output></span>
-      <span><span class="memory-stat-label" data-en="Time">じかん</span> <output id="time">0:00</output></span>
-    </div>
-    <div class="play-stage">
-      <div class="memory-board game-field easy" id="board" role="group" aria-label="カード" data-en-label="Cards"></div>
-      <div class="game-card" id="ready-card">
-        <img src="../capybara-merge/pieces/5.webp" alt="" width="58" height="58">
-        <strong data-en="Ready to play?">はじめよう！</strong>
-        <div class="player-setup">
-          <label for="nickname" data-en="Nickname">ニックネーム</label>
-          <input id="nickname" maxlength="20" placeholder="例：もち" data-en-placeholder="e.g. Mochi" autocomplete="off" aria-describedby="player-hint">
-          <small id="player-hint" data-en="Enter a nickname to save your score on this device.">なまえを入れると、この端末にスコアが残るよ。</small>
-        </div>
-      </div>
-    </div>
-    <div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
-      <span data-en="Score">スコア</span><strong id="final-score"></strong>
-      <p></p>
-    </div>
-    <button type="button" id="change-player" class="change-player" data-en="Change nickname" hidden>ニックネームをかえる</button>
-    <div class="play-row">
-      <button class="play-primary" id="start" type="button">Play</button>
-      <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
-    </div>
-  </div>
-  <p id="instructions" data-en="Flip two cards. Match the same capybara stage to make a pair!">カードを 2まい めくって、おなじ カピバラを あてよう！</p>
-  <div class="music"><button id="sound" type="button" aria-pressed="true">おと ON</button></div>
-  <section class="score-board" aria-labelledby="board-title">
+<section class="score-board" aria-labelledby="board-title">
     <div class="score-board-heading">
       <h2 id="board-title"><img src="../capybara-merge/pieces/4.webp" alt="" width="24" height="24"><span data-en="Leaderboard">ランキング</span></h2>
       <span id="score-level"></span>
@@ -81,7 +55,39 @@
     <p class="personal-best" id="personal-best"></p>
     <ol id="score-list"></ol>
   </section>
-  <nav class="game-picker" aria-label="Choose a game">
+</div>
+<div class="play-stack">
+<div class="play-hud">
+  <div class="stats memory-stats">
+      <span><span class="memory-stat-label" data-en="Pairs">ペア</span> <output id="pairs">0/6</output></span>
+      <span><span class="memory-stat-label" data-en="Moves">てかず</span> <output id="moves">0</output></span>
+      <span><span class="memory-stat-label" data-en="Time">じかん</span> <output id="time">0:00</output></span>
+    </div>
+    </div>
+<div class="play-stage">
+      <div class="memory-board game-field easy" id="board" role="group" aria-label="カード" data-en-label="Cards"></div>
+      <div class="game-card" id="ready-card">
+        <img src="../capybara-merge/pieces/5.webp" alt="" width="58" height="58">
+        <strong data-en="Ready to play?">はじめよう！</strong>
+        <div class="player-setup">
+          <label for="nickname" data-en="Nickname">ニックネーム</label>
+          <input id="nickname" maxlength="20" placeholder="例：もち" data-en-placeholder="e.g. Mochi" autocomplete="off" aria-describedby="player-hint">
+          <small id="player-hint" data-en="Enter a nickname to save your score on this device.">なまえを入れると、この端末にスコアが残るよ。</small>
+        </div>
+      </div>
+    </div>
+    <div class="play-row">
+      <button class="play-primary" id="start" type="button">Play</button>
+      <button class="stop-button" id="stop" type="button" hidden>■ Stop</button>
+    </div>
+<div class="game-card" id="score-card" role="status" aria-atomic="true" hidden>
+      <span data-en="Score">スコア</span><strong id="final-score"></strong>
+      <p></p>
+    </div>
+    <button type="button" id="change-player" class="change-player" data-en="Change nickname" hidden>ニックネームをかえる</button>
+  </div>
+  
+<nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img class="game-art" src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
     <a href="../bun-owner/"><img class="game-art" src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="肉まん屋オーナー">Bun Shop Owner</span></a>

@@ -68,6 +68,65 @@ const momoRoot = new URL('./', document.currentScript.src);
     render();
     if (typeof momoLanguage !== 'undefined') momoLanguage.subscribe(render);
     document.body.prepend(link);
+
+    const game = document.querySelector('main[data-game-toolbar]');
+    if (!game) return;
+
+    const toolbar = document.createElement('div');
+    toolbar.className = 'momo-game-toolbar';
+    toolbar.append(link);
+
+    const music = game.querySelector('.music');
+    const volume = music?.querySelector('label:has(input[type="range"])');
+    if (music) toolbar.append(music);
+    let volumeToggle;
+    if (volume) {
+      const details = document.createElement('details');
+      volumeToggle = document.createElement('summary');
+      details.append(volumeToggle, volume);
+      music.append(details);
+    }
+
+    const gems = document.createElement('output');
+    gems.className = 'momo-gem-balance';
+    toolbar.append(gems);
+    document.body.prepend(toolbar);
+
+    const languages = document.querySelector('.momo-language');
+    const footer = document.querySelector('footer');
+    if (languages && footer) {
+      const row = document.createElement('div');
+      row.className = 'momo-footer-language';
+      for (const button of languages.querySelectorAll('button')) {
+        button.textContent = button.getAttribute('aria-label') || button.textContent;
+      }
+      row.append(languages);
+      footer.append(row);
+    }
+
+    function renderToolbar() {
+      const japanese = document.documentElement.lang === 'ja';
+      toolbar.setAttribute('role', 'group');
+      toolbar.setAttribute('aria-label', japanese ? 'ゲームの共通操作' : 'Game controls');
+      if (volumeToggle) {
+        volumeToggle.textContent = '⋯';
+        volumeToggle.setAttribute('aria-label', japanese ? '音量' : 'Volume');
+      }
+      let balance = 0;
+      try {
+        balance = typeof sodaGems === 'undefined'
+          ? Math.max(0, Number.parseInt(localStorage.getItem('momo:coins'), 10) || 0)
+          : sodaGems.balance();
+      } catch { /* Storage may be disabled. */ }
+      gems.textContent = '💎 ' + balance;
+      gems.setAttribute('aria-label', japanese ? balance + 'ジェム' : balance + ' gems');
+    }
+    if (typeof momoLanguage !== 'undefined') momoLanguage.subscribe(renderToolbar);
+    renderToolbar();
+    window.addEventListener('momo-gems-change', renderToolbar);
+    window.addEventListener('storage', renderToolbar);
+    window.addEventListener('pageshow', renderToolbar);
+
   };
 
   if (document.readyState === 'loading') document.addEventListener('DOMContentLoaded', add);
