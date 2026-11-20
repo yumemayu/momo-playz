@@ -4,14 +4,15 @@
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
   <title>Momo Piano</title>
-  <link rel="stylesheet" href="piano.css?v=song-cute2">
+  <link rel="stylesheet" href="../game.css?v=level-cards">
+  <link rel="stylesheet" href="piano.css?v=gingham-stage">
   <link rel="stylesheet" href="../game-picker.css">
 <link rel="stylesheet" href="../language.css">
   <script defer src="../language.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
   <script defer src="../stickers.js"></script>
-<script src="piano.js?v=wide-case" defer></script>
+<script src="piano.js?v=gingham-stage" defer></script>
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
   <meta name="mobile-web-app-capable" content="yes">
@@ -19,20 +20,22 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Momo Piano">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body>
-<main id="momo-piano-levels">
-  <aside class="piano-sidebar">
-    <div class="momo-art">
-      <h1 class="patch">MOM<span>O</span><br>PIANO</h1>
-      <div class="hero">
-        <span class="gem one" aria-hidden="true">✦</span>
-        <span class="gem two" aria-hidden="true">♪</span>
-        <span class="gem three" aria-hidden="true">★</span>
-        <span class="gem four" aria-hidden="true">♥</span>
-        <img class="avatar" src="momo-avatar.webp" width="350" height="350" alt="Momo">
-      </div>
+<main id="momo-piano-levels" data-board-layout data-game-toolbar>
+  <aside class="piano-sidebar game-sidebar">
+    <header class="piano-title game-heading">
+      <span aria-hidden="true">♫</span>
+      <h1>Momo Piano</h1>
+    </header>
+    <div class="game-guide">
+      <h2 data-ja="あそびかた">How to play</h2>
+      <ol>
+        <li data-ja="じゆうピアノでは、すきな鍵盤を押してみよう。">In Free Piano, tap any key to play a note.</li>
+        <li data-ja="おてほんピアノでは、曲とレベルをえらぼう。">In Guided Piano, choose a song and a level.</li>
+        <li data-ja="光る鍵盤を順番に押して、曲をひこう。">Follow the glowing keys to play the song.</li>
+      </ol>
     </div>
       <div class="choices" role="group" aria-label="モードを えらぶ">
         <button type="button" class="choice free cursor-interaction" data-action="free" aria-pressed="true"><span aria-hidden="true">♫</span> <span data-copy="free">じゆうピアノ</span></button>
@@ -40,6 +43,7 @@
       </div>
     <div class="level-buttons" role="group" aria-label="レベルを えらぶ" hidden></div>
   </aside>
+  <div class="play-stack">
   <section class="phone play select-song" data-screen="songs" hidden aria-labelledby="momo-song-heading">
     <h2 id="momo-song-heading" data-copy="selectSong">きょくを えらぶ</h2>
     <div class="song-list"></div>
@@ -73,6 +77,16 @@
         <button class="reset cursor-interaction" data-copy="reset" type="button">はじめから</button>
       </div>
   </section>
+  <details class="momo-nickname-panel" data-nickname-panel>
+  <summary>Set nickname</summary>
+  <form>
+    <label for="shared-nickname" data-ja="ニックネーム">Nickname</label>
+    <input id="shared-nickname" maxlength="20" autocomplete="off">
+    <button type="submit" data-ja="保存">Save</button>
+  </form>
+  <small role="status"></small>
+</details>
+  </div>
   <nav class="game-picker" aria-label="Choose a game">
     <a href="../fry-catch/"><img src="../assets/game-fries.png" alt="" width="40" height="40"><span data-ja="フライキャッチ">Fry Catch</span></a>
     <a href="../smiley-bun-catch/"><img src="../assets/game-bun.png" alt="" width="40" height="40"><span data-ja="にこにこ肉まんキャッチ">Smiley Bun Catch</span></a>
@@ -97,15 +111,7 @@
     <a class="picker-piano" href="../clicky-keys/"><span class="game-art" aria-hidden="true">⌨</span><span data-ja="カチカチキー">Clicky Keys</span></a>
   <a href="../switch-shine/"><span class="game-art" aria-hidden="true">⚡</span><span data-ja="ピカッとスイッチ">Switch &amp; Shine</span></a>
 </nav>
-<details class="momo-nickname-panel" data-nickname-panel>
-  <summary>Set nickname</summary>
-  <form>
-    <label for="shared-nickname" data-ja="ニックネーム">Nickname</label>
-    <input id="shared-nickname" maxlength="20" autocomplete="off">
-    <button type="submit" data-ja="保存">Save</button>
-  </form>
-  <small role="status"></small>
-</details>
+
 </main>
 <footer class="sticker-footer"><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a>
 <a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a></footer>
