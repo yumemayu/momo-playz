@@ -72,3 +72,8 @@ body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
   cursor: pointer;
 }
 #star-sound[aria-pressed="true"] { background: #e5d0ff; border-color: #7053ad; }
+#mood-story { max-width: 32em; margin: 8px auto; padding: 8px 14px; border-radius: 14px; background: #221643d6; line-height: 1.55; }
+.mood-choices { margin-block: auto; }
+.trail-star { cursor: default; }
+.trail-star:enabled { cursor: pointer; opacity: .82; }
+.trail-star.is-lit { opacity: 1; }
