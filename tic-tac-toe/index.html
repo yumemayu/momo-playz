@@ -6,14 +6,21 @@
   <title data-en-title="Tic-Tac-Toe">三目ならべ</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../game.css?v=level-cards">
-  <link rel="stylesheet" href="tic-tac-toe.css?v=celebration">
+  <link rel="stylesheet" href="tic-tac-toe.css?v=candy-start">
   <script defer src="../language.js"></script>
   <script defer src="../pwa.js?v=shared-toolbar"></script>
   <script defer src="tic-tac-toe.js?v=celebration"></script>
 </head>
 <body data-game="tic-tac-toe">
 <main class="ttt" data-game-toolbar>
-  <h1 data-ja="三目ならべ">Tic-Tac-Toe</h1>
+  <header class="ttt-heading">
+    <span class="ttt-brand">Momo Playz</span>
+    <h1 data-ja="三目ならべ">Tic-Tac-Toe</h1>
+    <div class="ttt-preview" aria-hidden="true">
+      <span class="ttt-piece" data-mark="o"></span>
+      <span class="ttt-piece" data-mark="x"></span>
+    </div>
+  </header>
   <div class="ttt-modes" role="group" aria-label="Game mode" data-ja-label="あそびかたをえらぶ">
     <button type="button" data-mode="solo" aria-pressed="true" data-ja="ひとり">1 player</button>
     <button type="button" data-mode="duo" aria-pressed="false" data-ja="ふたり対戦">2 players</button>
@@ -23,7 +30,7 @@
     <button type="button" data-level="normal" aria-pressed="true" data-ja="ふつう">Normal</button>
     <button type="button" data-level="hard" aria-pressed="false" data-ja="むずかしい">Hard</button>
   </div>
-  <p data-ja="たて・よこ・ななめに、同じマークを3つならべよう。">Get three in a row, column, or diagonal.</p>
+  <p class="ttt-rule" data-ja="たて・よこ・ななめに、同じマークを3つならべよう。">Get three in a row, column, or diagonal.</p>
   <p class="ttt-status" id="ttt-status" role="status"></p>
   <div class="ttt-board" id="ttt-board" role="group" aria-label="Tic-Tac-Toe board" data-ja-label="三目ならべの盤面"></div>
   <button type="button" id="ttt-reset" data-ja="もういちど">Play again</button>
