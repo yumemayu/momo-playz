@@ -14,6 +14,7 @@
   const trail = document.querySelector('#star-trail');
   const points = document.querySelector('#star-points');
   const line = document.querySelector('#star-line');
+  const moonRay = document.querySelector('#moon-ray');
   const play = document.querySelector('#play-stars');
   const back = document.querySelector('#pick-again');
   const sound = document.querySelector('#star-sound');
@@ -58,7 +59,7 @@
       tap: ['Tap in the same order', 'おぼえた順番に星をタップ'],
       retry: ['Want to see the stars again?', 'お手本をもういちど見てみよう'],
       next: ['The path is growing!', 'ひかりの道がのびたよ'],
-      complete: ['Your constellation is ready!', '星座ができた！']
+      complete: ['Your light reached the moon!', '月にひかりが とどいたよ！']
     };
     title.textContent = say(...messages[phase]);
     choices.hidden = !picking;
@@ -203,7 +204,12 @@
         line.setAttribute('points', sequence.slice(0, progress).map(i => mood.path[i].join(',')).join(' '));
         if (progress === round) {
           phase = round === targets.length ? 'complete' : 'next';
-          if (phase === 'complete') ring(mood.notes[0] + 12, audio?.destination, .045);
+          if (phase === 'complete') {
+            const [x, y] = mood.path[index];
+            moonRay.setAttribute('x1', x);
+            moonRay.setAttribute('y1', y);
+            ring(mood.notes[0] + 12, audio?.destination, .045);
+          }
         }
         render();
         if (phase !== 'tap') play.focus({ preventScroll: true });

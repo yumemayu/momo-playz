@@ -135,3 +135,39 @@ body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
 .story-star .my-stars img { display: block; }
 .mood-sky .mood-actions { margin-top: 10px; }
 .mood-sky .mood-actions button { border-color: #ebd4ff; }
+
+.trail-moon {
+  position: absolute;
+  left: 86%;
+  top: 9%;
+  translate: -50% -50%;
+  width: clamp(30px, 8vw, 48px);
+  aspect-ratio: 1;
+  border-radius: 50%;
+  box-shadow: inset -9px -5px #c0b1df;
+  opacity: .66;
+  pointer-events: none;
+}
+#moon-ray {
+  visibility: hidden;
+  stroke: #fff2b9;
+  stroke-width: 2px;
+  vector-effect: non-scaling-stroke;
+  stroke-linecap: round;
+}
+.star-trail[data-phase="complete"] #moon-ray { visibility: visible; }
+.star-trail[data-phase="complete"] .trail-moon {
+  box-shadow: inset -9px -5px #fff1b4;
+  filter: drop-shadow(0 0 11px #ffe1a7);
+  opacity: 1;
+}
+@media (prefers-reduced-motion: no-preference) {
+  .star-trail[data-phase="complete"] #moon-ray { stroke-dasharray: 1; animation: moon-ray .55s ease-out both; }
+  .star-trail[data-phase="complete"] .trail-moon { animation: moon-light .75s .35s ease-out both; }
+}
+@keyframes moon-ray { from { stroke-dashoffset: 1; } to { stroke-dashoffset: 0; } }
+@keyframes moon-light {
+  from { opacity: .55; filter: none; }
+  55% { filter: drop-shadow(0 0 22px #ffe1a7); }
+  to { opacity: 1; filter: drop-shadow(0 0 11px #ffe1a7); }
+}

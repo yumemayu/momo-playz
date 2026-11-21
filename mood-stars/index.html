@@ -6,10 +6,10 @@
   <title data-en-title="Mood Stars">きょうのきぶん星</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../game.css?v=level-cards">
-  <link rel="stylesheet" href="mood-stars.css?v=star-door">
+  <link rel="stylesheet" href="mood-stars.css?v=moon-trail">
   <script defer src="../language.js"></script>
   <script defer src="../pwa.js?v=shared-toolbar"></script>
-  <script defer src="mood-stars.js?v=star-door"></script>
+  <script defer src="mood-stars.js?v=moon-trail"></script>
 </head>
 <body data-game="mood-stars">
 <main data-game-toolbar class="mood-page">
@@ -29,7 +29,8 @@
       <span data-ja="星にふれて、ひかりの道へ">Touch the star to follow its light</span>
     </button>
     <div id="star-trail" class="star-trail" hidden>
-      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline id="star-line" points=""/></svg>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline id="star-line" points=""/><line id="moon-ray" x2="86" y2="9" pathLength="1"/></svg>
+      <span class="trail-moon" aria-hidden="true"></span>
       <div id="star-points"></div>
     </div>
     <p id="mood-story" hidden></p>
