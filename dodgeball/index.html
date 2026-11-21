@@ -7,13 +7,13 @@
 <link rel="stylesheet" href="../language.css">
 <link rel="stylesheet" href="../game.css?v=level-cards">
   <link rel="stylesheet" href="../game-picker.css">
-<link rel="stylesheet" href="dodgeball.css?v=nickname-card">
+<link rel="stylesheet" href="dodgeball.css?v=white-ball">
 <link rel="stylesheet" href="../game-title-banner.css">
 <script defer src="../language.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
 <script defer src="../stickers.js"></script>
 <script defer src="../scores.js?v=gem-rewards"></script>
-<script defer src="dodgeball.js?v=dodge-navigation"></script>
+<script defer src="dodgeball.js?v=character-levels"></script>
   <link rel="manifest" href="./manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
   <meta name="mobile-web-app-capable" content="yes">
@@ -34,13 +34,21 @@
   <a class="home-link" href="../" data-ja="← ゲーム集にもどる">← All games</a>
   <fieldset class="match-modes">
     <legend data-ja="モードをえらぶ">Game mode</legend>
-    <button type="button" data-mode="practice" data-level="practice" aria-pressed="false"><span data-ja="5球練習">5-shot practice</span></button>
-    <button type="button" data-mode="match" data-level="match" aria-pressed="true"><span data-ja="ねこと対戦">Play against Cat</span></button>
+    <button type="button" data-mode="practice" aria-pressed="false"><span data-ja="5球練習">5-shot practice</span></button>
+    <button type="button" data-mode="match" aria-pressed="true"><span data-ja="対戦">Match</span></button>
   </fieldset>
+<fieldset class="difficulty"><legend data-ja="レベルをえらぶ">Pick a level</legend>
+<div class="level-buttons">
+<button type="button" data-level="super-easy" aria-pressed="false"><span class="level-icon" aria-hidden="true">🌱</span><span data-ja="とてもかんたん">Super Easy</span></button>
+<button type="button" data-level="easy" aria-pressed="false"><span class="level-icon" aria-hidden="true">🌼</span><span data-ja="かんたん">Easy</span></button>
+<button type="button" data-level="medium" aria-pressed="true"><span class="level-icon" aria-hidden="true">🦋</span><span data-ja="ふつう">Medium</span></button>
+<button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-ja="むずかしい">Hard</span></button>
+<button type="button" data-level="impossible" aria-pressed="false"><span class="level-icon" aria-hidden="true">🚀</span><span data-ja="超むずかしい">Impossible</span></button>
+</div></fieldset>
   <div class="game-guide"><h2 data-ja="あそびかた">How to play</h2><ol>
     <li data-ja="コートをタップしてボールを投げよう">Tap the court to throw.</li>
     <li data-ja="ドラッグでねらって、はなして投げられるよ">Drag to aim, then release to throw.</li>
-    <li data-ja="ねこの番は左右にタップかスワイプでよけよう">On Cat’s turn, tap or swipe sideways to dodge.</li>
+    <li data-ja="相手の番は左右にタップかスワイプでよけよう">On your opponent’s turn, tap or swipe sideways to dodge.</li>
   </ol></div>
   <section class="score-board" aria-labelledby="board-title">
 <div class="score-board-heading">
@@ -58,19 +66,15 @@
   <div class="play-stack">
   <div class="play-hud">
   <div class="wide-bar"><button id="change-player" class="change-player" type="button" data-ja="ニックネームを設定">Set nickname</button><button type="button" class="wide-btn" data-wide-btn aria-pressed="false">⛶ Bigger</button></div>
-    <div class="score"><span data-ja="ヒット">Hits</span> <strong id="hits">0</strong> <span aria-hidden="true">·</span> <span data-ja="のこり">Left</span> <strong id="left">5</strong><span id="cat-score" hidden> · <span data-ja="ねこ">Cat</span> <strong id="cat-hits">0</strong></span></div>
+    <div class="score"><span data-ja="ヒット">Hits</span> <strong id="hits">0</strong> <span aria-hidden="true">·</span> <span data-ja="のこり">Left</span> <strong id="left">5</strong><span id="cat-score" hidden> · <span data-ja="あいて">Opponent</span> <strong id="cat-hits">0</strong></span></div>
   </div>
   <div class="play-stage">
     <section class="court game-field" aria-label="Dodgeball court" data-ja-label="ドッジボールコート">
     <div class="windows" aria-hidden="true"><i></i><i></i><i></i></div>
     <div class="floor" aria-hidden="true"></div>
     <div class="opponent" aria-hidden="true">
-      <img src="cat.webp" alt="" draggable="false">
-      <img class="hit-face" data-face="squint" src="cat-squint.webp?v=catchlights" alt="" draggable="false">
-      <img class="hit-face" data-face="surprised" src="cat-surprised.webp?v=catchlights" alt="" draggable="false">
-      <img class="hit-face" data-face="dizzy" src="cat-dizzy.webp?v=catchlights" alt="" draggable="false">
+      <img id="opponent-character" src="chicken.webp" alt="" draggable="false">
       <div class="impact">
-        <i class="glasses"></i>
         <div class="star-burst">
           <i class="spark">★</i><i class="spark">✦</i><i class="spark">★</i>
           <i class="spark">✧</i><i class="spark">★</i><i class="spark">✦</i>
@@ -83,7 +87,7 @@
     <div id="dodge-zone" class="dodge-zone" hidden>
       <span id="dodge-cue" class="dodge-cue" aria-hidden="true"></span>
       <div id="landing" class="landing" aria-hidden="true"></div>
-      <div id="paw-position" class="paw-position" aria-hidden="true">🐾</div>
+      <div id="paw-position" class="paw-position" aria-hidden="true"><img id="player-character" src="boba.webp" draggable="false" alt=""></div>
       <button type="button" data-dodge="-1" aria-label="Dodge left" data-ja-label="左によける">‹</button>
       <button type="button" data-dodge="1" aria-label="Dodge right" data-ja-label="右によける">›</button>
     </div>
