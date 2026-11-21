@@ -18,10 +18,23 @@
   const catHitsOutput = document.querySelector('#cat-hits');
   const dodgeZone = document.querySelector('#dodge-zone');
   const dodgeCue = document.querySelector('#dodge-cue');
-  const dodgeDuration = 1850;
+  const levels = {
+    'super-easy': { flight: 1550, pace: 730, range: 16, danger: 10 },
+    easy: { flight: 1070, pace: 610, range: 21, danger: 12 },
+    medium: { flight: 670, pace: 490, range: 24, danger: 14 },
+    hard: { flight: 520, pace: 380, range: 28, danger: 16, chicken: true },
+    impossible: { flight: 420, pace: 280, range: 32, danger: 17, chicken: true }
+  };
+  const moveSpeed = 48; // Percentage points of court width per second.
+  const levelButtons = document.querySelectorAll('[data-level]');
+  let level = 'medium';
+  let dodgeTarget = 50;
+  let lastDodgeUpdate = 0;
+  let dodgeDeadline = 0;
   const landing = document.querySelector('#landing');
   const paw = document.querySelector('#paw-position');
   const modeButtons = document.querySelectorAll('[data-mode]');
+  const settingsButtons = [...levelButtons, ...modeButtons];
   const dodgeButtons = document.querySelectorAll('[data-dodge]');
   let mode = 'match';
   let phase = 'throw';
@@ -41,12 +54,22 @@
   let reactionTimer;
   let audio;
 
-  function moveCat(time) {
-    if (phase === 'throw' && !reducedMotion.matches && finish.hidden && !opponent.classList.contains('hit')) {
-      catX = 50 + Math.sin(time / 650) * (21 + thrown * 1.8);
+  function updateDodgePosition(time) {
+    const current = Math.min(dodgeDeadline, Math.max(lastDodgeUpdate, time));
+    const distance = moveSpeed * (current - lastDodgeUpdate) / 1000;
+    playerPosition += clamp(dodgeTarget - playerPosition, -distance, distance);
+    lastDodgeUpdate = current;
+    paw.style.left = playerPosition + '%';
+    paw.style.setProperty('--dodge-lean', Math.sign(dodgeTarget - playerPosition) * 9 + 'deg');
+  }
+
+  function animateCourt(time) {
+    if (phase === 'dodge') updateDodgePosition(time);
+    if (phase === 'throw' && finish.hidden && !opponent.classList.contains('hit')) {
+      catX = 50 + Math.sin(time / levels[level].pace) * (levels[level].range + thrown * .8);
       opponent.style.left = catX + '%';
     }
-    requestAnimationFrame(moveCat);
+    requestAnimationFrame(animateCourt);
   }
 
   function tone(start, end, delay = 0) {
@@ -77,16 +100,16 @@
       return;
     }
     const outcome = hits === catHits ? say('Draw!', 'ひきわけ！')
-      : hits > catHits ? say('You win!', 'きみの勝ち！') : say('Cat wins!', 'ねこの勝ち！');
+      : hits > catHits ? say('You win!', 'きみの勝ち！') : say('Opponent wins!', 'あいての勝ち！');
     result.textContent = outcome + ' ' + hits + '–' + catHits;
   }
 
   function renderGuide() {
     if (phase === 'dodge') {
       dodgeCue.textContent = say('DODGE!  ←  →', 'よけて！  ←  →');
-      guide.textContent = say("Cat’s turn! Swipe or tap either side to dodge. Keyboard: ← →.", 'ねこの番！ 横にスワイプ、または左右をタップ。キーなら ← →。');
+      guide.textContent = say("Opponent’s turn! Swipe or tap either side to dodge. Keyboard: ← →.", 'あいての番！ 横にスワイプ、または左右をタップ。キーなら ← →。');
     } else if (phase === 'between') {
-      guide.textContent = dodgeResult === 'safe' ? say('Nice dodge!', 'よけた！') : say('Cat scores!', 'ねこに1点！');
+      guide.textContent = dodgeResult === 'safe' ? say('Nice dodge!', 'よけた！') : say('Opponent scores!', 'あいてに1点！');
     } else if (phase === 'finished') {
       guide.textContent = say('Play again for another round.', 'もういちど押すと、新しいラウンドが始まるよ。');
     } else {
@@ -102,8 +125,8 @@
 
   function dodge(direction) {
     if (phase !== 'dodge') return;
-    playerPosition = direction < 0 ? 23 : 77;
-    paw.style.left = playerPosition + '%';
+    updateDodgePosition(performance.now());
+    if (lastDodgeUpdate < dodgeDeadline) dodgeTarget = direction < 0 ? 18 : 82;
   }
 
   function delay(ms) {
@@ -112,10 +135,12 @@
 
   async function catTurn() {
     phase = 'dodge';
-    playerPosition = 50;
+    const { flight: dodgeDuration, danger } = levels[level];
+    playerPosition = dodgeTarget = 50;
     paw.style.left = '50%';
-    // Aim near the center lane so either side gives the player a safe escape.
-    const destination = 44 + Math.random() * 12;
+    paw.style.removeProperty('--dodge-lean');
+    const destination = 38 + Math.random() * 24;
+    landing.style.width = danger * 2 + '%';
     landing.style.left = destination + '%';
     dodgeZone.hidden = false;
     ball.classList.add('returning');
@@ -131,12 +156,15 @@
       { transform: `translate(${from}px, ${-height * .37}px) scale(.43)` },
       { transform: `translate(${to}px, 0) scale(.93)` }
     ], { duration: dodgeDuration, easing: 'ease-in', fill: 'both' });
+    lastDodgeUpdate = performance.now();
+    dodgeDeadline = lastDodgeUpdate + dodgeDuration;
     if (reducedMotion.matches) {
       flight.pause();
       flight.currentTime = 0;
       await delay(dodgeDuration);
     } else await flight.finished;
-    const hit = Math.abs(destination - playerPosition) < 12;
+    updateDodgePosition(dodgeDeadline);
+    const hit = Math.abs(destination - playerPosition) < danger;
     phase = 'between';
     dodgeOrigin = null;
     dodgeZone.hidden = true;
@@ -153,9 +181,9 @@
 
   async function throwBall(position) {
     if (busy || thrown >= total) return;
-    if (thrown === 0) gameScores.start(mode);
+    if (thrown === 0) gameScores.start(scoreLevel());
     busy = true;
-    modeButtons.forEach(button => { button.disabled = true; });
+    settingsButtons.forEach(button => { button.disabled = true; });
     ball.setAttribute('aria-disabled', 'true');
     aim.hidden = true;
     if (window.AudioContext) {
@@ -183,11 +211,11 @@
     opponent.classList.remove('hit');
     if (hit) {
       opponent.dataset.face = hitFaces[(hits - 1) % hitFaces.length];
-      // Restart the squash and glasses animations even on consecutive hits.
+      // Restart the reaction animation even on consecutive hits.
       void opponent.offsetWidth;
       opponent.classList.add('hit');
     }
-    reaction.textContent = hit ? say('Meow!', 'にゃっ！') : say('Missed me!', 'よけた！');
+    reaction.textContent = hit ? say('Oops!', 'わっ！') : say('Missed me!', 'よけた！');
     reaction.hidden = false;
     status.textContent = (hit ? say('Hit!', 'ヒット！') : say('Miss!', 'はずれ！')) + ' ' + say((total - thrown) + ' left.', 'のこり ' + (total - thrown) + ' 球。');
     if (hit) {
@@ -218,7 +246,7 @@
       await catTurn();
     }
     busy = false;
-    modeButtons.forEach(button => { button.disabled = false; });
+    settingsButtons.forEach(button => { button.disabled = false; });
     ball.removeAttribute('aria-disabled');
     if (thrown === total || (mode === 'match' && Math.max(hits, catHits) >= winningScore)) {
       phase = 'finished';
@@ -323,7 +351,7 @@
     if (!event.isPrimary || event.button !== 0 || event.target.closest('button')) return;
     dodgeOrigin = { x: event.clientX, id: event.pointerId, moved: false };
     dodgeZone.setPointerCapture(event.pointerId);
-    // A tap on either side works immediately, including on touch screens.
+    // A tap sets a destination without moving the player immediately.
     const rect = dodgeZone.getBoundingClientRect();
     const location = (event.clientX - rect.left) / rect.width;
     if (location < .4 || location > .6) dodge(location < .5 ? -1 : 1);
@@ -341,13 +369,31 @@
     event.preventDefault();
     dodge(event.key === 'ArrowLeft' ? -1 : 1);
   });
+  function scoreLevel() {
+    return mode === 'practice' ? 'practice-' + level : level;
+  }
+
+  function changeSettings() {
+    if (thrown > 0 && phase !== 'finished') gameScores.finish(hits, false);
+    gameScores.showLevel(scoreLevel());
+    resetRound();
+  }
+
+  levelButtons.forEach(button => button.addEventListener('click', () => {
+    if (level === button.dataset.level) return;
+    level = button.dataset.level;
+    levelButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+    const chicken = levels[level].chicken;
+    document.querySelector('#player-character').src = chicken ? 'chicken.webp' : 'boba.webp';
+    document.querySelector('#opponent-character').src = chicken ? 'boba.webp' : 'chicken.webp';
+    changeSettings();
+  }));
+
   modeButtons.forEach(button => button.addEventListener('click', () => {
     if (mode === button.dataset.mode) return;
     mode = button.dataset.mode;
     modeButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
-    if (thrown > 0 && phase !== 'finished') gameScores.finish(hits, false);
-    gameScores.showLevel(mode);
-    resetRound();
+    changeSettings();
   }));
   retry.addEventListener('click', resetRound);
   catScore.hidden = mode !== 'match';
@@ -355,7 +401,7 @@
     renderGuide();
     if (!finish.hidden) showResults();
   });
-  requestAnimationFrame(moveCat);
+  requestAnimationFrame(animateCourt);
 })();
 
 // Wide mode: fill the screen with the play area (Bigger button).
