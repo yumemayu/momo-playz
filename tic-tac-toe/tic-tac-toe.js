@@ -7,8 +7,11 @@
   const board = document.querySelector('#ttt-board');
   const status = document.querySelector('#ttt-status');
   const modes = [...document.querySelectorAll('[data-mode]')];
+  const levels = document.querySelector('#ttt-levels');
+  const levelButtons = [...levels.querySelectorAll('[data-level]')];
   const say = (en, ja) => momoLanguage.pick(en, ja);
   let mode = 'solo';
+  let level = 'normal';
   let turn = 'o';
   let marks = Array(9).fill('');
   let winningLine;
@@ -38,6 +41,8 @@
         ? (turn === 'o' ? say('Your turn · ○', 'きみのばん · ○') : say('Computer’s turn · ×', 'コンピューターのばん · ×'))
         : say(symbol(turn) + '’s turn', symbol(turn) + ' のばん');
     }
+    levels.hidden = !solo;
+    levelButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.level === level)));
     modes.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
     cells.forEach((cell, index) => {
       const mark = marks[index];
@@ -63,9 +68,42 @@
     return undefined;
   }
 
+  function optimalScore(board, player, depth) {
+    const win = lines.find(line => board[line[0]] && line.every(index => board[index] === board[line[0]]));
+    if (win) return board[win[0]] === 'x' ? 10 - depth : depth - 10;
+    const scores = board.flatMap((mark, index) => {
+      if (mark) return [];
+      board[index] = player;
+      const score = optimalScore(board, player === 'x' ? 'o' : 'x', depth + 1);
+      board[index] = '';
+      return [score];
+    });
+    if (!scores.length) return 0;
+    return player === 'x' ? Math.max(...scores) : Math.min(...scores);
+  }
+
+  function bestSquare(open) {
+    const board = marks.slice();
+    let best = -Infinity;
+    let choice = open[0];
+    for (const index of open) {
+      board[index] = 'x';
+      const score = optimalScore(board, 'o', 0);
+      board[index] = '';
+      if (score > best) {
+        best = score;
+        choice = index;
+      }
+    }
+    return choice;
+  }
+
   function cpuMove() {
     const open = marks.flatMap((mark, index) => mark ? [] : [index]);
-    const index = finishableSquare('x') ?? finishableSquare('o') ?? open[Math.floor(Math.random() * open.length)];
+    const random = open[Math.floor(Math.random() * open.length)];
+    let index = random;
+    if (level === 'normal') index = finishableSquare('x') ?? finishableSquare('o') ?? random;
+    if (level === 'hard') index = bestSquare(open);
     move(index);
   }
 
@@ -90,6 +128,11 @@
   modes.forEach(button => button.addEventListener('click', () => {
     if (mode === button.dataset.mode) return;
     mode = button.dataset.mode;
+    reset();
+  }));
+  levelButtons.forEach(button => button.addEventListener('click', () => {
+    if (mode !== 'solo' || level === button.dataset.level) return;
+    level = button.dataset.level;
     reset();
   }));
   document.querySelector('#ttt-reset').addEventListener('click', reset);

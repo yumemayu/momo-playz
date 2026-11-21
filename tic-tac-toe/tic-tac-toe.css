@@ -70,3 +70,5 @@ body[data-game="tic-tac-toe"] { background: #fff2f8; color: #543561; }
 }
 .ttt-cell.is-winner { background: #fff0ac; border-color: #a67a32; }
 .ttt button:focus-visible { outline: 3px solid #713b99; outline-offset: 2px; }
+.ttt-levels { margin-top: 8px; flex-wrap: wrap; }
+.ttt-levels[hidden] { display: none; }

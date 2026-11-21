@@ -6,10 +6,10 @@
   <title data-en-title="Tic-Tac-Toe">三目ならべ</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../game.css?v=level-cards">
-  <link rel="stylesheet" href="tic-tac-toe.css?v=candy-marks">
+  <link rel="stylesheet" href="tic-tac-toe.css?v=levels">
   <script defer src="../language.js"></script>
   <script defer src="../pwa.js?v=shared-toolbar"></script>
-  <script defer src="tic-tac-toe.js"></script>
+  <script defer src="tic-tac-toe.js?v=levels"></script>
 </head>
 <body data-game="tic-tac-toe">
 <main class="ttt" data-game-toolbar>
@@ -17,6 +17,11 @@
   <div class="ttt-modes" role="group" aria-label="Game mode" data-ja-label="あそびかたをえらぶ">
     <button type="button" data-mode="solo" aria-pressed="true" data-ja="ひとり">1 player</button>
     <button type="button" data-mode="duo" aria-pressed="false" data-ja="ふたり対戦">2 players</button>
+  </div>
+  <div id="ttt-levels" class="ttt-modes ttt-levels" role="group" aria-label="Computer difficulty" data-ja-label="コンピューターのつよさ">
+    <button type="button" data-level="easy" aria-pressed="false" data-ja="かんたん">Easy</button>
+    <button type="button" data-level="normal" aria-pressed="true" data-ja="ふつう">Normal</button>
+    <button type="button" data-level="hard" aria-pressed="false" data-ja="むずかしい">Hard</button>
   </div>
   <p data-ja="たて・よこ・ななめに、同じマークを3つならべよう。">Get three in a row, column, or diagonal.</p>
   <p class="ttt-status" id="ttt-status" role="status"></p>
