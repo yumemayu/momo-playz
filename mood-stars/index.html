@@ -1,0 +1,45 @@
+<!doctype html>
+<html lang="ja">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-en-title="Mood Stars">きょうのきぶん星</title>
+  <link rel="stylesheet" href="../language.css">
+  <link rel="stylesheet" href="../game.css?v=level-cards">
+  <link rel="stylesheet" href="mood-stars.css">
+  <script defer src="../language.js"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
+  <script defer src="mood-stars.js"></script>
+</head>
+<body data-game="mood-stars">
+<main data-game-toolbar class="mood-page">
+  <a class="home-link" href="../" data-ja="ホーム">Home</a>
+  <div class="music"><button id="star-sound" type="button" aria-pressed="false">Sound</button></div>
+  <h1 data-ja="きょうのきぶん星">Mood Stars</h1>
+  <section class="mood-sky" aria-labelledby="sky-title">
+    <h2 id="sky-title">Which stars feel like you today?</h2>
+    <div id="mood-choices" class="mood-choices">
+      <button type="button" data-mood="excited" aria-pressed="false"><img src="rainbow.webp" alt=""><span data-ja="わくわく">Excited</span></button>
+      <button type="button" data-mood="happy" aria-pressed="false"><img src="rose.webp" alt=""><span data-ja="うれしい">Happy</span></button>
+      <button type="button" data-mood="sad" aria-pressed="false"><img src="blue.webp" alt=""><span data-ja="しょんぼり">A little sad</span></button>
+      <button type="button" data-mood="dreamy" aria-pressed="false"><img src="crystal.webp" alt=""><span data-ja="ぼんやり">Dreamy</span></button>
+    </div>
+    <div id="my-stars" class="my-stars" aria-hidden="true"></div>
+    <div id="star-trail" class="star-trail" hidden>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline id="star-line" points=""/></svg>
+      <div id="star-points"></div>
+    </div>
+    <p id="mood-message" class="mood-message" role="status"></p>
+  </section>
+  <div class="mood-actions">
+    <button type="button" id="play-stars" disabled>Play with my stars</button>
+    <button type="button" id="pick-again" data-ja="星をえらぶ" hidden>Pick my stars</button>
+  </div>
+</main>
+<footer class="feedback">
+  <a href="../" data-ja="ゲーム集">All games</a>
+  <a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a>
+  <small>Copyright Momo.squirrels</small>
+</footer>
+</body>
+</html>
