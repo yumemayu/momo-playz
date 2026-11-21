@@ -6,10 +6,10 @@
   <title data-en-title="Mood Stars">きょうのきぶん星</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../game.css?v=level-cards">
-  <link rel="stylesheet" href="mood-stars.css?v=moon-sparkle">
+  <link rel="stylesheet" href="mood-stars.css?v=tap-star">
   <script defer src="../language.js"></script>
   <script defer src="../pwa.js?v=shared-toolbar"></script>
-  <script defer src="mood-stars.js?v=moon-sparkle"></script>
+  <script defer src="mood-stars.js?v=tap-star"></script>
 </head>
 <body data-game="mood-stars">
 <main data-game-toolbar class="mood-page">
@@ -26,7 +26,7 @@
     </div>
     <button id="story-star" class="story-star" type="button" hidden>
       <span id="my-stars" class="my-stars" aria-hidden="true"></span>
-      <span data-ja="星にふれて、ひかりの道へ">Touch the star to follow its light</span>
+      <span class="story-star-label" data-ja="この星をタップ →">Tap this star →</span>
     </button>
     <div id="star-trail" class="star-trail" hidden>
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">

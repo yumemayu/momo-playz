@@ -208,3 +208,22 @@ body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
   opacity: 0;
 }
 .star-trail.has-light-path .trail-moon { opacity: .9; }
+
+.story-star { gap: 10px; }
+.story-star-label {
+  display: grid;
+  place-items: center;
+  min-height: 44px;
+  padding-inline: 16px;
+  border-radius: 999px;
+  color: #34204e;
+  background: #ffedbd;
+  box-shadow: 0 2px 0 #c7a96c;
+}
+.story-star:active .story-star-label { translate: 0 1px; }
+@media (prefers-reduced-motion: no-preference) {
+  .story-star:not([hidden]) .my-stars img { animation: appear .38s ease-out, story-invite 3s .4s ease-in-out 2; }
+}
+@keyframes story-invite {
+  50% { transform: translateY(-4px); filter: drop-shadow(0 0 14px #f9d6ff); }
+}
