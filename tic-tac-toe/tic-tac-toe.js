@@ -1,0 +1,174 @@
+(() => {
+  const lines = [
+    [0,1,2], [3,4,5], [6,7,8],
+    [0,3,6], [1,4,7], [2,5,8],
+    [0,4,8], [2,4,6]
+  ];
+  const board = document.querySelector('#ttt-board');
+  const status = document.querySelector('#ttt-status');
+  const modes = [...document.querySelectorAll('[data-mode]')];
+  const ranking = document.querySelector('#ttt-ranking');
+  const pointsLabel = document.querySelector('#ttt-points');
+  const nickname = document.querySelector('#nickname');
+  const points = new Map();
+  const levels = document.querySelector('#ttt-levels');
+  const levelButtons = [...levels.querySelectorAll('[data-level]')];
+  const say = (en, ja) => momoLanguage.pick(en, ja);
+  let mode = 'solo';
+  let level = 'normal';
+  let turn = 'o';
+  let marks = Array(9).fill('');
+  let winningLine;
+  let winner;
+  let cpuTimer;
+  const cells = marks.map((_, index) => {
+    const cell = document.createElement('button');
+    cell.type = 'button';
+    cell.className = 'ttt-cell';
+    cell.addEventListener('click', () => {
+      if (!marks[index] && !winner && !(mode === 'solo' && turn === 'x')) move(index);
+    });
+    for (let i = 0; i < 3; i += 1) {
+      const sparkle = document.createElement('span');
+      sparkle.className = 'ttt-sparkle';
+      sparkle.textContent = '✦';
+      sparkle.setAttribute('aria-hidden', 'true');
+      cell.append(sparkle);
+    }
+    board.append(cell);
+    return cell;
+  });
+
+  function render() {
+    const solo = mode === 'solo';
+    const symbol = mark => mark === 'o' ? '○' : '×';
+    if (winner === 'draw') status.textContent = say('Draw!', 'ひきわけ！');
+    else if (winner) {
+      status.textContent = solo
+        ? (winner === 'o' ? say('You win!', 'きみのかち！') : say('Computer wins!', 'コンピューターのかち！'))
+        : say(symbol(winner) + ' wins!', symbol(winner) + ' のかち！');
+    } else {
+      status.textContent = solo
+        ? (turn === 'o' ? say('Your turn · ○', 'きみのばん · ○') : say('Computer’s turn · ×', 'コンピューターのばん · ×'))
+        : say(symbol(turn) + '’s turn', symbol(turn) + ' のばん');
+    }
+    status.dataset.result = winner === 'draw' ? 'draw' : winner ? 'win' : '';
+    levels.hidden = ranking.hidden = !solo;
+    const score = points.get(level) || 0;
+    pointsLabel.textContent = say('Current streak: ' + score + ' pts', 'れんぞくポイント：' + score + '点');
+    levelButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.level === level)));
+    modes.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
+    cells.forEach((cell, index) => {
+      const mark = marks[index];
+      cell.dataset.mark = mark;
+      cell.classList.toggle('is-winner', Boolean(winningLine?.includes(index)));
+      cell.setAttribute('aria-disabled', String(Boolean(mark || winner || (solo && turn === 'x'))));
+      const row = Math.floor(index / 3) + 1;
+      const column = index % 3 + 1;
+      cell.setAttribute('aria-label', say(
+        `Row ${row}, column ${column}: ${mark ? symbol(mark) : 'empty'}`,
+        `${row}行 ${column}列：${mark ? symbol(mark) : 'あき'}`
+      ));
+    });
+  }
+
+  function finishableSquare(mark) {
+    for (const line of lines) {
+      if (line.filter(index => marks[index] === mark).length === 2) {
+        const empty = line.find(index => !marks[index]);
+        if (empty !== undefined) return empty;
+      }
+    }
+    return undefined;
+  }
+
+  function optimalScore(board, player, depth) {
+    const win = lines.find(line => board[line[0]] && line.every(index => board[index] === board[line[0]]));
+    if (win) return board[win[0]] === 'x' ? 10 - depth : depth - 10;
+    const scores = board.flatMap((mark, index) => {
+      if (mark) return [];
+      board[index] = player;
+      const score = optimalScore(board, player === 'x' ? 'o' : 'x', depth + 1);
+      board[index] = '';
+      return [score];
+    });
+    if (!scores.length) return 0;
+    return player === 'x' ? Math.max(...scores) : Math.min(...scores);
+  }
+
+  function bestSquare(open) {
+    const board = marks.slice();
+    let best = -Infinity;
+    let choice = open[0];
+    for (const index of open) {
+      board[index] = 'x';
+      const score = optimalScore(board, 'o', 0);
+      board[index] = '';
+      if (score > best) {
+        best = score;
+        choice = index;
+      }
+    }
+    return choice;
+  }
+
+  function cpuMove() {
+    const open = marks.flatMap((mark, index) => mark ? [] : [index]);
+    const random = open[Math.floor(Math.random() * open.length)];
+    let index = random;
+    if (level === 'normal') index = finishableSquare('x') ?? finishableSquare('o') ?? random;
+    if (level === 'hard') index = bestSquare(open);
+    move(index);
+  }
+
+  function move(index) {
+    marks[index] = turn;
+    winningLine = lines.find(line => line.every(square => marks[square] === turn));
+    if (winningLine) winner = turn;
+    else if (marks.every(Boolean)) winner = 'draw';
+    else turn = turn === 'o' ? 'x' : 'o';
+    if (winner && mode === 'solo') {
+      const score = winner === 'x' ? 0 : (points.get(level) || 0) + (winner === 'o' ? 3 : 1);
+      points.set(level, score);
+      if (score > 0) {
+        gameScores.start(level);
+        gameScores.finish(score, true);
+      }
+    }
+    render();
+    if (!winner && mode === 'solo' && turn === 'x') cpuTimer = setTimeout(cpuMove, 340);
+  }
+
+  function reset() {
+    clearTimeout(cpuTimer);
+    marks = Array(9).fill('');
+    turn = 'o';
+    winner = winningLine = undefined;
+    render();
+  }
+
+  modes.forEach(button => button.addEventListener('click', () => {
+    if (mode === button.dataset.mode) return;
+    mode = button.dataset.mode;
+    reset();
+  }));
+  levelButtons.forEach(button => button.addEventListener('click', () => {
+    if (mode !== 'solo' || level === button.dataset.level) return;
+    level = button.dataset.level;
+    gameScores.showLevel(level);
+    reset();
+  }));
+  document.querySelector('#ttt-reset').addEventListener('click', reset);
+  nickname.addEventListener('input', () => {
+    points.clear();
+    render();
+  });
+  window.addEventListener('storage', event => {
+    if (momoNickname.matches(event.key)) {
+      points.clear();
+      render();
+    }
+  });
+  momoLanguage.subscribe(render);
+  render();
+})();

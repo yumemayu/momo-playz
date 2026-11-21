@@ -1,0 +1,68 @@
+<!doctype html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title data-en-title="Tic-Tac-Toe">三目ならべ</title>
+  <link rel="stylesheet" href="../language.css">
+  <link rel="stylesheet" href="../game.css?v=level-cards">
+  <link rel="stylesheet" href="tic-tac-toe.css?v=ranking">
+  <script defer src="../language.js"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
+  <script defer src="../nickname.js?v=compact"></script>
+  <script defer src="../scores.js?v=gem-rewards"></script>
+  <script defer src="tic-tac-toe.js?v=ranking"></script>
+</head>
+<body data-game="tic-tac-toe">
+<main class="ttt" data-game-toolbar>
+  <header class="ttt-heading">
+    <span class="ttt-brand">Momo Playz</span>
+    <h1 data-ja="三目ならべ">Tic-Tac-Toe</h1>
+    <div class="ttt-preview" aria-hidden="true">
+      <span class="ttt-piece" data-mark="o"></span>
+      <span class="ttt-piece" data-mark="x"></span>
+    </div>
+  </header>
+  <div class="ttt-modes" role="group" aria-label="Game mode" data-ja-label="あそびかたをえらぶ">
+    <button type="button" data-mode="solo" aria-pressed="true" data-ja="ひとり">1 player</button>
+    <button type="button" data-mode="duo" aria-pressed="false" data-ja="ふたり対戦">2 players</button>
+  </div>
+  <div id="ttt-levels" class="ttt-modes ttt-levels" role="group" aria-label="Computer difficulty" data-ja-label="コンピューターのつよさ">
+    <button type="button" data-level="easy" aria-pressed="false"><span data-ja="かんたん">Easy</span></button>
+    <button type="button" data-level="normal" aria-pressed="true"><span data-ja="ふつう">Normal</span></button>
+    <button type="button" data-level="hard" aria-pressed="false"><span data-ja="むずかしい">Hard</span></button>
+  </div>
+  <p class="ttt-rule" data-ja="たて・よこ・ななめに、同じマークを3つならべよう。">Get three in a row, column, or diagonal.</p>
+  <p class="ttt-status" id="ttt-status" role="status"></p>
+  <div class="ttt-board" id="ttt-board" role="group" aria-label="Tic-Tac-Toe board" data-ja-label="三目ならべの盤面"></div>
+  <button type="button" id="ttt-reset" data-ja="もういちど">Play again</button>
+  <section id="ttt-ranking" class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><span data-ja="ランキング">Leaderboard</span></h2>
+      <span id="score-level"></span>
+      <div class="score-period" role="group" aria-label="Ranking period" data-ja-label="ランキングの期間">
+        <button type="button" data-period="weekly" aria-pressed="true" data-ja="今週">This week</button>
+        <button type="button" data-period="all" aria-pressed="false" data-ja="すべて">All time</button>
+      </div>
+    </div>
+    <p id="ttt-points"></p>
+    <p data-ja="勝つと3点、引き分けで1点。負けると0点から。">Win for 3 points or draw for 1. A loss restarts your streak.</p>
+    <button type="button" id="change-player" class="change-player" data-ja="ニックネームを設定">Set nickname</button>
+    <div id="ready-card" hidden>
+      <div class="player-setup">
+        <label for="nickname" data-ja="ニックネーム（任意）">Nickname (optional)</label>
+        <input id="nickname" maxlength="20" autocomplete="off">
+      </div>
+    </div>
+    <p id="personal-best" class="personal-best"></p>
+    <ol id="score-list"></ol>
+    <div hidden><div id="score-card" hidden><strong id="final-score"></strong><p></p></div></div>
+  </section>
+</main>
+<footer class="feedback">
+  <a href="../" data-ja="ゲーム集">All games</a>
+  <a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a>
+  <small>Copyright Momo.squirrels</small>
+</footer>
+</body>
+</html>
