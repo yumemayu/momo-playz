@@ -6,10 +6,10 @@
   <title data-en-title="Mood Stars">きょうのきぶん星</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../game.css?v=level-cards">
-  <link rel="stylesheet" href="mood-stars.css?v=music-box">
+  <link rel="stylesheet" href="mood-stars.css?v=star-door">
   <script defer src="../language.js"></script>
   <script defer src="../pwa.js?v=shared-toolbar"></script>
-  <script defer src="mood-stars.js?v=music-box"></script>
+  <script defer src="mood-stars.js?v=star-door"></script>
 </head>
 <body data-game="mood-stars">
 <main data-game-toolbar class="mood-page">
@@ -24,19 +24,22 @@
       <button type="button" data-mood="sad" aria-pressed="false"><img src="blue.webp" alt=""></button>
       <button type="button" data-mood="dreamy" aria-pressed="false"><img src="crystal.webp" alt=""></button>
     </div>
-    <div id="my-stars" class="my-stars" aria-hidden="true"></div>
+    <button id="story-star" class="story-star" type="button" hidden>
+      <span id="my-stars" class="my-stars" aria-hidden="true"></span>
+      <span data-ja="星にふれて、ひかりの道へ">Touch the star to follow its light</span>
+    </button>
     <div id="star-trail" class="star-trail" hidden>
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline id="star-line" points=""/></svg>
       <div id="star-points"></div>
     </div>
     <p id="mood-story" hidden></p>
     <p id="mood-message" class="mood-message" role="status"></p>
-  </section>
-  <div class="mood-actions">
+    <div class="mood-actions">
     <button type="button" id="play-stars" disabled>Play with my stars</button>
     <button type="button" id="show-stars" data-ja="お手本をもういちど" hidden>Show me again</button>
-    <button type="button" id="pick-again" data-ja="星をえらぶ" hidden>Pick my stars</button>
-  </div>
+    <button type="button" id="pick-again" data-ja="星えらびにもどる" hidden>Back to the stars</button>
+    </div>
+  </section>
 </main>
 <footer class="feedback">
   <a href="../" data-ja="ゲーム集">All games</a>

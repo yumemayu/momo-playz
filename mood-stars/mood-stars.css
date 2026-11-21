@@ -113,3 +113,25 @@ body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
 @keyframes constellation-glow {
   50% { filter: brightness(1.65); }
 }
+
+.story-star {
+  display: grid;
+  justify-items: center;
+  align-content: center;
+  gap: 6px;
+  margin: auto 0 0;
+  padding: 8px 15px;
+  border: 1px solid #e9d3ff90;
+  border-radius: 20px;
+  background: #271747bf;
+  color: #fff8ff;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+  touch-action: manipulation;
+}
+.story-star:hover { background: #392259; }
+.story-star .my-stars { min-height: 0; }
+.story-star .my-stars img { display: block; }
+.mood-sky .mood-actions { margin-top: 10px; }
+.mood-sky .mood-actions button { border-color: #ebd4ff; }

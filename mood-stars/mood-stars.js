@@ -7,6 +7,7 @@
   };
   const choices = document.querySelector('#mood-choices');
   const buttons = [...choices.querySelectorAll('button')];
+  const storyStar = document.querySelector('#story-star');
   const myStars = document.querySelector('#my-stars');
   const title = document.querySelector('#sky-title');
   const message = document.querySelector('#mood-message');
@@ -53,20 +54,20 @@
     const messages = {
       pick: ['Which star catches your eye?', 'いま、なんとなく気になる星はどれ？'],
       story: ['A story from your star', 'えらんだ星のおはなし'],
-      watch: ['Watch the stars light up', 'ひかる順番をおぼえてね'],
+      watch: ['Watch the stars light up', '星がひかる順番を、ゆっくり見てね'],
       tap: ['Tap in the same order', 'おぼえた順番に星をタップ'],
       retry: ['Want to see the stars again?', 'お手本をもういちど見てみよう'],
-      next: ['You got it!', 'できた！'],
+      next: ['The path is growing!', 'ひかりの道がのびたよ'],
       complete: ['Your constellation is ready!', '星座ができた！']
     };
     title.textContent = say(...messages[phase]);
     choices.hidden = !picking;
-    myStars.hidden = story.hidden = phase !== 'story';
+    storyStar.hidden = story.hidden = phase !== 'story';
     if (phase === 'story') story.textContent = say(...moods[selected].story);
     trail.hidden = intro;
     back.hidden = picking;
     replay.hidden = phase !== 'tap' && phase !== 'retry';
-    play.hidden = !['story', 'next', 'complete'].includes(phase);
+    play.hidden = !['next', 'complete'].includes(phase);
     play.disabled = !selected;
     play.textContent = phase === 'complete' ? say('Play again', 'もういちど')
       : phase === 'next' ? say('Next round', 'つぎへ') : say('Play with my star', '星とあそぶ');
@@ -219,8 +220,9 @@
     myStars.replaceChildren(starImage(selected));
     ring(moods[selected].notes[0]);
     render();
-    play.focus({ preventScroll: true });
+    storyStar.focus({ preventScroll: true });
   }));
+  storyStar.addEventListener('click', start);
   play.addEventListener('click', start);
   replay.addEventListener('click', demonstrate);
   back.addEventListener('click', () => {
