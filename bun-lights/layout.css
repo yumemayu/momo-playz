@@ -1,0 +1,18 @@
+.bun-lights-main[data-board-layout] { padding-top: 64px; }
+.bun-lights-main .bun-modes { order: 3; display: grid; gap: 8px; }
+
+.bun-lights-main #bun { padding: 0; text-align: center; }
+.bun-lights-main #bun .bun-tray {
+  min-height: var(--board-height);
+  margin: 0;
+}
+.bun-lights-main #bun .bun-tray:not([data-night]) { padding-top: 80px; }
+
+.bun-lights-main .night-controls { flex-wrap: wrap; margin-top: 0; }
+.bun-lights-main .night-controls select {
+  min-height: 44px;
+  padding: 0 12px;
+  border: 2px solid #e9a8c1;
+  border-radius: 14px;
+  background: #fff;
+}
