@@ -1,0 +1,10 @@
+.clicky-keys-main[data-board-layout] { padding-top: 64px; }
+
+.clicky-keys-main #keys:not(.keys-wide) {
+  padding: clamp(8px, 2vw, 18px);
+}
+.clicky-keys-main #keys:not(.keys-wide) .key-case {
+  width: 100%;
+  max-width: none;
+}
+.clicky-keys-main #keys .choices button { min-height: 44px; }

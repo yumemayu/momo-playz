@@ -5,8 +5,10 @@
   <meta name="viewport" content="width=device-width,initial-scale=1">
   <title data-en-title="Clicky Keys">カチカチキー</title>
   <link rel="stylesheet" href="../language.css">
+  <link rel="stylesheet" href="../game.css?v=level-cards">
   <link rel="stylesheet" href="../toy-box/toys.css?v=space-wide2">
   <link rel="stylesheet" href="../game-title-banner.css">
+  <link rel="stylesheet" href="layout.css">
   <script defer src="../language.js"></script>
 <script defer src="../nickname.js?v=compact"></script>
 <link rel="stylesheet" href="../nickname.css?v=compact">
@@ -19,21 +21,29 @@
   <meta name="apple-mobile-web-app-status-bar-style" content="default">
   <meta name="apple-mobile-web-app-title" content="Clicky Keys">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
-  <script defer src="../pwa.js?v=home-button"></script>
+  <script defer src="../pwa.js?v=shared-toolbar"></script>
 </head>
 <body data-game="clicky-keys">
-<main>
-  <header><a href="../" data-ja="← ゲーム一覧">← Games</a></header>
+<main class="clicky-keys-main" data-board-layout data-game-toolbar>
+  <aside class="game-sidebar">
     <header class="game-heading game-title-banner">
     <span class="game-title-rainbow" aria-hidden="true">🌈</span>
     <span class="game-title-art" aria-hidden="true"></span>
     <h1><span data-ja="Momoのカチカチキーボード">Momo Clicky Keys</span></h1>
-  </header>
-<section id="keys" class="toy">
+    </header>
+    <div class="game-guide">
+      <h2 data-ja="あそびかた">How to play</h2>
+      <ol>
+        <li data-ja="キーを押すと、カチッと音が鳴るよ。">Tap a key to hear it click.</li>
+        <li data-ja="パソコンなら A〜Z とスペースキーも使えるよ。">On a computer, you can also use A–Z and Space.</li>
+        <li data-ja="れんらくちょうで、ひみつの言葉を見つけよう。">Try typing a secret word in the notebook.</li>
+      </ol>
+    </div>
+  </aside>
+  <div class="play-stack">
+  <section id="keys" class="toy play-stage" aria-label="Clicky Keys" data-ja-label="カチカチキー">
     <div class="keys-bar"><button type="button" id="keys-wide" aria-pressed="false">⛶ Bigger</button></div>
-    
-    <p data-ja="キーを押して、カチッ。パソコンなら A〜Z とスペースキーでも遊べるよ。">Tap the keys for a click. On a computer, try A–Z and Space.</p>
-    <div class="choices">
+    <div class="choices" role="group" aria-label="Keyboard style" data-ja-label="キーボードの見た目">
       <button type="button" data-palette="choco" aria-pressed="true" data-ja="チョコミント">Choco Mint</button>
       <button type="button" data-palette="pastel" aria-pressed="false" data-ja="いちごミルク">Strawberry Milk</button>
       <button type="button" data-palette="cat" aria-pressed="false" data-ja="ねこキー">Cat Keys</button>
@@ -55,7 +65,7 @@
       <div id="key-grid" role="group" aria-label="Keyboard" data-ja-label="キーボード"></div>
       <div class="bottom-row"><span aria-hidden="true">✿</span><button type="button" class="space keycap" aria-label="Space" data-ja-label="スペースキー"><span class="key-art" data-art="flower" aria-hidden="true"></span><span class="key-art" data-art="strawberry" aria-hidden="true"></span><small id="space-word" aria-hidden="true">HAPPINESS</small><span class="key-art" data-art="bow" aria-hidden="true"></span><span class="key-art" data-art="heart" aria-hidden="true"></span></button><span aria-hidden="true">✦</span></div>
     </div>
-    <div class="choices">
+    <div class="choices" role="group" aria-label="Key sound" data-ja-label="キーの音">
       <button type="button" data-sound="creamy" aria-pressed="true" data-ja="クリーミー">Creamy</button>
       <button type="button" data-sound="soft" aria-pressed="false" data-ja="やわらか">Soft</button>
       <button type="button" data-sound="cute" aria-pressed="false" data-ja="かわいい">Cute</button>
@@ -85,9 +95,10 @@
   </form>
   <small role="status"></small>
 </details>
+  </div>
+</main>
   <footer><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a>
 <a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a></footer>
-</main>
 <span id="sticker-announcement" class="toy-sr-only" role="status"></span>
 </body>
 </html>
