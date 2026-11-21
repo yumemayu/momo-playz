@@ -14,6 +14,8 @@
   const trail = document.querySelector('#star-trail');
   const points = document.querySelector('#star-points');
   const line = document.querySelector('#star-line');
+  const moonSparkles = document.querySelector('.moon-sparkles');
+  let moonTwinkle;
   const moonRay = document.querySelector('#moon-ray');
   const play = document.querySelector('#play-stars');
   const back = document.querySelector('#pick-again');
@@ -152,6 +154,7 @@
   async function demonstrate() {
     const current = ++playback;
     progress = 0;
+    moonTwinkle?.cancel();
     lit = undefined;
     phase = 'watch';
     syncMusic();
@@ -202,6 +205,14 @@
         }
         ring(mood.notes[index]);
         progress += 1;
+        moonTwinkle?.cancel();
+        if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+          moonTwinkle = moonSparkles.animate([
+            { opacity: 0, transform: 'scale(.84)' },
+            { opacity: 1, transform: 'scale(1)', offset: .26 },
+            { opacity: 0, transform: 'scale(1.14)' }
+          ], { duration: 850, easing: 'ease-out' });
+        }
         line.setAttribute('d', 'M ' + sequence.slice(0, progress).map(i => mood.path[i].join(',')).join(' L '));
         if (progress === round) {
           phase = round === targets.length ? 'complete' : 'next';
@@ -234,6 +245,7 @@
   replay.addEventListener('click', demonstrate);
   back.addEventListener('click', () => {
     playback += 1;
+    moonTwinkle?.cancel();
     phase = 'pick';
     syncMusic();
     targets = [];

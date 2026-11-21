@@ -194,3 +194,17 @@ body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
 @keyframes trail-breathe { from { opacity: .72; } to { opacity: 1; } }
 @keyframes trail-twinkle { from { opacity: .3; } to { opacity: .92; } }
 @keyframes sky-breathe { from { opacity: .52; } to { opacity: 1; } }
+
+.moon-sparkles {
+  position: absolute;
+  z-index: 1;
+  inset: -30% -75%;
+  display: grid;
+  place-items: center;
+  color: #fff6ce;
+  text-shadow: 0 0 5px #ffe098, 0 0 12px #ffc9e8;
+  font-size: clamp(.8rem, 2.5vw, 1.2rem);
+  white-space: nowrap;
+  opacity: 0;
+}
+.star-trail.has-light-path .trail-moon { opacity: .9; }
