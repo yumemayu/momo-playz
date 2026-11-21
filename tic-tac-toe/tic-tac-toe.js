@@ -7,6 +7,10 @@
   const board = document.querySelector('#ttt-board');
   const status = document.querySelector('#ttt-status');
   const modes = [...document.querySelectorAll('[data-mode]')];
+  const ranking = document.querySelector('#ttt-ranking');
+  const pointsLabel = document.querySelector('#ttt-points');
+  const nickname = document.querySelector('#nickname');
+  const points = new Map();
   const levels = document.querySelector('#ttt-levels');
   const levelButtons = [...levels.querySelectorAll('[data-level]')];
   const say = (en, ja) => momoLanguage.pick(en, ja);
@@ -49,7 +53,9 @@
         : say(symbol(turn) + '’s turn', symbol(turn) + ' のばん');
     }
     status.dataset.result = winner === 'draw' ? 'draw' : winner ? 'win' : '';
-    levels.hidden = !solo;
+    levels.hidden = ranking.hidden = !solo;
+    const score = points.get(level) || 0;
+    pointsLabel.textContent = say('Current streak: ' + score + ' pts', 'れんぞくポイント：' + score + '点');
     levelButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.level === level)));
     modes.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
     cells.forEach((cell, index) => {
@@ -121,6 +127,14 @@
     if (winningLine) winner = turn;
     else if (marks.every(Boolean)) winner = 'draw';
     else turn = turn === 'o' ? 'x' : 'o';
+    if (winner && mode === 'solo') {
+      const score = winner === 'x' ? 0 : (points.get(level) || 0) + (winner === 'o' ? 3 : 1);
+      points.set(level, score);
+      if (score > 0) {
+        gameScores.start(level);
+        gameScores.finish(score, true);
+      }
+    }
     render();
     if (!winner && mode === 'solo' && turn === 'x') cpuTimer = setTimeout(cpuMove, 340);
   }
@@ -141,9 +155,20 @@
   levelButtons.forEach(button => button.addEventListener('click', () => {
     if (mode !== 'solo' || level === button.dataset.level) return;
     level = button.dataset.level;
+    gameScores.showLevel(level);
     reset();
   }));
   document.querySelector('#ttt-reset').addEventListener('click', reset);
+  nickname.addEventListener('input', () => {
+    points.clear();
+    render();
+  });
+  window.addEventListener('storage', event => {
+    if (momoNickname.matches(event.key)) {
+      points.clear();
+      render();
+    }
+  });
   momoLanguage.subscribe(render);
   render();
 })();

@@ -109,3 +109,8 @@ body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe
 @keyframes ttt-draw {
   50% { transform: scale(1.08); }
 }
+
+#ttt-ranking { width: min(100%, 460px); margin: 20px auto 0; text-align: start; }
+#ttt-ranking[hidden] { display: none; }
+#ttt-ranking > p { margin-block: 8px; }
+#ttt-points { font-weight: 800; }
