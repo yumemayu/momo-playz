@@ -6,10 +6,10 @@
   <title data-en-title="Mood Stars">きょうのきぶん星</title>
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../game.css?v=level-cards">
-  <link rel="stylesheet" href="mood-stars.css?v=moon-trail">
+  <link rel="stylesheet" href="mood-stars.css?v=glowing-trail">
   <script defer src="../language.js"></script>
   <script defer src="../pwa.js?v=shared-toolbar"></script>
-  <script defer src="mood-stars.js?v=moon-trail"></script>
+  <script defer src="mood-stars.js?v=glowing-trail"></script>
 </head>
 <body data-game="mood-stars">
 <main data-game-toolbar class="mood-page">
@@ -29,7 +29,25 @@
       <span data-ja="星にふれて、ひかりの道へ">Touch the star to follow its light</span>
     </button>
     <div id="star-trail" class="star-trail" hidden>
-      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true"><polyline id="star-line" points=""/><line id="moon-ray" x2="86" y2="9" pathLength="1"/></svg>
+      <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="trail-colors" x1="0%" y1="100%" x2="100%" y2="0%">
+            <stop offset="0%" stop-color="#ffd6fa"/>
+            <stop offset="54%" stop-color="#dcddff"/>
+            <stop offset="100%" stop-color="#fff3bd"/>
+          </linearGradient>
+        </defs>
+        <polyline id="star-line" points=""/>
+        <line id="moon-ray" x2="86" y2="9" pathLength="1"/>
+        <g class="trail-dust">
+          <circle r=".58">
+            <animateMotion dur="6s" repeatCount="indefinite"><mpath href="#star-line"/></animateMotion>
+          </circle>
+          <circle r=".4">
+            <animateMotion dur="8s" begin="1.5s" repeatCount="indefinite"><mpath href="#star-line"/></animateMotion>
+          </circle>
+        </g>
+      </svg>
       <span class="trail-moon" aria-hidden="true"></span>
       <div id="star-points"></div>
     </div>

@@ -50,6 +50,7 @@
 
   function render() {
     trail.dataset.phase = phase;
+    trail.classList.toggle('has-light-path', progress > 1);
     const picking = phase === 'pick';
     const intro = picking || phase === 'story';
     const messages = {

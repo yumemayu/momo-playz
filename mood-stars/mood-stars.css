@@ -96,22 +96,14 @@ body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
   color: #fff3bd;
   text-shadow: 0 0 8px #ffd69d;
 }
-.star-trail[data-phase="complete"] polyline {
-  stroke: #fff2b9;
-  filter: drop-shadow(0 0 4px #ffd59a);
-}
 @media (prefers-reduced-motion: no-preference) {
   .my-stars:not([hidden])::after { animation: star-bloom .8s ease-out both; }
   .trail-star.is-lit::after { animation: star-bloom .45s ease-out both; }
-  .star-trail[data-phase="complete"] svg { animation: constellation-glow .95s ease-in-out; }
 }
 @keyframes star-bloom {
   from { scale: .55; opacity: 0; }
   45% { opacity: 1; }
   to { scale: 1.28; opacity: .9; }
-}
-@keyframes constellation-glow {
-  50% { filter: brightness(1.65); }
 }
 
 .story-star {
@@ -171,3 +163,34 @@ body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
   55% { filter: drop-shadow(0 0 22px #ffe1a7); }
   to { opacity: 1; filter: drop-shadow(0 0 11px #ffe1a7); }
 }
+
+
+#star-line, #moon-ray {
+  stroke: url("#trail-colors");
+  stroke-linecap: round;
+  stroke-linejoin: round;
+  filter: drop-shadow(0 0 2px #fff1d9) drop-shadow(0 0 5px #ffc5f4) drop-shadow(0 0 11px #bf9dff);
+}
+.trail-dust { visibility: hidden; fill: #fffaf0; filter: drop-shadow(0 0 4px #fff1cc); }
+.trail-dust circle { vector-effect: non-scaling-stroke; }
+.star-trail::before {
+  content: "";
+  position: absolute;
+  inset: -14% -6%;
+  pointer-events: none;
+  background: radial-gradient(ellipse at 76% 22%, #ffdca530, transparent 33%),
+    radial-gradient(ellipse at 27% 74%, #cb92ff29, transparent 58%);
+  opacity: 0;
+  transition: opacity .9s ease;
+}
+.star-trail[data-phase="complete"]::before { opacity: 1; }
+@media (prefers-reduced-motion: no-preference) {
+  .star-trail.has-light-path .trail-dust { visibility: visible; }
+  .trail-dust circle { animation: trail-twinkle 3.8s ease-in-out infinite alternate; }
+  .trail-dust circle + circle { animation-delay: -2s; }
+  .star-trail.has-light-path #star-line { animation: trail-breathe 5.5s ease-in-out infinite alternate; }
+  .star-trail[data-phase="complete"]::before { animation: sky-breathe 7s ease-in-out infinite alternate; }
+}
+@keyframes trail-breathe { from { opacity: .72; } to { opacity: 1; } }
+@keyframes trail-twinkle { from { opacity: .3; } to { opacity: .92; } }
+@keyframes sky-breathe { from { opacity: .52; } to { opacity: 1; } }
