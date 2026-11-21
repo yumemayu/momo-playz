@@ -1,0 +1,116 @@
+body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe9f4, #fbd1e7); color: #68354f; }
+.ttt { width: min(100%, 640px); margin: 0 auto; padding: 68px 16px 16px; text-align: center; }
+.ttt-brand { font-size: .9rem; font-weight: 800; color: #9c285a; }
+.ttt h1 { margin: 2px 0 6px; color: #ac225b; font-size: clamp(1.85rem, 7.5vw, 2.65rem); }
+.ttt-preview { display: flex; justify-content: center; gap: 6px; margin-bottom: 9px; }
+.ttt-piece { display: grid; place-items: center; width: 60px; aspect-ratio: 1; }
+.ttt-rule { margin: 9px 0; font-size: .87rem; }
+.ttt-modes { display: flex; justify-content: center; gap: 8px; }
+.ttt-modes button, #ttt-reset {
+  min-height: 44px;
+  padding: 6px 16px;
+  border: 1px solid #ad85bf;
+  border-radius: 22px;
+  background: #fff8e9;
+  box-shadow: 0 2px 0 #b46b9c2b;
+  color: inherit;
+  font: inherit;
+  font-weight: 700;
+  cursor: pointer;
+}
+.ttt-modes button[aria-pressed="true"] { background: #a9255d; border-color: #8c2050; color: #fff; }
+.ttt-levels button[aria-pressed="true"] { background: #704697; border-color: #603784; }
+#ttt-reset { background: #ffdfed; border-color: #be779e; }
+.ttt-status { width: fit-content; min-height: 1.6em; margin: 10px auto; padding: 4px 14px; border-radius: 22px; background: #fff6ed; font-size: 1.18rem; font-weight: 800; }
+.ttt-board {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 8px;
+  width: min(100%, 352px);
+  margin: 0 auto 16px;
+  padding: 10px;
+  border-radius: 22px;
+  background: linear-gradient(145deg, #f0dfff, #c8a4e9);
+  box-shadow: 0 5px 0 #c9a9dd, inset 0 1px 0 #fff;
+}
+.ttt-cell {
+  position: relative;
+  display: grid;
+  place-items: center;
+  aspect-ratio: 1;
+  padding: 0;
+  border: 2px solid #ceafd9;
+  border-radius: 15px;
+  background: #fff8e9;
+  box-shadow: inset 0 -3px #b58d6615;
+  cursor: pointer;
+}
+.ttt-cell[aria-disabled="true"] { cursor: default; }
+.ttt :is(.ttt-cell, .ttt-piece)[data-mark="o"]::before {
+  content: "";
+  width: 62%;
+  aspect-ratio: 1;
+  border-radius: 50%;
+  background: radial-gradient(circle at 34% 22%, #ffc4df, #f578ab 45%, #d43979 82%);
+  mask: radial-gradient(circle closest-side, transparent 53%, #000 56%);
+  box-shadow: inset 0 2px 2px #fff8, inset 0 -3px 4px #8a1d4b55;
+}
+.ttt :is(.ttt-cell, .ttt-piece)[data-mark="x"]::before,
+.ttt :is(.ttt-cell, .ttt-piece)[data-mark="x"]::after {
+  content: "";
+  grid-area: 1 / 1;
+  width: 66%;
+  height: 19%;
+  border-radius: 999px;
+  background: linear-gradient(#a5e8ff, #58c5ef 50%, #2889ba);
+  box-shadow: inset 0 2px 2px #fff8;
+  min-height: 8px;
+  rotate: 45deg;
+}
+.ttt :is(.ttt-cell, .ttt-piece)[data-mark="x"]::after { rotate: -45deg; }
+@media (prefers-reduced-motion: no-preference) {
+  .ttt-cell[data-mark]:not([data-mark=""]) { animation: ttt-place .22s ease-out; }
+}
+@keyframes ttt-place {
+  from { scale: .94; }
+  68% { scale: 1.04; }
+  to { scale: 1; }
+}
+.ttt-cell.is-winner { background: #fff0ac; border-color: #a67a32; }
+.ttt button:focus-visible { outline: 3px solid #713b99; outline-offset: 2px; }
+.ttt-levels { margin-top: 8px; flex-wrap: wrap; }
+.ttt-levels[hidden] { display: none; }
+
+.ttt-sparkle {
+  position: absolute;
+  z-index: 1;
+  inset: 50% auto auto 50%;
+  translate: -50% -50%;
+  color: #fff9cd;
+  text-shadow: 0 1px 4px #935b24;
+  font-size: clamp(.9rem, 3vw, 1.4rem);
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+}
+.ttt-sparkle:nth-child(1) { --x: -28px; --y: -43px; --tilt: -35deg; }
+.ttt-sparkle:nth-child(2) { --x: 11px; --y: -54px; --tilt: 20deg; }
+.ttt-sparkle:nth-child(3) { --x: 39px; --y: -28px; --tilt: 45deg; }
+.ttt-status[data-result="draw"] { color: #6c4287; }
+@media (prefers-reduced-motion: no-preference) {
+  .ttt-cell.is-winner .ttt-sparkle { animation: ttt-spark .65s .12s ease-out both; }
+  .ttt-status[data-result="draw"] { animation: ttt-draw .38s ease-out; }
+}
+@keyframes ttt-spark {
+  0% { opacity: 0; transform: scale(.3); }
+  28% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--x), var(--y)) rotate(var(--tilt)) scale(.7); }
+}
+@keyframes ttt-draw {
+  50% { transform: scale(1.08); }
+}
+
+#ttt-ranking { width: min(100%, 460px); margin: 20px auto 0; text-align: start; }
+#ttt-ranking[hidden] { display: none; }
+#ttt-ranking > p { margin-block: 8px; }
+#ttt-points { font-weight: 800; }
