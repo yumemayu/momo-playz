@@ -120,7 +120,7 @@
   const chips = document.querySelector('#cat-chips');
   if (!picker || !chips) return;
   const CAT = {
-    'cube-net': 'puzzle', 'cube-count': 'puzzle', 'shadow-light': 'puzzle',
+    'tic-tac-toe': 'puzzle', 'cube-net': 'puzzle', 'cube-count': 'puzzle', 'shadow-light': 'puzzle',
     'whats-next': 'puzzle', 'flow': 'puzzle', 'lights-out': 'puzzle',
     'hit-blow': 'puzzle', 'minesweeper': 'puzzle', 'hanoi': 'puzzle',
     'quoridor': 'puzzle', 'cat-trap': 'puzzle', 'one-stroke': 'puzzle',
