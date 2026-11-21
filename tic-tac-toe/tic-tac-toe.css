@@ -72,3 +72,32 @@ body[data-game="tic-tac-toe"] { background: #fff2f8; color: #543561; }
 .ttt button:focus-visible { outline: 3px solid #713b99; outline-offset: 2px; }
 .ttt-levels { margin-top: 8px; flex-wrap: wrap; }
 .ttt-levels[hidden] { display: none; }
+
+.ttt-sparkle {
+  position: absolute;
+  z-index: 1;
+  inset: 50% auto auto 50%;
+  translate: -50% -50%;
+  color: #fff9cd;
+  text-shadow: 0 1px 4px #935b24;
+  font-size: clamp(.9rem, 3vw, 1.4rem);
+  line-height: 1;
+  pointer-events: none;
+  opacity: 0;
+}
+.ttt-sparkle:nth-child(1) { --x: -28px; --y: -43px; --tilt: -35deg; }
+.ttt-sparkle:nth-child(2) { --x: 11px; --y: -54px; --tilt: 20deg; }
+.ttt-sparkle:nth-child(3) { --x: 39px; --y: -28px; --tilt: 45deg; }
+.ttt-status[data-result="draw"] { color: #6c4287; }
+@media (prefers-reduced-motion: no-preference) {
+  .ttt-cell.is-winner .ttt-sparkle { animation: ttt-spark .65s .12s ease-out both; }
+  .ttt-status[data-result="draw"] { animation: ttt-draw .38s ease-out; }
+}
+@keyframes ttt-spark {
+  0% { opacity: 0; transform: scale(.3); }
+  28% { opacity: 1; }
+  100% { opacity: 0; transform: translate(var(--x), var(--y)) rotate(var(--tilt)) scale(.7); }
+}
+@keyframes ttt-draw {
+  50% { transform: scale(1.08); }
+}

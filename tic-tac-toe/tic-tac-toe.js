@@ -24,6 +24,13 @@
     cell.addEventListener('click', () => {
       if (!marks[index] && !winner && !(mode === 'solo' && turn === 'x')) move(index);
     });
+    for (let i = 0; i < 3; i += 1) {
+      const sparkle = document.createElement('span');
+      sparkle.className = 'ttt-sparkle';
+      sparkle.textContent = '✦';
+      sparkle.setAttribute('aria-hidden', 'true');
+      cell.append(sparkle);
+    }
     board.append(cell);
     return cell;
   });
@@ -41,6 +48,7 @@
         ? (turn === 'o' ? say('Your turn · ○', 'きみのばん · ○') : say('Computer’s turn · ×', 'コンピューターのばん · ×'))
         : say(symbol(turn) + '’s turn', symbol(turn) + ' のばん');
     }
+    status.dataset.result = winner === 'draw' ? 'draw' : winner ? 'win' : '';
     levels.hidden = !solo;
     levelButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.level === level)));
     modes.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.mode === mode)));
