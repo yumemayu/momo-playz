@@ -43,7 +43,7 @@ body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
 .mood-actions button:disabled { opacity: .58; cursor: default; }
 .star-trail { position: relative; flex: 1; width: min(90%, 650px); min-height: 185px; margin: 8px auto; }
 .star-trail svg, #star-points { position: absolute; inset: 0; width: 100%; height: 100%; }
-.star-trail polyline { fill: none; stroke: #ffdfb3; stroke-width: 2px; vector-effect: non-scaling-stroke; }
+.star-trail #star-line { fill: none; stroke: #ffdfb3; stroke-width: 2px; vector-effect: non-scaling-stroke; }
 .trail-star { position: absolute; translate: -50% -50%; width: 54px; height: 54px; padding: 7px; opacity: .5; }
 .trail-star img { width: 100%; height: 100%; object-fit: contain; }
 .trail-star.is-next { opacity: 1; border-color: #ffefcc; box-shadow: 0 0 18px #ffd4a477; animation: glimmer var(--star-beat, 1.5s) infinite alternate; }

@@ -155,7 +155,7 @@
     lit = undefined;
     phase = 'watch';
     syncMusic();
-    line.setAttribute('points', '');
+    line.setAttribute('d', '');
     render();
     await wait(450);
     for (const index of sequence) {
@@ -202,7 +202,7 @@
         }
         ring(mood.notes[index]);
         progress += 1;
-        line.setAttribute('points', sequence.slice(0, progress).map(i => mood.path[i].join(',')).join(' '));
+        line.setAttribute('d', 'M ' + sequence.slice(0, progress).map(i => mood.path[i].join(',')).join(' L '));
         if (progress === round) {
           phase = round === targets.length ? 'complete' : 'next';
           if (phase === 'complete') {
