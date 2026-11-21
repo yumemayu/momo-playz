@@ -19,6 +19,13 @@
   const Audio = window.AudioContext || window.webkitAudioContext;
   let audio;
   let soundOn = false;
+  let musicTimer;
+  let musicGain;
+  const melody = [72, null, 76, 79, 77, null, 74, null,
+    69, null, 72, 76, 74, null, 67, null,
+    72, null, 76, 84, 81, null, 79, null,
+    77, null, 76, 74, 72, null, null, null];
+  let melodyStep = 0;
   const story = document.querySelector('#mood-story');
   const replay = document.querySelector('#show-stars');
   let selected;
@@ -40,6 +47,7 @@
   }
 
   function render() {
+    trail.dataset.phase = phase;
     const picking = phase === 'pick';
     const intro = picking || phase === 'story';
     const messages = {
@@ -63,7 +71,7 @@
     play.textContent = phase === 'complete' ? say('Play again', 'もういちど')
       : phase === 'next' ? say('Next round', 'つぎへ') : say('Play with my star', '星とあそぶ');
     sound.hidden = !Audio;
-    sound.textContent = say('Sound', 'おと');
+    sound.textContent = soundOn ? say('Music on', 'おと オン') : say('Music off', 'おと オフ');
     sound.setAttribute('aria-pressed', String(soundOn));
     message.textContent = phase === 'story'
       ? say(moodLabel(selected) + ' might be your mood.', 'きょうは「' + moodLabel(selected) + '」気分かも。')
@@ -81,29 +89,60 @@
     });
   }
 
-  function ring(note) {
+  function ring(note, destination = audio?.destination, volume = .09) {
     if (!soundOn || audio?.state !== 'running') return;
     const time = audio.currentTime;
-    const oscillator = audio.createOscillator();
     const gain = audio.createGain();
-    oscillator.frequency.value = 440 * 2 ** ((note - 69) / 12);
-    gain.gain.setValueAtTime(.001, time);
-    gain.gain.exponentialRampToValueAtTime(.09, time + .025);
-    gain.gain.exponentialRampToValueAtTime(.001, time + .42);
-    oscillator.connect(gain).connect(audio.destination);
-    oscillator.start(time);
-    oscillator.stop(time + .42);
+    gain.gain.setValueAtTime(.0001, time);
+    gain.gain.exponentialRampToValueAtTime(volume, time + .012);
+    gain.gain.exponentialRampToValueAtTime(.0001, time + .8);
+    gain.connect(destination);
+    for (const [harmonic, strength] of [[1, 1], [2, .22], [3, .08]]) {
+      const oscillator = audio.createOscillator();
+      const partial = audio.createGain();
+      oscillator.frequency.value = harmonic * 440 * 2 ** ((note - 69) / 12);
+      partial.gain.value = strength;
+      oscillator.connect(partial).connect(gain);
+      oscillator.start(time);
+      oscillator.stop(time + .8);
+      if (harmonic === 1) oscillator.onended = () => gain.disconnect();
+    }
   }
 
-  sound.addEventListener('click', () => {
+  function syncMusic() {
+    clearInterval(musicTimer);
+    if (!soundOn || !musicGain) return;
+    const audible = !document.hidden;
+    musicGain.gain.value = audible ? (phase === 'watch' ? .12 : .36) : 0;
+    if (!audible) return;
+    musicTimer = setInterval(() => {
+      const note = melody[melodyStep];
+      if (note !== null) ring(note, musicGain, .065);
+      melodyStep = (melodyStep + 1) % melody.length;
+    }, 520);
+  }
+
+  sound.addEventListener('click', async () => {
     if (!Audio) return;
     soundOn = !soundOn;
     render();
     if (soundOn) {
-      audio ??= new Audio();
-      audio.resume().then(() => ring(72)).catch(() => {});
+      try {
+        audio ??= new Audio();
+        if (!musicGain) {
+          musicGain = audio.createGain();
+          musicGain.connect(audio.destination);
+        }
+        await audio.resume();
+      } catch {
+        soundOn = false;
+        render();
+      }
     }
+    if (musicGain && !soundOn) musicGain.gain.value = 0;
+    syncMusic();
   });
+  document.addEventListener('visibilitychange', syncMusic);
 
   const wait = ms => new Promise(resolve => setTimeout(resolve, ms));
 
@@ -112,6 +151,7 @@
     progress = 0;
     lit = undefined;
     phase = 'watch';
+    syncMusic();
     line.setAttribute('points', '');
     render();
     await wait(450);
@@ -128,6 +168,7 @@
     }
     if (current !== playback) return;
     phase = 'tap';
+    syncMusic();
     render();
     targets[0].focus({ preventScroll: true });
   }
@@ -159,7 +200,10 @@
         ring(mood.notes[index]);
         progress += 1;
         line.setAttribute('points', sequence.slice(0, progress).map(i => mood.path[i].join(',')).join(' '));
-        if (progress === round) phase = round === targets.length ? 'complete' : 'next';
+        if (progress === round) {
+          phase = round === targets.length ? 'complete' : 'next';
+          if (phase === 'complete') ring(mood.notes[0] + 12, audio?.destination, .045);
+        }
         render();
         if (phase !== 'tap') play.focus({ preventScroll: true });
       });
@@ -173,6 +217,7 @@
     selected = button.dataset.mood;
     phase = 'story';
     myStars.replaceChildren(starImage(selected));
+    ring(moods[selected].notes[0]);
     render();
     play.focus({ preventScroll: true });
   }));
@@ -181,6 +226,7 @@
   back.addEventListener('click', () => {
     playback += 1;
     phase = 'pick';
+    syncMusic();
     targets = [];
     render();
     (buttons.find(button => button.dataset.mood === selected) ?? buttons[0]).focus({ preventScroll: true });

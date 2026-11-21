@@ -77,3 +77,39 @@ body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
 .trail-star { cursor: default; }
 .trail-star:enabled { cursor: pointer; opacity: .82; }
 .trail-star.is-lit { opacity: 1; }
+
+.my-stars { position: relative; }
+.my-stars:not([hidden])::after {
+  content: "✦  ·  ✧  ·  ✦";
+  position: absolute;
+  inset: 50% auto auto 50%;
+  translate: -50% -50%;
+  width: max-content;
+  color: #fff1c8;
+  text-shadow: 0 0 12px #ffcce8;
+  pointer-events: none;
+}
+.trail-star.is-lit::after {
+  content: "✧";
+  position: absolute;
+  inset: 1px 2px auto auto;
+  color: #fff3bd;
+  text-shadow: 0 0 8px #ffd69d;
+}
+.star-trail[data-phase="complete"] polyline {
+  stroke: #fff2b9;
+  filter: drop-shadow(0 0 4px #ffd59a);
+}
+@media (prefers-reduced-motion: no-preference) {
+  .my-stars:not([hidden])::after { animation: star-bloom .8s ease-out both; }
+  .trail-star.is-lit::after { animation: star-bloom .45s ease-out both; }
+  .star-trail[data-phase="complete"] svg { animation: constellation-glow .95s ease-in-out; }
+}
+@keyframes star-bloom {
+  from { scale: .55; opacity: 0; }
+  45% { opacity: 1; }
+  to { scale: 1.28; opacity: .9; }
+}
+@keyframes constellation-glow {
+  50% { filter: brightness(1.65); }
+}
