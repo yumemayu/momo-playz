@@ -1,5 +1,5 @@
 body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe9f4, #fbd1e7); color: #68354f; }
-.ttt { width: min(100%, 640px); margin: 0 auto; padding: 68px 16px 16px; text-align: center; }
+.ttt { display: block; width: min(100%, 640px); margin: 0 auto; padding: 68px 16px 16px; text-align: center; }
 .ttt-brand { font-size: .9rem; font-weight: 800; color: #9c285a; }
 .ttt h1 { margin: 2px 0 6px; color: #ac225b; font-size: clamp(1.85rem, 7.5vw, 2.65rem); }
 .ttt-preview { display: flex; justify-content: center; gap: 6px; margin-bottom: 9px; }
@@ -114,3 +114,19 @@ body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe
 #ttt-ranking[hidden] { display: none; }
 #ttt-ranking > p { margin-block: 8px; }
 #ttt-points { font-weight: 800; }
+
+
+@media (min-width: 1101px), (orientation: landscape) and (min-width: 700px) {
+  main.ttt {
+    display: grid;
+    width: min(100%, 900px);
+    grid-template-columns: minmax(270px, 1fr) minmax(0, 1.2fr);
+    grid-template-rows: auto 1fr;
+    column-gap: clamp(16px, 4vw, 48px);
+  }
+  .ttt-settings { grid-area: 1 / 1; min-width: 0; }
+  .ttt-play { grid-area: 1 / 2 / span 2; min-width: 0; }
+  main.ttt > #ttt-ranking { grid-area: 2 / 1; }
+  .ttt-play .ttt-status { margin-top: 0; }
+  .ttt-board { width: min(100%, clamp(180px, calc(100dvh - 180px), 352px)); }
+}
