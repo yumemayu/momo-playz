@@ -22,7 +22,7 @@
 <script defer src="../stickers.js?v=daily-stickers"></script>
 <script defer src="../scores.js?v=gem-rewards"></script>
 <script defer src="../pwa.js?v=shared-toolbar"></script>
-<script defer src="pudding.js?v=sound-cue"></script>
+<script defer src="pudding.js?v=levels"></script>
 </head>
 <body data-game="pudding-table-jump">
 <main class="pudding-main" data-board-layout data-game-toolbar>
@@ -36,6 +36,14 @@
       <li data-ja="ボタンをはなしてジャンプ">Release to jump.</li>
       <li data-ja="次のお皿に着地しよう">Land on the next plate.</li>
     </ol></div>
+    <fieldset class="difficulty">
+      <legend data-ja="レベルを えらぶ">Choose a level</legend>
+      <div class="level-buttons" role="group" aria-label="Level" data-ja-label="レベル">
+        <button type="button" data-level="easy" aria-pressed="false"><span class="level-icon" aria-hidden="true">🌼</span><span data-ja="かんたん">Easy</span></button>
+        <button type="button" data-level="standard" aria-pressed="true"><span class="level-icon" aria-hidden="true">🦋</span><span data-ja="ふつう">Normal</span></button>
+        <button type="button" data-level="hard" aria-pressed="false"><span class="level-icon" aria-hidden="true">⭐</span><span data-ja="むずかしい">Hard</span></button>
+      </div>
+    </fieldset>
     <div class="music"><button id="sound" type="button" aria-pressed="false">Sound OFF</button></div>
   <section class="score-board" aria-labelledby="board-title">
     <div class="score-board-heading">

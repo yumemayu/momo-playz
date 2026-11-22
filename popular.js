@@ -29,7 +29,7 @@
     'dodgeball': ['dodgeball', ['practice', 'match']],
     'cube-net': ['cube-net', ['easy', 'normal', 'hard']],
     'one-stroke': ['one-stroke', ['practice', 'easy', 'normal', 'hard', 'expert']],
-    'pudding-table-jump': ['pudding-table-jump', []],
+    'pudding-table-jump': ['pudding-table-jump', ['easy', 'standard', 'hard']],
     'shadow-light': ['shadow-light', ['easy', 'normal', 'hard']],
     'cube-count': ['cube-count', ['easy', 'normal', 'hard']],
     'whats-next': ['whats-next', ['easy', 'normal', 'hard']]

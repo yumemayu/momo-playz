@@ -5,15 +5,26 @@ const puddingBody = byId('body');
 const targetMarker = byId('target');
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 let wobble;
-const courses = [
+const levelButtons = [...document.querySelectorAll("[data-level]")];
+const standardCourses = [
   [[11,72,19],[31,64,16],[50,58,16],[69,66,15],[90,59,17]],
   [[9,73,15],[29,59,12],[52,68,13],[72,53,11],[91,62,13]],
   [[9,73,14],[25,58,10],[49,49,9],[63,67,10],[91,54,12]]
 ];
+const levels = {
+  easy: standardCourses.map(course => course.map(([x, y, width]) => [x, y, Math.min(width + 5, (100 - x) * 2)])),
+  standard: standardCourses,
+  hard: [
+    [[7,74,13],[28,64,11],[51,54,10],[71,66,10],[93,57,11]],
+    [[7,75,12],[26,61,9],[53,68,9],[69,49,9],[93,58,10]],
+    [[7,74,12],[34,58,9],[49,48,8],[66,66,9],[93,51,10]]
+  ]
+};
 const words = {
   en: {points:'Score', streak:'Perfect streak', perfects:'Perfect landings', falls:'Falls', stage:'Stage',hold:'Hold to jump',release:'Release to jump',tip:'Hold longer to jump farther. Space works too!',short:'A little short! Hold longer.',long:'A little far! Release sooner.',ready:'Let go now!',perfect:'Perfect landing! ✨',next:'Next stage',again:'Play again',clear:'Sweet landing!',done:'All stages cleared! 🍓',sound:'Sound',power:'Jump power'},
   ja: {points:'スコア', streak:'連続ぴったり', perfects:'ぴったり着地', falls:'落ちた回数', stage:'ステージ',hold:'長押しでジャンプ',release:'はなすとジャンプ',tip:'長く押すほど遠くへ。スペースキーでも遊べるよ！',short:'あと少し！もうちょっと長く押そう。',long:'飛びすぎた！もう少し早くはなそう。',ready:'いま、はなそう！',perfect:'ぴったり着地！ ✨',next:'つぎのステージ',again:'もう一度あそぶ',clear:'ゴールに着いたよ！',done:'全ステージクリア！ 🍓',sound:'サウンド',power:'ジャンプの強さ'}
 };
+let level = 'standard';
 let lang = 'en', stage = 0, plate = 0, state = 'ready', input = null;
 let started = 0, shownPower = 0, strength = 0, flight, message = 'tip', muted = true, audio;
 let score = 0, perfects = 0, streak = 0, falls = 0, earned = 0;
@@ -31,7 +42,8 @@ function scoreLanding(result) {
   score += earned;
 }
 const text = () => words[lang];
-const course = () => courses[stage];
+const courses = () => levels[level];
+const course = () => courses()[stage];
 const current = () => course()[plate];
 function renderLabels() {
   const next = course()[plate + 1];
@@ -43,12 +55,12 @@ function renderLabels() {
   const inRange = state === 'charging' && message === 'ready';
   jump.dataset.aim = targetMarker.dataset.aim = String(inRange);
   byId('message').dataset.perfect = String(message === 'perfect');
-  byId('stage').textContent = text().stage + ' ' + (stage + 1) + ' / ' + courses.length;
+  byId('stage').textContent = text().stage + ' ' + (stage + 1) + ' / ' + courses().length;
   const sound = byId('sound');
   sound.textContent = text().sound + (muted ? ' OFF' : ' ON');
   sound.setAttribute('aria-pressed', String(!muted));
   byId('power').setAttribute('aria-label', text().power);
-  jump.textContent = state === 'clear' ? text()[stage === courses.length - 1 ? 'again' : 'next'] : text()[inRange ? 'ready' : state === 'charging' ? 'release' : 'hold'];
+  jump.textContent = state === 'clear' ? text()[stage === courses().length - 1 ? 'again' : 'next'] : text()[inRange ? 'ready' : state === 'charging' ? 'release' : 'hold'];
   byId('score').textContent = text().points + ' ' + score.toLocaleString(lang);
   byId('combo').textContent = streak >= 2 ? text().streak + ' ×' + streak : '';
   let status = text()[message];
@@ -123,7 +135,8 @@ function trajectory(power) {
 function begin(source) {
   if (state !== 'ready') return;
   if (!runStarted) {
-    gameScores.start();
+    gameScores.start(level);
+    levelButtons.forEach(button => { button.disabled = true; });
     runStarted = true;
   }
   wobble?.cancel();
@@ -187,9 +200,12 @@ function update(now) {
       scoreLanding(flight);
       if (flight.hit) plate++;
       state = plate === course().length-1 ? 'clear' : 'ready';
-      message = state === 'clear' ? (stage === courses.length-1 ? 'done' : 'clear') : (flight.hit ? (flight.perfect ? 'perfect' : 'tip') : flight.missHint);
+      message = state === 'clear' ? (stage === courses().length-1 ? 'done' : 'clear') : (flight.hit ? (flight.perfect ? 'perfect' : 'tip') : flight.missHint);
       position(...current().slice(0,2));
-      if (message === 'done') gameScores.finish(score, true);
+      if (message === 'done') {
+        gameScores.finish(score, true);
+        levelButtons.forEach(button => { button.disabled = false; });
+      }
       if (flight.hit) celebrateLanding(state === 'clear', flight.perfect);
       tone(flight.hit ? 660 : 190,.19);
       renderLabels();
@@ -197,6 +213,22 @@ function update(now) {
   }
   requestAnimationFrame(update);
 }
+function resetRun() {
+  score = perfects = streak = falls = 0;
+  runStarted = false;
+}
+levelButtons.forEach(button => button.addEventListener('click', () => {
+  if (button.disabled || level === button.dataset.level) return;
+  if (message === 'done') gameScores.clear();
+  level = button.dataset.level;
+  levelButtons.forEach(choice => choice.setAttribute('aria-pressed', String(choice === button)));
+  gameScores.showLevel(level);
+  resetRun();
+  stage = plate = earned = 0;
+  state = 'ready';
+  message = 'tip';
+  renderCourse();
+}));
 jump.addEventListener('pointerdown', event => {
   if (event.button !== 0 || state !== 'ready') return;
   jump.setPointerCapture(event.pointerId);
@@ -208,12 +240,9 @@ jump.addEventListener('lostpointercapture',event => release(event.pointerId,true
 jump.addEventListener('contextmenu', event => event.preventDefault());
 jump.addEventListener('click',() => {
   if (state !== 'clear') return;
-  stage = (stage+1)%courses.length;
+  stage = (stage+1)%courses().length;
   earned = 0;
-  if (stage === 0) {
-    score = perfects = streak = falls = 0;
-    runStarted = false;
-  }
+  if (stage === 0) resetRun();
   plate = 0;
   state = 'ready';
   message = 'tip';
