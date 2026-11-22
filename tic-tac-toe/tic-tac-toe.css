@@ -4,6 +4,7 @@ body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe
 .ttt h1 { margin: 2px 0 6px; color: #ac225b; font-size: clamp(1.85rem, 7.5vw, 2.65rem); }
 .ttt-preview { display: flex; justify-content: center; gap: 6px; margin-bottom: 9px; }
 .ttt-piece { display: grid; place-items: center; width: 60px; aspect-ratio: 1; }
+.ttt-level-hint { margin: 8px 0; font-size: .84rem; font-weight: 700; }
 .ttt-rule { margin: 9px 0; font-size: .87rem; }
 .ttt-modes { display: flex; justify-content: center; gap: 8px; }
 .ttt-modes button, #ttt-reset {
