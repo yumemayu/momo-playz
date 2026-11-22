@@ -40,10 +40,10 @@ main.mood-page { padding-top: 64px; text-align: center; }
 .mood-actions { display: flex; gap: 8px; justify-content: center; flex-wrap: wrap; margin-top: 14px; }
 .mood-actions button:not(.play-primary) { min-height: 46px; padding: 8px 20px; border: 1px solid #b295dc; border-radius: 24px; background: #eee0ff; color: #47346c; font: inherit; font-weight: 700; cursor: pointer; }
 .mood-actions button:disabled { opacity: .58; cursor: default; }
-.star-trail { position: relative; flex: 1; width: min(90%, 650px); min-height: 185px; margin: 8px auto; }
+.star-trail { position: relative; flex: 1; width: min(100%, 690px); min-height: 164px; margin: 8px auto; }
 .star-trail svg, #star-points { position: absolute; inset: 0; width: 100%; height: 100%; }
-.star-trail #star-line { fill: none; stroke: #ffdfb3; stroke-width: 2px; vector-effect: non-scaling-stroke; }
-.trail-star { position: absolute; translate: -50% -50%; width: 54px; height: 54px; padding: 7px; opacity: .5; }
+.star-trail #star-line { fill: none; stroke: #ffdfb3; stroke-width: 4.5px; vector-effect: non-scaling-stroke; }
+.trail-star { position: absolute; translate: -50% -50%; width: clamp(56px, 13vw, 82px); height: clamp(56px, 13vw, 82px); padding: 3px; opacity: .5; }
 .trail-star img { width: 100%; height: 100%; object-fit: contain; }
 .trail-star.is-next { opacity: 1; border-color: #ffefcc; box-shadow: 0 0 18px #ffd4a477; animation: glimmer var(--star-beat, 1.5s) infinite alternate; }
 .trail-star.is-lit { opacity: 1; filter: drop-shadow(0 0 8px #f6d8ff); }
@@ -55,7 +55,7 @@ main.mood-page { padding-top: 64px; text-align: center; }
 @media (min-width: 600px) and (max-width: 900px) { .mood-sky { min-height: 400px; } }
 @media (max-width: 599px) {
   .mood-sky { min-height: 300px; }
-  .trail-star { width: 44px; height: 44px; }
+  .trail-star { width: clamp(44px, 15vw, 58px); height: clamp(44px, 15vw, 58px); }
 }
 @media (prefers-reduced-motion: reduce) {
   .my-stars img, .trail-star.is-next { animation: none; }
@@ -72,23 +72,36 @@ main.mood-page { padding-top: 64px; text-align: center; }
 }
 #star-sound[aria-pressed="true"] { background: #e5d0ff; border-color: #7053ad; }
 #mood-story {
-  max-width: 30ch;
-  margin: 4px auto 8px;
-  padding: 10px 16px;
-  border: 1px solid #f3d9ff;
-  border-radius: 20px;
-  background: linear-gradient(145deg, #fff2fa, #e7dbff);
-  box-shadow: 0 0 18px #e6c5ff55;
-  color: #3d285b;
-  font-size: clamp(1.08rem, 2.6vw, 1.45rem);
-  font-weight: 700;
-  line-height: 1.55;
+  --story-paper: #eee4f9;
+  --story-border: #b8a0cf;
+  --story-ink: #694585;
+  box-sizing: border-box;
+  width: min(100%, 30rem);
+  margin: auto 0 7px;
+  padding: clamp(8px, 2vw, 16px) clamp(16px, 4vw, 28px);
+  border: 2px solid var(--story-border);
+  border-radius: 22px 25px 23px 26px;
+  background: linear-gradient(155deg, #fffdf4 12%, var(--story-paper));
+  box-shadow: inset 0 0 0 3px #fffaf3, 0 3px 0 #190f3a55, 0 0 20px #efd4ff45;
+  color: var(--story-ink);
+  font-family: "Chalkboard SE", "Segoe Print", "Klee One", var(--game-handwriting);
+  font-size: clamp(1.075rem, 3vw, 1.5rem);
+  font-weight: 600;
+  line-height: 1.53;
+  text-wrap: pretty;
 }
+#mood-story:lang(ja) { font-family: "Klee One", "Hiragino Maru Gothic ProN", sans-serif; }
+#mood-story[data-mood="excited"] { --story-paper: #fff0cf; --story-border: #d7ae76; --story-ink: #815023; }
+#mood-story[data-mood="happy"] { --story-paper: #fbe3eb; --story-border: #d392a8; --story-ink: #943d66; }
+#mood-story[data-mood="sad"] { --story-paper: #e0f0fb; --story-border: #8bb3cc; --story-ink: #345d82; }
 #mood-story:not([hidden])::before {
-  content: "✧";
+  content: "·  ✧  ·" / "";
   display: block;
-  color: #8252ac;
+  margin-bottom: 2px;
+  color: var(--story-border);
+  font-size: .95rem;
   line-height: 1;
+  letter-spacing: .22em;
 }
 .mood-message:empty { display: none; }
 .mood-choices { margin-block: auto; }
@@ -149,25 +162,25 @@ main.mood-page { padding-top: 64px; text-align: center; }
 .trail-moon {
   position: absolute;
   left: 86%;
-  top: 9%;
+  top: 16%;
   translate: -50% -50%;
-  width: clamp(30px, 8vw, 48px);
+  width: clamp(49px, 12vw, 78px);
   aspect-ratio: 1;
   border-radius: 50%;
-  box-shadow: inset -9px -5px #c0b1df;
+  box-shadow: inset -14px -8px #c0b1df;
   opacity: .66;
   pointer-events: none;
 }
 #moon-ray {
   visibility: hidden;
   stroke: #fff2b9;
-  stroke-width: 2px;
+  stroke-width: 4px;
   vector-effect: non-scaling-stroke;
   stroke-linecap: round;
 }
 .star-trail[data-phase="complete"] #moon-ray { visibility: visible; }
 .star-trail[data-phase="complete"] .trail-moon {
-  box-shadow: inset -9px -5px #fff1b4;
+  box-shadow: inset -14px -8px #fff1b4;
   filter: drop-shadow(0 0 11px #ffe1a7);
   opacity: 1;
 }
@@ -187,7 +200,7 @@ main.mood-page { padding-top: 64px; text-align: center; }
   stroke: url("#trail-colors");
   stroke-linecap: round;
   stroke-linejoin: round;
-  filter: drop-shadow(0 0 2px #fff1d9) drop-shadow(0 0 5px #ffc5f4) drop-shadow(0 0 11px #bf9dff);
+  filter: drop-shadow(0 0 3px #fff1d9) drop-shadow(0 0 7px #ffc5f4) drop-shadow(0 0 14px #bf9dff);
 }
 .trail-dust { visibility: hidden; fill: #fffaf0; filter: drop-shadow(0 0 4px #fff1cc); }
 .trail-dust circle { vector-effect: non-scaling-stroke; }
@@ -242,5 +255,4 @@ main.mood-page { padding-top: 64px; text-align: center; }
 
 .mood-page .play-stage > .mood-sky { overflow: auto; }
 .mood-page .game-guide { text-align: start; }
-.mood-page .star-trail { min-height: 145px; }
 .mood-page .story-star .my-stars img { width: clamp(60px, 12vw, 100px); }
