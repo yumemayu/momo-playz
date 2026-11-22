@@ -1,7 +1,7 @@
 body[data-game="mood-stars"] { background: #f8efff; color: #47346c; }
-main.mood-page { display: block; width: 100%; max-width: 860px; margin-inline: auto; padding: 64px 12px 14px; text-align: center; }
+main.mood-page { padding-top: 64px; text-align: center; }
 .mood-page h1 { margin: 0 0 14px; font-size: clamp(1.65rem, 5vw, 2.25rem); }
-.mood-sky {
+.mood-page .play-stage > .mood-sky {
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -226,3 +226,8 @@ main.mood-page { display: block; width: 100%; max-width: 860px; margin-inline: a
 @keyframes story-invite {
   50% { transform: translateY(-4px); filter: drop-shadow(0 0 14px #f9d6ff); }
 }
+
+.mood-page .play-stage > .mood-sky { overflow: auto; }
+.mood-page .game-guide { text-align: start; }
+.mood-page .star-trail { min-height: 145px; }
+.mood-page .story-star .my-stars img { width: clamp(60px, 14vw, 108px); }
