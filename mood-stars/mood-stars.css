@@ -6,7 +6,6 @@ main.mood-page { padding-top: 64px; text-align: center; }
   flex-direction: column;
   align-items: center;
   width: 100%;
-  min-height: 440px;
   padding: 18px 12px 12px;
   border-radius: 24px;
   border: 2px solid #6054a2;
@@ -72,7 +71,26 @@ main.mood-page { padding-top: 64px; text-align: center; }
   cursor: pointer;
 }
 #star-sound[aria-pressed="true"] { background: #e5d0ff; border-color: #7053ad; }
-#mood-story { max-width: 32em; margin: 8px auto; padding: 8px 14px; border-radius: 14px; background: #221643d6; line-height: 1.55; }
+#mood-story {
+  max-width: 30ch;
+  margin: 4px auto 8px;
+  padding: 10px 16px;
+  border: 1px solid #f3d9ff;
+  border-radius: 20px;
+  background: linear-gradient(145deg, #fff2fa, #e7dbff);
+  box-shadow: 0 0 18px #e6c5ff55;
+  color: #3d285b;
+  font-size: clamp(1.08rem, 2.6vw, 1.45rem);
+  font-weight: 700;
+  line-height: 1.55;
+}
+#mood-story:not([hidden])::before {
+  content: "✧";
+  display: block;
+  color: #8252ac;
+  line-height: 1;
+}
+.mood-message:empty { display: none; }
 .mood-choices { margin-block: auto; }
 .trail-star { cursor: default; }
 .trail-star:enabled { cursor: pointer; opacity: .82; }
@@ -110,19 +128,19 @@ main.mood-page { padding-top: 64px; text-align: center; }
   display: grid;
   justify-items: center;
   align-content: center;
-  gap: 6px;
+  gap: 3px;
   margin: auto 0 0;
-  padding: 8px 15px;
-  border: 1px solid #e9d3ff90;
+  padding: 2px 12px 5px;
+  border: 1px solid transparent;
   border-radius: 20px;
-  background: #271747bf;
+  background: transparent;
   color: #fff8ff;
   font: inherit;
   font-weight: 700;
   cursor: pointer;
   touch-action: manipulation;
 }
-.story-star:hover { background: #392259; }
+.story-star:hover { background: #39225966; }
 .story-star .my-stars { min-height: 0; }
 .story-star .my-stars img { display: block; }
 .mood-sky .mood-actions { margin-top: 10px; }
@@ -209,19 +227,14 @@ main.mood-page { padding-top: 64px; text-align: center; }
 }
 .star-trail.has-light-path .trail-moon { opacity: .9; }
 
-.story-star { gap: 10px; }
-.story-star-label, #play-stars {
-  width: auto;
-  min-height: 44px;
-  max-width: calc(100% - 12px);
-  padding: 7px 14px;
-  font-size: clamp(1rem, 3vw, 1.3rem);
-  line-height: 1.35;
+.story-star-label {
+  color: #efe0ff;
+  font-size: .85rem;
+  font-weight: 600;
+  text-shadow: 0 1px 5px #130e33;
 }
-.story-star-label { display: block; margin: 4px 0 8px; }
-.story-star:active .story-star-label { translate: 0 1px; }
 @media (prefers-reduced-motion: no-preference) {
-  .story-star:not([hidden]) .my-stars img { animation: appear .38s ease-out, story-invite 3s .4s ease-in-out 2; }
+  .story-star:not([hidden]) .my-stars img { animation: appear .38s ease-out, story-invite 3s .4s ease-in-out infinite; }
 }
 @keyframes story-invite {
   50% { transform: translateY(-4px); filter: drop-shadow(0 0 14px #f9d6ff); }
@@ -230,4 +243,4 @@ main.mood-page { padding-top: 64px; text-align: center; }
 .mood-page .play-stage > .mood-sky { overflow: auto; }
 .mood-page .game-guide { text-align: start; }
 .mood-page .star-trail { min-height: 145px; }
-.mood-page .story-star .my-stars img { width: clamp(60px, 14vw, 108px); }
+.mood-page .story-star .my-stars img { width: clamp(60px, 12vw, 100px); }

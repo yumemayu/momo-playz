@@ -44,7 +44,9 @@ function renderLabels() {
   jump.dataset.aim = targetMarker.dataset.aim = String(inRange);
   byId('message').dataset.perfect = String(message === 'perfect');
   byId('stage').textContent = text().stage + ' ' + (stage + 1) + ' / ' + courses.length;
-  byId('sound').setAttribute('aria-label', text().sound);
+  const sound = byId('sound');
+  sound.textContent = text().sound + (muted ? ' OFF' : ' ON');
+  sound.setAttribute('aria-pressed', String(!muted));
   byId('power').setAttribute('aria-label', text().power);
   jump.textContent = state === 'clear' ? text()[stage === courses.length - 1 ? 'again' : 'next'] : text()[inRange ? 'ready' : state === 'charging' ? 'release' : 'hold'];
   byId('score').textContent = text().points + ' ' + score.toLocaleString(lang);
@@ -237,10 +239,12 @@ byId('sound').addEventListener('click',async () => {
       await audio.resume();
     }
     muted = !muted;
-    byId('sound').textContent = muted ? '🔇' : '🔊';
-    byId('sound').setAttribute('aria-pressed',String(!muted));
+    renderLabels();
     tone(540,.12);
-  } catch { muted = true; }
+  } catch {
+    muted = true;
+    renderLabels();
+  }
 });
 renderCourse();
 requestAnimationFrame(update);

@@ -725,7 +725,7 @@ main[data-board-layout] > .play-stack {
   color: #683951;
   box-shadow: 0 2px 0 #e9b5d0;
 }
-.momo-game-toolbar :is(.momo-home-link, .music > button, summary, .momo-gem-balance) {
+.momo-game-toolbar :is(.momo-home-link, .music > button, summary, .momo-gem-balance, .momo-audio-badge) {
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -738,7 +738,17 @@ main[data-board-layout] > .play-stack {
 }
 .momo-game-toolbar .momo-home-link { gap: 4px; color: inherit; text-decoration: none; }
 .momo-game-toolbar .music { display: flex; gap: 3px; margin: 0; font-size: .82rem; }
-.momo-game-toolbar .music > button { background: #fff0cc; color: #553747; }
+.momo-game-toolbar .music > button,
+.momo-game-toolbar .momo-audio-badge {
+  gap: 4px;
+  background: #fff0cc;
+  color: #553747;
+}
+.momo-game-toolbar .music > button[aria-pressed="false"] { background: #f4edf5; color: #614a60; }
+.momo-game-toolbar .music > button[aria-pressed="true"]::before,
+.momo-game-toolbar .momo-audio-badge::before { content: "🔊" / ""; }
+.momo-game-toolbar .music > button[aria-pressed="false"]::before { content: "🔇" / ""; }
+.momo-game-toolbar .music > button[hidden] { display: none; }
 .momo-game-toolbar .momo-gem-balance { background: #efe2fa; }
 .momo-game-toolbar details { position: relative; }
 .momo-game-toolbar summary { cursor: pointer; list-style: none; }

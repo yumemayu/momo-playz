@@ -33,7 +33,7 @@
   const story = document.querySelector('#mood-story');
   const replay = document.querySelector('#show-stars');
   let selected;
-  let phase = 'pick';
+  let phase = 'ready';
   let progress = 0;
   let round = 2;
   let targets = [];
@@ -53,9 +53,11 @@
   function render() {
     trail.dataset.phase = phase;
     trail.classList.toggle('has-light-path', progress > 1);
+    const ready = phase === 'ready';
     const picking = phase === 'pick';
-    const intro = picking || phase === 'story';
+    const intro = ready || picking || phase === 'story';
     const messages = {
+      ready: ['Ready to play?', '星をさがしに いこう'],
       pick: ['Which star catches your eye?', 'いま、なんとなく気になる星はどれ？'],
       story: ['A story from your star', 'えらんだ星のおはなし'],
       watch: ['Watch the stars light up', '星がひかる順番を、ゆっくり見てね'],
@@ -65,17 +67,17 @@
       complete: ['Your light reached the moon!', '月にひかりが とどいたよ！']
     };
     title.textContent = say(...messages[phase]);
-    choices.hidden = !picking;
+    choices.hidden = !ready && !picking;
+    choices.inert = ready;
     storyStar.hidden = story.hidden = phase !== 'story';
     if (phase === 'story') story.textContent = say(...moods[selected].story);
     trail.hidden = intro;
-    back.hidden = picking;
+    back.hidden = ready || picking;
     const canStop = !intro && phase !== 'complete';
     back.classList.toggle('stop-button', canStop);
     back.textContent = canStop ? say('■ Stop', '■ ストップ') : say('Back to the stars', '星えらびにもどる');
     replay.hidden = phase !== 'tap' && phase !== 'retry';
-    play.hidden = !['story', 'next', 'complete'].includes(phase);
-    play.disabled = !selected;
+    play.hidden = !['ready', 'next', 'complete'].includes(phase);
     play.textContent = phase === 'complete' ? say('Play again', 'もういちど')
       : phase === 'next' ? say('Next round', 'つぎへ') : 'Play';
     sound.hidden = !Audio;
@@ -244,7 +246,15 @@
     storyStar.focus({ preventScroll: true });
   }));
   storyStar.addEventListener('click', start);
-  play.addEventListener('click', start);
+  play.addEventListener('click', () => {
+    if (phase === 'ready') {
+      phase = 'pick';
+      render();
+      buttons[0].focus({ preventScroll: true });
+      return;
+    }
+    start();
+  });
   replay.addEventListener('click', demonstrate);
   back.addEventListener('click', () => {
     playback += 1;
