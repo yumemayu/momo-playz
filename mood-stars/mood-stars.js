@@ -1,9 +1,9 @@
 (() => {
   const moods = {
-    excited: { image: 'rainbow', color: ['Rainbow', '虹色'], story: ['A rainbow star found a tiny rocket and could hardly wait to see where it went.', '虹色の星が、小さなロケットを見つけたよ。どこまで行けるかな？'], label: ['Excited', 'わくわく'], notes: [72, 76, 79, 84, 88], path: [[10,75],[30,24],[50,69],[70,43],[90,65]] },
-    happy: { image: 'rose', color: ['Rose gold', '桃色'], story: ['A pink star saw its friend and lit up the whole sky with a little smile.', '桃色の星は、おともだちに会えてにっこり。空までほんのり桃色になったよ。'], label: ['Happy', 'うれしい'], notes: [67, 72, 76, 79, 84], path: [[10,62],[30,37],[50,24],[70,37],[90,62]] },
-    sad: { image: 'blue', color: ['Blue', '青'], story: ['The blue star rested beside the moon. One little star lit up to keep it company.', '青い星は、月のとなりでひとやすみ。小さな星がひとつ、そっと灯りました。'], label: ['Ready for a little rest', 'ゆっくりしたい'], notes: [60, 64, 67, 69, 72], path: [[10,78],[30,70],[50,54],[70,38],[90,48]] },
-    dreamy: { image: 'crystal', color: ['Crystal', '透明'], story: ['A crystal star floated past a soft cloud, dreaming of what might be beyond it.', '透明な星が、ふわふわの雲を通りすぎたよ。雲のむこうには、何があるかな？'], label: ['Dreamy', 'ぼんやり'], notes: [62, 69, 65, 72, 74], path: [[10,55],[30,34],[50,54],[70,73],[90,54]] }
+    excited: { image: 'rainbow', color: ['Rainbow', '虹色'], story: ['A rainbow star found a tiny rocket and could hardly wait to see where it went.', '虹色の星が、小さなロケットを見つけたよ。どこまで行けるかな？'], prompt: ['Could there be something you’re excited to try today?', 'きょう、やってみたいことは ある？'], notes: [72, 76, 79, 84, 88], path: [[10,75],[30,24],[50,69],[70,43],[90,65]] },
+    happy: { image: 'rose', color: ['Rose gold', '桃色'], story: ['A pink star saw its friend and lit up the whole sky with a little smile.', '桃色の星は、おともだちに会えてにっこり。空までほんのり桃色になったよ。'], prompt: ['What made you smile today?', 'きょう、にっこりしたことは ある？'], notes: [67, 72, 76, 79, 84], path: [[10,62],[30,37],[50,24],[70,37],[90,62]] },
+    sad: { image: 'blue', color: ['Blue', '青'], story: ['The blue star rested beside the moon. One little star lit up to keep it company.', '青い星は、月のとなりでひとやすみ。小さな星がひとつ、そっと灯りました。'], prompt: ['Would a little quiet time feel nice today?', 'きょうは、ちょっと ひとやすみしたい？'], notes: [60, 64, 67, 69, 72], path: [[10,78],[30,70],[50,54],[70,38],[90,48]] },
+    dreamy: { image: 'crystal', color: ['Crystal', '透明'], story: ['A crystal star floated past a soft cloud, dreaming of what might be beyond it.', '透明な星が、ふわふわの雲を通りすぎたよ。雲のむこうには、何があるかな？'], prompt: ['What would you like to daydream about today?', 'きょうは、どんなことを ぼんやり考えたい？'], notes: [62, 69, 65, 72, 74], path: [[10,55],[30,34],[50,54],[70,73],[90,54]] }
   };
   const choices = document.querySelector('#mood-choices');
   const buttons = [...choices.querySelectorAll('button')];
@@ -35,13 +35,14 @@
   let selected;
   let phase = 'ready';
   let progress = 0;
-  let round = 2;
+  const firstRound = 2;
+  const lastRound = 4;
+  let round = firstRound;
   let targets = [];
   let sequence = [];
   let lit;
   let playback = 0;
   const say = (en, ja) => momoLanguage.pick(en, ja);
-  const moodLabel = key => say(...moods[key].label);
 
   function starImage(key) {
     const img = document.createElement('img');
@@ -52,6 +53,8 @@
 
   function render() {
     trail.dataset.phase = phase;
+    trail.dataset.round = round - firstRound + 1;
+    trail.dataset.mood = selected ?? '';
     trail.classList.toggle('has-light-path', progress > 1);
     const ready = phase === 'ready';
     const picking = phase === 'pick';
@@ -84,10 +87,10 @@
     play.textContent = phase === 'complete' ? say('Play again', 'もういちど')
       : phase === 'next' ? say('Next round', 'つぎへ') : 'Play';
     sound.hidden = !Audio;
-    sound.textContent = soundOn ? say('Music on', 'おと オン') : say('Music off', 'おと オフ');
+    sound.textContent = soundOn ? say('Music box ON', 'オルゴール ON') : say('Play music box', 'オルゴールをならす');
     sound.setAttribute('aria-pressed', String(soundOn));
     message.textContent = phase === 'story'
-      ? say(moodLabel(selected) + ' might be your mood.', 'きょうは「' + moodLabel(selected) + '」気分かも。')
+      ? say(...moods[selected].prompt)
       : intro ? '' : progress + ' / ' + round;
     buttons.forEach(button => {
       const mood = moods[button.dataset.mood];
@@ -126,7 +129,7 @@
     clearInterval(musicTimer);
     if (!soundOn || !musicGain) return;
     const audible = !document.hidden;
-    musicGain.gain.value = audible ? (phase === 'watch' ? .12 : .36) : 0;
+    musicGain.gain.value = audible ? (phase === 'watch' ? .16 : .48) : 0;
     if (!audible) return;
     musicTimer = setInterval(() => {
       const note = melody[melodyStep];
@@ -147,6 +150,7 @@
           musicGain.connect(audio.destination);
         }
         await audio.resume();
+        if (soundOn) ring(79, audio.destination, .12);
       } catch {
         soundOn = false;
         render();
@@ -188,7 +192,7 @@
   }
 
   function start() {
-    round = phase === 'next' ? round + 1 : 2;
+    round = phase === 'next' ? round + 1 : firstRound;
     const mood = moods[selected];
     const order = mood.path.map((_, index) => index);
     for (let i = order.length - 1; i > 0; i -= 1) {
@@ -221,9 +225,15 @@
             { opacity: 0, transform: 'scale(1.14)' }
           ], { duration: 850, easing: 'ease-out' });
         }
-        line.setAttribute('d', 'M ' + sequence.slice(0, progress).map(i => mood.path[i].join(',')).join(' L '));
+        const path = sequence.slice(0, progress).map(i => mood.path[i]);
+        const segments = path.slice(1).map(([x, y], i) => {
+          const [prevX, prevY] = path[i];
+          const midX = (prevX + x) / 2;
+          return `C ${midX},${prevY} ${midX},${y} ${x},${y}`;
+        });
+        line.setAttribute('d', ['M ' + path[0].join(','), ...segments].join(' '));
         if (progress === round) {
-          phase = round === targets.length ? 'complete' : 'next';
+          phase = round === lastRound ? 'complete' : 'next';
           if (phase === 'complete') {
             const [x, y] = mood.path[index];
             moonRay.setAttribute('x1', x);
@@ -248,7 +258,10 @@
     render();
     storyStar.focus({ preventScroll: true });
   }));
-  storyStar.addEventListener('click', start);
+  storyStar.addEventListener('click', () => {
+    ring(moods[selected].notes[2], audio?.destination, .11);
+    start();
+  });
   play.addEventListener('click', () => {
     if (phase === 'ready') {
       phase = 'pick';

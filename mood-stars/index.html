@@ -8,10 +8,10 @@
   <link rel="stylesheet" href="../game.css?v=level-cards">
   <link rel="stylesheet" href="../game-picker.css">
   <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&amp;display=swap">
-  <link rel="stylesheet" href="mood-stars.css?v=storybook-ink">
+  <link rel="stylesheet" href="mood-stars.css?v=round-colors">
   <script defer src="../language.js"></script>
   <script defer src="../pwa.js?v=shared-toolbar"></script>
-  <script defer src="mood-stars.js?v=storybook-brighter-trail"></script>
+  <script defer src="mood-stars.js?v=mood-prompt"></script>
 </head>
 <body data-game="mood-stars">
 <main data-board-layout data-game-toolbar class="mood-page">
@@ -46,11 +46,12 @@
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
         <defs>
           <linearGradient id="trail-colors" x1="0%" y1="100%" x2="100%" y2="0%">
-            <stop offset="0%" stop-color="#ffd6fa"/>
-            <stop offset="54%" stop-color="#dcddff"/>
-            <stop offset="100%" stop-color="#fff3bd"/>
+            <stop offset="0%" class="trail-color-start" stop-color="#ff8cc8"/>
+            <stop offset="54%" class="trail-color-middle" stop-color="#ffd6ea"/>
+            <stop offset="100%" class="trail-color-end" stop-color="#ffa4dd"/>
           </linearGradient>
         </defs>
+        <use class="trail-glow" href="#star-line"/>
         <path id="star-line" d=""/>
         <line id="moon-ray" x2="86" y2="16" pathLength="1"/>
         <g class="trail-dust">
@@ -60,6 +61,26 @@
           <circle r=".55">
             <animateMotion dur="8s" begin="1.5s" repeatCount="indefinite"><mpath href="#star-line"/></animateMotion>
           </circle>
+        </g>
+      </svg>
+      <div class="trail-twinkles" aria-hidden="true"><span>✧</span><span>✦</span><span>·</span><span>✧</span><span>✦</span></div>
+      <svg class="constellation-art" viewBox="0 0 180 130" aria-hidden="true">
+        <g data-picture="excited">
+          <path d="M34 87 Q42 62 34 40 Q54 58 67 65 Q83 49 90 27 Q97 49 113 65 Q126 58 146 40 Q138 62 146 87 Q90 109 34 87Z"/>
+          <path d="M43 83 Q90 98 137 83"/>
+          <circle cx="34" cy="40" r="3"/><circle cx="90" cy="27" r="3"/><circle cx="146" cy="40" r="3"/>
+        </g>
+        <g data-picture="happy">
+          <path d="M90 103 C73 89 37 72 37 47 C37 23 68 19 90 45 C112 19 143 23 143 47 C143 72 107 89 90 103Z"/>
+          <path d="M47 49 Q48 37 59 35"/>
+        </g>
+        <g data-picture="sad">
+          <path d="M96 22 A46 46 0 1 0 134 94 Q100 105 81 79 Q63 48 96 22Z"/>
+          <path d="M122 26 Q124 40 137 42 Q124 44 122 57 Q120 44 107 42 Q120 40 122 26Z"/>
+        </g>
+        <g data-picture="dreamy">
+          <path d="M90 66 C70 27 28 20 38 51 Q43 67 68 72 C38 72 46 105 66 100 Q83 96 90 76 C97 96 114 100 122 100 C142 105 142 72 112 72 Q137 67 142 51 C152 20 110 27 90 66Z"/>
+          <path d="M90 65 Q86 55 79 51 M90 65 Q94 55 101 51 M90 66V81"/>
         </g>
       </svg>
       <span class="trail-moon" aria-hidden="true"><span class="moon-sparkles">✧　✦　✧</span></span>
