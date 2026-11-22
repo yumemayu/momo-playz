@@ -1,23 +1,3 @@
-// Keep the new shop discoverable from every shared game picker.
-(() => {
-  const picker = document.querySelector('nav.game-picker');
-  const script = document.currentScript;
-  if (!picker || !script) return;
-  const destination = new URL('bun-owner/', script.src);
-  if (Array.from(picker.querySelectorAll('a')).some(a => new URL(a.href, location.href).pathname === destination.pathname)) return;
-  const link = document.createElement('a');
-  link.href = destination.href;
-  const icon = document.createElement('span');
-  icon.className = 'game-art';
-  icon.setAttribute('aria-hidden', 'true');
-  icon.textContent = '🏮';
-  const label = document.createElement('span');
-  label.textContent = 'Bun Shop Owner';
-  label.setAttribute('data-ja', '肉まん屋オーナー');
-  link.append(icon, label);
-  picker.append(link);
-})();
-
 const momoLanguage = (() => {
   const key = 'momo:language';
   const listeners = new Set();

@@ -1,7 +1,7 @@
 const scope = new URL(self.registration.scope);
 const prefix = 'offline:' + scope.pathname + ':';
 const live = prefix + 'visited';
-const pack = prefix + 'games-07d965cb83ce';
+const pack = prefix + 'games-catalog-1';
 const marker = new URL('offline-ready', scope).href;
 const files = [
   "assets/banner-dodgeball.jpg",
@@ -126,6 +126,7 @@ const files = [
   "flow/manifest.webmanifest",
   "fry-catch/index.html",
   "fry-catch/manifest.webmanifest",
+  "game-catalog.js",
   "game-picker.css",
   "game-title-banner.css",
   "game.css",
