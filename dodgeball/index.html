@@ -22,6 +22,18 @@
   <meta name="apple-mobile-web-app-title" content="Momo Dodgeball">
   <link rel="apple-touch-icon" href="../icons/icon-512.png">
   <script defer src="../pwa.js?v=sound-cue"></script>
+<style>
+body[data-game="dodgeball"] .game-title-art {
+  background: url("chicken.webp") 76% 52% / auto 70% no-repeat,
+              url("boba.webp") 21% 65% / auto 58% no-repeat;
+}
+@media (orientation: portrait) and (min-width: 680px) and (max-width: 1100px) {
+  body[data-game="dodgeball"] main[data-board-layout] {
+    --board-width: 560px;
+    --board-height: 400px;
+  }
+}
+</style>
 </head>
 <body data-game="dodgeball">
 <main data-board-layout data-game-toolbar data-game-audio>
