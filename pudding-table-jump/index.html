@@ -23,6 +23,21 @@
 <script defer src="../scores.js?v=gem-rewards"></script>
 <script defer src="../pwa.js?v=shared-toolbar"></script>
 <script defer src="pudding.js?v=sound-cue"></script>
+<style>
+.pudding-main .pudding-games-link {
+  display: inline-flex;
+  align-items: center;
+  align-self: flex-start;
+  min-height: 44px;
+  margin: 0 0 8px;
+  padding: 0 14px;
+  border: 1px solid #e8adc6;
+  border-radius: 999px;
+  background: #fff8fb;
+  color: #713267;
+  font-weight: 700;
+}
+</style>
 </head>
 <body data-game="pudding-table-jump">
 <main class="pudding-main" data-board-layout data-game-toolbar>
@@ -31,6 +46,7 @@
     <span class="game-title-rainbow" aria-hidden="true">🌈</span><span class="game-title-art" aria-hidden="true"></span>
     <h1 data-ja="プリンのテーブルジャンプ">Pudding Table Jump</h1>
   </header>
+    <a class="pudding-games-link" href="../" data-ja="← ゲーム集にもどる">← Back to all games</a>
     <div class="game-guide"><h2 data-ja="あそびかた">How to play</h2><ol>
       <li data-ja="ボタンを長押しして力をためる">Hold to build jump power.</li>
       <li data-ja="ボタンをはなしてジャンプ">Release to jump.</li>
