@@ -10,7 +10,7 @@
 <link rel="stylesheet" href="home.css?v=gem-celebration">
 <script defer src="language.js"></script>
 <script defer src="stickers.js?v=daily-stickers"></script>
-<script defer src="install-hint.js"></script>
+<script defer src="offline.js"></script>
 <script defer src="home.js?v=game-rows-4"></script>
 <link rel="stylesheet" href="toy-shelf.css?v=compact-home">
 <script defer src="toy-shelf.js?v=daily1"></script>
@@ -24,6 +24,13 @@
   <meta name="apple-mobile-web-app-title" content="Momo Playz">
   <link rel="apple-touch-icon" href="icons/icon-512.png">
   <script defer src="pwa.js?v=home-button"></script>
+<style>
+.pwa-tools { margin: 8px auto 12px; max-width: 760px; text-align: center; }
+.pwa-tools button { margin: 3px; min-height: 44px; padding: 6px 14px; border: 2px solid #c9dce5; border-radius: 12px; background: #fff; color: #274357; font: inherit; font-weight: 700; cursor: pointer; }
+.pwa-tools button:disabled { cursor: default; opacity: .65; }
+.pwa-tools button[hidden] { display: none; }
+.pwa-tools p { margin: 5px 0; font-size: .92rem; line-height: 1.5; }
+</style>
 </head>
 <body>
 <main>
@@ -31,6 +38,12 @@
   <img src="assets/momo-squirrels.png" alt="" width="130" height="99">
   <h1>Momo Playz</h1>
 </header>
+<section class="pwa-tools">
+  <button type="button" id="pwa-install" aria-controls="pwa-guide" aria-expanded="false">ホーム画面に追加</button>
+  <button type="button" id="pwa-save">オフラインであそぶ準備</button>
+  <p id="pwa-guide" hidden></p>
+  <p id="pwa-status" role="status"></p>
+</section>
 <section class="home-play" id="home-play" hidden>
   <div class="home-mission">
     <h2><span aria-hidden="true">🎯</span> <span data-ja="今日のミッション">Today’s mission</span></h2>
@@ -131,13 +144,6 @@
 <a href="https://yumemayu.github.io/norimono/" target="_blank" rel="noopener noreferrer" data-ja="🚃 のりものゲーム">🚃 Train games</a>
 <small>Copyright Momo.squirrels</small>
 </footer>
-<div class="install-pop" id="install-pop" hidden>
-  <div class="install-pop-card" role="dialog" aria-label="Add to home screen">
-    <button type="button" class="install-pop-close" id="install-pop-close" aria-label="Close">✕</button>
-    <div class="install-pop-icon" aria-hidden="true">📱</div>
-    <p class="install-pop-text" data-ja="共有ボタン→「ホーム画面に追加」してね。アプリみたいに遊べるよ！">Add it to your home screen to play like an app: Share → “Add to Home Screen”</p>
-    <button type="button" class="install-pop-ok" id="install-pop-ok" data-ja="わかった！">Got it!</button>
-  </div>
-</div>
+
 </body>
 </html>
