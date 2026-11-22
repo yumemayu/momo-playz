@@ -15,7 +15,7 @@
       stopped: 'とちゅうでやめたよ',
       on: 'おと ON',
       off: 'おと OFF',
-      light: { front: '☀️ ひかり： まえから', side: '☀️ ひかり： よこから', top: '☀️ ひかり： うえから' }
+      light: { front: 'まえから', side: 'よこから', top: 'うえから' }
     },
     en: {
       go: 'Which shadow appears?',
@@ -28,7 +28,7 @@
       stopped: 'Round stopped',
       on: 'Sound on',
       off: 'Sound off',
-      light: { front: '☀️ Light: front', side: '☀️ Light: side', top: '☀️ Light: top' }
+      light: { front: 'From front', side: 'From side', top: 'From above' }
     }
   };
   const LEVELS = {
@@ -45,7 +45,6 @@
   ];
 
   const blocksEl = document.querySelector('#blocks');
-  const chipEl = document.querySelector('#light-chip');
   const answersEl = document.querySelector('#answers');
   const board = document.querySelector('#board');
   const qnumEl = document.querySelector('#qnum');
@@ -185,7 +184,7 @@
     return { H, dir: 'front', options: order.map(i => options[i]), correctIndex: order.indexOf(0) };
   }
 
-  function blocksSVG(H, dir) {
+  function blocksSVG(H, dir, label) {
     const DX = 27, DY = 14, DH = 27, OX = 180, OY = 96;
     const cubes = [];
     H.forEach((col, x) => col.forEach((h, z) => {
@@ -199,11 +198,24 @@
         + `<polygon points="${sx - DX},${sy + DY} ${sx},${sy + 2 * DY} ${sx},${sy + 2 * DY + DH} ${sx - DX},${sy + DY + DH}" fill="${left}" stroke="#b08968" stroke-width="1.4"/>`
         + `<polygon points="${sx},${sy + 2 * DY} ${sx + DX},${sy + DY} ${sx + DX},${sy + DY + DH} ${sx},${sy + 2 * DY + DH}" fill="${right}" stroke="#b08968" stroke-width="1.4"/>`;
     }).join('');
-    const sun = (cx, cy, arrow) => `<g transform="translate(${cx},${cy})"><circle cx="0" cy="0" r="11" fill="#ffb84d"/><g stroke="#ffb84d" stroke-width="3.4" stroke-linecap="round"><line x1="0" y1="-19" x2="0" y2="-14"/><line x1="-19" y1="0" x2="-14" y2="0"/><line x1="19" y1="0" x2="14" y2="0"/><line x1="-13" y1="-13" x2="-10" y2="-10"/><line x1="13" y1="-13" x2="10" y2="-10"/></g>${arrow}</g>`;
-    if (dir === 'front') out += sun(56, 120, '<path d="M24 0 l18 7 -18 7 5 -7 Z" fill="#f272a7"/>');
-    if (dir === 'side') out += sun(308, 120, '<path d="M-24 0 l-18 7 18 7 -5 -7 Z" fill="#f272a7"/>');
-    if (dir === 'top') out += sun(180, 30, '<path d="M0 24 l7 18 -7 -5 -7 5 Z" fill="#f272a7" transform="rotate(90 0 33)"/>');
-    return `<svg viewBox="0 0 360 300" aria-hidden="true">${out}</svg>`;
+    const right = OX + H.length * DX;
+    const left = OX - H[0].length * DX;
+    const ground = OY + (H.length + H[0].length) * DY;
+    const highest = Math.min(...cubes.map(({ x, z, lv }) => OY + (x + z) * DY - lv * DH));
+    // z = 0 faces screen right, while x = 0 faces screen left.
+    const positions = {
+      front: [right + 53, ground - 35],
+      side: [left - 53, ground - 35],
+      top: [(left + right) / 2, highest - 62]
+    };
+    const [cx, cy] = positions[dir];
+    out += `<g transform="translate(${cx},${cy})">
+      <circle r="11" fill="#ffbd51"/>
+      <path d="M0 -20v4 M0 16v4 M-20 0h4 M16 0h4 M-14 -14l3 3 M11 11l3 3 M14 -14l-3 3 M-11 11l-3 3" fill="none" stroke="#eaa035" stroke-width="3" stroke-linecap="round"/>
+      <rect x="-48" y="24" width="96" height="26" rx="13" fill="#fff1c9"/>
+      <text x="0" y="42" text-anchor="middle" font-family="system-ui, sans-serif" font-size="16" font-weight="700" fill="#634429">${label}</text>
+    </g>`;
+    return `<svg viewBox="0 0 360 300" role="img" aria-label="${language === 'ja' ? 'ひかり：' : 'Light: '}${label}">${out}</svg>`;
   }
 
   function silSVG(s) {
@@ -259,14 +271,17 @@
   const sndWrong = () => tone(170, 0, 0.22, 'square', 0.07);
   const sndFinish = () => [523, 659, 784, 1046].forEach((f, i) => tone(f, i * 0.09, 0.22, 'triangle', 0.12));
 
-  function renderQuestion() {
-    blocksEl.innerHTML = blocksSVG(current.H, current.dir);
+  function renderBlocks() {
+    blocksEl.innerHTML = blocksSVG(current.H, current.dir, copy[language].light[current.dir]);
     const illustration = blocksEl.firstElementChild;
     const { x, y, width, height } = illustration.getBBox();
     const inset = 8;
     illustration.setAttribute('viewBox',
       [x - inset, y - inset, width + inset * 2, height + inset * 2].join(' '));
-    chipEl.textContent = copy[language].light[current.dir];
+  }
+
+  function renderQuestion() {
+    renderBlocks();
     answersEl.innerHTML = '';
     current.options.forEach((sil, i) => {
       const btn = document.createElement('button');
@@ -381,7 +396,7 @@
     momoLanguage.subscribe(lang => {
       language = lang;
       sound.textContent = copy[language][muted ? 'off' : 'on'];
-      if (current) chipEl.textContent = copy[language].light[current.dir];
+      if (current) renderBlocks();
       if (!playing) turnLine.textContent = copy[language].go;
     });
   }

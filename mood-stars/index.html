@@ -7,10 +7,10 @@
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../game.css?v=level-cards">
   <link rel="stylesheet" href="../game-picker.css">
-  <link rel="stylesheet" href="mood-stars.css?v=shared-board">
+  <link rel="stylesheet" href="mood-stars.css?v=opening-story">
   <script defer src="../language.js"></script>
   <script defer src="../pwa.js?v=shared-toolbar"></script>
-  <script defer src="mood-stars.js?v=shared-board"></script>
+  <script defer src="mood-stars.js?v=opening-story"></script>
 </head>
 <body data-game="mood-stars">
 <main data-board-layout data-game-toolbar class="mood-page">
@@ -29,8 +29,9 @@
   <div class="play-stack">
     <div class="play-stage">
   <section class="mood-sky game-field" aria-labelledby="sky-title">
-    <h2 id="sky-title">Which stars feel like you today?</h2>
-    <div id="mood-choices" class="mood-choices">
+    <h2 id="sky-title">Ready to play?</h2>
+    <p id="mood-story" hidden></p>
+    <div id="mood-choices" class="mood-choices" inert>
       <button type="button" data-mood="excited" aria-pressed="false"><img src="rainbow.webp" alt=""></button>
       <button type="button" data-mood="happy" aria-pressed="false"><img src="rose.webp" alt=""></button>
       <button type="button" data-mood="sad" aria-pressed="false"><img src="blue.webp" alt=""></button>
@@ -38,7 +39,7 @@
     </div>
     <button id="story-star" class="story-star" type="button" hidden>
       <span id="my-stars" class="my-stars" aria-hidden="true"></span>
-      <span class="story-star-label play-primary" data-ja="この星をタップ →">Tap this star →</span>
+      <span class="story-star-label" data-ja="星にふれてね">Touch the star</span>
     </button>
     <div id="star-trail" class="star-trail" hidden>
       <svg viewBox="0 0 100 100" preserveAspectRatio="none" aria-hidden="true">
@@ -63,12 +64,11 @@
       <span class="trail-moon" aria-hidden="true"><span class="moon-sparkles">✧　✦　✧</span></span>
       <div id="star-points"></div>
     </div>
-    <p id="mood-story" hidden></p>
     <p id="mood-message" class="mood-message" role="status"></p>
   </section>
     </div>
     <div class="mood-actions play-row">
-    <button type="button" class="play-primary" id="play-stars" disabled>Play with my stars</button>
+    <button type="button" class="play-primary" id="play-stars">Play</button>
     <button type="button" id="show-stars" data-ja="お手本をもういちど" hidden>Show me again</button>
     <button type="button" id="pick-again" hidden>Back to the stars</button>
     </div>

@@ -87,6 +87,13 @@ const momoRoot = new URL('./', document.currentScript.src);
       music.append(details);
     }
 
+    let audioBadge;
+    if (!music && game.hasAttribute('data-game-audio')) {
+      audioBadge = document.createElement('span');
+      audioBadge.className = 'momo-audio-badge';
+      toolbar.append(audioBadge);
+    }
+
     const gems = document.createElement('output');
     gems.className = 'momo-gem-balance';
     toolbar.append(gems);
@@ -108,6 +115,7 @@ const momoRoot = new URL('./', document.currentScript.src);
       const japanese = document.documentElement.lang === 'ja';
       toolbar.setAttribute('role', 'group');
       toolbar.setAttribute('aria-label', japanese ? 'ゲームの共通操作' : 'Game controls');
+      if (audioBadge) audioBadge.textContent = japanese ? 'おとあり' : 'Has sound';
       if (volumeToggle) {
         volumeToggle.textContent = '⋯';
         volumeToggle.setAttribute('aria-label', japanese ? '音量' : 'Volume');
