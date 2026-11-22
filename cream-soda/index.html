@@ -21,6 +21,18 @@
   <script defer src="../nickname.js?v=compact"></script>
   <script defer src="../scores.js?v=shared-toolbar"></script>
   <script defer src="soda.js?v=shared-ui"></script>
+<style>
+.soda-main[data-board-layout] .soda-board {
+  display: flex;
+  flex-direction: column;
+}
+.soda-board > .soda-counter {
+  flex: none;
+  margin-block: auto;
+  padding-block-start: 7px;
+}
+.soda-counter > #message:empty { display: none; }
+</style>
 </head>
 <body data-game="cream-soda" data-stage-rewards>
 <main class="soda-main" data-board-layout data-game-toolbar>
@@ -57,10 +69,12 @@
 <div class="play-stack">
     <div class="play-hud" aria-hidden="true"></div>
     <div class="soda-board">
-      <div class="awning" aria-hidden="true"></div>
-      <div id="glasses" class="glasses"></div>
-      <div id="celebration" hidden><img src="melon-soda.webp" alt="" width="180" height="180"></div>
-      <p id="message" role="status"></p>
+      <div class="soda-counter">
+        <div class="awning" aria-hidden="true"></div>
+        <div id="glasses" class="glasses"></div>
+        <div id="celebration" hidden><img src="melon-soda.webp" alt="" width="180" height="180"></div>
+        <p id="message" role="status"></p>
+      </div>
     </div>
     <div class="actions soda-actions">
         <button id="undo" type="button" data-ja="ひとつ戻す">Undo</button>
