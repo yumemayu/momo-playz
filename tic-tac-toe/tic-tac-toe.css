@@ -1,5 +1,5 @@
 body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe9f4, #fbd1e7); color: #68354f; }
-.ttt { display: block; width: min(100%, 640px); margin: 0 auto; padding: 68px 16px 16px; text-align: center; }
+main.ttt { text-align: center; padding-top: 68px; }
 .ttt-brand { font-size: .9rem; font-weight: 800; color: #9c285a; }
 .ttt h1 { margin: 2px 0 6px; color: #ac225b; font-size: clamp(1.85rem, 7.5vw, 2.65rem); }
 .ttt-preview { display: flex; justify-content: center; gap: 6px; margin-bottom: 9px; }
@@ -21,14 +21,14 @@ body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe
 }
 .ttt-modes button[aria-pressed="true"] { background: #a9255d; border-color: #8c2050; color: #fff; }
 .ttt-levels button[aria-pressed="true"] { background: #704697; border-color: #603784; }
-#ttt-reset { width: min(calc(100% - 12px), 352px); }
+
 .ttt-status { width: fit-content; min-height: 1.6em; margin: 10px auto; padding: 4px 14px; border-radius: 22px; background: #fff6ed; font-size: 1.18rem; font-weight: 800; }
 .ttt-board {
   display: grid;
-  grid-template-columns: repeat(3, minmax(0, 1fr));
+  grid-template-columns: repeat(var(--ttt-size, 3), minmax(0, 1fr));
   gap: 8px;
-  width: min(100%, 352px);
-  margin: 0 auto 16px;
+  width: min(100%, calc(var(--board-height) - 64px));
+  margin: 0 auto;
   padding: 10px;
   border-radius: 22px;
   background: linear-gradient(145deg, #f0dfff, #c8a4e9);
@@ -39,6 +39,7 @@ body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe
   display: grid;
   place-items: center;
   aspect-ratio: 1;
+  min-height: 0;
   padding: 0;
   border: 2px solid #ceafd9;
   border-radius: 15px;
@@ -117,17 +118,16 @@ body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe
 #ttt-points { font-weight: 800; }
 
 
-@media (min-width: 1101px), (orientation: landscape) and (min-width: 700px) {
-  main.ttt {
-    display: grid;
-    width: min(100%, 900px);
-    grid-template-columns: minmax(270px, 1fr) minmax(0, 1.2fr);
-    grid-template-rows: auto 1fr;
-    column-gap: clamp(16px, 4vw, 48px);
-  }
-  .ttt-settings { grid-area: 1 / 1; min-width: 0; }
-  .ttt-play { grid-area: 1 / 2 / span 2; min-width: 0; }
-  main.ttt > #ttt-ranking { grid-area: 2 / 1; }
-  .ttt-play .ttt-status { margin-top: 0; }
-  .ttt-board { width: min(100%, clamp(180px, calc(100dvh - 180px), 352px)); }
+
+.ttt .play-stage > .ttt-field {
+  display: grid;
+  align-content: center;
+  padding: 6px 12px 10px;
+  border-radius: 22px;
+  background: #fff8f1;
 }
+.ttt-status { margin-top: 0; }
+.ttt [hidden] { display: none; }
+.ttt .game-guide { text-align: start; }
+.ttt #ttt-level-hint { order: 3; }
+.ttt .play-hud { min-height: 0; text-align: start; }

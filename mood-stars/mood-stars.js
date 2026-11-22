@@ -70,11 +70,14 @@
     if (phase === 'story') story.textContent = say(...moods[selected].story);
     trail.hidden = intro;
     back.hidden = picking;
+    const canStop = !intro && phase !== 'complete';
+    back.classList.toggle('stop-button', canStop);
+    back.textContent = canStop ? say('■ Stop', '■ ストップ') : say('Back to the stars', '星えらびにもどる');
     replay.hidden = phase !== 'tap' && phase !== 'retry';
-    play.hidden = !['next', 'complete'].includes(phase);
+    play.hidden = !['story', 'next', 'complete'].includes(phase);
     play.disabled = !selected;
     play.textContent = phase === 'complete' ? say('Play again', 'もういちど')
-      : phase === 'next' ? say('Next round', 'つぎへ') : say('Play with my star', '星とあそぶ');
+      : phase === 'next' ? say('Next round', 'つぎへ') : 'Play';
     sound.hidden = !Audio;
     sound.textContent = soundOn ? say('Music on', 'おと オン') : say('Music off', 'おと オフ');
     sound.setAttribute('aria-pressed', String(soundOn));
