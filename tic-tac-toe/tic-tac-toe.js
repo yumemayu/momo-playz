@@ -11,6 +11,12 @@
   const pointsLabel = document.querySelector('#ttt-points');
   const nickname = document.querySelector('#nickname');
   const points = new Map();
+  const levelHint = document.querySelector('#ttt-level-hint');
+  const levelHints = {
+    easy: ['The computer leaves chances to win.', 'あいては、きみが3つそろえそうでも じゃまをしないよ。'],
+    normal: ['The computer spots wins and blocks.', 'あいては、3つそろえられそうなところを見つけるよ。'],
+    hard: ['The computer plans ahead. Aim for a draw!', 'あいては先の手まで読むよ。ひきわけをめざそう！']
+  };
   const levels = document.querySelector('#ttt-levels');
   const levelButtons = [...levels.querySelectorAll('[data-level]')];
   const say = (en, ja) => momoLanguage.pick(en, ja);
@@ -53,7 +59,8 @@
         : say(symbol(turn) + '’s turn', symbol(turn) + ' のばん');
     }
     status.dataset.result = winner === 'draw' ? 'draw' : winner ? 'win' : '';
-    levels.hidden = ranking.hidden = !solo;
+    levels.hidden = levelHint.hidden = ranking.hidden = !solo;
+    levelHint.textContent = say(...levelHints[level]);
     const score = points.get(level) || 0;
     pointsLabel.textContent = say('Current streak: ' + score + ' pts', 'れんぞくポイント：' + score + '点');
     levelButtons.forEach(button => button.setAttribute('aria-pressed', String(button.dataset.level === level)));
@@ -112,13 +119,25 @@
     return choice;
   }
 
+  function randomSquare(squares) {
+    return squares[Math.floor(Math.random() * squares.length)];
+  }
+
   function cpuMove() {
     const open = marks.flatMap((mark, index) => mark ? [] : [index]);
-    const random = open[Math.floor(Math.random() * open.length)];
-    let index = random;
-    if (level === 'normal') index = finishableSquare('x') ?? finishableSquare('o') ?? random;
-    if (level === 'hard') index = bestSquare(open);
-    move(index);
+    if (level === 'hard') {
+      move(bestSquare(open));
+      return;
+    }
+    if (level === 'normal') {
+      const corners = [0, 2, 6, 8].filter(index => !marks[index]);
+      move(finishableSquare('x') ?? finishableSquare('o') ?? randomSquare(corners.length ? corners : open));
+      return;
+    }
+    const threat = finishableSquare('o');
+    const practiceMoves = open.filter(index => index !== threat);
+    const edges = [1, 3, 5, 7].filter(index => practiceMoves.includes(index));
+    move(randomSquare(edges.length ? edges : practiceMoves.length ? practiceMoves : open));
   }
 
   function move(index) {
