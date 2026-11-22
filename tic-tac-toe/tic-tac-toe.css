@@ -7,7 +7,7 @@ body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe
 .ttt-level-hint { margin: 8px 0; font-size: .84rem; font-weight: 700; }
 .ttt-rule { margin: 9px 0; font-size: .87rem; }
 .ttt-modes { display: flex; justify-content: center; gap: 8px; }
-.ttt-modes button, #ttt-reset {
+.ttt-modes button {
   min-height: 44px;
   padding: 6px 16px;
   border: 1px solid #ad85bf;
@@ -21,7 +21,7 @@ body[data-game="tic-tac-toe"] { background: radial-gradient(ellipse at top, #ffe
 }
 .ttt-modes button[aria-pressed="true"] { background: #a9255d; border-color: #8c2050; color: #fff; }
 .ttt-levels button[aria-pressed="true"] { background: #704697; border-color: #603784; }
-#ttt-reset { background: #ffdfed; border-color: #be779e; }
+#ttt-reset { width: min(calc(100% - 12px), 352px); }
 .ttt-status { width: fit-content; min-height: 1.6em; margin: 10px auto; padding: 4px 14px; border-radius: 22px; background: #fff6ed; font-size: 1.18rem; font-weight: 800; }
 .ttt-board {
   display: grid;
