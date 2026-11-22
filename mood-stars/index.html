@@ -7,10 +7,11 @@
   <link rel="stylesheet" href="../language.css">
   <link rel="stylesheet" href="../game.css?v=level-cards">
   <link rel="stylesheet" href="../game-picker.css">
-  <link rel="stylesheet" href="mood-stars.css?v=opening-story">
+  <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Klee+One:wght@600&amp;display=swap">
+  <link rel="stylesheet" href="mood-stars.css?v=storybook-ink">
   <script defer src="../language.js"></script>
   <script defer src="../pwa.js?v=shared-toolbar"></script>
-  <script defer src="mood-stars.js?v=opening-story"></script>
+  <script defer src="mood-stars.js?v=storybook-brighter-trail"></script>
 </head>
 <body data-game="mood-stars">
 <main data-board-layout data-game-toolbar class="mood-page">
@@ -51,12 +52,12 @@
           </linearGradient>
         </defs>
         <path id="star-line" d=""/>
-        <line id="moon-ray" x2="86" y2="9" pathLength="1"/>
+        <line id="moon-ray" x2="86" y2="16" pathLength="1"/>
         <g class="trail-dust">
-          <circle r=".58">
+          <circle r=".8">
             <animateMotion dur="6s" repeatCount="indefinite"><mpath href="#star-line"/></animateMotion>
           </circle>
-          <circle r=".4">
+          <circle r=".55">
             <animateMotion dur="8s" begin="1.5s" repeatCount="indefinite"><mpath href="#star-line"/></animateMotion>
           </circle>
         </g>

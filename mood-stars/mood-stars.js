@@ -1,8 +1,8 @@
 (() => {
   const moods = {
-    excited: { image: 'rainbow', color: ['Rainbow', '虹色'], story: ['A rainbow star found a tiny rocket and could hardly wait to see where it went.', '虹色の星が、小さなロケットを見つけたよ。どこまで行けるかな？'], label: ['Excited', 'わくわく'], notes: [72, 76, 79, 84, 88], path: [[10,75],[30,24],[50,69],[70,25],[90,48]] },
+    excited: { image: 'rainbow', color: ['Rainbow', '虹色'], story: ['A rainbow star found a tiny rocket and could hardly wait to see where it went.', '虹色の星が、小さなロケットを見つけたよ。どこまで行けるかな？'], label: ['Excited', 'わくわく'], notes: [72, 76, 79, 84, 88], path: [[10,75],[30,24],[50,69],[70,43],[90,65]] },
     happy: { image: 'rose', color: ['Rose gold', '桃色'], story: ['A pink star saw its friend and lit up the whole sky with a little smile.', '桃色の星は、おともだちに会えてにっこり。空までほんのり桃色になったよ。'], label: ['Happy', 'うれしい'], notes: [67, 72, 76, 79, 84], path: [[10,62],[30,37],[50,24],[70,37],[90,62]] },
-    sad: { image: 'blue', color: ['Blue', '青'], story: ['The blue star rested beside the moon. One little star lit up to keep it company.', '青い星は、月のとなりでひとやすみ。小さな星がひとつ、そっと灯りました。'], label: ['Ready for a little rest', 'ゆっくりしたい'], notes: [60, 64, 67, 69, 72], path: [[10,78],[30,70],[50,54],[70,38],[90,29]] },
+    sad: { image: 'blue', color: ['Blue', '青'], story: ['The blue star rested beside the moon. One little star lit up to keep it company.', '青い星は、月のとなりでひとやすみ。小さな星がひとつ、そっと灯りました。'], label: ['Ready for a little rest', 'ゆっくりしたい'], notes: [60, 64, 67, 69, 72], path: [[10,78],[30,70],[50,54],[70,38],[90,48]] },
     dreamy: { image: 'crystal', color: ['Crystal', '透明'], story: ['A crystal star floated past a soft cloud, dreaming of what might be beyond it.', '透明な星が、ふわふわの雲を通りすぎたよ。雲のむこうには、何があるかな？'], label: ['Dreamy', 'ぼんやり'], notes: [62, 69, 65, 72, 74], path: [[10,55],[30,34],[50,54],[70,73],[90,54]] }
   };
   const choices = document.querySelector('#mood-choices');
@@ -70,7 +70,10 @@
     choices.hidden = !ready && !picking;
     choices.inert = ready;
     storyStar.hidden = story.hidden = phase !== 'story';
-    if (phase === 'story') story.textContent = say(...moods[selected].story);
+    if (phase === 'story') {
+      story.dataset.mood = selected;
+      story.textContent = say(...moods[selected].story);
+    }
     trail.hidden = intro;
     back.hidden = ready || picking;
     const canStop = !intro && phase !== 'complete';
