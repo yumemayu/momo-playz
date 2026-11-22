@@ -1,1 +1,31 @@
-{"background_color":"#fff8ee","description":"Momo's little games: catch, piano, capybara, puzzles and more.","display":"standalone","icons":[{"purpose":"any","sizes":"192x192","src":"icons/icon-512.png","type":"image/png"},{"purpose":"any","sizes":"512x512","src":"icons/icon-512.png","type":"image/png"},{"purpose":"maskable","sizes":"512x512","src":"icons/icon-512.png","type":"image/png"}],"lang":"en","name":"Momo Playz","scope":"./","short_name":"Momo Playz","start_url":"./","theme_color":"#f272a7"}
+{
+  "background_color": "#fff8ee",
+  "description": "Momo's little games: catch, piano, capybara, puzzles and more.",
+  "display": "standalone",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "purpose": "any",
+      "sizes": "512x512",
+      "src": "icons/icon-512.png",
+      "type": "image/png"
+    },
+    {
+      "purpose": "maskable",
+      "sizes": "512x512",
+      "src": "icons/icon-512.png",
+      "type": "image/png"
+    }
+  ],
+  "lang": "en",
+  "name": "Momo Playz",
+  "scope": "./",
+  "short_name": "Momo Playz",
+  "start_url": "./",
+  "theme_color": "#f272a7"
+}
