@@ -16,12 +16,12 @@
   background: linear-gradient(180deg, #bfeccb, #9fdcb0); border-radius: 50% 50% 0 0 / 100% 100% 0 0; }
 #scene .stack-slime { position: absolute; object-fit: contain; object-position: bottom; pointer-events: none;
   filter: drop-shadow(0 3px 3px rgba(120,90,140,.18)); }
-#crane { position: absolute; top: 0; width: 0; z-index: 3; }
+#crane { position: absolute; top: 0; width: 0; }
 #crane .string { width: 4px; height: 52px; margin-left: -2px;
   background: repeating-linear-gradient(180deg, #d9a0bd 0 6px, #fff 6px 12px); }
 #crane .hover-slime { display: block; transform: translateX(-50%); pointer-events: none;
   filter: drop-shadow(0 6px 6px rgba(120,90,140,.25)); }
-#guide-line { position: absolute; width: 0; border-left: 3px dashed rgba(240,140,190,.55); z-index: 2; pointer-events: none; }
+#guide-line { position: absolute; width: 0; border-left: 3px dashed rgba(240,140,190,.55); pointer-events: none; }
 .slime-controls { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
 .slime-controls #message { margin: 0; font-weight: 700; }
 
