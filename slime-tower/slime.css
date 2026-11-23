@@ -24,3 +24,5 @@
 #guide-line { position: absolute; width: 0; border-left: 3px dashed rgba(240,140,190,.55); z-index: 2; pointer-events: none; }
 .slime-controls { display: flex; align-items: center; gap: 12px; margin-top: 10px; }
 .slime-controls #message { margin: 0; font-weight: 700; }
+
+[data-game="slime-tower"] .game-title-art { background-size: auto 82%; background-position: right 10px center; }

@@ -114,7 +114,7 @@ function updateCamera() {
 function drop() {
   if (state === 'over') { reset(); return; }
   if (state !== 'aim' || !current) return;
-  if (!runStarted) { gameScores.start(); runStarted = true; }
+  if (!runStarted) { gameScores.start(); runStarted = true; swingStart = performance.now(); }
   const cx = craneX(performance.now()) / sceneW();
   const el = slimeEl(current.color, 'normal', cx, current.wFrac);
   tilt.append(el);
@@ -216,7 +216,7 @@ function update(now) {
   const dt = Math.min(0.05, (now - lastFrame) / 1000);
   lastFrame = now;
   if (state === 'aim' && current) {
-    const x = craneX(now);
+    const x = runStarted ? craneX(now) : sceneW() / 2;
     crane.style.left = x + 'px';
     const support = supportFor(x / sceneW(), current.wFrac);
     guideLine.style.left = x + 'px';
