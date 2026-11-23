@@ -65,10 +65,10 @@ function setPose(entry, pose) {
 }
 
 function newCraneSlime() {
-  current = { color: COLORS[Math.floor(Math.random() * COLORS.length)], wFrac: 0.135 + Math.random() * 0.04 };
+  current = { color: COLORS[Math.floor(Math.random() * COLORS.length)], wFrac: 0.11 + Math.random() * 0.035 };
   hoverSlime.src = SPRITES[current.color + '-normal'];
   hoverSlime.style.width = current.wFrac * sceneW() + 'px';
-  hoverSlime.style.height = current.wFrac * sceneW() * ASPECT + 'px';
+  hoverSlime.style.height = 'auto';
 }
 
 function renderLabels() {
@@ -262,7 +262,7 @@ window.addEventListener('resize', () => {
 });
 function newCraneSlimeSize() {
   hoverSlime.style.width = current.wFrac * sceneW() + 'px';
-  hoverSlime.style.height = current.wFrac * sceneW() * ASPECT + 'px';
+  hoverSlime.style.height = 'auto';
 }
 byId('sound').addEventListener('click', async () => {
   try {
