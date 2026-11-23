@@ -65,7 +65,7 @@ function setPose(entry, pose) {
 }
 
 function newCraneSlime() {
-  current = { color: COLORS[Math.floor(Math.random() * COLORS.length)], wFrac: 0.11 + Math.random() * 0.035 };
+  current = { color: COLORS[Math.floor(Math.random() * COLORS.length)], wFrac: 0.09 + Math.random() * 0.03 };
   hoverSlime.src = SPRITES[current.color + '-normal'];
   hoverSlime.style.width = current.wFrac * sceneW() + 'px';
   hoverSlime.style.height = 'auto';
@@ -188,8 +188,10 @@ function resolveFall() {
     tipOff(f, f.cx < 0.5 ? -1 : 1);
     return;
   }
-  const centerOutside = !support.isBase && (f.cx < support.cx - support.half || f.cx > support.cx + support.half);
-  if (support.overlapFrac < 0.34 || centerOutside) {
+  // Squishy slimes can grip: the centre may overhang the support edge a little.
+  const overhang = support.isBase ? 0
+    : Math.max(0, Math.abs(f.cx - support.cx) - support.half) / f.wFrac;
+  if (support.overlapFrac < 0.28 || overhang > 0.25) {
     tipOff(f, f.cx < support.cx ? -1 : 1);
     return;
   }

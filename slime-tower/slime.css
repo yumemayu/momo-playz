@@ -25,4 +25,4 @@
 .slime-controls { display: grid; gap: 6px; margin-top: 10px; }
 .slime-controls #message { margin: 0; min-height: 1.45em; text-align: center; font-weight: 700; }
 
-[data-game="slime-tower"] .game-title-art { background-size: auto 82%; background-position: right 10px center; }
+[data-game="slime-tower"] .game-title-art { inset: 0 0 0 28%; background-size: auto 66%; background-position: right 14px center; }
