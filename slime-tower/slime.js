@@ -5,7 +5,9 @@ const dropButton = byId('drop'), messageEl = byId('message'), heightEl = byId('h
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const SPRITES = window.SLIME_SPRITES || {};
 const COLORS = ['mint', 'pink', 'yellow', 'purple'];
-const ASPECT = 0.99; // normal pose height / width (transparent sheet)
+const ASPECTS = { mint: 0.945, pink: 0.992, yellow: 1.023, purple: 0.997 };
+const aspectOf = color => ASPECTS[color] || 0.99;
+const NESTLE = 0.12; // how far a landed slime sinks into the one below
 const words = {
   en: { drop: '👇 Drop!', again: 'Play again', tip: 'Tap Drop when the slime is over the tower!', nice: 'Nice!', wobble: 'Careful… it is wobbling!', over: 'It fell! Game over', height: 'Height', sound: 'Sound' },
   ja: { drop: '👇 おとす！', again: 'もう一度あそぶ', tip: 'タワーの上でタイミングよく落とそう！', nice: 'いいね！', wobble: '気をつけて…ゆれてるよ！', over: '落ちちゃった！ ゲームオーバー', height: '高さ', sound: 'サウンド' }
@@ -17,6 +19,7 @@ let stack = []; // {el, color, cx, wFrac, bottom, top}
 let current = null; // {color, wFrac} waiting on the crane
 let falling = null; // {el, color, cx, wFrac, bottom, v, support}
 let camY = 0, leanDeg = 0, swingStart = performance.now();
+let fallenEls = [];
 let muted = true, audio;
 const text = () => words[lang];
 const pick = (en, ja) => (lang === 'ja' ? ja : en);
@@ -55,9 +58,9 @@ function slimeEl(color, pose, cx, wFrac) {
 function place(el, cx, wFrac, bottom) {
   const w = wFrac * sceneW();
   el.style.width = w + 'px';
-  el.style.height = w * ASPECT + 'px';
+  el.style.height = w * aspectOf(el.dataset.color) + 'px';
   el.style.left = (cx * sceneW() - w / 2) + 'px';
-  el.style.top = (bottom - w * ASPECT) + 'px';
+  el.style.top = (bottom - w * aspectOf(el.dataset.color)) + 'px';
 }
 function setPose(entry, pose) {
   entry.el.src = SPRITES[entry.color + '-' + pose];
@@ -118,7 +121,7 @@ function drop() {
   const cx = craneX(performance.now()) / sceneW();
   const el = slimeEl(current.color, 'normal', cx, current.wFrac);
   tilt.append(el);
-  const startBottom = (52 + current.wFrac * sceneW() * ASPECT) - camY;
+  const startBottom = (52 + current.wFrac * sceneW() * aspectOf(current.color)) - camY;
   falling = { el, color: current.color, cx, wFrac: current.wFrac, bottom: startBottom, v: 0, support: supportFor(cx, current.wFrac) };
   place(el, cx, current.wFrac, startBottom);
   current = null;
@@ -131,8 +134,8 @@ function drop() {
 function land() {
   const f = falling; falling = null;
   const support = f.support;
-  const h = f.wFrac * sceneW() * ASPECT;
-  f.bottom = support.top + h * 0.05;
+  const h = f.wFrac * sceneW() * aspectOf(f.color);
+  f.bottom = support.top + h * NESTLE;
   place(f.el, f.cx, f.wFrac, f.bottom);
   const entry = { el: f.el, color: f.color, cx: f.cx, wFrac: f.wFrac, bottom: f.bottom, top: f.bottom - h };
   stack.push(entry);
@@ -165,9 +168,10 @@ function gameOver() {
 }
 
 function tipOff(f, direction) {
+  fallenEls.push(f.el);
   // The slime slides off its support and tumbles to the ground.
   const startLeft = parseFloat(f.el.style.left), startTop = parseFloat(f.el.style.top);
-  const dx = direction * sceneW() * 0.16, dy = groundTop() - f.bottom + f.wFrac * sceneW() * ASPECT * 0.4;
+  const dx = direction * sceneW() * 0.16, dy = groundTop() - f.bottom + f.wFrac * sceneW() * aspectOf(f.color) * 0.4;
   const anim = f.el.animate([
     { transform: 'translate(0,0) rotate(0deg)', opacity: 1 },
     { transform: 'translate(' + dx * .4 + 'px,' + dy * .25 + 'px) rotate(' + direction * 34 + 'deg)', opacity: 1, offset: .45 },
@@ -201,6 +205,8 @@ function resolveFall() {
 function reset() {
   stack.forEach(s => s.el.remove());
   stack = [];
+  fallenEls.forEach(el => el.remove());
+  fallenEls = [];
   falling = null;
   runStarted = false;
   camY = 0; world.style.transform = '';
@@ -222,7 +228,7 @@ function update(now) {
     crane.style.left = x + 'px';
     const support = supportFor(x / sceneW(), current.wFrac);
     guideLine.style.left = x + 'px';
-    guideLine.style.top = (52 + current.wFrac * sceneW() * ASPECT + 4) + 'px';
+    guideLine.style.top = (52 + current.wFrac * sceneW() * aspectOf(current.color) + 4) + 'px';
     guideLine.style.height = Math.max(0, support.top + camY - parseFloat(guideLine.style.top)) + 'px';
   }
   if (state === 'fall' && falling) {
@@ -253,8 +259,8 @@ window.addEventListener('resize', () => {
     };
     consider(baseTop(), 0.5, 0.23);
     placed.forEach(p => consider(p.top, p.cx, p.wFrac / 2));
-    const h = s.wFrac * sceneW() * ASPECT;
-    s.bottom = top + h * 0.05;
+    const h = s.wFrac * sceneW() * aspectOf(s.color);
+    s.bottom = top + h * NESTLE;
     s.top = s.bottom - h;
     place(s.el, s.cx, s.wFrac, s.bottom);
     placed.push(s);
