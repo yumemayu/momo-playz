@@ -289,6 +289,15 @@
     "<span class=\"game-art\" aria-hidden=\"true\"><svg viewBox=\"0 0 100 84\" width=\"40\" height=\"40\"><path d=\"M50 6c14 0 22 8 27 16 6 9 13 14 13 26 0 17-18 30-40 30S10 65 10 48c0-12 7-17 13-26C28 14 36 6 50 6Z\" fill=\"#a8e6cf\" stroke=\"#7a4a3a\" stroke-width=\"4\"/><circle cx=\"38\" cy=\"46\" r=\"4\" fill=\"#5a3a2a\"/><circle cx=\"62\" cy=\"46\" r=\"4\" fill=\"#5a3a2a\"/><path d=\"M44 56q6 5 12 0\" stroke=\"#5a3a2a\" stroke-width=\"3.5\" fill=\"none\" stroke-linecap=\"round\"/><ellipse cx=\"34\" cy=\"24\" rx=\"9\" ry=\"5\" fill=\"#ffffff\" opacity=\".65\" transform=\"rotate(-24 34 24)\"/></svg></span>",
     "",
     "2026-12-14"
+  ],
+  [
+    "chick-cross",
+    "ひよこクロス",
+    "Chick Cross",
+    "#fff3ad",
+    "<span class=\"game-art\" aria-hidden=\"true\"><svg viewBox=\"0 0 100 100\" width=\"40\" height=\"40\"><path d=\"M50 16c-2-6-8-9-12-7 3 1 4 3 4 5-14 2-24 15-24 31 0 19 14 33 32 33s32-14 32-33c0-16-10-29-24-31 0-2 1-4 4-5-4-2-10 1-12 7Z\" fill=\"#ffe066\" stroke=\"#7a4a3a\" stroke-width=\"4\"/><path d=\"M44 52l6 5 6-5-6 8Z\" fill=\"#ff9f43\" stroke=\"#7a4a3a\" stroke-width=\"2.5\" stroke-linejoin=\"round\"/><circle cx=\"38\" cy=\"44\" r=\"3.6\" fill=\"#5a3a2a\"/><circle cx=\"62\" cy=\"44\" r=\"3.6\" fill=\"#5a3a2a\"/><ellipse cx=\"32\" cy=\"54\" rx=\"5\" ry=\"3\" fill=\"#ffb3c7\" opacity=\".8\"/><ellipse cx=\"68\" cy=\"54\" rx=\"5\" ry=\"3\" fill=\"#ffb3c7\" opacity=\".8\"/><path d=\"M40 84l-3 6M60 84l3 6\" stroke=\"#ff9f43\" stroke-width=\"4\" stroke-linecap=\"round\"/></svg></span>",
+    "",
+    "2026-12-15"
   ]
 ];
   const links = document.createDocumentFragment();

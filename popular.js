@@ -33,6 +33,7 @@
     'one-stroke': ['one-stroke', ['practice', 'easy', 'normal', 'hard', 'expert']],
     'pudding-table-jump': ['pudding-table-jump', []],
     'slime-tower': ['slime-tower', []],
+  'chick-cross': ['chick-cross', []],
     'shadow-light': ['shadow-light', ['easy', 'normal', 'hard']],
     'cube-count': ['cube-count', ['easy', 'normal', 'hard']],
     'whats-next': ['whats-next', ['easy', 'normal', 'hard']]
