@@ -8,15 +8,14 @@
 <meta name="description" content="Play Momo Playz games, from Fry Catch and Momo Piano to circuit puzzles.">
 <link rel="stylesheet" href="game-picker.css">
 <link rel="stylesheet" href="language.css">
-<link rel="stylesheet" href="home.css?v=gem-celebration">
+<link rel="stylesheet" href="home.css?v=cute-home-1">
 <script defer src="language.js"></script>
 <script defer src="stickers.js?v=daily-stickers"></script>
 <script defer src="offline.js"></script>
 <script defer src="home.js?v=game-rows-4"></script>
-<link rel="stylesheet" href="toy-shelf.css?v=compact-home">
-<script defer src="toy-shelf.js?v=daily1"></script>
 <script defer src="popular.js?v=pop-6"></script>
 <script defer src="coins.js?v=gem-celebration"></script>
+<script defer src="home-decor.js?v=1"></script>
   <link rel="manifest" href="manifest.webmanifest">
   <meta name="theme-color" content="#f272a7">
   <meta name="mobile-web-app-capable" content="yes">
@@ -28,12 +27,11 @@
 <style>
 .pwa-tools {
   --pwa-tint: #ffe4ef; --pwa-accent: #843861; --pwa-edge: #efaece;
-  position: fixed; z-index: 100; right: max(12px, env(safe-area-inset-right));
-  bottom: max(12px, env(safe-area-inset-bottom)); color: var(--pwa-accent); text-align: left;
+  position: relative; flex: 0 0 100%; margin-top: 8px; color: var(--pwa-accent); text-align: left;
 }
 .pwa-tools summary {
   display: flex; align-items: center; gap: 7px; width: fit-content; min-height: 46px;
-  margin-left: auto; padding: 6px 13px; border: 2px solid var(--pwa-edge);
+  margin-left: 0; padding: 6px 13px; border: 2px solid var(--pwa-edge);
   border-radius: 999px; background: var(--pwa-tint); box-shadow: 0 3px 0 var(--pwa-edge);
   cursor: pointer; font-weight: 800; list-style: none;
 }
@@ -60,21 +58,14 @@ html:lang(ja) .pwa-en, html:not(:lang(ja)) .pwa-ja { display: none; }
 </style>
 </head>
 <body>
+<svg id="awning" viewBox="0 0 1496 30" preserveAspectRatio="xMinYMin slice" aria-hidden="true" focusable="false"><rect x="0" y="0" width="34" height="22" fill="#ffd9e8"/><circle cx="17" cy="22" r="17" fill="#ffd9e8"/><rect x="34" y="0" width="34" height="22" fill="#fff3df"/><circle cx="51" cy="22" r="17" fill="#fff3df"/><rect x="68" y="0" width="34" height="22" fill="#d9f2e2"/><circle cx="85" cy="22" r="17" fill="#d9f2e2"/><rect x="102" y="0" width="34" height="22" fill="#e7defa"/><circle cx="119" cy="22" r="17" fill="#e7defa"/><rect x="136" y="0" width="34" height="22" fill="#d8f0fb"/><circle cx="153" cy="22" r="17" fill="#d8f0fb"/><rect x="170" y="0" width="34" height="22" fill="#ffd9e8"/><circle cx="187" cy="22" r="17" fill="#ffd9e8"/><rect x="204" y="0" width="34" height="22" fill="#fff3df"/><circle cx="221" cy="22" r="17" fill="#fff3df"/><rect x="238" y="0" width="34" height="22" fill="#d9f2e2"/><circle cx="255" cy="22" r="17" fill="#d9f2e2"/><rect x="272" y="0" width="34" height="22" fill="#e7defa"/><circle cx="289" cy="22" r="17" fill="#e7defa"/><rect x="306" y="0" width="34" height="22" fill="#d8f0fb"/><circle cx="323" cy="22" r="17" fill="#d8f0fb"/><rect x="340" y="0" width="34" height="22" fill="#ffd9e8"/><circle cx="357" cy="22" r="17" fill="#ffd9e8"/><rect x="374" y="0" width="34" height="22" fill="#fff3df"/><circle cx="391" cy="22" r="17" fill="#fff3df"/><rect x="408" y="0" width="34" height="22" fill="#d9f2e2"/><circle cx="425" cy="22" r="17" fill="#d9f2e2"/><rect x="442" y="0" width="34" height="22" fill="#e7defa"/><circle cx="459" cy="22" r="17" fill="#e7defa"/><rect x="476" y="0" width="34" height="22" fill="#d8f0fb"/><circle cx="493" cy="22" r="17" fill="#d8f0fb"/><rect x="510" y="0" width="34" height="22" fill="#ffd9e8"/><circle cx="527" cy="22" r="17" fill="#ffd9e8"/><rect x="544" y="0" width="34" height="22" fill="#fff3df"/><circle cx="561" cy="22" r="17" fill="#fff3df"/><rect x="578" y="0" width="34" height="22" fill="#d9f2e2"/><circle cx="595" cy="22" r="17" fill="#d9f2e2"/><rect x="612" y="0" width="34" height="22" fill="#e7defa"/><circle cx="629" cy="22" r="17" fill="#e7defa"/><rect x="646" y="0" width="34" height="22" fill="#d8f0fb"/><circle cx="663" cy="22" r="17" fill="#d8f0fb"/><rect x="680" y="0" width="34" height="22" fill="#ffd9e8"/><circle cx="697" cy="22" r="17" fill="#ffd9e8"/><rect x="714" y="0" width="34" height="22" fill="#fff3df"/><circle cx="731" cy="22" r="17" fill="#fff3df"/><rect x="748" y="0" width="34" height="22" fill="#d9f2e2"/><circle cx="765" cy="22" r="17" fill="#d9f2e2"/><rect x="782" y="0" width="34" height="22" fill="#e7defa"/><circle cx="799" cy="22" r="17" fill="#e7defa"/><rect x="816" y="0" width="34" height="22" fill="#d8f0fb"/><circle cx="833" cy="22" r="17" fill="#d8f0fb"/><rect x="850" y="0" width="34" height="22" fill="#ffd9e8"/><circle cx="867" cy="22" r="17" fill="#ffd9e8"/><rect x="884" y="0" width="34" height="22" fill="#fff3df"/><circle cx="901" cy="22" r="17" fill="#fff3df"/><rect x="918" y="0" width="34" height="22" fill="#d9f2e2"/><circle cx="935" cy="22" r="17" fill="#d9f2e2"/><rect x="952" y="0" width="34" height="22" fill="#e7defa"/><circle cx="969" cy="22" r="17" fill="#e7defa"/><rect x="986" y="0" width="34" height="22" fill="#d8f0fb"/><circle cx="1003" cy="22" r="17" fill="#d8f0fb"/><rect x="1020" y="0" width="34" height="22" fill="#ffd9e8"/><circle cx="1037" cy="22" r="17" fill="#ffd9e8"/><rect x="1054" y="0" width="34" height="22" fill="#fff3df"/><circle cx="1071" cy="22" r="17" fill="#fff3df"/><rect x="1088" y="0" width="34" height="22" fill="#d9f2e2"/><circle cx="1105" cy="22" r="17" fill="#d9f2e2"/><rect x="1122" y="0" width="34" height="22" fill="#e7defa"/><circle cx="1139" cy="22" r="17" fill="#e7defa"/><rect x="1156" y="0" width="34" height="22" fill="#d8f0fb"/><circle cx="1173" cy="22" r="17" fill="#d8f0fb"/><rect x="1190" y="0" width="34" height="22" fill="#ffd9e8"/><circle cx="1207" cy="22" r="17" fill="#ffd9e8"/><rect x="1224" y="0" width="34" height="22" fill="#fff3df"/><circle cx="1241" cy="22" r="17" fill="#fff3df"/><rect x="1258" y="0" width="34" height="22" fill="#d9f2e2"/><circle cx="1275" cy="22" r="17" fill="#d9f2e2"/><rect x="1292" y="0" width="34" height="22" fill="#e7defa"/><circle cx="1309" cy="22" r="17" fill="#e7defa"/><rect x="1326" y="0" width="34" height="22" fill="#d8f0fb"/><circle cx="1343" cy="22" r="17" fill="#d8f0fb"/><rect x="1360" y="0" width="34" height="22" fill="#ffd9e8"/><circle cx="1377" cy="22" r="17" fill="#ffd9e8"/><rect x="1394" y="0" width="34" height="22" fill="#fff3df"/><circle cx="1411" cy="22" r="17" fill="#fff3df"/><rect x="1428" y="0" width="34" height="22" fill="#d9f2e2"/><circle cx="1445" cy="22" r="17" fill="#d9f2e2"/><rect x="1462" y="0" width="34" height="22" fill="#e7defa"/><circle cx="1479" cy="22" r="17" fill="#e7defa"/></svg>
 <main>
 <header>
   <img src="assets/momo-squirrels.png" alt="" width="130" height="99">
   <h1>Momo Playz</h1>
+  <span class="mascot" aria-hidden="true"><img class="mascot-face" src="assets/toy-shelf-capybara.webp" alt="" draggable="false"><svg class="mascot-hat" viewBox="0 0 60 44" focusable="false"><path d="M10 32 Q26 -8 52 22 Q32 16 12 36 Z" fill="#e5484d"/><rect x="5" y="30" width="48" height="9" rx="4.5" fill="#ffffff"/><circle cx="53" cy="23" r="6" fill="#ffffff"/></svg></span>
 </header>
-<details class="pwa-tools">
-  <summary><span aria-hidden="true">🌈</span><span class="pwa-ja">おでかけモード</span><span class="pwa-en">Take it with you</span><span class="pwa-chevron" aria-hidden="true">▴</span></summary>
-  <div class="pwa-panel">
-    <strong class="pwa-heading"><span class="pwa-ja">おでかけ先でもあそぼう！</span><span class="pwa-en">Play on the go!</span></strong>
-  <button type="button" id="pwa-install" aria-controls="pwa-guide" aria-expanded="false">ホーム画面に追加</button>
-  <button type="button" id="pwa-save">オフラインであそぶ準備</button>
-  <p id="pwa-guide" hidden></p>
-  <p id="pwa-status" role="status"></p>
-  </div>
-</details>
+
 <section class="home-play" id="home-play" hidden>
   <div class="home-mission">
     <h2><span aria-hidden="true">🎯</span> <span data-ja="今日のミッション">Today’s mission</span></h2>
@@ -87,27 +78,7 @@ html:lang(ja) .pwa-en, html:not(:lang(ja)) .pwa-ja { display: none; }
     <span id="surprise-announcement" class="home-sr-only" role="status"></span>
   </div>
 </section>
-<section class="toy-shelf" aria-labelledby="toy-shelf-title">
-  <h2 id="toy-shelf-title" data-ja="Momoのおもちゃ棚">Momo’s Toy Shelf</h2>
-  <p data-ja="おもちゃをタップしてみよう">Tap a toy to see it move</p>
-  <div class="toy-shelf-row">
-    <article class="toy-shelf-item toy-pudding">
-      <button class="toy-preview" type="button" aria-label="Animate Pudding" data-ja-label="プリンを動かす"><img class="toy-art" src="assets/toy-shelf-pudding.webp" alt="" draggable="false"></button>
-    </article>
-    <article class="toy-shelf-item toy-bun">
-      <button class="toy-preview" type="button" aria-label="Animate Steamed bun" data-ja-label="肉まんを動かす"><img class="toy-art" src="assets/toy-shelf-bun.webp" alt="" draggable="false"></button>
-    </article>
-    <article class="toy-shelf-item toy-capybara">
-      <button class="toy-preview" type="button" aria-label="Animate Capybara" data-ja-label="カピバラを動かす"><img class="toy-art" src="assets/toy-shelf-capybara.webp" alt="" draggable="false"></button>
-    </article>
-  </div>
-  <img class="toy-board" src="assets/toy-shelf-strawberry.webp" alt="" width="1000" height="162">
-  <div class="toy-game-links">
-    <a class="toy-play toy-play-pudding" href="./pudding-table-jump/" aria-label="Find me in Pudding Table Jump" data-ja-label="プリンのテーブルジャンプでみつけてね" data-ja="みつけてね">Find me</a>
-    <a class="toy-play toy-play-bun" href="./bun-owner/" aria-label="Find me in Bun Shop Owner" data-ja-label="肉まん屋オーナーでみつけてね" data-ja="みつけてね">Find me</a>
-    <a class="toy-play toy-play-capybara" href="./capybara-merge/" aria-label="Find me in Capybara Onsen Merge" data-ja-label="カピバラ温泉マージでみつけてね" data-ja="みつけてね">Find me</a>
-  </div>
-</section>
+
 <div class="home-tabs" role="tablist" aria-label="Game shelves">
   <button type="button" class="home-tab is-on" data-tab="new" data-ja="🆕 新着ゲーム">🆕 New games</button>
   <button type="button" class="home-tab" data-tab="pop" data-ja="💗 人気のゲーム">💗 Popular games</button>
@@ -142,6 +113,16 @@ html:lang(ja) .pwa-en, html:not(:lang(ja)) .pwa-ja { display: none; }
 </main>
 <footer class="feedback"><a href="sticker-book/" data-sticker-link>✦ Sticker Book</a><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a>
 <a href="https://yumemayu.github.io/norimono/" target="_blank" rel="noopener noreferrer" data-ja="🚃 のりものゲーム">🚃 Train games</a>
+<details class="pwa-tools">
+  <summary><span aria-hidden="true">🌈</span><span class="pwa-ja">おでかけモード</span><span class="pwa-en">Take it with you</span><span class="pwa-chevron" aria-hidden="true">▴</span></summary>
+  <div class="pwa-panel">
+    <strong class="pwa-heading"><span class="pwa-ja">おでかけ先でもあそぼう！</span><span class="pwa-en">Play on the go!</span></strong>
+  <button type="button" id="pwa-install" aria-controls="pwa-guide" aria-expanded="false">ホーム画面に追加</button>
+  <button type="button" id="pwa-save">オフラインであそぶ準備</button>
+  <p id="pwa-guide" hidden></p>
+  <p id="pwa-status" role="status"></p>
+  </div>
+</details>
 <small>Copyright Momo.squirrels</small>
 </footer>
 
