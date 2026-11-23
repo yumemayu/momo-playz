@@ -126,6 +126,7 @@
     'quoridor': 'puzzle', 'cat-trap': 'puzzle', 'one-stroke': 'puzzle',
     'fry-catch': 'action', 'smiley-bun-catch': 'action', 'glasses-cat': 'action',
     'dodgeball': 'action', 'capybara-tap': 'action', 'pudding-table-jump': 'action',
+    'slime-tower': 'action',
     'capybara-merge': 'relax', 'capybara-memory': 'relax', 'bun-owner': 'relax',
     'switch-shine': 'relax',
     'piano': 'music', 'clicky-keys': 'music', 'bun-lights': 'music'

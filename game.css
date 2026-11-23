@@ -780,3 +780,12 @@ main[data-board-layout] > .play-stack {
 [data-game-toolbar] .play-stage > .memory-board { display: grid; max-width: 560px; margin-inline: auto; }
 [data-game-toolbar] .play-stage > .flow-board { display: grid; width: min(100%, var(--board-height)); height: auto; aspect-ratio: 1; margin-inline: auto; padding: 2%; }
 [data-game-toolbar].flow-main .play-stage { min-height: var(--board-height); display: grid; place-items: center; }
+
+/* === Guide card (cute) — design system, 2026-11-23 ===
+   The How-to-play block is a white sticker card with emoji-led lines. */
+.game-guide { background: #fff; border: 2px solid #f6d3e3; border-radius: 18px;
+  padding: 12px 14px; box-shadow: 0 3px 9px rgba(178,116,158,.12); }
+.game-guide h2 { color: #a04a72; }
+.game-guide p { margin: 0 0 8px; font-size: .92rem; }
+[data-board-layout] .game-guide ol { list-style: none; padding-inline-start: 0; }
+.game-guide li { margin-top: 6px; font-size: .92rem; }

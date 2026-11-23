@@ -1,0 +1,90 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Slime Tower | Momo Playz</title>
+<script defer src="../game-catalog.js"></script>
+<meta name="description" content="Drop the swinging slime and stack a squishy tower as high as you can in this free browser game.">
+<link rel="manifest" href="./manifest.webmanifest">
+<meta name="theme-color" content="#f272a7">
+<meta name="mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="default">
+<meta name="apple-mobile-web-app-title" content="Slime Tower">
+<link rel="stylesheet" href="../game.css?v=level-cards">
+<link rel="stylesheet" href="../language.css">
+<link rel="stylesheet" href="../nickname.css">
+<link rel="stylesheet" href="../game-picker.css">
+<link rel="stylesheet" href="../game-title-banner.css">
+<link rel="stylesheet" href="slime.css?v=1">
+<script defer src="../language.js"></script>
+<script defer src="../nickname.js"></script>
+<script defer src="../stickers.js?v=daily-stickers"></script>
+<script defer src="../scores.js?v=gem-rewards"></script>
+<script defer src="../pwa.js?v=shared-toolbar"></script>
+<script defer src="slime-sprites.js?v=1"></script>
+<script defer src="slime.js?v=1"></script>
+</head>
+<body data-game="slime-tower">
+<main data-board-layout data-game-toolbar>
+  <div class="game-sidebar">
+  <header class="game-heading game-title-banner">
+    <span class="game-title-rainbow" aria-hidden="true">🌈</span><span class="game-title-art" aria-hidden="true"></span>
+    <h1 data-ja="スライムタワー">Slime Tower</h1>
+  </header>
+    <a class="slime-games-link" href="../" data-ja="← ゲーム集にもどる">← Back to all games</a>
+    <div class="game-guide"><h2 data-ja="あそびかた">How to play</h2>
+      <p data-ja="タイミングよく落として、スライムを高く積もう！">Drop the slime at the right moment and stack the tower high!</p>
+      <ol>
+      <li data-ja="スライムが左右にゆらゆら">🌈 The slime swings left and right.</li>
+      <li data-ja="タップで落とすだけ">👆 One tap on Drop (or the sky) to drop it.</li>
+      <li data-ja="スコアは積んだ数。落ちたらおわり">🗼 Score = slimes stacked. If one falls off, game over!</li>
+      </ol></div>
+    <div class="music"><button id="sound" type="button" aria-pressed="false">Sound OFF</button></div>
+  <section class="score-board" aria-labelledby="board-title">
+    <div class="score-board-heading">
+      <h2 id="board-title"><span aria-hidden="true">🗼</span> <span data-ja="リーダーボード">Leaderboard</span></h2>
+      <div class="score-period" role="group" aria-label="Ranking period" data-ja-label="ランキングの期間">
+        <button type="button" data-period="weekly" aria-pressed="true" data-ja="今週">This week</button>
+        <button type="button" data-period="all" aria-pressed="false" data-ja="すべて">All time</button>
+      </div>
+    </div>
+    <ol id="score-list"></ol><p class="personal-best" id="personal-best"></p>
+  </section>
+  </div>
+  <div class="play-stack">
+  <div class="play-hud"><div class="stats"><span>🗼 <strong id="height">Height: 0</strong></span></div><div id="scoreline"><span id="score"></span><span id="combo"></span></div></div>
+  <div class="play-stage"><div class="scene game-field" id="scene">
+    <div class="world" id="world">
+      <div class="cloud" style="width:110px;height:30px;top:8%;left:8%"></div>
+      <div class="cloud" style="width:80px;height:24px;top:22%;right:10%"></div>
+      <div id="tilt">
+        <div class="base" id="base"></div>
+        <div class="ground"></div>
+      </div>
+    </div>
+    <div class="crane" id="crane"><div class="string"></div><img class="hover-slime" id="hover-slime" alt=""></div>
+    <div class="guide-line" id="guide-line"></div>
+  </div>
+  <div class="game-card" id="ready-card">
+    <strong data-ja="はじめよう！">Ready to play?</strong>
+    <div class="player-setup">
+      <label for="nickname" data-ja="ニックネーム（任意）">Nickname (optional)</label>
+      <input id="nickname" maxlength="20" autocomplete="off" placeholder="e.g. Mochi" data-ja-placeholder="例：もち" aria-describedby="player-hint">
+      <small id="player-hint" data-ja="ニックネームを入れて積むと、ランキングに載るよ。">Enter a nickname and stack slimes to join the leaderboard.</small>
+    </div>
+  </div>
+  </div>
+  <div class="slime-controls">
+    <button class="play-primary" id="drop" type="button">👇 Drop!</button>
+    <p id="message" role="status"></p>
+  </div>
+  <div class="game-card" id="score-card" hidden><strong id="final-score"></strong><p></p></div>
+  <button type="button" id="change-player" class="change-player" data-ja="ニックネームをかえる" hidden>Change nickname</button>
+  </div>
+  <nav class="game-picker" data-game-catalog aria-label="More Momo games"></nav>
+</main>
+<footer class="feedback"><a href="../sticker-book/" data-sticker-link>✦ Sticker Book</a><a href="https://clubs.place/f/fS6twrevaLxr9ZI38eKpOUpW" target="_blank" rel="noopener noreferrer" data-ja="感想をおくる">Send feedback</a><small>Copyright Momo.squirrels</small></footer>
+</body>
+</html>
