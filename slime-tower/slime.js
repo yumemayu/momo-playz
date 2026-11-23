@@ -5,7 +5,7 @@ const dropButton = byId('drop'), messageEl = byId('message'), heightEl = byId('h
 const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)');
 const SPRITES = window.SLIME_SPRITES || {};
 const COLORS = ['mint', 'pink', 'yellow', 'purple'];
-const ASPECT = 0.783; // normal pose height / width
+const ASPECT = 0.99; // normal pose height / width (transparent sheet)
 const words = {
   en: { drop: '👇 Drop!', again: 'Play again', tip: 'Tap Drop when the slime is over the tower!', nice: 'Nice!', wobble: 'Careful… it is wobbling!', over: 'It fell! Game over', height: 'Height', sound: 'Sound' },
   ja: { drop: '👇 おとす！', again: 'もう一度あそぶ', tip: 'タワーの上でタイミングよく落とそう！', nice: 'いいね！', wobble: '気をつけて…ゆれてるよ！', over: '落ちちゃった！ ゲームオーバー', height: '高さ', sound: 'サウンド' }
@@ -65,7 +65,7 @@ function setPose(entry, pose) {
 }
 
 function newCraneSlime() {
-  current = { color: COLORS[Math.floor(Math.random() * COLORS.length)], wFrac: 0.17 + Math.random() * 0.055 };
+  current = { color: COLORS[Math.floor(Math.random() * COLORS.length)], wFrac: 0.135 + Math.random() * 0.04 };
   hoverSlime.src = SPRITES[current.color + '-normal'];
   hoverSlime.style.width = current.wFrac * sceneW() + 'px';
   hoverSlime.style.height = current.wFrac * sceneW() * ASPECT + 'px';
